@@ -2,10 +2,9 @@
 title: See More Logistics
 client: See More Logistics
 tags: ['Branding', 'Visual Identity', 'Webflow']
-thumbnail: '/portfolio/see-more/cover.webm'
+thumbnail: '/portfolio/see-more/cover.riv'
 folderName: 'see-more'
 order: 3
-video: '/portfolio/see-more/cover.webm'
 heroImage: '/portfolio/see-more/bg.webp'
 heroSubtitle: |-
   A brand that shapes the Panama's

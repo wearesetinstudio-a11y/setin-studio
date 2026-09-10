@@ -11,6 +11,7 @@ const { title, thumbnail, video, comingSoon = false } = project.data;
 const label = title.toUpperCase();
 const thumbnailSrc = withPublicAssetVersion(thumbnail);
 const videoSrc = video ? withPublicAssetVersion(video) : '';
+const isRiveCover = thumbnail.toLowerCase().endsWith('.riv');
 const titleLineClass =
 	'flex h-[1.5em] items-center leading-none text-[1.2rem] font-semibold uppercase tracking-[0.02em] text-black md:text-[1.4rem]';
 const cardClass = 'project-card project-card__cursor-target group flex h-full flex-col';
@@ -26,7 +27,13 @@ const cardClass = 'project-card project-card__cursor-target group flex h-full fl
 			aria-label={`${title} — coming soon`}
 		>
 			<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
-				{video ? (
+				{isRiveCover ? (
+					<canvas
+						class="project-card__rive block h-auto w-full"
+						data-rive-cover={thumbnailSrc}
+						aria-label={title}
+					></canvas>
+				) : video ? (
 					<video
 						src={videoSrc}
 						class="block h-auto w-full object-contain"
@@ -63,7 +70,13 @@ const cardClass = 'project-card project-card__cursor-target group flex h-full fl
 	) : (
 		<a href={`/projects/${project.id}`} class={cardClass} data-cursor-i18n="projects.view">
 			<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
-				{video ? (
+				{isRiveCover ? (
+					<canvas
+						class="project-card__rive block h-auto w-full"
+						data-rive-cover={thumbnailSrc}
+						aria-label={title}
+					></canvas>
+				) : video ? (
 					<video
 						src={videoSrc}
 						class="block h-auto w-full object-contain"
@@ -124,4 +137,32 @@ const cardClass = 'project-card project-card__cursor-target group flex h-full fl
 	.project-card[data-coming-soon='true'] {
 		cursor: default;
 	}
+
+	.project-card__rive {
+		aspect-ratio: 4 / 3;
+		width: 100%;
+	}
 </style>
+
+<script>
+	import { Alignment, Fit, Layout, Rive } from '@rive-app/canvas';
+
+	function initRiveCovers() {
+		document.querySelectorAll<HTMLCanvasElement>('[data-rive-cover]').forEach((canvas) => {
+			if (canvas.dataset.riveInitialized === 'true') return;
+			const src = canvas.dataset.riveCover;
+			if (!src) return;
+
+			canvas.dataset.riveInitialized = 'true';
+			new Rive({
+				src,
+				canvas,
+				autoplay: true,
+				layout: Layout.new({ fit: Fit.Cover, alignment: Alignment.Center }),
+			});
+		});
+	}
+
+	initRiveCovers();
+	document.addEventListener('astro:page-load', initRiveCovers);
+</script>
