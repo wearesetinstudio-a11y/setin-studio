@@ -4,6 +4,8 @@
 		{ "source": "/pl/", "destination": "/" },
 		{ "source": "/es", "destination": "/" },
 		{ "source": "/es/", "destination": "/" },
+		{ "source": "/pl/projects/:path*", "destination": "/projects/:path*" },
+		{ "source": "/es/projects/:path*", "destination": "/projects/:path*" },
 		{ "source": "/pl/:path*", "destination": "/:path*" },
 		{ "source": "/es/:path*", "destination": "/:path*" }
 	]
