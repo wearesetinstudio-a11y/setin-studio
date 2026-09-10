@@ -154,12 +154,25 @@ const cardClass = 'project-card project-card__cursor-target group flex h-full fl
 			if (!src) return;
 
 			canvas.dataset.riveInitialized = 'true';
-			new Rive({
+			const rive = new Rive({
 				src,
 				canvas,
 				autoplay: true,
 				layout: Layout.new({ fit: Fit.Cover, alignment: Alignment.Center }),
 			});
+
+			const resizeCanvas = () => {
+				const rect = canvas.getBoundingClientRect();
+				const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+				if (!rect.width || !rect.height) return;
+
+				canvas.width = Math.round(rect.width * pixelRatio);
+				canvas.height = Math.round(rect.height * pixelRatio);
+				rive.resizeDrawingSurfaceToCanvas();
+			};
+
+			resizeCanvas();
+			new ResizeObserver(resizeCanvas).observe(canvas);
 		});
 	}
 
