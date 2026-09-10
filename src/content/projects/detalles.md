@@ -4,7 +4,7 @@ client: Detalles
 tags: ['Brand Identity', 'Print']
 thumbnail: '/portfolio/detalles/cover.webp'
 folderName: 'detalles'
-order: 4
+order: 5
 heroImage: '/portfolio/detalles/bg.webp'
 heroSubtitle: 'An editorial identity for a studio that treats every detail as the whole story'
 overviewTitle: 'Crafted with intention'
@@ -14,7 +14,7 @@ service: 'Brand Identity, Print Design, Art Direction'
 industry: 'Creative Studio'
 market: 'Panama'
 year: 2023
-summaryLabel: 'Summary'
+summaryLabel: 'Results'
 summaryTitle: 'Every touchpoint, considered'
 summaryText: 'From stationery to signage, the system holds together with quiet confidence — proof that restraint, when executed with precision, becomes the loudest statement a brand can make.'
 ---

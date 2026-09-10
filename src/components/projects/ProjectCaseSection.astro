@@ -1,0 +1,287 @@
+---
+import type { GalleryMediaItem } from '../../utils/getProjectGallery';
+import type { ProjectCaseBlock } from '../../utils/buildProjectCase';
+import ProjectGalleryMedia from './ProjectGalleryMedia.astro';
+import ProjectInfoRow from './ProjectInfoRow.astro';
+import ProjectRelatedArticles from './ProjectRelatedArticles.astro';
+
+interface Props {
+	index: number;
+	label: string;
+	blocks: ProjectCaseBlock[];
+	media: GalleryMediaItem[];
+	rows?: { label: string; value: string; isLink?: boolean }[];
+	relatedArticles?: { slug: string; title: string }[];
+	youtubeSrc?: string | null;
+	youtubeTitle?: string;
+	projectTitle: string;
+	mediaStartIndex?: number;
+}
+
+const {
+	index,
+	label,
+	blocks,
+	media,
+	rows = [],
+	relatedArticles = [],
+	youtubeSrc = null,
+	youtubeTitle = '',
+	projectTitle,
+	mediaStartIndex = 0,
+} = Astro.props;
+
+const indexLabel = String(index).padStart(2, '0');
+const sectionId = index === 1 ? 'project-overview' : `project-section-${index}`;
+const hasMeta = rows.length > 0 || relatedArticles.length > 0;
+const mediaCount = media.length + (youtubeSrc ? 1 : 0);
+const hasCopy = blocks.length > 0 || hasMeta;
+---
+
+<section
+	class="project-case-section"
+	data-project-section
+	data-section-index={index}
+	id={sectionId}
+>
+	<p class="project-case-section__label">{indexLabel} / [{label}]</p>
+
+	<div
+		class:list={[
+			'project-case-section__body',
+			!hasCopy && 'project-case-section__body--media-only',
+		]}
+	>
+		{
+			hasCopy ? (
+				<div class="project-case-section__copy">
+					{blocks.length > 0 ? (
+						<div class="project-case-section__blocks">
+							{blocks.map((block, blockIndex) => (
+								<div
+									class:list={[
+										'project-case-section__block',
+										blockIndex > 0 && 'project-case-section__block--divided',
+									]}
+								>
+									{block.title ? (
+										<h2
+											id={
+												blockIndex === 0
+													? `project-section-${index}-heading`
+													: undefined
+											}
+											class="project-case-section__heading"
+										>
+											{block.title}
+										</h2>
+									) : null}
+
+									{block.text
+										? block.text
+												.split(/\n\n+/)
+												.map((paragraph) => paragraph.trim())
+												.filter(Boolean)
+												.map((paragraph) => (
+													<p class="body-txt-1 project-case-section__text">
+														{paragraph}
+													</p>
+												))
+										: null}
+								</div>
+							))}
+						</div>
+					) : null}
+
+					{hasMeta ? (
+						<div
+							class:list={[
+								'project-case-section__meta overflow-hidden border-t border-black/10',
+								blocks.length > 0 && 'project-case-section__meta--spaced',
+								relatedArticles.length === 0 && 'border-b border-black/10',
+							]}
+						>
+							<dl class="m-0">
+								{rows.map((row, rowIndex) => (
+									<ProjectInfoRow
+										label={row.label}
+										value={row.value}
+										isLink={row.isLink}
+										isLast={rowIndex === rows.length - 1 && relatedArticles.length === 0}
+										theme="light"
+									/>
+								))}
+								<ProjectRelatedArticles articles={relatedArticles} />
+							</dl>
+						</div>
+					) : null}
+				</div>
+			) : null
+		}
+
+		{
+			mediaCount > 0 ? (
+				<div
+					class:list={[
+						'project-case-section__media',
+						youtubeSrc && 'project-case-section__media--has-youtube',
+						mediaCount === 1 && 'project-case-section__media--one',
+						mediaCount === 2 && 'project-case-section__media--two',
+						mediaCount === 3 && 'project-case-section__media--three',
+						mediaCount >= 4 && 'project-case-section__media--four',
+					]}
+				>
+					{youtubeSrc ? (
+						<div class="project-case-section__slot project-case-section__slot--youtube">
+							<div class="project-case-section__youtube relative aspect-video w-full overflow-hidden bg-black">
+								<iframe
+									src={youtubeSrc}
+									title={youtubeTitle || label}
+									class="absolute inset-0 h-full w-full border-0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+									referrerpolicy="strict-origin-when-cross-origin"
+									allowfullscreen
+									loading="lazy"
+								/>
+							</div>
+						</div>
+					) : null}
+
+					{media.map((item, mediaIndex) => (
+						<div class="project-case-section__slot">
+							<ProjectGalleryMedia
+								item={item}
+								title={projectTitle}
+								index={mediaStartIndex + mediaIndex}
+							/>
+						</div>
+					))}
+				</div>
+			) : null
+		}
+	</div>
+</section>
+
+<style>
+	.project-case-section {
+		scroll-margin-top: 6.5rem;
+		padding-bottom: 4.5rem;
+	}
+
+	.project-case-section:last-child {
+		padding-bottom: 0;
+	}
+
+	.project-case-section__label {
+		margin: 0 0 2rem;
+		font-size: 1.2rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		line-height: 1.2;
+		color: #000000;
+	}
+
+	.project-case-section__body {
+		display: grid;
+		gap: 2rem;
+	}
+
+	@media (min-width: 1024px) {
+		.project-case-section__body {
+			grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+			column-gap: 2.5rem;
+			align-items: start;
+		}
+
+		.project-case-section__body--media-only {
+			grid-template-columns: 1fr;
+		}
+
+		.project-case-section__media--one.project-case-section__media--has-youtube {
+			position: sticky;
+			top: 7.5rem;
+		}
+	}
+
+	.project-case-section__blocks {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.project-case-section__block--divided {
+		margin-top: 2rem;
+		padding-top: 2rem;
+		border-top: 1px solid rgba(0, 0, 0, 0.1);
+	}
+
+	.project-case-section__heading {
+		margin: 0;
+		font-weight: 600;
+		text-transform: uppercase;
+		line-height: 1.12;
+		letter-spacing: -0.01em;
+		font-size: clamp(1.35rem, 1.7vw, 1.75rem);
+		color: #131415;
+	}
+
+	.project-case-section__heading + .project-case-section__text {
+		margin-top: 1.1rem;
+	}
+
+	.project-case-section__text {
+		margin: 0;
+		line-height: 1.625;
+		color: rgba(0, 0, 0, 0.55);
+	}
+
+	.project-case-section__text + .project-case-section__text {
+		margin-top: 1.1rem;
+	}
+
+	.project-case-section__meta--spaced {
+		margin-top: 2.5rem;
+	}
+
+	.project-case-section__media {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.project-case-section__slot {
+		min-width: 0;
+	}
+
+	.project-case-section__youtube {
+		background: #0f1011;
+	}
+
+	@media (min-width: 768px) {
+		.project-case-section__media {
+			gap: 1.5rem;
+		}
+
+		.project-case-section__media--two,
+		.project-case-section__media--four {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.project-case-section__media--three {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.project-case-section__media--three > :first-child {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.project-case-section {
+			padding-bottom: 3rem;
+		}
+
+		.project-case-section__label {
+			margin-bottom: 1.5rem;
+		}
+	}
+</style>

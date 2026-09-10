@@ -7,63 +7,107 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, thumbnail, video } = project.data;
+const { title, thumbnail, video, comingSoon = false } = project.data;
 const label = title.toUpperCase();
 const thumbnailSrc = withPublicAssetVersion(thumbnail);
 const videoSrc = video ? withPublicAssetVersion(video) : '';
 const titleLineClass =
 	'flex h-[1.5em] items-center leading-none text-[1.2rem] font-semibold uppercase tracking-[0.02em] text-black md:text-[1.4rem]';
+const cardClass = 'project-card project-card__cursor-target group flex h-full flex-col';
 ---
 
-<a href={`/projects/${project.id}`} class="project-card project-card__cursor-target group block">
-	<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
-		{
-			video ? (
-				<video
-					src={videoSrc}
-					class="block h-auto w-full object-contain"
-					autoplay
-					muted
-					loop
-					playsinline
-					preload="metadata"
+{
+	comingSoon ? (
+		<div
+			class={cardClass}
+			data-coming-soon="true"
+			data-cursor-i18n="projects.soon"
+			role="group"
+			aria-label={`${title} — coming soon`}
+		>
+			<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
+				{video ? (
+					<video
+						src={videoSrc}
+						class="block h-auto w-full object-contain"
+						autoplay
+						muted
+						loop
+						playsinline
+						preload="metadata"
+						aria-hidden="true"
+					/>
+				) : (
+					<img
+						src={thumbnailSrc}
+						alt={title}
+						width="960"
+						height="600"
+						class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+						loading="lazy"
+					/>
+				)}
+			</div>
+
+			<div class="project-card__meta mt-5 flex items-center justify-between gap-4">
+				<h3 class="project-card__title min-w-0 text-[1.2rem] font-semibold uppercase leading-none tracking-[0.02em] text-black md:text-[1.4rem]">
+					<span class="flex h-[1.5em] flex-col overflow-hidden">
+						<span class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out">
+							<span class={titleLineClass}>{label}</span>
+							<span class={titleLineClass}>{label}</span>
+						</span>
+					</span>
+				</h3>
+			</div>
+		</div>
+	) : (
+		<a href={`/projects/${project.id}`} class={cardClass} data-cursor-i18n="projects.view">
+			<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
+				{video ? (
+					<video
+						src={videoSrc}
+						class="block h-auto w-full object-contain"
+						autoplay
+						muted
+						loop
+						playsinline
+						preload="metadata"
+						aria-hidden="true"
+					/>
+				) : (
+					<img
+						src={thumbnailSrc}
+						alt={title}
+						width="960"
+						height="600"
+						class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+						loading="lazy"
+					/>
+				)}
+			</div>
+
+			<div class="project-card__meta mt-5 flex items-center justify-between gap-4">
+				<h3 class="project-card__title min-w-0 text-[1.2rem] font-semibold uppercase leading-none tracking-[0.02em] text-black md:text-[1.4rem]">
+					<span class="flex h-[1.5em] flex-col overflow-hidden">
+						<span class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out">
+							<span class={titleLineClass}>{label}</span>
+							<span class={titleLineClass}>{label}</span>
+						</span>
+					</span>
+				</h3>
+
+				<img
+					src="/icons/arrow.svg"
+					alt=""
+					width="20"
+					height="16"
+					class="project-card__arrow w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
 					aria-hidden="true"
 				/>
-			) : (
-				<img
-					src={thumbnailSrc}
-					alt={title}
-					width="960"
-					height="600"
-					class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-					loading="lazy"
-				/>
-			)
-		}
-	</div>
-
-	<div class="project-card__meta mt-5 flex items-center justify-between gap-4">
-		<h3 class="project-card__title min-w-0 text-[1.2rem] font-semibold uppercase leading-none tracking-[0.02em] text-black md:text-[1.4rem]">
-			<span class="flex h-[1.5em] flex-col overflow-hidden">
-				<span
-					class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
-				>
-					<span class={titleLineClass}>{label}</span>
-					<span class={titleLineClass}>{label}</span>
-				</span>
-			</span>
-		</h3>
-
-		<img
-			src="/icons/arrow.svg"
-			alt=""
-			width="20"
-			height="16"
-			class="project-card__arrow w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
-			aria-hidden="true"
-		/>
-	</div>
-</a>
+			</div>
+		</a>
+	)
+}
 
 <style is:global>
 	.project-card__title {
@@ -75,5 +119,9 @@ const titleLineClass =
 		.project-card__title {
 			font-size: 1.4rem;
 		}
+	}
+
+	.project-card[data-coming-soon='true'] {
+		cursor: default;
 	}
 </style>

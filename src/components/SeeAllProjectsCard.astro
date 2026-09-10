@@ -6,22 +6,27 @@ interface Props {
 
 const { count, href = '/projects' } = Astro.props;
 
-const label = `See all projects [${count}]`;
+const countLabel = `+${count}`;
+const label = `More projects [${countLabel}]`;
 const lineClass =
-	'see-all-projects__label flex h-[1.5em] items-center leading-[1.15] text-[1.2rem] font-semibold uppercase text-black md:text-[1.6rem]';
+	'see-all-projects__label flex h-[1.5em] items-center leading-[1.15] text-[1.2rem] font-[600] uppercase text-black md:text-[1.6rem]';
 ---
 
-<a href={href} class="see-all-projects group block">
+<a href={href} class="see-all-projects group flex h-full min-h-0 flex-col">
 	<div
-		class="see-all-projects__surface flex h-[120px] items-center justify-center bg-[#ECECEC] transition-colors duration-300 ease-out group-hover:bg-[#D6D6D6] md:aspect-[16/10] md:h-auto"
+		class="see-all-projects__surface flex min-h-[120px] flex-1 items-center justify-center bg-[#ECECEC] transition-colors duration-300 ease-out group-hover:bg-[#D6D6D6]"
 	>
 		<span class="relative inline-block pb-1.5 text-[1.2rem] md:text-[1.6rem]">
 			<span class="flex h-[1.5em] flex-col overflow-hidden">
 				<span
 					class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
 				>
-					<span class={lineClass}>{label}</span>
-					<span class={lineClass}>{label}</span>
+					<span class={lineClass} data-i18n-count="projects.seeAll" data-count={countLabel}>
+						{label}
+					</span>
+					<span class={lineClass} data-i18n-count="projects.seeAll" data-count={countLabel}>
+						{label}
+					</span>
 				</span>
 			</span>
 

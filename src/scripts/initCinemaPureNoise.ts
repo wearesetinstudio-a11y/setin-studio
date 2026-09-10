@@ -7,7 +7,12 @@ const controllers = new WeakMap<HTMLCanvasElement, NoiseController>();
 
 export function initCinemaPureNoise(
 	canvasId: string,
-	options: { observeElementId?: string } = {},
+	options: {
+		observeElementId?: string;
+		density?: number;
+		grainSize?: number;
+		baseOpacity?: number;
+	} = {},
 ): NoiseController | null {
 	const canvas = document.getElementById(canvasId) as HTMLCanvasElement | null;
 	if (!canvas) return null;
@@ -23,9 +28,9 @@ export function initCinemaPureNoise(
 	if (!ctx || !container) return null;
 
 	const isMobile = window.matchMedia('(max-width: 767px)').matches;
-	const NOISE_DENSITY = isMobile ? 0.034 : 0.052;
-	const GRAIN_SIZE = isMobile ? 0.65 : 0.75;
-	const BASE_OPACITY = isMobile ? 0.2 : 0.17;
+	const NOISE_DENSITY = options.density ?? (isMobile ? 0.034 : 0.052);
+	const GRAIN_SIZE = options.grainSize ?? (isMobile ? 0.65 : 0.75);
+	const BASE_OPACITY = options.baseOpacity ?? (isMobile ? 0.2 : 0.17);
 	const MAX_NOISE_WIDTH = isMobile ? 640 : 1100;
 	const MAX_NOISE_HEIGHT = isMobile ? 420 : 700;
 	const TOTAL_BUFFERS = isMobile ? 4 : 6;

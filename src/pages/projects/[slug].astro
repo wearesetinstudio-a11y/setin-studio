@@ -6,6 +6,7 @@ import ProjectHero from '../../components/projects/ProjectHero.astro';
 import ProjectOverviewSection from '../../components/projects/ProjectOverviewSection.astro';
 import ProjectContentBlock from '../../components/projects/ProjectContentBlock.astro';
 import ProjectGallerySection from '../../components/projects/ProjectGallerySection.astro';
+import ProjectSidebar, { type SidebarNavItem } from '../../components/projects/ProjectSidebar.astro';
 import ContactSection from '../../components/ContactSection.astro';
 import { getCollection } from 'astro:content';
 import {
@@ -15,8 +16,14 @@ import {
 	resolveProjectFolderName,
 	type GalleryLayoutBlock,
 } from '../../utils/getProjectGallery';
+import {
+	buildProjectPageSegments,
+	resolveProjectSections,
+} from '../../utils/getProjectSections';
 import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion';
 import { getSiteCounts } from '../../utils/getSiteCounts.ts';
+import { getYouTubeEmbedUrl } from '../../utils/youtube.ts';
+import { buildProjectCopyBundle } from '../../utils/getProjectCopy.ts';
 
 export async function getStaticPaths() {
 	const [projects, articles] = await Promise.all([
@@ -25,10 +32,9 @@ export async function getStaticPaths() {
 	]);
 	const { articleCount } = await getSiteCounts();
 
-	return projects.map((project) => {
-		const folderName = resolveProjectFolderName(project);
-		const coverFilename = getCoverFilename(project.data.thumbnail);
-		const galleryLayout = buildGalleryLayout(folderName, coverFilename);
+	return projects
+		.filter((project) => !project.data.comingSoon)
+		.map((project) => {
 		const relatedArticles = articles
 			.filter((article) => article.data.relatedProject === project.id)
 			.sort((a, b) => a.data.order - b.data.order)
@@ -43,14 +49,13 @@ export async function getStaticPaths() {
 				project,
 				projectCount: projects.length,
 				articleCount,
-				galleryLayout,
 				relatedArticles,
 			},
 		};
 	});
 }
 
-const { project, projectCount, articleCount, galleryLayout, relatedArticles } = Astro.props;
+const { project, projectCount, articleCount, relatedArticles } = Astro.props;
 const data = project.data;
 
 const title = data.title ?? 'Project';
@@ -59,151 +64,205 @@ const heroBackground = data.heroBackground ?? '';
 const client = data.client ?? title;
 const heroImage = withPublicAssetVersion(data.heroImage || heroBackground);
 const year = data.year;
-const logo = data.logo ?? '';
 const service = data.service ?? '';
 const industry = data.industry ?? '';
 const market = data.market ?? '';
 const liveUrl = data.liveUrl ?? '';
-const overviewLabel = data.overviewLabel ?? 'Overview';
-const overviewTitle = data.overviewTitle ?? '';
-const overviewText = data.overviewText ?? '';
 const folderName = resolveProjectFolderName(project);
 const coverFilename = getCoverFilename(data.thumbnail);
-const overviewGraphicItem = getOverviewGraphic(folderName, coverFilename);
-const overviewGraphicSrc = overviewGraphicItem
-	? withPublicAssetVersion(overviewGraphicItem.src)
-	: withPublicAssetVersion(data.overviewGraphic || logo);
-const overviewGraphicType = overviewGraphicItem?.type ?? 'image';
-const pageGalleryLayout = galleryLayout.filter((block) => block.group !== 1);
-const challengesLabel = data.challengesLabel ?? 'Challenges';
-const challengesText = data.challengesText ?? '';
-const challengesAfterGroup = data.challengesAfterGroup ?? 2;
-const strategyLabel = data.strategyLabel ?? 'Strategy';
-const strategyTitle = data.strategyTitle ?? '';
-const strategyText = data.strategyText ?? '';
-const strategyAfterGroup = data.strategyAfterGroup ?? 8;
-const summaryLabel = data.summaryLabel ?? 'Summary';
-const summaryTitle = data.summaryTitle ?? '';
-const summaryText = data.summaryText ?? '';
+const galleryLayout = buildGalleryLayout(folderName, coverFilename);
+const overviewLabel = data.overviewLabel || 'Overview';
+const overviewTitle = data.overviewTitle ?? '';
+const overviewText = data.overviewText ?? '';
+const overviewYoutubeEmbed = data.overviewYoutube
+	? getYouTubeEmbedUrl(data.overviewYoutube)
+	: null;
+const hasGroupOne = galleryLayout.some((block) => block.group === 1);
+const overviewGraphicItem = overviewYoutubeEmbed
+	? null
+	: hasGroupOne
+		? null
+		: getOverviewGraphic(folderName, coverFilename);
+const overviewGraphicSrc = overviewYoutubeEmbed
+	? overviewYoutubeEmbed
+	: data.overviewGraphic
+		? withPublicAssetVersion(data.overviewGraphic)
+		: overviewGraphicItem
+			? withPublicAssetVersion(overviewGraphicItem.src)
+			: '';
+const overviewGraphicType = overviewYoutubeEmbed
+	? ('youtube' as const)
+	: overviewGraphicItem?.type === 'video'
+		? ('video' as const)
+		: ('image' as const);
+
+// YouTube owns slot 1.1 — remove file-based group 1 from the gallery stream.
+const pageGalleryLayout = overviewYoutubeEmbed
+	? galleryLayout.filter((block) => block.group !== 1)
+	: galleryLayout;
+
+const projectSections = resolveProjectSections(data);
+
+const infoRows = [
+	service ? { label: 'Service', value: service, labelKey: 'project.meta.service', fieldKey: 'service' } : null,
+	industry
+		? { label: 'Industry', value: industry, labelKey: 'project.meta.industry', fieldKey: 'industry' }
+		: null,
+	market ? { label: 'Market', value: market, labelKey: 'project.meta.market', fieldKey: 'market' } : null,
+	year ? { label: 'Year', value: String(year), labelKey: 'project.meta.year' } : null,
+	liveUrl ? { label: 'Live', value: liveUrl, isLink: true, labelKey: 'project.meta.live' } : null,
+].filter(
+	(
+		row,
+	): row is {
+		label: string;
+		value: string;
+		isLink?: boolean;
+		labelKey?: string;
+		fieldKey?: string;
+	} => row !== null,
+);
+
+const showOverview = Boolean(overviewTitle || overviewText || infoRows.length || overviewGraphicSrc);
+const pageDescription =
+	projectSections.find((section) => section.text)?.text ||
+	overviewText ||
+	heroSubtitle ||
+	title;
+
+function splitGalleryAfterGroup(
+	blocks: GalleryLayoutBlock[],
+	afterGroup: number,
+): { before: GalleryLayoutBlock[]; after: GalleryLayoutBlock[] } {
+	const before: GalleryLayoutBlock[] = [];
+	const after: GalleryLayoutBlock[] = [];
+
+	for (const block of blocks) {
+		if (block.group <= afterGroup) before.push(block);
+		else after.push(block);
+	}
+
+	return { before, after };
+}
+
+const pageSegments = buildProjectPageSegments(
+	pageGalleryLayout,
+	projectSections,
+	splitGalleryAfterGroup,
+);
 
 const heroLines = (heroSubtitle || title)
 	.split('\n')
 	.map((line) => line.trim())
 	.filter(Boolean);
 
-const infoRows = [
-	service ? { label: 'Service', value: service } : null,
-	industry ? { label: 'Industry', value: industry } : null,
-	market ? { label: 'Market', value: market } : null,
-	year ? { label: 'Year', value: String(year) } : null,
-	liveUrl ? { label: 'Live', value: liveUrl, isLink: true } : null,
-].filter(
-	(row): row is { label: string; value: string; isLink?: boolean } => row !== null,
-);
+let galleryMediaCursor = 0;
+const revealHeadingIds = [
+	'project-overview-heading',
+	...projectSections
+		.filter((section) => section.title)
+		.map((section) => `project-section-${section.index}-heading`),
+];
 
-const pageDescription = summaryText || overviewText || challengesText || heroSubtitle || title;
+const navItems: SidebarNavItem[] = [
+	...(showOverview
+		? [
+				{
+					id: 'project-section-0',
+					num: '01',
+					label: overviewLabel,
+					isOverview: true,
+				},
+			]
+		: []),
+	...projectSections.map((section, idx) => ({
+		id: `project-section-${section.index + 1}`,
+		num: String(showOverview ? idx + 2 : idx + 1).padStart(2, '0'),
+		label: section.label,
+		sectionIndex: section.index,
+	})),
+];
 
-function splitGalleryByGroup(
-	blocks: GalleryLayoutBlock[],
-	afterGroup: number,
-): { before: GalleryLayoutBlock[]; after: GalleryLayoutBlock[] } {
-	const before = blocks.filter((block) => block.group <= afterGroup);
-	const after = blocks.filter((block) => block.group > afterGroup);
-	return { before, after };
-}
-
-const firstSplit = challengesText
-	? splitGalleryByGroup(pageGalleryLayout, challengesAfterGroup)
-	: { before: pageGalleryLayout, after: [] as GalleryLayoutBlock[] };
-
-const secondSplit = strategyText
-	? splitGalleryByGroup(firstSplit.after, strategyAfterGroup)
-	: { before: firstSplit.after, after: [] as GalleryLayoutBlock[] };
-
-const galleryBeforeCount = firstSplit.before.length;
-const galleryMiddleCount = secondSplit.before.length;
+const projectCopy = buildProjectCopyBundle(data);
+const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
 ---
 
 <Layout title={title} description={pageDescription}>
 	<Header projectCount={projectCount} articleCount={articleCount} />
 
 	<main id="project-page" class="project-page relative z-20 flex-1">
+		<template id="project-copy-data" data-project-copy="true" set:html={projectCopyJson} />
+		<script is:inline define:vars={{ projectCopy }}>
+			globalThis.__projectCopy = projectCopy;
+		</script>
+
 		<ProjectHero heroImage={heroImage} heroLines={heroLines} client={client} />
 
-		<div class="project-page__body relative z-10">
-			<ProjectOverviewSection
-				label={overviewLabel}
-				title={overviewTitle}
-				text={overviewText}
-				graphicSrc={overviewGraphicSrc}
-				graphicType={overviewGraphicType}
-				graphicAlt={client}
-				rows={infoRows}
-				relatedArticles={relatedArticles}
-			/>
+		<div class="project-page__body relative z-10 bg-white pb-20 lg:pb-0">
+			<div class="project-page__container relative mx-auto w-full px-[var(--page-gutter)] pt-24 pb-12 md:pt-36 md:pb-20 lg:pt-48 lg:pb-24">
+				<div class="project-page__layout grid grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_75%] lg:gap-14 xl:gap-16">
+					{navItems.length > 0 ? <ProjectSidebar items={navItems} /> : null}
 
-			{
-				firstSplit.before.length > 0 ? (
-					<ProjectGallerySection blocks={firstSplit.before} title={title} startIndex={0} />
-				) : null
-			}
+					<div class="project-page__content flex min-w-0 flex-col gap-20 md:gap-28 lg:gap-36">
+						{
+							showOverview ? (
+								<ProjectOverviewSection
+									id="project-section-0"
+									num="01"
+									label={overviewLabel}
+									title={overviewTitle}
+									text={overviewText}
+									graphicSrc={overviewGraphicSrc}
+									graphicType={overviewGraphicType}
+									graphicAlt={client}
+									rows={infoRows}
+									relatedArticles={relatedArticles}
+								/>
+							) : null
+						}
 
-			{
-				challengesText ? (
-					<ProjectContentBlock
-						index={2}
-						label={challengesLabel}
-						text={challengesText}
-						theme="light"
-					/>
-				) : null
-			}
+						{
+							pageSegments.map((segment) => {
+								if (segment.type === 'gallery') {
+									const startIndex = galleryMediaCursor;
+									galleryMediaCursor += segment.blocks.reduce((count, block) => {
+										if (block.kind === 'full') return count + 1;
+										return count + block.items.length;
+									}, 0);
 
-			{
-				secondSplit.before.length > 0 ? (
-					<ProjectGallerySection
-						blocks={secondSplit.before}
-						title={title}
-						startIndex={galleryBeforeCount}
-					/>
-				) : null
-			}
+									return (
+										<ProjectGallerySection
+											blocks={segment.blocks}
+											title={title}
+											startIndex={startIndex}
+										/>
+									);
+								}
 
-			{
-				strategyText ? (
-					<ProjectContentBlock
-						index={3}
-						label={strategyLabel}
-						title={strategyTitle}
-						text={strategyText}
-						theme="dark"
-						headingId="project-strategy-heading"
-					/>
-				) : null
-			}
+								const { section } = segment;
+								const sectionNum = String(
+									showOverview
+										? projectSections.findIndex((s) => s.index === section.index) + 2
+										: projectSections.findIndex((s) => s.index === section.index) + 1,
+								).padStart(2, '0');
 
-			{
-				secondSplit.after.length > 0 ? (
-					<ProjectGallerySection
-						blocks={secondSplit.after}
-						title={title}
-						startIndex={galleryBeforeCount + galleryMiddleCount}
-					/>
-				) : null
-			}
-
-			{
-				summaryText ? (
-					<ProjectContentBlock
-						index={4}
-						label={summaryLabel}
-						title={summaryTitle}
-						text={summaryText}
-						theme="light"
-						headingId="project-summary-heading"
-					/>
-				) : null
-			}
+								return (
+									<ProjectContentBlock
+										id={`project-section-${section.index + 1}`}
+										num={sectionNum}
+										index={section.index + 1}
+										sectionIndex={section.index}
+										label={section.label}
+										title={section.title}
+										text={section.text}
+										headingId={`project-section-${section.index}-heading`}
+									/>
+								);
+							})
+						}
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<ContactSection />
@@ -211,19 +270,21 @@ const galleryMiddleCount = secondSplit.before.length;
 
 	<Footer />
 
+	<script is:inline define:vars={{ revealHeadingIds }}>
+		globalThis.__projectRevealHeadings = revealHeadingIds;
+	</script>
+
 	<script>
 		import { bootSlideUpReveal } from '../../scripts/initSlideUpReveal.ts';
 		import { initScrollLetterReveals } from '../../scripts/initScrollLetterReveal.ts';
-
-		const PROJECT_REVEAL_HEADINGS = [
-			'project-overview-heading',
-			'project-strategy-heading',
-			'project-summary-heading',
-		];
+		import { initProjectSidebar } from '../../scripts/initProjectSidebar.ts';
 
 		function initProjectPage() {
 			bootSlideUpReveal();
-			initScrollLetterReveals(PROJECT_REVEAL_HEADINGS);
+			const ids =
+				(globalThis as { __projectRevealHeadings?: string[] }).__projectRevealHeadings ?? [];
+			initScrollLetterReveals(ids);
+			initProjectSidebar();
 		}
 
 		if (document.readyState === 'loading') {
@@ -242,10 +303,30 @@ const galleryMiddleCount = secondSplit.before.length;
 		opacity: 1;
 	}
 
+	.project-page__body {
+		background: #ffffff;
+		color: #131415;
+		min-width: 0;
+		max-width: 100%;
+		overflow-x: clip;
+	}
+
+	.project-page__layout,
+	.project-page__content {
+		min-width: 0;
+		max-width: 100%;
+	}
+
 	.project-page__body :global(img),
 	.project-page__body :global(video) {
 		display: block;
 		width: 100%;
+		max-width: 100%;
 		height: auto;
+	}
+
+	.project-page__content > :global(.project-gallery) {
+		padding-inline: 0;
+		padding-block: 0;
 	}
 </style>

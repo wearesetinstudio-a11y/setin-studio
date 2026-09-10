@@ -1,0 +1,248 @@
+export const locales = ['en', 'pl', 'es'] as const;
+export type Locale = (typeof locales)[number];
+
+export const defaultLocale: Locale = 'en';
+
+export type Dictionary = Record<string, string>;
+
+export const dictionaries: Record<Locale, Dictionary> = {
+	en: {
+		'nav.projects': 'Projects',
+		'nav.services': 'Services',
+		'nav.about': 'About us',
+		'nav.articles': 'Articles',
+		'nav.workWithUs': 'Work with us',
+		'nav.homeAria': 'Setin Studio — home',
+		'nav.mainAria': 'Main',
+		'nav.mobileAria': 'Mobile',
+		'nav.openMenu': 'Open menu',
+		'nav.closeMenu': 'Close menu',
+		'nav.languageAria': 'Language',
+
+		'project.client': 'Client',
+		'project.meta.service': 'Service',
+		'project.meta.industry': 'Industry',
+		'project.meta.market': 'Market',
+		'project.meta.year': 'Year',
+		'project.meta.live': 'Live',
+
+		'hero.headline': 'We design solutions\nfor visionaries.',
+		'hero.headline.mobile': 'We design\nsolutions for\nvisionaries.',
+		'hero.description':
+			'Setin Studio is an independent creative studio rooted in Slavic culture. We help ambitious founders and brands turn ideas into sharp design, clean code, and clear stories.',
+		'hero.service.branding': 'Branding',
+		'hero.service.uxResearch': 'UX Research',
+		'hero.service.uxUi': 'UX/UI Design',
+		'hero.service.development': 'Development',
+		'hero.servicesAria': 'Services',
+
+		'clients.heading1': 'Those who stand',
+		'clients.heading2': 'with us',
+		'clients.description':
+			"From local innovators to global visionaries, we've helped plenty of brands find their edge and own their space in the digital landscape.",
+
+		'projects.heading': 'Our finest work',
+		'projects.description':
+			"We don't follow trends, we set the tone. These are the collaborations that redefined the standard for our partners.",
+		'projects.seeAll': 'More projects',
+		'projects.view': 'view',
+		'projects.soon': 'soon',
+
+		'about.eyebrow': 'Our story',
+		'about.intro':
+			'We are two brothers who turned a shared passion into a studio dedicated to quality. We combine years of global experience to build digital products that truly last.',
+		'about.heading':
+			'We believe that a great brand is built on two things – a clear vision and a solid foundation.',
+		'about.body1':
+			"In our studio, we create digital spaces that tell your story. With 15 years of combined experience, we've worked with brands from Poland to the LatAm, helping them stand out.",
+		'about.body2':
+			'Our work is a mix of two worlds. We look at the human side of your business to understand your goals, and then we use high-end technology to make them real. Because we are brothers, we work as one. This means your project is always consistent, from the first sketch to the final line of code. We are here to help you grow and leave a mark on the digital world.',
+		'about.readMore': 'Read more about us',
+
+		'testimonials.heading1': 'What they say',
+		'testimonials.heading2': 'about the setin',
+		'testimonials.description':
+			'Every digital landmark we create is a result of deep trust and precise execution.',
+
+		'articles.heading1': 'Inside',
+		'articles.heading2': 'the process',
+		'articles.description':
+			"We're opening our internal documentation to showcase the systems, technical shifts, and strategic decisions that drive our studio.",
+		'articles.viewMore': 'View more articles',
+
+		'contact.heading': 'Start your legacy',
+		'contact.description':
+			"Every great brand begins with a single conversation. Whether you're building from the ground up or redefining your edge, let's create something that lasts.",
+		'contact.email': 'Send us e-mail',
+
+		'footer.all': 'All',
+
+		'services.title': 'Services',
+		'services.description':
+			'From identity systems to digital products and performance-focused builds — we craft work that holds up over time.',
+
+		'aboutPage.title': 'About Us',
+	},
+	pl: {
+		'nav.projects': 'Projekty',
+		'nav.services': 'Usługi',
+		'nav.about': 'O nas',
+		'nav.articles': 'Artykuły',
+		'nav.workWithUs': 'Napisz do nas',
+		'nav.homeAria': 'Setin Studio — strona główna',
+		'nav.mainAria': 'Główne',
+		'nav.mobileAria': 'Mobilne',
+		'nav.openMenu': 'Otwórz menu',
+		'nav.closeMenu': 'Zamknij menu',
+		'nav.languageAria': 'Język',
+
+		'project.client': 'Klient',
+		'project.meta.service': 'Usługa',
+		'project.meta.industry': 'Branża',
+		'project.meta.market': 'Rynek',
+		'project.meta.year': 'Rok',
+		'project.meta.live': 'Live',
+
+		'hero.headline': 'Projektujemy rozwiązania\ndla wizjonerów.',
+		'hero.headline.mobile': 'Projektujemy\nrozwiązania dla\nwizjonerów.',
+		'hero.description':
+			'Setin Studio to niezależne studio kreatywne wyrastające ze słowiańskich korzeni. Pomagamy ambitnym markom i założycielom zamieniać pomysły w dopracowany design, działający kod i prostą opowieść.',
+		'hero.service.branding': 'Branding',
+		'hero.service.uxResearch': 'Badania UX',
+		'hero.service.uxUi': 'Projektowanie UX/UI',
+		'hero.service.development': 'Development',
+		'hero.servicesAria': 'Usługi',
+
+		'clients.heading1': 'Ci, którzy stoją',
+		'clients.heading2': 'z nami',
+		'clients.description':
+			'Od lokalnych innowatorów po globalne wizje — pomogliśmy markom znaleźć przewagę i zająć własne miejsce w cyfrowym krajobrazie.',
+
+		'projects.heading': 'Nasze najlepsze prace',
+		'projects.description':
+			'Nie podążamy za trendami — wyznaczamy ton. To współprace, które podniosły standard dla naszych partnerów.',
+		'projects.seeAll': 'Więcej projektów',
+		'projects.view': 'zobacz',
+		'projects.soon': 'wkrótce',
+
+		'about.eyebrow': 'Nasza historia',
+		'about.intro':
+			'Jesteśmy braćmi, którzy zamienili wspólną pasję w studio oddane jakości. Łączymy lata globalnego doświadczenia, by budować produkty cyfrowe, które naprawdę trwają.',
+		'about.heading':
+			'Wierzymy, że wielką markę budują dwie rzeczy – jasna wizja i solidne fundamenty.',
+		'about.body1':
+			'Tworzymy cyfrowe przestrzenie, które opowiadają Twoją historię. Dzięki 15 latom wspólnego doświadczenia pracowaliśmy z markami od Polski po LatAm, pomagając im się wyróżnić.',
+		'about.body2':
+			'Nasza praca łączy dwa światy. Patrzymy na ludzką stronę Twojego biznesu, by zrozumieć cele, a potem używamy zaawansowanej technologii, by je zrealizować. Jesteśmy braćmi, więc działamy jako jeden zespół. Dzięki temu projekt jest spójny — od pierwszego szkicu po ostatnią linię kodu. Jesteśmy tu, by pomóc Ci rosnąć i zostawić ślad w cyfrowym świecie.',
+		'about.readMore': 'Więcej o nas',
+
+		'testimonials.heading1': 'Co mówią',
+		'testimonials.heading2': 'o setin',
+		'testimonials.description':
+			'Każdy cyfrowy punkt orientacyjny, który tworzymy, jest wynikiem głębokiego zaufania i precyzyjnej realizacji.',
+
+		'articles.heading1': 'Wewnątrz',
+		'articles.heading2': 'procesu',
+		'articles.description':
+			'Otwieramy naszą wewnętrzną dokumentację, by pokazać systemy, zmiany techniczne i decyzje strategiczne, które napędzają studio.',
+		'articles.viewMore': 'Więcej artykułów',
+
+		'contact.heading': 'Zacznij dziedzictwo',
+		'contact.description':
+			'Każda wielka marka zaczyna się od jednej rozmowy. Niezależnie czy budujesz od zera, czy redefiniujesz swoją przewagę — stwórzmy coś, co przetrwa.',
+		'contact.email': 'Napisz e-mail',
+
+		'footer.all': 'Wszystkie',
+
+		'services.title': 'Usługi',
+		'services.description':
+			'Od systemów identyfikacji po produkty cyfrowe i realizacje nastawione na wydajność — tworzymy rzeczy, które wytrzymują próbę czasu.',
+
+		'aboutPage.title': 'O nas',
+	},
+	es: {
+		'nav.projects': 'Proyectos',
+		'nav.services': 'Servicios',
+		'nav.about': 'Nosotros',
+		'nav.articles': 'Artículos',
+		'nav.workWithUs': 'Contáctanos',
+		'nav.homeAria': 'Setin Studio — inicio',
+		'nav.mainAria': 'Principal',
+		'nav.mobileAria': 'Móvil',
+		'nav.openMenu': 'Abrir menú',
+		'nav.closeMenu': 'Cerrar menú',
+		'nav.languageAria': 'Idioma',
+
+		'project.client': 'Cliente',
+		'project.meta.service': 'Servicio',
+		'project.meta.industry': 'Industria',
+		'project.meta.market': 'Mercado',
+		'project.meta.year': 'Año',
+		'project.meta.live': 'Live',
+
+		'hero.headline': 'Diseñamos soluciones\npara visionarios.',
+		'hero.headline.mobile': 'Diseñamos\nsoluciones para\nvisionarios.',
+		'hero.description':
+			'Setin Studio es un estudio creativo independiente con raíces eslavas. Ayudamos a marcas y fundadores a transformar ideas en buen diseño, código impecable y relatos claros.',
+		'hero.service.branding': 'Branding',
+		'hero.service.uxResearch': 'Investigación UX',
+		'hero.service.uxUi': 'Diseño UX/UI',
+		'hero.service.development': 'Desarrollo',
+		'hero.servicesAria': 'Servicios',
+
+		'clients.heading1': 'Quienes están',
+		'clients.heading2': 'con nosotros',
+		'clients.description':
+			'Desde innovadores locales hasta visionarios globales, hemos ayudado a muchas marcas a encontrar su ventaja y ocupar su lugar en el panorama digital.',
+
+		'projects.heading': 'Nuestro mejor trabajo',
+		'projects.description':
+			'No seguimos tendencias, marcamos el tono. Estas son las colaboraciones que redefinieron el estándar para nuestros socios.',
+		'projects.seeAll': 'Más proyectos',
+		'projects.view': 'ver',
+		'projects.soon': 'pronto',
+
+		'about.eyebrow': 'Nuestra historia',
+		'about.intro':
+			'Somos dos hermanos que convirtieron una pasión compartida en un estudio dedicado a la calidad. Combinamos años de experiencia global para crear productos digitales que realmente perduran.',
+		'about.heading':
+			'Creemos que una gran marca se construye sobre dos cosas: una visión clara y una base sólida.',
+		'about.body1':
+			'En nuestro estudio creamos espacios digitales que cuentan tu historia. Con 15 años de experiencia combinada, hemos trabajado con marcas desde Polonia hasta LatAm, ayudándolas a destacar.',
+		'about.body2':
+			'Nuestro trabajo une dos mundos. Miramos el lado humano de tu negocio para entender tus objetivos y luego usamos tecnología de alto nivel para hacerlos reales. Como somos hermanos, trabajamos como uno. Eso significa que tu proyecto siempre es coherente, desde el primer boceto hasta la última línea de código. Estamos aquí para ayudarte a crecer y dejar huella en el mundo digital.',
+		'about.readMore': 'Más sobre nosotros',
+
+		'testimonials.heading1': 'Lo que dicen',
+		'testimonials.heading2': 'sobre setin',
+		'testimonials.description':
+			'Cada hito digital que creamos es resultado de una confianza profunda y una ejecución precisa.',
+
+		'articles.heading1': 'Dentro',
+		'articles.heading2': 'del proceso',
+		'articles.description':
+			'Abrimos nuestra documentación interna para mostrar los sistemas, cambios técnicos y decisiones estratégicas que impulsan el estudio.',
+		'articles.viewMore': 'Ver más artículos',
+
+		'contact.heading': 'Empieza tu legado',
+		'contact.description':
+			'Toda gran marca comienza con una sola conversación. Ya sea que construyas desde cero o redefines tu ventaja, creemos algo que dure.',
+		'contact.email': 'Envíanos un e-mail',
+
+		'footer.all': 'Todos',
+
+		'services.title': 'Servicios',
+		'services.description':
+			'Desde sistemas de identidad hasta productos digitales y desarrollos orientados al rendimiento: creamos trabajo que resiste el tiempo.',
+
+		'aboutPage.title': 'Nosotros',
+	},
+};
+
+export function isLocale(value: string | null | undefined): value is Locale {
+	return value === 'en' || value === 'pl' || value === 'es';
+}
+
+export function t(locale: Locale, key: string): string {
+	return dictionaries[locale][key] ?? dictionaries.en[key] ?? key;
+}

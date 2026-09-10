@@ -4,29 +4,149 @@ interface Props {
 	label: string;
 	count?: number;
 	inverted?: boolean;
+	i18nKey?: string;
+	variant?: 'nav' | 'footer';
+	underlined?: boolean;
+	external?: boolean;
 }
 
-const { href, label, count, inverted = false } = Astro.props;
+const {
+	href,
+	label,
+	count,
+	inverted = false,
+	i18nKey,
+	variant = 'nav',
+	underlined = false,
+	external = false,
+} = Astro.props;
 const text = count !== undefined ? `${label} [${count}]` : label;
+const isFooter = variant === 'footer';
 
-const lineClass = inverted
-	? 'flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-black'
-	: 'flex h-[1.5em] items-center leading-none text-[1.05rem] font-semibold uppercase text-setin-fg';
+const lineClass = isFooter
+	? 'site-footer__link-line rolling-link__line'
+	: inverted
+		? 'rolling-link__line rolling-link__line--nav rolling-link__line--inverted'
+		: 'rolling-link__line rolling-link__line--nav';
+
+const underlineColor = inverted ? 'bg-black' : 'bg-white';
 ---
 
 <a
 	href={href}
 	class:list={[
-		'rolling-link group relative -mx-1 -my-2 inline-flex flex-col px-1 py-2',
-		inverted ? 'text-black' : 'text-setin-fg',
+		'rolling-link group relative inline-flex flex-col',
+		isFooter
+			? ['site-footer__link', underlined && 'site-footer__link--underlined']
+			: ['-mx-1 -my-2 px-1 py-2', inverted ? 'text-black' : 'text-setin-fg'],
 	]}
+	target={external ? '_blank' : undefined}
+	rel={external ? 'noopener noreferrer' : undefined}
 >
-	<div class="flex h-[1.5em] flex-col overflow-hidden">
-		<div
-			class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out"
-		>
-			<span class={lineClass}>{text}</span>
-			<span class={lineClass}>{text}</span>
+	<div class:list={['rolling-link__mask', isFooter && 'rolling-link__mask--footer']}>
+		<div class="rolling-link__track">
+			<span
+				class={lineClass}
+				data-i18n-count={count !== undefined ? i18nKey : undefined}
+				data-count={count !== undefined ? String(count) : undefined}
+				data-i18n={count === undefined ? i18nKey : undefined}
+			>
+				{text}
+			</span>
+			<span
+				class={lineClass}
+				aria-hidden="true"
+				data-i18n-count={count !== undefined ? i18nKey : undefined}
+				data-count={count !== undefined ? String(count) : undefined}
+				data-i18n={count === undefined ? i18nKey : undefined}
+			>
+				{text}
+			</span>
 		</div>
 	</div>
+
+	{
+		underlined && (
+			<span
+				class:list={[
+					'rolling-link__underline absolute left-0 h-[1.5px] w-full origin-left scale-x-100 transition-transform duration-300 ease-out group-hover:origin-right group-hover:scale-x-0',
+					isFooter ? 'bottom-0' : '-bottom-1',
+					underlineColor,
+				]}
+				aria-hidden="true"
+			/>
+		)
+	}
 </a>
+
+<style is:global>
+	.rolling-link__mask {
+		display: block;
+		height: 1.5em;
+		overflow: hidden;
+		overflow-clip-margin: 0;
+	}
+
+	.rolling-link__mask--footer {
+		/* Tall enough for accents; hard clip so the duplicate line never peeks */
+		height: 1.3em;
+	}
+
+	.rolling-link__track {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15em;
+		transition: transform 300ms ease-in;
+		will-change: transform;
+	}
+
+	.rolling-link__mask--footer .rolling-link__track {
+		gap: 0.35em;
+	}
+
+	.rolling-link:hover .rolling-link__mask:not(.rolling-link__mask--footer) .rolling-link__track,
+	.rolling-link:focus-visible .rolling-link__mask:not(.rolling-link__mask--footer) .rolling-link__track {
+		transform: translateY(calc(-1.5em - 0.15em));
+		transition-duration: 450ms;
+		transition-timing-function: ease-out;
+	}
+
+	.rolling-link:hover .rolling-link__mask--footer .rolling-link__track,
+	.rolling-link:focus-visible .rolling-link__mask--footer .rolling-link__track {
+		transform: translateY(calc(-1.3em - 0.35em));
+		transition-duration: 450ms;
+		transition-timing-function: ease-out;
+	}
+
+	.rolling-link__line {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		height: 1.5em;
+		line-height: 1;
+		font-weight: 600;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.rolling-link__mask--footer .rolling-link__line {
+		height: 1.3em;
+		font-size: 0.95rem;
+		color: #f5f5f5;
+	}
+
+	.rolling-link__line--nav {
+		font-size: 1.05rem;
+		color: inherit;
+	}
+
+	.rolling-link__line--inverted {
+		color: #000000;
+	}
+
+	@media (max-width: 767px) {
+		.rolling-link__mask--footer .rolling-link__line {
+			font-size: 0.85rem;
+		}
+	}
+</style>

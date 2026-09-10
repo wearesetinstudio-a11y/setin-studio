@@ -9,16 +9,49 @@ import {
 } from './sygnetFlipAnimation.ts';
 
 export const PAGE_TRANSITION_OVERLAY_ID = 'page-transition-overlay';
+const BAR_STAGGER_MS = 75;
 
 export function getPageTransitionOverlay(): HTMLElement | null {
 	return document.getElementById(PAGE_TRANSITION_OVERLAY_ID);
 }
 
+function getBars(overlay: HTMLElement): HTMLElement[] {
+	return Array.from(overlay.querySelectorAll<HTMLElement>('.page-transition-bar'));
+}
+
+function clearBarAnimations(overlay: HTMLElement) {
+	const bars = getBars(overlay);
+	for (const bar of bars) {
+		bar.style.animation = 'none';
+	}
+	void overlay.offsetWidth;
+	for (const bar of bars) {
+		bar.style.animation = '';
+	}
+}
+
+async function waitForBars(
+	overlay: HTMLElement,
+	animationName: string,
+	baseMs: number,
+): Promise<void> {
+	const bars = getBars(overlay);
+	if (!bars.length) {
+		await wait(baseMs);
+		return;
+	}
+
+	await Promise.all(
+		bars.map((bar, index) =>
+			waitForAnimation(bar, animationName, baseMs + index * BAR_STAGGER_MS),
+		),
+	);
+}
+
 export function resetPageTransitionOverlay(overlay: HTMLElement) {
-	overlay.classList.remove('is-sliding-in', 'is-sliding-out', 'is-active');
-	overlay.style.top = '-100vh';
-	overlay.style.animation = 'none';
+	overlay.classList.remove('is-covering', 'is-revealing', 'is-covered', 'is-active');
 	overlay.style.pointerEvents = 'none';
+	clearBarAnimations(overlay);
 
 	const sygnet = findSygnetFlip(overlay);
 	if (sygnet) resetSygnetFlip(sygnet);
@@ -26,25 +59,25 @@ export function resetPageTransitionOverlay(overlay: HTMLElement) {
 
 export async function slidePanelIn(overlay: HTMLElement): Promise<void> {
 	if (prefersReducedMotion()) {
-		overlay.classList.add('is-active');
-		overlay.style.top = '0';
+		overlay.classList.add('is-active', 'is-covered');
 		overlay.style.pointerEvents = 'auto';
 		await wait(120);
 		return;
 	}
 
-	resetPageTransitionOverlay(overlay);
+	overlay.classList.remove('is-revealing', 'is-covered');
 	overlay.classList.add('is-active');
-	overlay.style.top = '-100vh';
-	overlay.style.animation = '';
 	overlay.style.pointerEvents = 'auto';
 
+	const sygnet = findSygnetFlip(overlay);
+	if (sygnet) resetSygnetFlip(sygnet);
+
+	clearBarAnimations(overlay);
 	void overlay.offsetWidth;
-	overlay.classList.add('is-sliding-in');
-	await waitForAnimation(overlay, 'slide-in-top', PANEL_SLIDE_MS);
-	overlay.classList.remove('is-sliding-in');
-	overlay.style.top = '0';
-	overlay.style.animation = 'none';
+	overlay.classList.add('is-covering');
+	await waitForBars(overlay, 'preloader-bar-cover', PANEL_SLIDE_MS);
+	overlay.classList.remove('is-covering');
+	overlay.classList.add('is-covered');
 }
 
 export async function slidePanelOut(overlay: HTMLElement): Promise<void> {
@@ -53,12 +86,11 @@ export async function slidePanelOut(overlay: HTMLElement): Promise<void> {
 		return;
 	}
 
-	overlay.style.top = '0';
-	overlay.style.animation = '';
-
+	overlay.classList.remove('is-covering');
+	clearBarAnimations(overlay);
 	void overlay.offsetWidth;
-	overlay.classList.add('is-sliding-out');
-	await waitForAnimation(overlay, 'slide-out-bottom', PANEL_SLIDE_MS);
+	overlay.classList.add('is-revealing');
+	await waitForBars(overlay, 'preloader-bar-reveal', PANEL_SLIDE_MS);
 	resetPageTransitionOverlay(overlay);
 }
 
@@ -74,11 +106,10 @@ export function applyOverlayCover(overlay: HTMLElement): void {
 	const sygnet = findSygnetFlip(overlay);
 	if (sygnet) resetSygnetFlip(sygnet);
 
-	overlay.classList.remove('is-sliding-in', 'is-sliding-out');
-	overlay.classList.add('is-active');
-	overlay.style.animation = 'none';
-	overlay.style.top = '0';
+	overlay.classList.remove('is-covering', 'is-revealing');
+	overlay.classList.add('is-active', 'is-covered');
 	overlay.style.pointerEvents = 'auto';
+	clearBarAnimations(overlay);
 }
 
 async function playOverlaySygnetFlip(overlay: HTMLElement): Promise<void> {
@@ -90,8 +121,26 @@ export async function animateIntroCover(): Promise<void> {
 	const overlay = getPageTransitionOverlay();
 	if (!overlay) return;
 
+	// First visit: cover is already on screen — no slide-in
 	await showOverlayCover(overlay);
+	await waitForPageReady();
 	await playOverlaySygnetFlip(overlay);
+}
+
+async function waitForPageReady(): Promise<void> {
+	const fontsReady =
+		'document' in globalThis && 'fonts' in document
+			? document.fonts.ready.catch(() => undefined)
+			: Promise.resolve();
+
+	if (document.readyState !== 'complete') {
+		await new Promise<void>((resolve) => {
+			window.addEventListener('load', () => resolve(), { once: true });
+		});
+	}
+
+	await fontsReady;
+	await wait(180);
 }
 
 export async function animatePageTransitionCover(): Promise<void> {

@@ -47,7 +47,15 @@ const { articles } = Astro.props;
 		transition: opacity 0.2s ease;
 	}
 
-	.project-related-articles__link:hover {
-		opacity: 0.65;
+	@media (hover: hover) and (pointer: fine) {
+		.project-related-articles__link:hover {
+			opacity: 0.65;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.project-related-articles__link:active {
+			opacity: 0.65;
+		}
 	}
 </style>

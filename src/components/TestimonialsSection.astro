@@ -49,11 +49,14 @@ const loopTestimonials = [...testimonials, ...testimonials];
 	<div class="grid gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start lg:gap-20">
 		<div class="testimonials-intro">
 			<h2 id="testimonials-heading" class="testimonials-heading max-w-md uppercase leading-[1.15]">
-				<span data-reveal-line>What they say</span>
+				<span data-reveal-line data-i18n="testimonials.heading1">What they say</span>
 				<br />
-				<span data-reveal-line>about the setin</span>
+				<span data-reveal-line data-i18n="testimonials.heading2">about the setin</span>
 			</h2>
-			<p class="testimonials-description mt-6 max-w-md leading-relaxed text-black/55">
+			<p
+				class="body-txt-1 testimonials-description mt-6 max-w-md leading-relaxed text-black/55"
+				data-i18n="testimonials.description"
+			>
 				Every digital landmark we create is a result of deep trust and precise execution.
 			</p>
 		</div>
@@ -64,7 +67,7 @@ const loopTestimonials = [...testimonials, ...testimonials];
 					{
 						loopTestimonials.map((testimonial, index) => (
 							<article class="testimonial-card" data-testimonial-index={index % testimonials.length}>
-								<p class="testimonial-card__quote">{testimonial.quote}</p>
+								<p class="body-txt-1 testimonial-card__quote">{testimonial.quote}</p>
 
 								<div class="testimonial-card__footer mt-auto pt-10">
 									<img
@@ -95,7 +98,6 @@ const loopTestimonials = [...testimonials, ...testimonials];
 
 <style is:global>
 	.testimonials-heading {
-		font-size: 2rem;
 		color: #000000;
 	}
 
@@ -207,7 +209,7 @@ const loopTestimonials = [...testimonials, ...testimonials];
 		for (const char of text) {
 			const span = document.createElement('span');
 			span.className = 'reveal-char';
-			span.textContent = char === ' ' ? '\u00a0' : char;
+			span.textContent = char === ' ' ? ' ' : char;
 			element.appendChild(span);
 		}
 	}

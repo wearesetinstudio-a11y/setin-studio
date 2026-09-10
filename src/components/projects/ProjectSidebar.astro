@@ -1,0 +1,245 @@
+---
+export interface SidebarNavItem {
+	id: string;
+	num: string;
+	label: string;
+	isOverview?: boolean;
+	labelKey?: string;
+	sectionIndex?: number;
+}
+
+interface Props {
+	items: SidebarNavItem[];
+}
+
+const { items } = Astro.props;
+
+function displayLabel(label: string): string {
+	return label.trim().toUpperCase();
+}
+---
+
+<aside class="project-sidebar hidden self-stretch lg:block" data-project-sidebar>
+	<div class="project-sidebar__inner sticky top-[calc(100px+2.5rem+20px)]">
+		<nav class="project-sidebar__nav" aria-label="Spis sekcji projektu">
+			{
+				items.map((item, idx) => (
+					<a
+						href={`#${item.id}`}
+						class:list={['project-sidebar__link', idx === 0 && 'is-active']}
+						data-section-target={item.id}
+						data-project-section={item.sectionIndex != null ? item.sectionIndex : undefined}
+					>
+						<span class="project-sidebar__index">{item.num}&nbsp;/&nbsp;</span>
+						<span class="project-sidebar__name">
+							[
+							<span
+								data-project-field={item.isOverview ? 'overviewLabel' : undefined}
+								data-project-section-field={item.isOverview ? undefined : 'label'}
+								data-i18n={item.isOverview ? item.labelKey : undefined}
+							>
+								{displayLabel(item.label)}
+							</span>
+							]
+						</span>
+					</a>
+				))
+			}
+		</nav>
+	</div>
+</aside>
+
+<div
+	class="project-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-0 bg-[#131415]/95 px-[var(--page-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden"
+	data-project-sidebar-mobile
+>
+	<div
+		id="project-mobile-dropdown"
+		class="project-sidebar-mobile__dropdown grid grid-rows-[0fr] border-b border-transparent transition-[grid-template-rows,border-color,opacity] duration-300 ease-in"
+		data-mobile-nav-dropdown
+	>
+		<div class="project-sidebar-mobile__dropdown-inner overflow-hidden">
+			<nav
+				class="project-sidebar-mobile__nav flex max-h-[60vh] flex-col overflow-y-auto pb-5 pt-4"
+				aria-label="Spis sekcji projektu (mobile)"
+			>
+				{
+					items.map((item, idx) => (
+						<a
+							href={`#${item.id}`}
+							class:list={['project-sidebar__link project-sidebar__link--mobile', idx === 0 && 'is-active']}
+							data-section-target={item.id}
+							data-project-section={item.sectionIndex != null ? item.sectionIndex : undefined}
+						>
+							<span class="project-sidebar__index project-sidebar-mobile__link-num">
+								{item.num}&nbsp;/&nbsp;
+							</span>
+							<span class="project-sidebar__name project-sidebar-mobile__link-label">
+								[
+								<span
+									data-project-field={item.isOverview ? 'overviewLabel' : undefined}
+									data-project-section-field={item.isOverview ? undefined : 'label'}
+									data-i18n={item.isOverview ? item.labelKey : undefined}
+								>
+									{displayLabel(item.label)}
+								</span>
+								]
+							</span>
+						</a>
+					))
+				}
+			</nav>
+		</div>
+	</div>
+
+	<button
+		type="button"
+		class="project-sidebar-mobile__trigger flex w-full items-center justify-between py-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] text-left text-[0.95rem] font-semibold uppercase tracking-normal text-white transition-colors"
+		aria-expanded="false"
+		aria-controls="project-mobile-dropdown"
+		data-mobile-nav-trigger
+	>
+		<span class="project-sidebar-mobile__current">
+			<span class="project-sidebar__index project-sidebar-mobile__current-num" data-mobile-current-num>
+				{items[0]?.num ?? '01'}&nbsp;/&nbsp;
+			</span>
+			<span
+				class="project-sidebar__name is-active project-sidebar-mobile__current-label"
+				data-mobile-current-label
+			>
+				[{displayLabel(items[0]?.label ?? '')}]
+			</span>
+		</span>
+		<svg
+			width="14"
+			height="14"
+			viewBox="0 0 14 14"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+			class="project-sidebar-mobile__chevron flex-shrink-0 transition-transform duration-300 ease-in-out"
+			aria-hidden="true"
+		>
+			<path d="M1 3.5L7 9.5L13 3.5" stroke="currentColor" stroke-width="2"></path>
+		</svg>
+	</button>
+</div>
+
+<style>
+	/* Figma node 3916-385: nav frame 200×175 */
+	.project-sidebar__inner {
+		width: 200px;
+		max-width: 100%;
+	}
+
+	.project-sidebar__nav,
+	.project-sidebar-mobile__nav {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	.project-sidebar__link {
+		display: block;
+		width: 100%;
+		font-size: 18px;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: 0;
+		text-decoration: none;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.project-sidebar__link--mobile {
+		font-size: 16px;
+	}
+
+	.project-sidebar-mobile__current {
+		display: inline;
+		font-size: 16px;
+		font-weight: 600;
+		letter-spacing: 0;
+		text-transform: uppercase;
+	}
+
+	/* Number + slash */
+	.project-sidebar__index {
+		color: #c8c8c8;
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* Bracketed name */
+	.project-sidebar__name {
+		color: #c8c8c8;
+		transition: color 180ms ease;
+	}
+
+	.project-sidebar__link:hover .project-sidebar__index {
+		color: #5e697c;
+	}
+
+	.project-sidebar__link:hover .project-sidebar__name {
+		color: #7a7a7a;
+	}
+
+	/* Active: number #5E697C, name black — same as content labels */
+	.project-sidebar__link.is-active .project-sidebar__index {
+		color: #5e697c;
+	}
+
+	.project-sidebar__link.is-active .project-sidebar__name,
+	.project-sidebar__name.is-active {
+		color: #131415;
+	}
+
+	.project-sidebar-mobile__current .project-sidebar__index,
+	.project-sidebar-mobile__current-num {
+		color: rgba(255, 255, 255, 0.45) !important;
+	}
+
+	.project-sidebar-mobile__current .project-sidebar__name,
+	.project-sidebar-mobile__current .project-sidebar__name.is-active,
+	.project-sidebar-mobile__current-label {
+		color: #ffffff !important;
+	}
+
+	/* Mobile sticky bar — dark mode */
+	.project-sidebar-mobile .project-sidebar__link--mobile .project-sidebar__index,
+	.project-sidebar-mobile .project-sidebar__link--mobile .project-sidebar__name {
+		color: rgba(255, 255, 255, 0.4);
+	}
+
+	.project-sidebar-mobile .project-sidebar__link--mobile:hover .project-sidebar__index,
+	.project-sidebar-mobile .project-sidebar__link--mobile:hover .project-sidebar__name {
+		color: rgba(255, 255, 255, 0.75);
+	}
+
+	.project-sidebar-mobile .project-sidebar__link--mobile.is-active .project-sidebar__index {
+		color: rgba(255, 255, 255, 0.55);
+	}
+
+	.project-sidebar-mobile .project-sidebar__link--mobile.is-active .project-sidebar__name {
+		color: #ffffff;
+	}
+
+	.project-sidebar-mobile__chevron {
+		transform: rotate(180deg);
+		color: #ffffff;
+	}
+
+	.project-sidebar-mobile.is-open .project-sidebar-mobile__chevron {
+		transform: rotate(0deg);
+	}
+
+	.project-sidebar-mobile.is-open .project-sidebar-mobile__dropdown {
+		grid-template-rows: 1fr;
+		border-color: transparent;
+		transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+		transition-duration: 350ms;
+	}
+
+	.project-sidebar-mobile:not(.is-open) .project-sidebar-mobile__dropdown {
+		transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+		transition-duration: 250ms;
+	}
+</style>

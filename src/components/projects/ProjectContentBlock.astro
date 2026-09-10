@@ -1,113 +1,105 @@
 ---
 interface Props {
+	id?: string;
+	num?: string;
 	index: number;
 	label: string;
 	title?: string;
 	text: string;
-	theme?: 'dark' | 'light';
 	headingId?: string;
+	sectionIndex?: number;
 }
 
-const { index, label, title = '', text, theme = 'light', headingId = '' } = Astro.props;
+const {
+	id,
+	num,
+	index,
+	label,
+	title = '',
+	text,
+	headingId = '',
+	sectionIndex,
+} = Astro.props;
 
 const titleChars = title.split('');
-const paragraphs = text.split('\n\n').map((part) => part.trim()).filter(Boolean);
+const paragraphs = text.split(/\n\n+/).map((part) => part.trim()).filter(Boolean);
 const resolvedHeadingId = headingId || (title ? `project-section-${index}-heading` : '');
+const resolvedSectionId =
+	id || (sectionIndex != null ? `project-section-${sectionIndex + 1}` : `project-section-${index}`);
+const resolvedNum = num || String(sectionIndex != null ? sectionIndex + 2 : index).padStart(2, '0');
 ---
 
 <section
-	class:list={[
-		'project-content-block px-[var(--page-gutter)] py-20 md:py-28',
-		theme === 'dark' ? 'project-content-block--dark' : 'project-content-block--light',
-	]}
+	id={resolvedSectionId}
+	class="project-content-block w-full"
+	data-project-section={sectionIndex != null ? sectionIndex : undefined}
 >
-	<div class="project-content-block__grid">
-		<p class="project-content-block__label">[{index}] {label}</p>
+	<p class="project-content-block__label">
+		<span class="project-content-block__num">{resolvedNum}&nbsp;/&nbsp;</span>
+		<span class="project-content-block__label-bracket"
+			>[<span data-project-section-field="label">{label.toUpperCase()}</span>]</span
+		>
+	</p>
 
-		<div class="project-content-block__body min-w-0">
-			{
-				title ? (
-					<h2 id={resolvedHeadingId} class="project-content-block__heading">
-						<span class="project-content-block__heading-line" data-reveal-line>
-							{titleChars.map((char) => (
-								<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
-							))}
-						</span>
-					</h2>
-				) : null
-			}
+	{
+		title ? (
+			<h2 id={resolvedHeadingId} class="project-content-block__heading" data-project-section-field="title">
+				<span class="project-content-block__heading-line" data-reveal-line>
+					{titleChars.map((char) => (
+						<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
+					))}
+				</span>
+			</h2>
+		) : null
+	}
 
-			<div class:list={['project-content-block__paragraphs', title ? 'project-content-block__paragraphs--with-title' : '']}>
-				{
-					paragraphs.map((paragraph) => (
-						<p class="project-content-block__text">{paragraph}</p>
-					))
-				}
+	{
+		paragraphs.length > 0 ? (
+			<div
+				class:list={['project-content-block__paragraphs', title && 'project-content-block__paragraphs--with-title']}
+				data-project-section-field="text"
+				data-paragraph-class="body-txt-1 project-content-block__text"
+			>
+				{paragraphs.map((paragraph) => (
+					<p class="body-txt-1 project-content-block__text">{paragraph}</p>
+				))}
 			</div>
-		</div>
-	</div>
+		) : null
+	}
 </section>
 
 <style>
-	.project-content-block--light {
+	.project-content-block {
+		scroll-margin-top: 7.5rem;
 		background: #ffffff;
 		color: #131415;
 	}
 
-	.project-content-block--dark {
-		background: #131415;
-		color: #ffffff;
-	}
-
-	.project-content-block__grid {
-		display: grid;
-		gap: 2rem;
-	}
-
-	@media (min-width: 1024px) {
-		.project-content-block__grid {
-			grid-template-columns: minmax(140px, 200px) minmax(0, 1fr);
-			column-gap: 5rem;
-			row-gap: 0;
-			align-items: start;
-		}
-	}
-
-	@media (min-width: 1280px) {
-		.project-content-block__grid {
-			column-gap: 6rem;
-		}
-	}
-
 	.project-content-block__label {
-		font-size: 1.2rem;
+		margin: 0;
+		font-size: 1.125rem;
 		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.14em;
 		line-height: 1.2;
+		letter-spacing: 0;
+		text-transform: uppercase;
 	}
 
-	.project-content-block--light .project-content-block__label {
-		color: #000000;
+	.project-content-block__num {
+		color: #5e697c;
+		font-variant-numeric: tabular-nums;
 	}
 
-	.project-content-block--dark .project-content-block__label {
-		color: #ffffff;
+	.project-content-block__label-bracket {
+		color: #131415;
 	}
 
 	.project-content-block__heading {
-		font-size: 1.8rem;
+		margin-top: 1.75rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		line-height: 1.12;
 		letter-spacing: -0.01em;
 		color: transparent;
-	}
-
-	@media (min-width: 768px) {
-		.project-content-block__heading {
-			font-size: 2.25rem;
-		}
 	}
 
 	.project-content-block__heading-line {
@@ -116,28 +108,20 @@ const resolvedHeadingId = headingId || (title ? `project-section-${index}-headin
 		overflow-wrap: anywhere;
 	}
 
-	.project-content-block--light .project-content-block__heading :global(.reveal-char) {
+	.project-content-block__heading :global(.reveal-char) {
 		color: rgba(0, 0, 0, 0.15);
 		transition: color 0.35s ease-out;
 	}
 
-	.project-content-block--light .project-content-block__heading :global(.reveal-char.active) {
+	.project-content-block__heading :global(.reveal-char.active) {
 		color: #000000;
-	}
-
-	.project-content-block--dark .project-content-block__heading :global(.reveal-char) {
-		color: rgba(255, 255, 255, 0.15);
-		transition: color 0.35s ease-out;
-	}
-
-	.project-content-block--dark .project-content-block__heading :global(.reveal-char.active) {
-		color: #ffffff;
 	}
 
 	.project-content-block__paragraphs {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: 1.25rem;
+		color: rgba(0, 0, 0, 0.55);
 	}
 
 	.project-content-block__paragraphs--with-title {
@@ -145,14 +129,7 @@ const resolvedHeadingId = headingId || (title ? `project-section-${index}-headin
 	}
 
 	.project-content-block__text {
+		margin: 0;
 		line-height: 1.625;
-	}
-
-	.project-content-block--light .project-content-block__text {
-		color: rgba(0, 0, 0, 0.7);
-	}
-
-	.project-content-block--dark .project-content-block__text {
-		color: rgba(255, 255, 255, 0.75);
 	}
 </style>

@@ -1,0 +1,38 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { getSiteCounts } from '../utils/getSiteCounts.ts';
+
+const { projectCount, articleCount } = await getSiteCounts();
+---
+
+<Layout
+	title="Services"
+	description="Brand identity, digital product design, and high-performance builds from Setin Studio."
+>
+	<Header projectCount={projectCount} articleCount={articleCount} />
+
+	<main class="relative z-20 flex-1">
+		<section class="bg-[#131415] px-[var(--page-gutter)] pt-[calc(var(--section-padding-y)+5.5rem)] pb-[var(--section-padding-y)]">
+			<h1
+				class="max-w-3xl text-[2rem] font-semibold uppercase leading-[1.15] text-setin-fg md:text-[3.2rem]"
+				data-i18n="services.title"
+			>
+				Services
+			</h1>
+			<p
+				class="body-txt-1 mt-6 max-w-md leading-relaxed text-setin-fg/55"
+				data-i18n="services.description"
+			>
+				From identity systems to digital products and performance-focused builds — we craft work that
+				holds up over time.
+			</p>
+		</section>
+
+		<ContactSection />
+	</main>
+
+	<Footer />
+</Layout>

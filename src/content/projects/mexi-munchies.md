@@ -4,7 +4,7 @@ client: Mexi Munchies
 tags: ['Branding', 'Visual Identity', 'Webflow']
 thumbnail: '/portfolio/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'
-order: 5
+order: 6
 heroImage: '/portfolio/mexi-munchies/bg.webp'
 heroSubtitle: |-
   A youthful brand identity built to
@@ -28,7 +28,7 @@ strategyText: |-
   We focused on a bold logotype and a flexible color system that could stretch from small digital formats to large campaign moments.
 
   Every layout rule was built to keep the brand instantly recognizable while giving the team room to move fast across new products, promotions, and seasonal drops.
-summaryLabel: 'Summary'
+summaryLabel: 'Results'
 summaryTitle: 'Fresh energy with a clear point of view'
 summaryText: 'Mexi Munchies now has a brand that feels alive in every format — expressive enough to attract attention, structured enough to scale, and ready to tell a consistent story wherever the product shows up.'
 ---

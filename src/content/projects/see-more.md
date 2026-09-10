@@ -4,7 +4,7 @@ client: See More Logistics
 tags: ['Branding', 'Visual Identity', 'Webflow']
 thumbnail: '/portfolio/see-more/cover.webm'
 folderName: 'see-more'
-order: 2
+order: 3
 video: '/portfolio/see-more/cover.webm'
 heroImage: '/portfolio/see-more/bg.webp'
 heroSubtitle: |-
@@ -30,7 +30,7 @@ strategyText: |-
   We abandoned decorative elements to focus entirely on functional design. We developed a strict grid system using mathematical rules from the brandbook to ensure absolute consistency across all physical and digital layouts.
 
   The logotype integrates a global icon directly into the typography, anchoring the brand to Panama's role as a major Latin American transport hub. For the color palette, we selected a combination of deep industrial navy and vibrant electric blue to evoke engineering precision and high visibility. This systematic approach was applied to their internal manifests, employee access cards, and minimalist vehicle wraps, turning their entire operation into a cohesive visual statement.
-summaryLabel: 'Summary'
+summaryLabel: 'Results'
 summaryTitle: 'Establishing an unmistakable visual standard for national logistics'
 summaryText: 'By stripping away the noise, we delivered an identity that feels like an institutional standard. See More Logistics now possesses a commanding visual presence that aligns perfectly with their operational commitment. Every touchpoint, from physical fleet graphics to technical documentation, reinforces their promise of trust and transparency, giving them the leverage to secure high-value contracts and drive business expansion.'
 ---

@@ -65,6 +65,9 @@ export function initPageTransitionOverlay() {
 		if (getPhase() !== 'covered') return;
 
 		setPhase('revealing');
-		void animatePageTransitionReveal().finally(() => setPhase('idle'));
+		void animatePageTransitionReveal().finally(() => {
+			setPhase('idle');
+			window.dispatchEvent(new CustomEvent('page-transition-reveal-complete'));
+		});
 	});
 }

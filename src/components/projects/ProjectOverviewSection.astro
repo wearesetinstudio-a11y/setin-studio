@@ -3,82 +3,116 @@ import ProjectInfoRow from './ProjectInfoRow.astro';
 import ProjectRelatedArticles from './ProjectRelatedArticles.astro';
 
 interface Props {
+	id?: string;
+	num?: string;
 	label?: string;
 	title: string;
 	text: string;
-	graphicSrc: string;
-	graphicType?: 'image' | 'video';
-	graphicAlt: string;
-	rows: { label: string; value: string; isLink?: boolean }[];
+	graphicSrc?: string;
+	graphicType?: 'image' | 'video' | 'youtube';
+	graphicAlt?: string;
+	rows: { label: string; value: string; isLink?: boolean; labelKey?: string; fieldKey?: string }[];
 	relatedArticles?: { slug: string; title: string }[];
 }
 
 const {
+	id = 'project-section-0',
+	num = '01',
 	label = 'Overview',
 	title,
 	text,
-	graphicSrc,
+	graphicSrc = '',
 	graphicType = 'image',
-	graphicAlt,
+	graphicAlt = '',
 	rows,
 	relatedArticles = [],
 } = Astro.props;
 
 const titleChars = title.split('');
+const paragraphs = text.split(/\n\n+/).map((part) => part.trim()).filter(Boolean);
+const hasGraphic = Boolean(graphicSrc);
+const hasMeta = rows.length > 0 || relatedArticles.length > 0;
 ---
 
-<section id="project-overview" class="project-overview relative z-10 bg-white px-[var(--page-gutter)] py-20 md:py-28">
-	<div class="project-overview__grid grid gap-12 lg:grid-cols-2 lg:gap-20 xl:gap-24">
-		<div class="project-overview__content min-w-0">
-			<p class="project-overview__label">[{label}]</p>
+<section id={id} class="project-overview relative z-10 bg-white">
+	<div class="project-overview__content w-full min-w-0">
+		<p class="project-overview__label">
+			<span class="project-overview__num">{num}&nbsp;/&nbsp;</span>
+			<span class="project-overview__label-bracket"
+				>[<span data-project-field="overviewLabel">{label.toUpperCase()}</span>]</span
+			>
+		</p>
 
-			<h2 id="project-overview-heading" class="project-overview__heading">
-				<span class="project-overview__heading-line" data-reveal-line>
-					{
-						titleChars.map((char) => (
+		{
+			title ? (
+				<h2 id="project-overview-heading" class="project-overview__heading" data-project-field="overviewTitle">
+					<span class="project-overview__heading-line" data-reveal-line>
+						{titleChars.map((char) => (
 							<span class="reveal-char">{char === ' ' ? ' ' : char}</span>
-						))
-					}
-				</span>
-			</h2>
+						))}
+					</span>
+				</h2>
+			) : null
+		}
 
-			<p class="project-overview__text">{text}</p>
+		{
+			paragraphs.length > 0 ? (
+				<div
+					class="project-overview__text-wrap"
+					data-project-field="overviewText"
+					data-project-paragraphs="true"
+					data-paragraph-class="body-txt-1 project-overview__text"
+				>
+					{paragraphs.map((paragraph) => (
+						<p class="body-txt-1 project-overview__text">{paragraph}</p>
+					))}
+				</div>
+			) : null
+		}
 
-			{
-				rows.length > 0 || relatedArticles.length > 0 ? (
-					<div
-						class:list={[
-							'mt-12 overflow-hidden border-t border-black/10 md:mt-16',
-							relatedArticles.length === 0 && 'border-b border-black/10',
-						]}
-					>
-						{
-							rows.length > 0 || relatedArticles.length > 0 ? (
-								<dl class="m-0">
-									{rows.map((row, index) => (
-										<ProjectInfoRow
-											label={row.label}
-											value={row.value}
-											isLink={row.isLink}
-											isLast={index === rows.length - 1 && relatedArticles.length === 0}
-											theme="light"
-										/>
-									))}
+		{
+			hasMeta ? (
+				<div
+					class:list={[
+						'mt-12 overflow-hidden border-t border-black/10 md:mt-16',
+						relatedArticles.length === 0 && 'border-b border-black/10',
+					]}
+				>
+					<dl class="m-0">
+						{rows.map((row, index) => (
+							<ProjectInfoRow
+								label={row.label}
+								value={row.value}
+								isLink={row.isLink}
+								labelKey={row.labelKey}
+								fieldKey={row.fieldKey}
+								isLast={index === rows.length - 1 && relatedArticles.length === 0}
+								theme="light"
+							/>
+						))}
+						<ProjectRelatedArticles articles={relatedArticles} />
+					</dl>
+				</div>
+			) : null
+		}
 
-									<ProjectRelatedArticles articles={relatedArticles} />
-								</dl>
-							) : null
-						}
-					</div>
-				) : null
-			}
-		</div>
-
-		<div class="project-overview__visual min-w-0">
-			<div class="project-overview__sticky lg:sticky lg:top-[100px] lg:w-full">
-				<div class="project-overview__frame w-full overflow-hidden bg-[#ECECEC]">
-					{
-						graphicType === 'video' ? (
+		{
+			hasGraphic ? (
+				<div class="project-overview__visual mt-12 w-full md:mt-16">
+					<div class="project-overview__frame w-full overflow-hidden bg-[#0f1011]">
+						{graphicType === 'youtube' ? (
+							<div class="project-overview__youtube relative aspect-video w-full">
+								<iframe
+									src={graphicSrc}
+									title={graphicAlt || label}
+									class="absolute inset-0 h-full w-full border-0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+									referrerpolicy="strict-origin-when-cross-origin"
+									allowfullscreen
+									loading="lazy"
+								/>
+							</div>
+						) : graphicType === 'video' ? (
 							<video
 								src={graphicSrc}
 								class="block h-auto w-full"
@@ -93,39 +127,46 @@ const titleChars = title.split('');
 							<img
 								src={graphicSrc}
 								alt={graphicAlt}
-								width="720"
+								width="1400"
 								height="900"
 								class="block h-auto w-full"
-								loading="lazy"
+								loading="eager"
 								decoding="async"
 							/>
-						)
-					}
+						)}
+					</div>
 				</div>
-			</div>
-		</div>
+			) : null
+		}
 	</div>
 </section>
 
 <style>
-	.project-overview__content {
-		width: 100%;
-		max-width: 100%;
+	.project-overview {
+		scroll-margin-top: 7.5rem;
+		color: #131415;
 	}
 
 	.project-overview__label {
-		font-size: 1.2rem;
+		margin: 0;
+		font-size: 1.125rem;
 		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: 0;
 		text-transform: uppercase;
-		letter-spacing: 0.14em;
-		color: #000000;
+	}
+
+	.project-overview__num {
+		color: #5e697c;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.project-overview__label-bracket {
+		color: #131415;
 	}
 
 	.project-overview__heading {
-		margin-top: 2rem;
-		width: 100%;
-		max-width: 100%;
-		font-size: 1.8rem;
+		margin-top: 1.75rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		line-height: 1.12;
@@ -139,12 +180,6 @@ const titleChars = title.split('');
 		overflow-wrap: anywhere;
 	}
 
-	@media (min-width: 768px) {
-		.project-overview__heading {
-			font-size: 2.25rem;
-		}
-	}
-
 	.project-overview__heading :global(.reveal-char) {
 		color: rgba(0, 0, 0, 0.15);
 		transition: color 0.35s ease-out;
@@ -154,27 +189,16 @@ const titleChars = title.split('');
 		color: #000000;
 	}
 
-	.project-overview__text {
+	.project-overview__text-wrap {
 		margin-top: 1.5rem;
-		width: 100%;
-		max-width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+		color: rgba(0, 0, 0, 0.55);
+	}
+
+	.project-overview__text {
+		margin: 0;
 		line-height: 1.625;
-		color: rgba(0, 0, 0, 0.7);
-	}
-
-	@media (min-width: 1024px) {
-		.project-overview__visual {
-			align-self: stretch;
-		}
-
-		.project-overview__sticky {
-			height: fit-content;
-		}
-	}
-
-	@media (max-width: 767px) {
-		.project-overview {
-			padding-bottom: 2rem;
-		}
 	}
 </style>

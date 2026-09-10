@@ -22,7 +22,8 @@ type ParsedMediaFile = GalleryMediaItem & {
 	part: number | null;
 };
 
-const FILE_PATTERN = /^(\d+)(?:\.(\d+))?\.(webp|mp4)$/i;
+const FILE_PATTERN = /^(\d+)(?:\.(\d+))?\.(webp|mp4|webm)$/i;
+const MAX_SECTION_PARTS = 4;
 
 export function getCoverFilename(thumbnail: string): string {
 	return thumbnail.split('/').pop() ?? 'cover.webp';
@@ -172,12 +173,56 @@ export function getOverviewGraphic(
 	coverFilename = 'cover.webp',
 	excludedFilenames: string[] = [],
 ): GalleryMediaItem | null {
-	const layout = buildGalleryLayout(folderName, coverFilename, excludedFilenames);
-	const groupOne = layout.find((block) => block.group === 1);
-	if (!groupOne) return null;
+	const sectionMedia = getSectionMedia(folderName, 1, coverFilename, excludedFilenames);
+	return sectionMedia[0] ?? null;
+}
 
-	if (groupOne.kind === 'full') return groupOne.item;
-	return groupOne.items[0] ?? null;
+/**
+ * Media for one case-study section (group N).
+ * Accepts `N.webp` / `N.mp4` and up to four parts: `N.1` … `N.4`.
+ */
+export function getSectionMedia(
+	folderName: string,
+	group: number,
+	coverFilename = 'cover.webp',
+	excludedFilenames: string[] = [],
+): GalleryMediaItem[] {
+	if (group < 1 || group > 10) return [];
+
+	const portfolioDir = join(process.cwd(), 'public', PROJECT_MEDIA_DIR, folderName);
+	const excluded = new Set([coverFilename, ...DEFAULT_EXCLUDED, ...excludedFilenames]);
+
+	try {
+		const parsed = readdirSync(portfolioDir)
+			.map((filename) => {
+				if (excluded.has(filename)) return null;
+				const match = parseMediaFilename(filename);
+				if (!match || match.group !== group) return null;
+				if (match.part !== null && (match.part < 1 || match.part > MAX_SECTION_PARTS)) return null;
+
+				const extension = filename.slice(filename.lastIndexOf('.')).toLowerCase();
+				return {
+					...match,
+					src: `/${PROJECT_MEDIA_DIR}/${folderName}/${filename}`,
+					type: isVideoExtension(extension) ? ('video' as const) : ('image' as const),
+				};
+			})
+			.filter((file): file is ParsedMediaFile => file !== null)
+			.sort((a, b) => {
+				const partA = a.part ?? 0;
+				const partB = b.part ?? 0;
+				return partA - partB;
+			});
+
+		const items: GalleryMediaItem[] = [];
+		for (const file of parsed) {
+			items.push(toMediaItem(folderName, file.filename, file.type));
+			if (items.length >= MAX_SECTION_PARTS) break;
+		}
+		return items;
+	} catch {
+		return [];
+	}
 }
 
 /** @deprecated Use buildGalleryLayout instead */

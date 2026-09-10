@@ -1,6 +1,16 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import {
+	absoluteUrl,
+	buildLocalePath,
+	getHreflangLinks,
+	getLocaleFromPath,
+	getOrganizationJsonLd,
+	getPanamaProfessionalServiceJsonLd,
+	htmlLang,
+	stripLocalePrefix,
+} from '../i18n/seo.ts';
 
 interface Props {
 	title?: string;
@@ -13,14 +23,49 @@ const {
 } = Astro.props;
 
 const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`;
+const pathname = Astro.url.pathname;
+/** Prefer pre-rewrite path so /es/* and /pl/* keep correct locale after middleware rewrite. */
+const originPathname =
+	typeof Astro.originPathname === 'string' && Astro.originPathname
+		? Astro.originPathname
+		: pathname;
+const barePath = stripLocalePrefix(originPathname);
+const pageLocale = getLocaleFromPath(originPathname);
+const hreflangLinks = getHreflangLinks(barePath);
+const canonicalHref = absoluteUrl(buildLocalePath(pageLocale, barePath));
+const organizationJsonLd = getOrganizationJsonLd();
+const panamaServiceJsonLd = getPanamaProfessionalServiceJsonLd();
+const isSpanish = pageLocale === 'es';
+const esOgTitle = 'Setin Studio | Estudio de Diseño Web y Branding en Panamá';
+const ogTitle = isSpanish && barePath === '/' ? esOgTitle : pageTitle;
+const organizationJsonLdJson = JSON.stringify(organizationJsonLd);
+const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 ---
 
 <!doctype html>
-<html lang="en" transition:animate="none" style="background-color: #131415;">
+<html lang={htmlLang(pageLocale)} transition:animate="none" style="background-color: #131415;">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
+		<link rel="canonical" id="canonical-url" href={canonicalHref} />
+		{
+			hreflangLinks.map((link) => (
+				<link rel="alternate" hreflang={link.hreflang} href={link.href} />
+			))
+		}
+		{
+			isSpanish ? (
+				<>
+					<meta name="geo.region" content="PA" />
+					<meta name="geo.placename" content="Panama City" />
+					<meta property="og:locale" content="es_PA" />
+					<meta property="og:title" content={ogTitle} />
+				</>
+			) : (
+				<meta property="og:title" content={pageTitle} />
+			)
+		}
 		<link rel="icon" type="image/svg+xml" href="/favicons/favicon-dark-mode.svg" />
 		<link
 			rel="icon"
@@ -41,15 +86,32 @@ const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`
 			rel="stylesheet"
 		/>
 		<title>{pageTitle}</title>
+		<script
+			type="application/ld+json"
+			id="setin-jsonld-organization"
+			set:html={organizationJsonLdJson}
+		/>
+		{
+			isSpanish ? (
+				<script
+					type="application/ld+json"
+					id="setin-jsonld-panama"
+					set:html={panamaServiceJsonLdJson}
+				/>
+			) : null
+		}
+		<script is:inline define:vars={{ panamaServiceJsonLdJson, organizationJsonLdJson }}>
+			window.__setinPanamaJsonLd = panamaServiceJsonLdJson;
+			window.__setinOrganizationJsonLd = organizationJsonLdJson;
+		</script>
 		<ClientRouter />
 		<style is:inline>
 			html.intro-pending #page-transition-overlay {
-				top: 0;
 				pointer-events: auto;
 			}
 
-			html.intro-pending:not(.intro-revealing) #page-transition-overlay {
-				top: 0 !important;
+			html.intro-pending:not(.intro-revealing) .page-transition-bar {
+				transform: translateY(0);
 			}
 
 			html.intro-pending body {
@@ -62,9 +124,72 @@ const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`
 		</style>
 		<script is:inline>
 			(function () {
+				var SITE = 'https://wearesetin.com';
 				var path = window.location.pathname.replace(/\/$/, '') || '/';
-				if (path === '/' || path.endsWith('/index.html')) {
+				var bare = path.replace(/^\/(pl|es)(?=\/|$)/, '') || '/';
+				if (bare === '/' || bare.endsWith('/index.html')) {
 					document.documentElement.classList.add('intro-pending');
+				}
+
+				var pathLocale = null;
+				if (/^\/pl(?=\/|$)/.test(path)) pathLocale = 'pl';
+				else if (/^\/es(?=\/|$)/.test(path)) pathLocale = 'es';
+
+				function withSlash(p) {
+					if (p === '/') return '/';
+					return p.endsWith('/') ? p : p + '/';
+				}
+
+				function localePath(locale, barePath) {
+					var b = barePath === '/' ? '/' : withSlash(barePath);
+					if (locale === 'en') return b === '/' ? '/' : b;
+					if (b === '/') return '/' + locale + '/';
+					return '/' + locale + b;
+				}
+
+				var locale = pathLocale || 'en';
+				try {
+					if (pathLocale) {
+						window.localStorage.setItem('setin-lang', pathLocale);
+					} else {
+						var stored = window.localStorage.getItem('setin-lang');
+						if (stored === 'en' || stored === 'pl' || stored === 'es') locale = stored;
+					}
+				} catch (e) {}
+
+				document.documentElement.lang = locale === 'es' ? 'es-PA' : locale;
+
+				var canonical = document.getElementById('canonical-url');
+				if (canonical) {
+					canonical.setAttribute('href', SITE + localePath(locale, bare === '/' ? '/' : bare));
+				}
+
+				function upsertMeta(attr, key, content) {
+					var selector = 'meta[' + attr + '="' + key + '"]';
+					var node = document.head.querySelector(selector);
+					if (!content) {
+						if (node) node.remove();
+						return;
+					}
+					if (!node) {
+						node = document.createElement('meta');
+						node.setAttribute(attr, key);
+						document.head.appendChild(node);
+					}
+					node.setAttribute('content', content);
+				}
+
+				var esOgTitle = 'Setin Studio | Estudio de Diseño Web y Branding en Panamá';
+				if (locale === 'es') {
+					upsertMeta('name', 'geo.region', 'PA');
+					upsertMeta('name', 'geo.placename', 'Panama City');
+					upsertMeta('property', 'og:locale', 'es_PA');
+					upsertMeta('property', 'og:title', bare === '/' ? esOgTitle : document.title);
+				} else {
+					upsertMeta('name', 'geo.region', '');
+					upsertMeta('name', 'geo.placename', '');
+					upsertMeta('property', 'og:locale', '');
+					upsertMeta('property', 'og:title', document.title);
 				}
 			})();
 		</script>
@@ -76,31 +201,59 @@ const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`
 
 		<div
 			id="page-transition-overlay"
-			class="page-transition-overlay pointer-events-none fixed inset-x-0 top-[-100vh] z-[9999] flex h-[100vh] items-center justify-center bg-[#131415]"
+			class="page-transition-overlay pointer-events-none fixed inset-0 z-[9999] overflow-hidden"
 			transition:persist="page-transition"
 			aria-hidden="true"
 		>
-			<div class="sygnet-flip-stage">
-				<img
-					src="/logo-sygnet.svg"
-					alt=""
-					width="64"
-					height="64"
-					class="page-transition-overlay__logo sygnet-flip-x h-16 w-auto"
-					decoding="async"
-				/>
+			<div class="page-transition-bars">
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar page-transition-bar--center">
+					<div class="sygnet-flip-stage">
+						<img
+							src="/logo-sygnet.svg"
+							alt=""
+							width="64"
+							height="64"
+							class="page-transition-overlay__logo sygnet-flip-x"
+							decoding="async"
+						/>
+					</div>
+				</div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
 			</div>
 		</div>
 
 		<slot />
 
+		<div id="site-cursor" class="site-cursor" aria-hidden="true" transition:persist="site-cursor">
+			<span class="site-cursor__trail"></span>
+			<span class="site-cursor__flash"></span>
+			<span class="site-cursor__core"></span>
+		</div>
+		<div id="site-cursor-sparks" class="site-cursor-sparks" aria-hidden="true" transition:persist="site-cursor-sparks"></div>
+
 		<script>
 			import { initGlobalPreloader } from '../scripts/initGlobalPreloader.ts';
 			import { initPageTransitionOverlay } from '../scripts/initPageTransitionOverlay.ts';
+			import { initSiteCursor } from '../scripts/initSiteCursor.ts';
+			import { initI18n } from '../scripts/i18n.ts';
+			import { initSmoothScroll } from '../scripts/initSmoothScroll.ts';
 
+			initSmoothScroll();
 			initPageTransitionOverlay();
+			initI18n();
 			initGlobalPreloader();
-			document.addEventListener('astro:page-load', initGlobalPreloader);
+			initSiteCursor();
+			document.addEventListener('astro:page-load', () => {
+				initSmoothScroll();
+				initI18n();
+				initGlobalPreloader();
+				initSiteCursor();
+			});
 		</script>
 	</body>
 </html>
@@ -158,34 +311,119 @@ const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`
 		}
 	}
 
-	@keyframes slide-in-top {
+	@keyframes preloader-bar-cover {
 		from {
-			top: -100vh;
+			transform: translateY(-100%);
 		}
 		to {
-			top: 0;
+			transform: translateY(0);
 		}
 	}
 
-	@keyframes slide-out-bottom {
+	@keyframes preloader-bar-reveal {
 		from {
-			top: 0;
+			transform: translateY(0);
 		}
 		to {
-			top: 100vh;
+			transform: translateY(100%);
 		}
+	}
+
+	.page-transition-bars {
+		display: flex;
+		width: 100%;
+		height: 100%;
+	}
+
+	.page-transition-bar {
+		flex: 1 1 0;
+		min-width: 0;
+		height: 100%;
+		margin-right: -1px;
+		background-color: #131415;
+		transform: translateY(-100%);
+		will-change: transform;
+	}
+
+	.page-transition-bar:last-child {
+		margin-right: 0;
+	}
+
+	.page-transition-bar--center {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: visible;
+		z-index: 2;
+	}
+
+	.page-transition-overlay .sygnet-flip-stage {
+		position: relative;
+		z-index: 2;
+		overflow: visible;
+	}
+
+	.page-transition-overlay__logo {
+		display: block;
+		height: 3.5rem;
+		width: auto;
+		max-width: 3.5rem;
+	}
+
+	@media (max-width: 767px) {
+		.page-transition-bar--center {
+			flex: 1.75 1 0;
+			min-width: 4.75rem;
+		}
+
+		.page-transition-overlay__logo {
+			height: 2.75rem;
+			max-width: 2.75rem;
+		}
+	}
+
+	.page-transition-bar:first-child {
+		--bar-delay: 0s;
+	}
+
+	.page-transition-bar:nth-child(2) {
+		--bar-delay: 75ms;
+	}
+
+	.page-transition-bar:nth-child(3) {
+		--bar-delay: 0.15s;
+	}
+
+	.page-transition-bar:nth-child(4) {
+		--bar-delay: 0.225s;
+	}
+
+	.page-transition-bar:nth-child(5) {
+		--bar-delay: 0.3s;
+	}
+
+	.page-transition-bar:nth-child(6) {
+		--bar-delay: 0.375s;
+	}
+
+	.page-transition-bar:nth-child(7) {
+		--bar-delay: 0.45s;
 	}
 
 	.page-transition-overlay.is-active {
 		pointer-events: auto;
 	}
 
-	.page-transition-overlay.is-sliding-in {
-		animation: slide-in-top 900ms cubic-bezier(0.85, 0, 0.15, 1) forwards;
+	.page-transition-overlay.is-covered .page-transition-bar {
+		transform: translateY(0);
 	}
 
-	.page-transition-overlay.is-sliding-out {
-		animation: slide-out-bottom 900ms cubic-bezier(0.85, 0, 0.15, 1) forwards;
+	.page-transition-overlay.is-covering .page-transition-bar {
+		animation: preloader-bar-cover 900ms cubic-bezier(0.85, 0, 0.15, 1) var(--bar-delay) forwards;
+	}
+
+	.page-transition-overlay.is-revealing .page-transition-bar {
+		animation: preloader-bar-reveal 900ms cubic-bezier(0.85, 0, 0.15, 1) var(--bar-delay) forwards;
 	}
 
 	.noise-overlay {
@@ -254,9 +492,180 @@ const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.page-transition-overlay.is-sliding-in,
-		.page-transition-overlay.is-sliding-out {
+		.page-transition-overlay.is-covering .page-transition-bar,
+		.page-transition-overlay.is-revealing .page-transition-bar {
 			animation: none !important;
+		}
+
+		.page-transition-overlay.is-covered .page-transition-bar {
+			transform: translateY(0);
+		}
+
+		.page-transition-overlay:not(.is-covered):not(.is-active) .page-transition-bar {
+			transform: translateY(-100%);
+		}
+
+		.site-cursor {
+			display: none !important;
+		}
+
+		.site-cursor-sparks {
+			display: none !important;
+		}
+	}
+
+	html.has-site-cursor,
+	html.has-site-cursor * {
+		cursor: none !important;
+	}
+
+	html.has-site-cursor input,
+	html.has-site-cursor textarea,
+	html.has-site-cursor select,
+	html.has-site-cursor [contenteditable='true'] {
+		cursor: text !important;
+	}
+
+	.site-cursor {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 10050;
+		width: 0;
+		height: 0;
+		pointer-events: none;
+		opacity: 0;
+		visibility: hidden;
+		mix-blend-mode: difference;
+		transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+		will-change: transform;
+	}
+
+	.site-cursor.is-visible {
+		opacity: 1;
+		visibility: visible;
+		transition: opacity 0.2s ease, visibility 0s linear 0s;
+	}
+
+	html.has-project-cursor .site-cursor {
+		opacity: 0 !important;
+		visibility: hidden !important;
+		transition: opacity 0.15s ease, visibility 0s linear 0.15s;
+	}
+
+	.site-cursor__core,
+	.site-cursor__trail,
+	.site-cursor__flash {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+		pointer-events: none;
+	}
+
+	.site-cursor__core {
+		width: 11px;
+		height: 11px;
+		border-radius: 9999px;
+		background: #ffffff;
+		box-shadow: 0 0 6px rgba(255, 255, 255, 0.35);
+		transform: translate(-50%, -50%);
+		transition: transform 0.18s ease;
+	}
+
+	.site-cursor.is-pressed .site-cursor__core {
+		transform: translate(-50%, -50%) scale(0.82);
+	}
+
+	.site-cursor__trail {
+		border-radius: 9999px;
+		background: radial-gradient(
+			ellipse at center,
+			rgba(255, 255, 255, 0.5) 0%,
+			rgba(255, 255, 255, 0.22) 40%,
+			rgba(255, 255, 255, 0.06) 65%,
+			rgba(255, 255, 255, 0) 80%
+		);
+		filter: blur(5px);
+		opacity: 0.5;
+		transform: translate(-50%, -50%);
+		transform-origin: center;
+	}
+
+	.site-cursor__flash {
+		width: 28px;
+		height: 28px;
+		border-radius: 9999px;
+		/* Arc on the local "front" (top half), rotated in JS toward movement */
+		background: conic-gradient(
+			from 270deg,
+			rgba(255, 255, 255, 0.08) 0deg,
+			rgba(255, 255, 255, 0.55) 40deg,
+			rgba(255, 255, 255, 0.95) 90deg,
+			rgba(255, 255, 255, 0.55) 140deg,
+			rgba(255, 255, 255, 0.08) 180deg,
+			transparent 180deg,
+			transparent 360deg
+		);
+		-webkit-mask-image: radial-gradient(
+			farthest-side,
+			transparent calc(100% - 3.5px),
+			#000 calc(100% - 2.5px),
+			#000 calc(100% - 0.5px),
+			transparent 100%
+		);
+		mask-image: radial-gradient(
+			farthest-side,
+			transparent calc(100% - 3.5px),
+			#000 calc(100% - 2.5px),
+			#000 calc(100% - 0.5px),
+			transparent 100%
+		);
+		filter: blur(1.25px) drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
+		opacity: 0;
+		transform: translate(-50%, -50%);
+		transform-origin: center;
+	}
+
+	.site-cursor-sparks {
+		position: fixed;
+		inset: 0;
+		z-index: 10049;
+		pointer-events: none;
+		overflow: hidden;
+		mix-blend-mode: difference;
+	}
+
+	html.has-project-cursor .site-cursor-sparks {
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.site-cursor-spark {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+		border-radius: 9999px;
+		background: #ffffff;
+		box-shadow: 0 0 5px rgba(255, 255, 255, 0.55);
+		opacity: 0;
+		will-change: transform, opacity;
+		pointer-events: none;
+	}
+
+	@media (max-width: 767px) {
+		.site-cursor {
+			display: none !important;
+		}
+
+		.site-cursor-sparks {
+			display: none !important;
+		}
+
+		html.has-site-cursor,
+		html.has-site-cursor * {
+			cursor: auto !important;
 		}
 	}
 </style>

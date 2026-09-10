@@ -19,6 +19,13 @@ export function formatArticleDate(date: Date): string {
 	return `${day}/${month}/${year}`;
 }
 
+export function formatArticleMonthYear(date: Date, locale = 'en-US'): string {
+	return new Intl.DateTimeFormat(locale, {
+		month: 'long',
+		year: 'numeric',
+	}).format(date);
+}
+
 export function resolveArticleProjectHref(
 	relatedProject: string,
 	projectSlugs: ReadonlySet<string>,

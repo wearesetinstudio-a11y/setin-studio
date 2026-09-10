@@ -1,0 +1,99 @@
+---
+interface NavItem {
+	index: number;
+	label: string;
+	href: string;
+}
+
+interface Props {
+	items: NavItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="project-case-nav" aria-label="Project sections" data-project-case-nav>
+	<ol class="project-case-nav__list">
+		{
+			items.map((item, i) => {
+				const indexLabel = String(item.index).padStart(2, '0');
+				return (
+					<li class="project-case-nav__item">
+						<a
+							href={item.href}
+							class="project-case-nav__link"
+							data-project-nav-link
+							data-section-target={item.href.replace('#', '')}
+							aria-current={i === 0 ? 'true' : undefined}
+						>
+							<span class="project-case-nav__index">{indexLabel}</span>
+							<span class="project-case-nav__label">[{item.label}]</span>
+						</a>
+					</li>
+				);
+			})
+		}
+	</ol>
+</nav>
+
+<style>
+	.project-case-nav {
+		min-width: 0;
+	}
+
+	.project-case-nav__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.project-case-nav__link {
+		display: flex;
+		align-items: baseline;
+		gap: 0.65rem;
+		font-size: 1.05rem;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		text-decoration: none;
+		color: rgba(0, 0, 0, 0.28);
+		transition: color 220ms ease;
+	}
+
+	.project-case-nav__link:hover,
+	.project-case-nav__link[aria-current='true'] {
+		color: #000000;
+	}
+
+	.project-case-nav__index {
+		flex: 0 0 auto;
+		min-width: 1.75rem;
+	}
+
+	.project-case-nav__label {
+		min-width: 0;
+	}
+
+	@media (max-width: 1023px) {
+		.project-case-nav {
+			overflow-x: auto;
+			padding-bottom: 0.25rem;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		.project-case-nav__list {
+			flex-direction: row;
+			gap: 1.25rem;
+			width: max-content;
+		}
+
+		.project-case-nav__link {
+			white-space: nowrap;
+			font-size: 0.95rem;
+		}
+	}
+</style>

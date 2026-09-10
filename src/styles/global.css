@@ -1,5 +1,34 @@
 @import "tailwindcss";
 
+/* Desktop: true hover. Touch: only while pressing. */
+@custom-variant hover {
+	@media (hover: hover) and (pointer: fine) {
+		&:hover {
+			@slot;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		&:active {
+			@slot;
+		}
+	}
+}
+
+@custom-variant group-hover {
+	@media (hover: hover) and (pointer: fine) {
+		&:is(:where(.group):hover *) {
+			@slot;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		&:is(:where(.group):active *) {
+			@slot;
+		}
+	}
+}
+
 @theme {
 	--font-sans: "Fustat", ui-sans-serif, system-ui, sans-serif;
 	--color-setin-bg: #131415;
@@ -10,24 +39,27 @@
 	--letter-spacing-ui: -0.1px;
 	--page-gutter: 16px;
 	--section-padding-y: 100px;
-	--body-text-size: 1.2rem;
+	--band-padding-y: 80px;
+	--body-txt-1-size: 1.1rem;
+	--body-text-size: var(--body-txt-1-size);
 }
 
 @media (width >= 768px) {
 	:root {
 		--page-gutter: 60px;
 		--section-padding-y: 200px;
+		--band-padding-y: 140px;
 	}
 }
 
 @media (max-width: 767px) {
 	:root {
-		--body-text-size: 1.05rem;
+		--body-txt-1-size: 1rem;
 	}
 }
 
 html {
-	scroll-behavior: smooth;
+	scroll-behavior: auto;
 	background-color: #131415;
 	overflow-x: clip;
 }
@@ -41,6 +73,8 @@ body {
 	@apply text-setin-fg antialiased;
 }
 
+/* Body txt 1 — default body copy across the site */
+.body-txt-1,
 p,
 li,
 blockquote,
@@ -59,9 +93,22 @@ blockquote,
 .about-content__body p,
 .project-overview__text,
 .project-content-block__text,
-.testimonial-card__quote {
+.project-case-section__text,
+.testimonial-card__quote,
+.article-prose p {
 	letter-spacing: var(--letter-spacing-body);
-	font-size: var(--body-text-size);
+	font-size: var(--body-txt-1-size);
+}
+
+/* Light surfaces: keep body copy dark even after client-side i18n rewrites (no Astro scope attrs). */
+.project-page__body {
+	color: #131415;
+}
+
+.project-overview__text,
+.project-content-block__text,
+.project-case-section__text {
+	color: rgba(0, 0, 0, 0.55);
 }
 
 h1,
@@ -80,9 +127,18 @@ label,
 	font-weight: 600;
 }
 
+/* H1 — home hero */
+.text-h1,
+.hero-headline {
+	font-weight: 600;
+	line-height: 1.3;
+	font-size: 4.75rem;
+}
+
 @media (max-width: 767px) {
+	.text-h1,
 	.hero-headline {
-		font-size: clamp(1.875rem, 10.2vw, 2.4rem);
+		font-size: 2.75rem;
 	}
 
 	.about-hero__title {
@@ -90,6 +146,41 @@ label,
 	}
 }
 
+/* H3 — project hero headline */
+.text-h3,
+.project-hero__title {
+	font-weight: 600;
+	line-height: 1.18;
+	letter-spacing: -0.01em;
+	font-size: 2.75rem;
+}
+
+@media (max-width: 767px) {
+	.text-h3,
+	.project-hero__title {
+		font-size: 2rem;
+	}
+}
+
+/* Subtitle 1 — e.g. “Our story” */
+.text-subtitle-1,
+.about-visual__eyebrow {
+	font-weight: 600;
+	text-transform: uppercase;
+	line-height: 1.12;
+	letter-spacing: -0.01em;
+	font-size: 3rem;
+}
+
+@media (max-width: 767px) {
+	.text-subtitle-1,
+	.about-visual__eyebrow {
+		font-size: 2.2rem;
+	}
+}
+
+/* Subtitle 2 — section headings (home + project sections) */
+.text-subtitle-2,
 .clients-heading,
 .projects-heading,
 .testimonials-heading,
@@ -97,18 +188,18 @@ label,
 .contact-heading,
 .about-content__heading,
 .about-studio-intro__heading,
-.about-visual__eyebrow,
 .project-content-block__heading,
 .project-overview__heading,
 .section-headline {
 	font-weight: 600;
-}
-
-.project-card__title {
-	font-weight: 600;
+	text-transform: uppercase;
+	line-height: 1.12;
+	letter-spacing: -0.01em;
+	font-size: 2.25rem;
 }
 
 @media (max-width: 767px) {
+	.text-subtitle-2,
 	.clients-heading,
 	.projects-heading,
 	.testimonials-heading,
@@ -119,9 +210,14 @@ label,
 	.project-content-block__heading,
 	.project-overview__heading,
 	.section-headline {
-		font-size: 1.8rem;
+		font-size: 1.5rem;
 	}
 }
+
+.project-card__title {
+	font-weight: 600;
+}
+
 .clients-heading,
 .projects-heading,
 .testimonials-heading,
@@ -139,6 +235,22 @@ label,
 .section-eyebrow,
 .section-headline {
 	letter-spacing: var(--letter-spacing-ui);
+}
+
+.text-subtitle-1,
+.text-subtitle-2,
+.clients-heading,
+.projects-heading,
+.testimonials-heading,
+.articles-heading,
+.contact-heading,
+.about-content__heading,
+.about-studio-intro__heading,
+.about-visual__eyebrow,
+.project-content-block__heading,
+.project-overview__heading,
+.section-headline {
+	letter-spacing: -0.01em;
 }
 
 body.intro-active {

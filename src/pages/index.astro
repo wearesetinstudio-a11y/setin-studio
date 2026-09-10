@@ -30,44 +30,92 @@ const { projectCount, articleCount } = await getSiteCounts();
 			<source src="/hero-background.mp4" type="video/mp4" />
 		</video>
 
-		<div class="hero-background-stack__tint absolute inset-0 bg-[#131415]/15"></div>
+		<div class="hero-background-stack__tint absolute inset-0 z-[1] bg-[#131415]/15"></div>
 
-		<canvas id="cinema-pure-noise-filter" class="hero-background-stack__noise absolute inset-0 block h-full w-full"></canvas>
+		<canvas
+			id="cinema-pure-noise-filter"
+			class="hero-background-stack__noise pointer-events-none absolute inset-0 z-[2] block h-full w-full bg-transparent"
+		></canvas>
 	</div>
 
 	<Header projectCount={projectCount} articleCount={articleCount} waitForIntro={true} />
 
 	<main class="relative z-20 flex-1">
-		<section id="hero-section" class="relative flex min-h-[100dvh] flex-col justify-end px-[var(--page-gutter)] pb-[80px] pt-28">
-			<div class="relative z-10 grid w-full grid-cols-1 items-end gap-6 lg:grid-cols-2 lg:gap-16">
-				<div class="min-w-0 w-full">
-					<h1 id="hero-headline" class="hero-headline w-full uppercase text-setin-fg">
-						<div class="hero-reveal-mask">
-							<span
-								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-							>
-								Digital legacies
-							</span>
-						</div>
-						<div class="hero-reveal-mask">
-							<span
-								class="hero-reveal-line translate-y-full transform opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-							>
-								for the outliers
-							</span>
-						</div>
-					</h1>
-				</div>
+		<section id="hero-section" class="hero-section relative pb-16 md:pb-[140px]">
+			<div class="hero-section__primary relative z-10 w-full">
+				<div class="hero-section__pin" data-hero-pin>
+					<div class="hero-headline-wrap min-w-0" data-hero-headline-wrap>
+						<h1
+							id="hero-headline"
+							class="hero-headline text-h1 w-full uppercase text-setin-fg"
+							data-hero-headline
+							data-i18n="hero.headline"
+						>
+							We design solutions for visionaries.
+						</h1>
+					</div>
 
-				<div class="block overflow-hidden lg:ml-auto lg:pb-1">
-					<p
-						class="hero-description hero-reveal-desc max-w-sm translate-y-full transform opacity-0 transition-all delay-300 duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-					>
-						Rooted in heritage. Built for the future. A multidisciplinary studio forging distinct
-						identities, seamless interfaces, and high-performance builds.
-					</p>
+					<div class="hero-aside min-w-0 w-full" data-hero-aside>
+						<p
+							class="body-txt-1 hero-description leading-relaxed"
+							data-hero-description
+							data-i18n="hero.description"
+						>
+							Setin Studio is an independent creative studio rooted in Slavic culture. We help
+							ambitious founders and brands turn ideas into sharp design, clean code, and clear
+							stories.
+						</p>
+
+						<nav
+							class="hero-services mt-[40px] w-full"
+							aria-label="Services"
+							data-i18n-aria="hero.servicesAria"
+							data-hero-services
+						>
+							{
+								[
+									{ key: 'hero.service.branding', label: 'Branding' },
+									{ key: 'hero.service.uxResearch', label: 'UX Research' },
+									{ key: 'hero.service.uxUi', label: 'UX/UI Design' },
+									{ key: 'hero.service.development', label: 'Development' },
+								].map((service, index) => (
+									<a
+										href="/services"
+										class="hero-service group"
+										style={`--i: ${index}`}
+									>
+										<span class="hero-service__inner">
+											<span class="hero-service__label-wrap">
+												<span class="hero-service__label-roll">
+													<span class="hero-service__label" data-i18n={service.key}>
+														{service.label}
+													</span>
+													<span
+														class="hero-service__label"
+														data-i18n={service.key}
+														aria-hidden="true"
+													>
+														{service.label}
+													</span>
+												</span>
+											</span>
+											<img
+												src="/icons/simple-arrow.svg"
+												alt=""
+												width="22"
+												height="18"
+												class="hero-service__arrow"
+												aria-hidden="true"
+											/>
+										</span>
+									</a>
+								))
+							}
+						</nav>
+					</div>
 				</div>
 			</div>
+			<div class="hero-section__tail relative z-10" data-hero-tail aria-hidden="true"></div>
 		</section>
 
 		<script>
@@ -75,6 +123,42 @@ const { projectCount, articleCount } = await getSiteCounts();
 
 			let heroStackHidden = false;
 			let heroSyncFrame = 0;
+			let lockedHeroBgHeight = 0;
+
+			function lockHeroBackgroundViewport(force = false) {
+				const stack = document.getElementById('hero-background-stack');
+				if (!stack) return;
+
+				const isMobile = window.matchMedia('(max-width: 767px)').matches;
+				if (!isMobile) {
+					lockedHeroBgHeight = 0;
+					stack.style.removeProperty('height');
+					stack.style.removeProperty('width');
+					stack.style.removeProperty('top');
+					stack.style.removeProperty('left');
+					stack.style.removeProperty('right');
+					return;
+				}
+
+				if (!force && lockedHeroBgHeight > 0) return;
+
+				const viewportHeight = Math.round(
+					Math.max(
+						window.innerHeight,
+						document.documentElement.clientHeight,
+						window.visualViewport?.height ?? 0,
+					),
+				);
+
+				// Keep the largest height seen so URL-bar show/hide doesn't resize the layer.
+				lockedHeroBgHeight = Math.max(lockedHeroBgHeight, viewportHeight);
+
+				stack.style.top = '0px';
+				stack.style.left = '0px';
+				stack.style.right = '0px';
+				stack.style.width = '100%';
+				stack.style.height = `${lockedHeroBgHeight}px`;
+			}
 
 			function syncHeroBackgroundStack() {
 				const hero = document.getElementById('hero-section');
@@ -102,14 +186,45 @@ const { projectCount, articleCount } = await getSiteCounts();
 				});
 			}
 
-			initCinemaPureNoise('cinema-pure-noise-filter', { observeElementId: 'hero-section' });
+			initCinemaPureNoise('cinema-pure-noise-filter', {
+				observeElementId: 'hero-section',
+				density: 0.038,
+				grainSize: 0.7,
+				baseOpacity: 0.12,
+			});
 			document.documentElement.classList.add('hero-cinema-active');
+			lockHeroBackgroundViewport(true);
 			syncHeroBackgroundStack();
 			window.addEventListener('scroll', scheduleHeroBackgroundSync, { passive: true });
-			window.addEventListener('resize', scheduleHeroBackgroundSync, { passive: true });
+			window.addEventListener(
+				'resize',
+				() => {
+					// Ignore toolbar-driven resizes on mobile; only unlock on real layout changes via orientation.
+					if (!window.matchMedia('(max-width: 767px)').matches) {
+						lockHeroBackgroundViewport(true);
+					}
+					scheduleHeroBackgroundSync();
+				},
+				{ passive: true },
+			);
+			window.addEventListener(
+				'orientationchange',
+				() => {
+					lockedHeroBgHeight = 0;
+					window.setTimeout(() => lockHeroBackgroundViewport(true), 250);
+				},
+				{ passive: true },
+			);
 			document.addEventListener('astro:page-load', () => {
-				initCinemaPureNoise('cinema-pure-noise-filter', { observeElementId: 'hero-section' });
+				initCinemaPureNoise('cinema-pure-noise-filter', {
+					observeElementId: 'hero-section',
+					density: 0.038,
+					grainSize: 0.7,
+					baseOpacity: 0.12,
+				});
 				document.documentElement.classList.add('hero-cinema-active');
+				lockedHeroBgHeight = 0;
+				lockHeroBackgroundViewport(true);
 				scheduleHeroBackgroundSync();
 			});
 		</script>
@@ -131,39 +246,301 @@ const { projectCount, articleCount } = await getSiteCounts();
 
 	<script>
 		import { hasCompletedIntro } from '../scripts/introState.ts';
+		import { dictionaries, type Locale } from '../i18n/dictionaries.ts';
 
-		function initHeroSlideUpReveal() {
-			function revealHeroText() {
-				document.querySelectorAll('.hero-reveal-line, .hero-reveal-desc').forEach((element) => {
-					element.classList.remove('translate-y-full', 'opacity-0');
-					element.classList.add('translate-y-0', 'opacity-100');
-				});
+		function getCurrentHeroLocale(): Locale {
+			const lang = document.documentElement.lang.toLowerCase();
+			if (lang.startsWith('pl')) return 'pl';
+			if (lang.startsWith('es')) return 'es';
+			return 'en';
+		}
+
+		function getResponsiveHeroHeadline(): string {
+			const locale = getCurrentHeroLocale();
+			const dict = dictionaries[locale] ?? dictionaries.en;
+			const isMobile = window.matchMedia('(max-width: 767px)').matches;
+			const key = isMobile ? 'hero.headline.mobile' : 'hero.headline';
+			return dict[key] ?? dict['hero.headline'] ?? dictionaries.en['hero.headline'];
+		}
+
+		function measureWrappedLines(container: HTMLElement, raw: string): string[] {
+			container.textContent = '';
+			// Split on regular spaces only so non-breaking spaces keep phrases together.
+			const words = raw.split(' ').filter(Boolean);
+			const wordSpans = words.map((word, index) => {
+				const span = document.createElement('span');
+				span.textContent = index < words.length - 1 ? `${word} ` : word;
+				container.appendChild(span);
+				return span;
+			});
+
+			const lines: string[][] = [];
+			let currentLine: string[] = [];
+			let currentTop = wordSpans[0]?.offsetTop ?? 0;
+
+			for (const span of wordSpans) {
+				if (span.offsetTop > currentTop + 1) {
+					lines.push(currentLine);
+					currentLine = [];
+					currentTop = span.offsetTop;
+				}
+				currentLine.push((span.textContent ?? '').replace(/ $/, ''));
 			}
+			if (currentLine.length) lines.push(currentLine);
 
-			if (hasCompletedIntro()) {
-				revealHeroText();
+			return lines.map((lineWords) => lineWords.join(' '));
+		}
+
+		function normalizeHeroCopy(text: string): string {
+			return text.replace(/[^\S\u00a0]+/g, ' ').trim();
+		}
+
+		function fitHeroHeadlineToWidth(container: HTMLElement) {
+			if (!container.classList.contains('hero-headline--fixed-lines')) {
+				container.style.removeProperty('font-size');
 				return;
 			}
 
-			window.addEventListener('intro-complete', revealHeroText, { once: true });
+			container.style.removeProperty('font-size');
+			const lines = [...container.querySelectorAll<HTMLElement>('.hero-reveal-line')];
+			if (!lines.length) return;
+
+			const available = container.clientWidth;
+			if (available <= 0) return;
+
+			let longest = 0;
+			for (const line of lines) {
+				longest = Math.max(longest, line.scrollWidth);
+			}
+			if (longest <= 0) return;
+
+			const computed = parseFloat(getComputedStyle(container).fontSize);
+			if (!computed) return;
+
+			// Scale so the longest fixed line fills the container edge-to-edge.
+			const next = computed * (available / longest);
+			container.style.fontSize = `${Math.max(1, next * 0.995)}px`;
+		}
+
+		function splitHeroHeadlineLines(container: HTMLElement) {
+			const fromDict = getResponsiveHeroHeadline().replace(/\r/g, '');
+			const raw = fromDict.trim();
+			if (!raw) return;
+
+			container.dataset.rawText = raw;
+			const wasRevealed = container.dataset.revealed === 'true';
+			const hasFixedLines = raw.includes('\n');
+
+			const lines = hasFixedLines
+				? raw
+						.split('\n')
+						.map((line) => line.trim())
+						.filter(Boolean)
+				: measureWrappedLines(container, normalizeHeroCopy(raw));
+
+			container.classList.toggle('hero-headline--fixed-lines', hasFixedLines);
+			container.style.removeProperty('font-size');
+			container.replaceChildren();
+
+			lines.forEach((lineText, index) => {
+				const mask = document.createElement('span');
+				mask.className = 'hero-reveal-mask';
+
+				const line = document.createElement('span');
+				line.className = 'hero-reveal-line';
+				line.style.setProperty('--i', String(index));
+				line.textContent = lineText;
+
+				if (wasRevealed) line.classList.add('is-revealed');
+
+				mask.appendChild(line);
+				container.appendChild(mask);
+			});
+
+			requestAnimationFrame(() => {
+				fitHeroHeadlineToWidth(container);
+				syncHeroPinHeight();
+			});
+		}
+
+		function splitHeroDescriptionLines(container: HTMLElement) {
+			const raw =
+				container.dataset.rawText?.trim() ||
+				normalizeHeroCopy(container.textContent ?? '');
+			if (!raw) return;
+
+			container.dataset.rawText = raw;
+			const wasRevealed = container.dataset.revealed === 'true';
+			const lines = measureWrappedLines(container, raw);
+
+			container.replaceChildren();
+
+			lines.forEach((lineText, index) => {
+				const mask = document.createElement('span');
+				mask.className = 'hero-desc-line-mask';
+
+				const line = document.createElement('span');
+				line.className = 'hero-reveal-desc-line';
+				line.style.setProperty('--i', String(index));
+				line.textContent = lineText;
+
+				if (wasRevealed) line.classList.add('is-revealed');
+
+				mask.appendChild(line);
+				container.appendChild(mask);
+			});
+		}
+
+		function revealHeroText() {
+			const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
+			if (headline) {
+				headline.dataset.revealed = 'true';
+				headline.querySelectorAll('.hero-reveal-line').forEach((element) => {
+					element.classList.add('is-revealed');
+				});
+			}
+
+			const description = document.querySelector<HTMLElement>('[data-hero-description]');
+			if (description) {
+				description.dataset.revealed = 'true';
+				description.querySelectorAll('.hero-reveal-desc-line').forEach((element) => {
+					element.classList.add('is-revealed');
+				});
+			}
+
+			document.querySelector<HTMLElement>('[data-hero-services]')?.classList.add('is-revealed');
+
+			requestAnimationFrame(() => {
+				const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
+				if (headline) fitHeroHeadlineToWidth(headline);
+				syncHeroPinHeight();
+			});
+		}
+
+		function prepareHeroCopy() {
+			const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
+			const description = document.querySelector<HTMLElement>('[data-hero-description]');
+			if (headline) splitHeroHeadlineLines(headline);
+			if (description) splitHeroDescriptionLines(description);
+			syncHeroPinHeight();
+		}
+
+		function syncHeroPinHeight() {
+			const pin = document.querySelector<HTMLElement>('[data-hero-pin]');
+			const headlineWrap = document.querySelector<HTMLElement>('[data-hero-headline-wrap]');
+			const aside = document.querySelector<HTMLElement>('[data-hero-aside]');
+			const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
+			const services = document.querySelector<HTMLElement>('[data-hero-services]');
+			const tail = document.querySelector<HTMLElement>('[data-hero-tail]');
+			if (!pin || !headlineWrap || !aside) return;
+
+			const isMobile = window.matchMedia('(max-width: 767px)').matches;
+			aside.style.removeProperty('padding-top');
+			aside.style.removeProperty('padding-bottom');
+			pin.style.removeProperty('min-height');
+
+			if (isMobile) {
+				// Pin ends at description bottom (90vh). Services sit below and need flow space.
+				if (!tail) return;
+				if (!services) {
+					tail.style.height = '0px';
+					return;
+				}
+				const marginTop = parseFloat(getComputedStyle(services).marginTop) || 0;
+				tail.style.height = `${services.offsetHeight + marginTop}px`;
+				return;
+			}
+
+			if (tail) tail.style.height = '0px';
+
+			// Start: aside top aligns with headline top (same as before).
+			// End of scroll: aside bottom aligns with headline bottom → travel = overflow.
+			const shellHeight = headlineWrap.clientHeight || Math.round(window.innerHeight * 0.9);
+			const headlineHeight = headline?.offsetHeight ?? 0;
+			const contentHeight = aside.offsetHeight;
+			const padTop = Math.max(0, shellHeight - headlineHeight);
+			const travel = Math.max(0, contentHeight - headlineHeight);
+
+			aside.style.paddingTop = `${padTop}px`;
+			pin.style.minHeight = `${shellHeight + travel}px`;
+		}
+
+		function initHeroSlideUpReveal() {
+			lastHeroLayoutWidth = window.innerWidth;
+			prepareHeroCopy();
+
+			if (hasCompletedIntro()) {
+				revealHeroText();
+			} else {
+				window.addEventListener('intro-complete', revealHeroText, { once: true });
+			}
+
+			requestAnimationFrame(syncHeroPinHeight);
+		}
+
+		let resizeTimer = 0;
+		let lastHeroLayoutWidth = 0;
+
+		function onHeroCopyResize() {
+			const width = window.innerWidth;
+			const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+			// Mobile URL-bar show/hide fires resize with the same width — skip reflow
+			// or the absolute pin (headline/description) jumps mid-scroll.
+			if (isMobile && lastHeroLayoutWidth > 0 && width === lastHeroLayoutWidth) {
+				return;
+			}
+
+			window.clearTimeout(resizeTimer);
+			resizeTimer = window.setTimeout(() => {
+				lastHeroLayoutWidth = window.innerWidth;
+				prepareHeroCopy();
+				if (hasCompletedIntro()) revealHeroText();
+				syncHeroPinHeight();
+			}, 120);
 		}
 
 		initHeroSlideUpReveal();
 		document.addEventListener('astro:page-load', initHeroSlideUpReveal);
+		window.addEventListener('resize', onHeroCopyResize, { passive: true });
+		window.addEventListener('setin:language-change', () => {
+			const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
+			const description = document.querySelector<HTMLElement>('[data-hero-description]');
+			if (headline) delete headline.dataset.rawText;
+			if (description) delete description.dataset.rawText;
+			prepareHeroCopy();
+			if (hasCompletedIntro()) revealHeroText();
+			requestAnimationFrame(syncHeroPinHeight);
+		});
+
+		if ('fonts' in document) {
+			void document.fonts.ready.then(() => {
+				const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
+				if (headline) {
+					fitHeroHeadlineToWidth(headline);
+					syncHeroPinHeight();
+				}
+			});
+		}
 	</script>
 </Layout>
 
 <style is:global>
 	.hero-background-stack {
 		position: fixed;
-		inset: 0;
+		top: 0;
+		right: 0;
+		left: 0;
 		z-index: 0;
 		overflow: hidden;
 		width: 100%;
+		/* Prefer large viewport units — dvh jumps when mobile browser chrome shows/hides */
 		height: 100vh;
-		height: 100dvh;
+		height: 100lvh;
 		background-color: #131415;
 		transition: opacity 0.35s ease, visibility 0.35s ease;
+		transform: translateZ(0);
+		backface-visibility: hidden;
 	}
 
 	.hero-background-stack.is-hidden {
@@ -172,45 +549,363 @@ const { projectCount, articleCount } = await getSiteCounts();
 	}
 
 	.hero-background-video {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center center;
 		transform: scale(1.48);
 		transform-origin: center center;
-		will-change: transform;
-	}
-
-	.hero-background-stack__noise {
-		z-index: 2;
-		opacity: 0.85;
-		mix-blend-mode: overlay;
 	}
 
 	@media (max-width: 767px) {
-		.hero-background-stack__noise {
-			opacity: 0.95;
+		.hero-background-stack {
+			width: 100%;
+			min-width: 100%;
 		}
 
-		html.hero-cinema-active .noise-overlay--coarse {
-			opacity: 0.035;
+		.hero-background-video {
+			/* Fill width; light scale only to avoid edge letterboxing, not heavy crop */
+			transform: none;
+			will-change: auto;
 		}
 	}
 
+	.hero-background-stack__noise {
+		opacity: 1;
+	}
+
+	/* Match other image sections: cinema grain only (global overlays sit under main) */
 	html.hero-cinema-active .noise-overlay--coarse,
-	html.hero-cinema-active .noise-overlay--fine {
+	html.hero-cinema-active .noise-overlay--fine,
+	html.hero-cinema-active .noise-scanlines {
 		opacity: 0;
 	}
 
 	.hero-headline {
-		font-weight: 700;
-		line-height: 1.3;
+		font-weight: 600;
+		line-height: 1.15;
+		width: 100%;
+		max-width: 100%;
+		overflow-wrap: normal;
+		word-break: normal;
 	}
 
-	.hero-reveal-mask {
+	.hero-section__primary {
+		position: relative;
+		/* svh stays stable when mobile browser chrome shows/hides (dvh jumps) */
+		min-height: 90svh;
+		min-height: 90dvh;
+		padding-top: 7rem;
+	}
+
+	.hero-section__pin {
+		position: absolute;
+		right: var(--page-gutter);
+		bottom: 0;
+		left: var(--page-gutter);
+		width: auto;
+	}
+
+	.hero-section__tail {
+		width: 100%;
+		pointer-events: none;
+	}
+
+	.hero-headline-wrap {
+		position: relative;
+		z-index: 1;
+		min-width: 0;
+		width: 100%;
+	}
+
+	.hero-aside {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		margin-top: 1.5rem;
+		width: 100%;
+	}
+
+	@media (max-width: 767px) {
+		.hero-section__primary {
+			/* Lock to small viewport — absolute pin won't jump on URL-bar toggle */
+			min-height: 90svh;
+			height: 90svh;
+		}
+
+		/* Stack headline + description in the pin so description bottom sits on 90vh */
+		.hero-aside {
+			position: static;
+			margin-top: 1.5rem;
+		}
+
+		.hero-services {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+		}
+
+		/* Forced lines; JS scales font to fill grid width on mobile */
+		.hero-headline.hero-headline--fixed-lines .hero-reveal-line {
+			white-space: nowrap;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.hero-section__primary {
+			min-height: 0;
+			padding-top: 0;
+		}
+
+		.hero-section__pin {
+			position: relative;
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) 28rem;
+			column-gap: 4rem;
+			align-items: start;
+			right: auto;
+			bottom: auto;
+			left: auto;
+			width: 100%;
+			padding-inline: var(--page-gutter);
+		}
+
+		.hero-headline-wrap {
+			position: sticky;
+			top: 0;
+			z-index: 2;
+			display: flex;
+			height: 90dvh;
+			width: 100%;
+			max-width: 100%;
+			flex-direction: column;
+			justify-content: flex-end;
+			padding-top: 7rem;
+			padding-bottom: 0;
+		}
+
+		.hero-aside {
+			position: relative;
+			top: auto;
+			right: auto;
+			left: auto;
+			margin-top: 0;
+			width: 100%;
+		}
+	}
+
+	.hero-headline .hero-reveal-mask {
 		display: block;
 		overflow: hidden;
 		padding-top: 0.08em;
 	}
 
-	.hero-reveal-line {
+	.hero-headline .hero-reveal-line {
 		display: block;
+		transform: translateY(110%);
+		opacity: 0;
+		transition:
+			transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: calc(var(--i, 0) * 90ms);
+	}
+
+	.hero-headline.hero-headline--fixed-lines .hero-reveal-line {
+		white-space: nowrap;
+	}
+
+	.hero-headline .hero-reveal-line.is-revealed {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	.hero-description {
+		font-weight: 500;
+		line-height: 1.625;
+		color: #ffffff;
+	}
+
+	.hero-desc-line-mask {
+		display: block;
+		overflow: hidden;
+	}
+
+	.hero-reveal-desc-line {
+		display: block;
+		transform: translateY(110%);
+		opacity: 0;
+		transition:
+			transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: calc(280ms + (var(--i, 0) * 140ms));
+	}
+
+	.hero-reveal-desc-line.is-revealed {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	.hero-services {
+		width: 100%;
+	}
+
+	.hero-service {
+		display: block;
+		border-top: 1px solid rgba(255, 255, 255, 0.18);
+		color: #f5f5f5;
+		text-decoration: none;
+		opacity: 0;
+		transform: translateY(0.75rem);
+		transition:
+			background-color 0.35s ease,
+			color 0.35s ease,
+			border-color 0.35s ease;
+	}
+
+	.hero-services.is-revealed .hero-service {
+		opacity: 1;
+		transform: translateY(0);
+		transition:
+			opacity 900ms cubic-bezier(0.16, 1, 0.3, 1) calc(280ms + (var(--i, 0) * 100ms)),
+			transform 900ms cubic-bezier(0.16, 1, 0.3, 1) calc(280ms + (var(--i, 0) * 100ms)),
+			background-color 0.35s ease,
+			color 0.35s ease,
+			border-color 0.35s ease;
+	}
+
+	.hero-service:last-child {
+		border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+	}
+
+	.hero-service__inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		padding-block: 1.65rem;
+		padding-inline: 0;
+		transition: padding-inline 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.hero-service__label-wrap {
+		display: flex;
+		height: 1.5em;
+		flex-direction: column;
+		overflow: hidden;
+	}
+
+	.hero-service__label-roll {
+		display: flex;
+		flex-direction: column;
+		transition: transform 300ms ease-in;
+	}
+
+	.hero-service:focus-visible .hero-service__label-roll {
+		transform: translateY(-50%);
+		transition-duration: 450ms;
+		transition-timing-function: ease-out;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.hero-service:hover .hero-service__label-roll {
+			transform: translateY(-50%);
+			transition-duration: 450ms;
+			transition-timing-function: ease-out;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.hero-service:active .hero-service__label-roll {
+			transform: translateY(-50%);
+			transition-duration: 450ms;
+			transition-timing-function: ease-out;
+		}
+	}
+
+	.hero-service__label {
+		display: flex;
+		height: 1.5em;
+		align-items: center;
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: -0.01em;
+		text-transform: uppercase;
+	}
+
+	.hero-service__arrow {
+		width: auto;
+		height: 0.9rem;
+		flex-shrink: 0;
+		transition:
+			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.35s ease;
+	}
+
+	.hero-service:focus-visible {
+		background-color: #ffffff;
+		color: #131415;
+		border-color: #ffffff;
+		outline: none;
+	}
+
+	.hero-service:focus-visible + .hero-service {
+		border-top-color: #ffffff;
+	}
+
+	.hero-service:focus-visible .hero-service__inner {
+		padding-inline: 8px;
+	}
+
+	.hero-service:focus-visible .hero-service__arrow {
+		filter: invert(1);
+		transform: rotate(45deg);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.hero-service:hover {
+			background-color: #ffffff;
+			color: #131415;
+			border-color: #ffffff;
+			outline: none;
+		}
+
+		.hero-service:hover + .hero-service {
+			border-top-color: #ffffff;
+		}
+
+		.hero-service:hover .hero-service__inner {
+			padding-inline: 8px;
+		}
+
+		.hero-service:hover .hero-service__arrow {
+			filter: invert(1);
+			transform: rotate(45deg);
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.hero-service:active {
+			background-color: #ffffff;
+			color: #131415;
+			border-color: #ffffff;
+			outline: none;
+		}
+
+		.hero-service:active + .hero-service {
+			border-top-color: #ffffff;
+		}
+
+		.hero-service:active .hero-service__inner {
+			padding-inline: 8px;
+		}
+
+		.hero-service:active .hero-service__arrow {
+			filter: invert(1);
+			transform: rotate(45deg);
+		}
 	}
 
 	@media (max-width: 767px) {
@@ -219,34 +914,8 @@ const { projectCount, articleCount } = await getSiteCounts();
 			max-width: 100%;
 		}
 
-		.hero-reveal-mask {
-			display: block;
-			width: 100%;
-			overflow: hidden;
+		.hero-service__inner {
+			padding-block: 1.35rem;
 		}
-
-		.hero-reveal-line {
-			display: block;
-			width: 100%;
-			white-space: nowrap;
-		}
-	}
-
-	@media (min-width: 768px) {
-		.hero-headline {
-			width: 70vw;
-			max-width: 70vw;
-			font-size: 3.8rem;
-		}
-
-		.hero-headline .hero-reveal-line {
-			white-space: nowrap;
-		}
-	}
-
-	.hero-description {
-		font-weight: 500;
-		line-height: 1.625;
-		color: #ffffff;
 	}
 </style>

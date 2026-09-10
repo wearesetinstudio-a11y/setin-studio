@@ -4,7 +4,7 @@ client: Snacks Lovers
 tags: ['Branding', 'Visual Identity', 'Webflow']
 thumbnail: '/portfolio/snacks-lovers/snacks-lovers-cover.webp'
 folderName: 'snacks-lovers'
-order: 3
+order: 4
 heroImage: '/portfolio/snacks-lovers/bg.webp'
 heroSubtitle: |-
   A brand built for sweet craziness
@@ -28,7 +28,7 @@ strategyText: |-
   We anchored the identity in a strong logotype and a modular graphic system that can stretch from social content to physical packaging without losing impact.
 
   Color, typography, and layout rules were built to support rapid campaign production while keeping the brand instantly recognizable in competitive retail environments.
-summaryLabel: 'Summary'
+summaryLabel: 'Results'
 summaryTitle: 'A sweet identity with serious staying power'
 summaryText: 'Snacks Lovers now has a brand that feels as energetic as the products themselves — confident, memorable, and ready to scale across every channel where snack culture comes to life.'
 ---

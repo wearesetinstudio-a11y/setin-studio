@@ -7,14 +7,15 @@ interface Props {
 
 const { heroImage = '', heroLines, client } = Astro.props;
 const clientLabel = client.toUpperCase();
+const heroRawText = heroLines.join('\n').trim();
 ---
 
-<section id="project-hero" class="project-hero relative h-[85vh] overflow-hidden">
+<section id="project-hero" class="project-hero relative h-[100vh] overflow-hidden">
 	{
 		heroImage ? (
 			<div
 				id="project-hero-visual"
-				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[85vh] w-full overflow-hidden bg-[#131415]"
+				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100vh] w-full overflow-hidden bg-[#131415]"
 				aria-hidden="true"
 			>
 				<img
@@ -40,21 +41,27 @@ const clientLabel = client.toUpperCase();
 		)
 	}
 
-	<div class="relative z-10 flex h-full items-end px-[var(--page-gutter)] pb-[60px] pt-28">
-		<div class="grid w-full grid-cols-1 items-end gap-6 lg:grid-cols-2 lg:gap-16">
-			<div class="w-full lg:w-[75vw] lg:max-w-[75vw]">
-				<h1 id="hero-headline" class="project-hero__title w-full uppercase text-white">
-					{
-						heroLines.map((line) => (
-							<span class="block">{line}</span>
-						))
-					}
-				</h1>
+	<div class="relative z-10 flex h-full items-end px-[var(--page-gutter)] pb-[calc(6.75rem+env(safe-area-inset-bottom,0px))] pt-28 md:pb-[72px]">
+		<div class="project-hero__row flex w-full flex-col gap-[40px] lg:flex-row lg:items-end lg:gap-[56px]">
+			<div class="project-hero__title-wrap min-w-0 flex-1">
+				<h3
+					id="hero-headline"
+					class="project-hero__title project-hero-headline text-h3 w-full uppercase text-white"
+					data-project-hero-headline
+					data-raw-text={heroRawText}
+				>
+					{heroRawText}
+				</h3>
 			</div>
 
-			<div class="lg:ml-auto lg:max-w-md lg:text-right">
-				<p class="project-hero__client-label text-[1.2rem] font-semibold uppercase tracking-[0.14em] text-white">[Client]</p>
-				<p class="project-hero__client-name mt-3 font-semibold uppercase leading-[1.08] tracking-tight text-white">
+			<div class="project-hero__client shrink-0 lg:text-right" data-project-hero-client>
+				<p class="project-hero__client-label text-[1.2rem] font-semibold uppercase tracking-[0.14em] text-white">
+					[<span data-i18n="project.client">Client</span>]
+				</p>
+				<p
+					class="project-hero__client-name mt-3 font-semibold uppercase leading-[1.08] tracking-tight text-white"
+					data-project-field="client"
+				>
 					{clientLabel}
 				</p>
 			</div>
@@ -73,36 +80,242 @@ const clientLabel = client.toUpperCase();
 		transform-origin: center 42%;
 	}
 
-	.project-hero__title {
-		font-size: 2rem;
-		line-height: 1.18;
-		letter-spacing: -0.01em;
-	}
-
 	.project-hero__client-name {
 		font-size: 1.6rem;
 	}
 
 	@media (min-width: 768px) {
-		.project-hero__title {
-			font-size: 2.75rem;
-		}
-
 		.project-hero__client-name {
 			font-size: 1.8rem;
 		}
+	}
+
+	@media (min-width: 1024px) {
+		.project-hero__client {
+			max-width: 18rem;
+		}
+	}
+
+	/* Same reveal pattern as home hero headline */
+	.project-hero-headline:not([data-prepared]) {
+		opacity: 0;
+	}
+
+	.project-hero-headline .hero-reveal-mask {
+		display: block;
+		overflow: hidden;
+		padding-top: 0.08em;
+	}
+
+	.project-hero-headline .hero-reveal-line {
+		display: block;
+		transform: translateY(110%);
+		opacity: 0;
+		transition:
+			transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: calc(var(--i, 0) * 90ms);
+	}
+
+	.project-hero-headline.project-hero-headline--fixed-lines .hero-reveal-line {
+		white-space: nowrap;
+	}
+
+	.project-hero-headline .hero-reveal-line.is-revealed {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	.project-hero__client:not(.is-revealed) {
+		pointer-events: none;
+	}
+
+	.project-hero__client {
+		opacity: 0;
+		transform: translateY(0.75rem);
+		transition:
+			opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+			transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: calc(280ms + (var(--client-i, 0) * 90ms));
+	}
+
+	.project-hero__client.is-revealed {
+		opacity: 1;
+		transform: translateY(0);
 	}
 </style>
 
 <script>
 	import { initCinemaPureNoise } from '../../scripts/initCinemaPureNoise.ts';
+	import { PAGE_TRANSITION_OVERLAY_ID } from '../../scripts/pageTransitionPanel.ts';
 
-	function initProjectHero() {
-		initCinemaPureNoise('project-hero-noise-filter', { observeElementId: 'project-hero' });
+	type TransitionPhase = 'idle' | 'covering' | 'covered' | 'revealing';
 
+	type TransitionWindow = Window &
+		typeof globalThis & {
+			__setinPageTransitionPhase?: TransitionPhase;
+		};
+
+	function getTransitionPhase(): TransitionPhase {
+		return (window as TransitionWindow).__setinPageTransitionPhase ?? 'idle';
+	}
+
+	function isPageTransitionBlocking(): boolean {
+		const phase = getTransitionPhase();
+		if (phase === 'covering' || phase === 'covered' || phase === 'revealing') return true;
+
+		const overlay = document.getElementById(PAGE_TRANSITION_OVERLAY_ID);
+		return Boolean(overlay?.classList.contains('is-active') || overlay?.classList.contains('is-covered'));
+	}
+
+	function waitForPageReveal(callback: () => void) {
+		let done = false;
+		const run = () => {
+			if (done) return;
+			done = true;
+			callback();
+		};
+
+		if (!isPageTransitionBlocking()) {
+			requestAnimationFrame(() => {
+				requestAnimationFrame(run);
+			});
+			return;
+		}
+
+		window.addEventListener('page-transition-reveal-complete', run, { once: true });
+		if (!isPageTransitionBlocking()) {
+			run();
+			return;
+		}
+		window.setTimeout(run, 2200);
+	}
+
+	function normalizeHeroCopy(text: string): string {
+		return text.replace(/[^\S\u00a0]+/g, ' ').trim();
+	}
+
+	function measureWrappedLines(container: HTMLElement, raw: string): string[] {
+		container.textContent = '';
+		const words = raw.split(' ').filter(Boolean);
+		const wordSpans = words.map((word, index) => {
+			const span = document.createElement('span');
+			span.textContent = index < words.length - 1 ? `${word} ` : word;
+			container.appendChild(span);
+			return span;
+		});
+
+		const lines: string[][] = [];
+		let currentLine: string[] = [];
+		let currentTop = wordSpans[0]?.offsetTop ?? 0;
+
+		for (const span of wordSpans) {
+			if (span.offsetTop > currentTop + 1) {
+				lines.push(currentLine);
+				currentLine = [];
+				currentTop = span.offsetTop;
+			}
+			currentLine.push((span.textContent ?? '').replace(/ $/, ''));
+		}
+		if (currentLine.length) lines.push(currentLine);
+
+		return lines.map((lineWords) => lineWords.join(' '));
+	}
+
+	function splitProjectHeroHeadline(container: HTMLElement) {
+		const raw = (container.dataset.rawText || container.textContent || '').replace(/\r/g, '').trim();
+		if (!raw) return 0;
+
+		container.dataset.rawText = raw;
+		const wasRevealed = container.dataset.revealed === 'true';
+		const hasFixedLines = raw.includes('\n');
+
+		const lines = hasFixedLines
+			? raw
+					.split('\n')
+					.map((line) => line.trim())
+					.filter(Boolean)
+			: measureWrappedLines(container, normalizeHeroCopy(raw));
+
+		container.classList.toggle('project-hero-headline--fixed-lines', hasFixedLines);
+		container.replaceChildren();
+
+		lines.forEach((lineText, index) => {
+			const mask = document.createElement('span');
+			mask.className = 'hero-reveal-mask';
+
+			const line = document.createElement('span');
+			line.className = 'hero-reveal-line';
+			line.style.setProperty('--i', String(index));
+			line.textContent = lineText;
+
+			if (wasRevealed) {
+				line.style.transition = 'none';
+				line.classList.add('is-revealed');
+			}
+
+			mask.appendChild(line);
+			container.appendChild(mask);
+		});
+
+		container.dataset.prepared = 'true';
+
+		if (wasRevealed) {
+			requestAnimationFrame(() => {
+				container.querySelectorAll<HTMLElement>('.hero-reveal-line').forEach((line) => {
+					line.style.removeProperty('transition');
+				});
+			});
+		}
+
+		return lines.length;
+	}
+
+	function prepareProjectHeroCopy() {
+		const headline = document.querySelector<HTMLElement>('[data-project-hero-headline]');
+		const client = document.querySelector<HTMLElement>('[data-project-hero-client]');
+		if (!headline) return;
+
+		const wasRevealed = headline.dataset.revealed === 'true';
+		const lineCount = splitProjectHeroHeadline(headline);
+		if (client) {
+			client.style.setProperty('--client-i', String(Math.max(lineCount, 1)));
+			if (wasRevealed) {
+				client.classList.add('is-revealed');
+			}
+		}
+	}
+
+	function revealProjectHeroText() {
+		const headline = document.querySelector<HTMLElement>('[data-project-hero-headline]');
+		const client = document.querySelector<HTMLElement>('[data-project-hero-client]');
+		if (!headline || headline.dataset.revealed === 'true') return;
+
+		// Ensure split lines exist and are painted hidden before toggling.
+		if (headline.dataset.prepared !== 'true') {
+			prepareProjectHeroCopy();
+		}
+
+		void headline.offsetWidth;
+
+		requestAnimationFrame(() => {
+			if (headline.dataset.revealed === 'true') return;
+			headline.dataset.revealed = 'true';
+			headline.querySelectorAll('.hero-reveal-line').forEach((element) => {
+				element.classList.add('is-revealed');
+			});
+			client?.classList.add('is-revealed');
+		});
+	}
+
+	function initProjectHeroVisual() {
 		const hero = document.getElementById('project-hero');
 		const visual = document.getElementById('project-hero-visual');
 		if (!hero || !visual) return;
+		if (hero.dataset.heroVisualInit === 'true') return;
+		hero.dataset.heroVisualInit = 'true';
+
+		initCinemaPureNoise('project-hero-noise-filter', { observeElementId: 'project-hero' });
 
 		const syncHeroVisual = () => {
 			const heroBottom = hero.getBoundingClientRect().bottom;
@@ -113,11 +326,53 @@ const clientLabel = client.toUpperCase();
 		window.addEventListener('scroll', syncHeroVisual, { passive: true });
 	}
 
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initProjectHero, { once: true });
-	} else {
-		initProjectHero();
+	function initProjectHeroReveal() {
+		const hero = document.getElementById('project-hero');
+		if (!hero || hero.dataset.heroRevealInit === 'true') return;
+
+		hero.dataset.heroRevealInit = 'true';
+		prepareProjectHeroCopy();
+		waitForPageReveal(revealProjectHeroText);
 	}
 
+	function initProjectHero() {
+		if (!document.getElementById('project-hero')) return;
+		initProjectHeroVisual();
+		initProjectHeroReveal();
+	}
+
+	// Single entry point — avoids double reveal from script boot + page-load.
 	document.addEventListener('astro:page-load', initProjectHero);
+
+	window.addEventListener('setin:project-copy-applied', () => {
+		const headline = document.querySelector<HTMLElement>('[data-project-hero-headline]');
+		if (!headline) return;
+		prepareProjectHeroCopy();
+		if (headline.dataset.revealed === 'true') {
+			headline.querySelectorAll('.hero-reveal-line').forEach((element) => {
+				element.classList.add('is-revealed');
+			});
+			document.querySelector<HTMLElement>('[data-project-hero-client]')?.classList.add('is-revealed');
+		}
+	});
+
+	let resizeTimer = 0;
+	let lastResizeWidth = 0;
+	window.addEventListener(
+		'resize',
+		() => {
+			const width = window.innerWidth;
+			if (width === lastResizeWidth) return;
+			lastResizeWidth = width;
+
+			window.clearTimeout(resizeTimer);
+			resizeTimer = window.setTimeout(() => {
+				const headline = document.querySelector<HTMLElement>('[data-project-hero-headline]');
+				if (!headline || headline.dataset.prepared !== 'true') return;
+				// Rebuild wrap lines quietly — no second entrance animation.
+				prepareProjectHeroCopy();
+			}, 150);
+		},
+		{ passive: true },
+	);
 </script>

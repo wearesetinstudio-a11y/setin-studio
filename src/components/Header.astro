@@ -1,6 +1,7 @@
 ---
 import RollingLink from './RollingLink.astro';
 import WorkWithUsButton from './WorkWithUsButton.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 
 interface Props {
 	projectCount?: number;
@@ -19,6 +20,7 @@ const {
 const hasLocalContact =
 	Astro.url.pathname === '/' ||
 	Astro.url.pathname === '/about' ||
+	Astro.url.pathname === '/services' ||
 	Astro.url.pathname === '/projects' ||
 	Astro.url.pathname === '/articles' ||
 	Astro.url.pathname.startsWith('/articles/') ||
@@ -28,14 +30,13 @@ const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
 const isLightBg = theme === 'light-bg';
 
 const nav = [
-	{ href: '/projects', label: 'Projects', count: projectCount },
-	{ href: '/about', label: 'About us' },
-	{ href: '/articles', label: 'Articles', count: articleCount },
+	{ href: '/projects', label: 'Projects', count: projectCount, i18nKey: 'nav.projects' },
+	{ href: '/services', label: 'Services', i18nKey: 'nav.services' },
+	{ href: '/about', label: 'About us', i18nKey: 'nav.about' },
+	{ href: '/articles', label: 'Articles', count: articleCount, i18nKey: 'nav.articles' },
 ];
 
-const headerClass = waitForIntro
-	? 'opacity-0 -translate-y-2 pointer-events-none'
-	: 'opacity-100 translate-y-0';
+const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 ---
 
 <header
@@ -48,137 +49,189 @@ const headerClass = waitForIntro
 		headerClass,
 	]}
 >
-	<div class="grid h-[72px] w-full grid-cols-[1fr_auto] items-center px-[var(--page-gutter)] md:h-[100px] md:grid-cols-[1fr_auto_1fr]">
+	<div class="grid h-[72px] w-full grid-cols-[1fr_auto] items-center px-[var(--page-gutter)] md:h-[100px]">
 		<a
 			href="/"
-			class="site-header__logo-link block w-fit transition-opacity hover:opacity-70"
+			class="site-header__logo-link justify-self-start block w-fit transition-opacity hover:opacity-70"
 			aria-label="Setin Studio — home"
+			data-i18n-aria="nav.homeAria"
 		>
-			<div class="site-header__logo-mark flex items-center" aria-hidden="true">
-				<img
-					src="/logo-setin.svg"
-					alt=""
-					width="111"
-					height="42"
-					class="site-header__logo-setin h-[28px] w-auto shrink-0"
-				/>
-				<div class="site-header__logo-sygnet-wrap flex shrink-0 items-center justify-center">
-					<img
-						src="/logo-sygnet.svg"
-						alt=""
-						width="51"
-						height="48"
-						class="site-header__logo-sygnet h-[30px] w-auto"
-					/>
-				</div>
-				<img
-					src="/logo-studio.svg"
-					alt=""
-					width="143"
-					height="42"
-					class="site-header__logo-studio h-[28px] w-auto shrink-0"
-				/>
-			</div>
+			<img
+				src="/logo-setin.svg"
+				alt=""
+				width="111"
+				height="42"
+				class="site-header__logo-setin h-[32px] w-auto"
+				aria-hidden="true"
+			/>
 		</a>
 
-		<nav class="hidden items-center justify-center gap-8 md:flex lg:gap-10" aria-label="Main">
+		<nav
+			class="site-header__nav hidden items-center justify-self-end gap-8 md:flex lg:gap-10"
+			aria-label="Main"
+			data-i18n-aria="nav.mainAria"
+		>
 			{
 				nav.map((item) => (
-					<RollingLink href={item.href} label={item.label} count={item.count} inverted={isLightBg} />
+					<RollingLink
+						href={item.href}
+						label={item.label}
+						count={item.count}
+						inverted={isLightBg}
+						i18nKey={item.i18nKey}
+					/>
 				))
 			}
+			<LanguageSwitcher inverted={isLightBg} />
+			<WorkWithUsButton
+				href={workWithUsHref}
+				variant={isLightBg ? 'dark' : 'light'}
+				label="Work with us"
+				i18nKey="nav.workWithUs"
+			/>
 		</nav>
-
-		<div class="hidden justify-end md:flex">
-			<WorkWithUsButton href={workWithUsHref} variant={isLightBg ? 'dark' : 'light'} />
-		</div>
 
 		<button
 			type="button"
 			id="mobile-nav-toggle"
-			class="mobile-nav-toggle relative -mr-1 flex h-10 w-10 flex-col items-end justify-center gap-[5px] md:hidden"
+			class="mobile-nav-toggle relative -mr-1 flex h-10 w-10 items-center justify-center justify-self-end md:hidden"
 			aria-expanded="false"
 			aria-controls="mobile-nav-panel"
 			aria-label="Open menu"
+			data-i18n-aria="nav.openMenu"
 		>
-			<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
-			<span class="mobile-nav-toggle__line" aria-hidden="true"></span>
+			<span class="mobile-nav-toggle__orb" aria-hidden="true">
+				<span class="mobile-nav-toggle__dot mobile-nav-toggle__dot--a">
+					<span class="mobile-nav-toggle__glow"></span>
+					<span class="mobile-nav-toggle__core"></span>
+				</span>
+				<span class="mobile-nav-toggle__dot mobile-nav-toggle__dot--b">
+					<span class="mobile-nav-toggle__glow"></span>
+					<span class="mobile-nav-toggle__core"></span>
+				</span>
+				<span class="mobile-nav-toggle__dot mobile-nav-toggle__dot--c">
+					<span class="mobile-nav-toggle__glow"></span>
+					<span class="mobile-nav-toggle__core"></span>
+				</span>
+				<span class="mobile-nav-toggle__ring"></span>
+			</span>
 		</button>
 	</div>
 </header>
 
 <div
 	id="mobile-nav-panel"
-	class="mobile-nav-panel fixed inset-x-0 top-0 z-[45] flex h-[100dvh] flex-col justify-center bg-[#131415] px-[var(--page-gutter)] md:hidden"
+	class="mobile-nav-panel fixed inset-x-0 top-0 z-[45] h-[100dvh] overflow-hidden md:hidden"
 	aria-hidden="true"
 >
-	<div class="mobile-nav-panel__content flex w-full flex-col gap-10">
-		<nav class="flex flex-col gap-8" aria-label="Mobile">
-			{
-				nav.map((item) => {
-					const text =
-						item.count !== undefined ? `${item.label} [${item.count}]` : item.label;
+	<div class="mobile-nav-bars" aria-hidden="true">
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+		<div class="mobile-nav-bar"></div>
+	</div>
 
-					return (
-						<a
-							href={item.href}
-							class="mobile-nav-link text-[2rem] font-semibold uppercase leading-none text-setin-fg"
-							data-mobile-nav-link
-						>
-							{text}
-						</a>
-					);
-				})
-			}
-		</nav>
+	<div class="mobile-nav-panel__content absolute inset-0 z-[1] flex h-full flex-col justify-center px-[var(--page-gutter)]">
+		<div class="mobile-nav-panel__inner flex w-full flex-col gap-10">
+			<nav class="flex flex-col gap-8" aria-label="Mobile" data-i18n-aria="nav.mobileAria">
+				{
+					nav.map((item, index) => {
+						return (
+							<a
+								href={item.href}
+								class="mobile-nav-link mobile-nav-item text-[2rem] font-semibold uppercase leading-none text-setin-fg"
+								style={`--nav-i: ${index}`}
+								data-mobile-nav-link
+							>
+								<span class="mobile-nav-item__reveal">
+									<span
+										class="mobile-nav-item__motion"
+										data-i18n-count={item.count !== undefined ? item.i18nKey : undefined}
+										data-count={item.count !== undefined ? String(item.count) : undefined}
+										data-i18n={item.count === undefined ? item.i18nKey : undefined}
+									>
+										{item.count !== undefined ? `${item.label} [${item.count}]` : item.label}
+									</span>
+								</span>
+							</a>
+						);
+					})
+				}
+			</nav>
 
-		<div class="mobile-nav-panel__cta" data-mobile-nav-link>
-			<WorkWithUsButton href={workWithUsHref} size="large" />
+			<div class="mobile-nav-item" style={`--nav-i: ${nav.length}`}>
+				<div class="mobile-nav-item__reveal">
+					<div class="mobile-nav-item__motion">
+						<LanguageSwitcher mobile />
+					</div>
+				</div>
+			</div>
+
+			<div
+				class="mobile-nav-panel__cta mobile-nav-item"
+				style={`--nav-i: ${nav.length + 1}`}
+				data-mobile-nav-link
+			>
+				<div class="mobile-nav-item__reveal">
+					<div class="mobile-nav-item__motion">
+						<WorkWithUsButton href={workWithUsHref} size="large" i18nKey="nav.workWithUs" />
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 
 <style is:global>
+	.site-header__logo-link,
+	.site-header__nav > *,
+	.site-header .mobile-nav-toggle {
+		opacity: 1;
+		transform: translateY(0);
+		transition:
+			opacity 550ms cubic-bezier(0.16, 1, 0.3, 1),
+			transform 550ms cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: 0ms;
+	}
+
+	.site-header.is-intro-pending .site-header__logo-link,
+	.site-header.is-intro-pending .site-header__nav > *,
+	.site-header.is-intro-pending .mobile-nav-toggle {
+		opacity: 0;
+		transform: translateY(0.45rem);
+	}
+
+	.site-header.is-intro-revealing .site-header__logo-link.is-nav-revealed,
+	.site-header.is-intro-revealing .site-header__nav > *.is-nav-revealed,
+	.site-header.is-intro-revealing .mobile-nav-toggle.is-nav-revealed {
+		opacity: 1;
+		transform: translateY(0);
+		transition-delay: calc(var(--nav-reveal-i, 0) * 75ms);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.site-header__logo-link,
+		.site-header__nav > *,
+		.site-header .mobile-nav-toggle {
+			transition: none !important;
+			transition-delay: 0ms !important;
+			opacity: 1 !important;
+			transform: none !important;
+		}
+	}
+
 	.site-header.header-solid {
 		background-color: #131415;
 	}
 
-	.site-header__logo-mark {
-		gap: 0.5rem;
-		transition: gap 0.5s cubic-bezier(0.76, 0, 0.24, 1);
-	}
-
-	.site-header__logo-setin,
-	.site-header__logo-studio {
-		max-width: 9rem;
-		opacity: 1;
-		overflow: hidden;
-		transition:
-			max-width 0.5s cubic-bezier(0.76, 0, 0.24, 1),
-			opacity 0.35s ease,
-			margin 0.5s cubic-bezier(0.76, 0, 0.24, 1);
-	}
-
-	.site-header__logo-sygnet-wrap {
-		transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
-	}
-
-	.site-header.header-logo-compact .site-header__logo-mark {
-		gap: 0;
-	}
-
-	.site-header.header-logo-compact .site-header__logo-setin,
-	.site-header.header-logo-compact .site-header__logo-studio {
-		max-width: 0;
-		opacity: 0;
-		margin-inline: 0;
-	}
-
-	.site-header--light-bg:not(.header-solid) .site-header__logo-mark img {
+	.site-header--light-bg:not(.header-solid) .site-header__logo-setin {
 		filter: brightness(0);
 	}
 
-	.site-header--light-bg.header-solid .site-header__logo-mark img {
+	.site-header--light-bg.header-solid .site-header__logo-setin {
 		filter: none;
 	}
 
@@ -210,7 +263,7 @@ const headerClass = waitForIntro
 		background-color: #ffffff !important;
 	}
 
-	body.mobile-nav-open .site-header--light-bg .site-header__logo-mark img {
+	body.mobile-nav-open .site-header--light-bg .site-header__logo-setin {
 		filter: none;
 	}
 
@@ -222,18 +275,482 @@ const headerClass = waitForIntro
 		position: relative;
 		z-index: 50;
 		color: #f5f5f5;
-		transition: gap 0.6s cubic-bezier(0.76, 0, 0.24, 1);
 	}
 
-	.mobile-nav-toggle__line {
+	.mobile-nav-toggle__orb {
+		position: relative;
 		display: block;
-		width: 48px;
-		height: 2px;
-		background-color: currentColor;
-		transition:
-			transform 0.6s cubic-bezier(0.76, 0, 0.24, 1),
-			opacity 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+		width: 36px;
+		height: 36px;
+	}
+
+	.mobile-nav-toggle__dot {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 6px;
+		height: 6px;
+		margin: -3px 0 0 -3px;
 		will-change: transform, opacity;
+	}
+
+	.mobile-nav-toggle__core {
+		position: absolute;
+		inset: 0;
+		border-radius: 9999px;
+		background-color: currentColor;
+		box-shadow: 0 0 6px color-mix(in srgb, currentColor 45%, transparent);
+	}
+
+	.mobile-nav-toggle__glow {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 22px;
+		height: 22px;
+		margin: -11px 0 0 -11px;
+		border-radius: 9999px;
+		background: radial-gradient(
+			ellipse at center,
+			color-mix(in srgb, currentColor 55%, transparent) 0%,
+			color-mix(in srgb, currentColor 22%, transparent) 42%,
+			color-mix(in srgb, currentColor 6%, transparent) 68%,
+			transparent 80%
+		);
+		filter: blur(3.5px);
+		opacity: 0.55;
+		transform: translate(0, 0) scale(1);
+		transform-origin: center;
+		pointer-events: none;
+		will-change: transform, opacity, width, height;
+	}
+
+	.mobile-nav-toggle__dot--a {
+		animation: mobile-nav-dot-a 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+	}
+
+	.mobile-nav-toggle__dot--b {
+		animation: mobile-nav-dot-b 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+	}
+
+	.mobile-nav-toggle__dot--c {
+		animation: mobile-nav-dot-c 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+	}
+
+	.mobile-nav-toggle__dot--a .mobile-nav-toggle__glow {
+		animation: mobile-nav-glow-a 9s cubic-bezier(0.45, 0.05, 0.25, 1) infinite;
+	}
+
+	.mobile-nav-toggle__dot--b .mobile-nav-toggle__glow {
+		animation: mobile-nav-glow-b 9s cubic-bezier(0.45, 0.05, 0.25, 1) infinite;
+	}
+
+	.mobile-nav-toggle__dot--c .mobile-nav-toggle__glow {
+		animation: mobile-nav-glow-c 9s cubic-bezier(0.45, 0.05, 0.25, 1) infinite;
+	}
+
+	/* Positions every 3s (9s cycle). Hold ~2.15s, morph move ~0.85s */
+	@keyframes mobile-nav-dot-a {
+		0%,
+		23.8% {
+			transform: translate(0, -8px) scale(1);
+		}
+		33.33%,
+		57.13% {
+			transform: translate(7px, 5px) scale(1);
+		}
+		66.66%,
+		90.46% {
+			transform: translate(-7px, 5px) scale(1);
+		}
+		100% {
+			transform: translate(0, -8px) scale(1);
+		}
+	}
+
+	@keyframes mobile-nav-dot-b {
+		0%,
+		23.8% {
+			transform: translate(-7px, 5px) scale(1);
+		}
+		33.33%,
+		57.13% {
+			transform: translate(0, -8px) scale(1);
+		}
+		66.66%,
+		90.46% {
+			transform: translate(7px, 5px) scale(1);
+		}
+		100% {
+			transform: translate(-7px, 5px) scale(1);
+		}
+	}
+
+	@keyframes mobile-nav-dot-c {
+		0%,
+		23.8% {
+			transform: translate(7px, 5px) scale(1);
+		}
+		33.33%,
+		57.13% {
+			transform: translate(-7px, 5px) scale(1);
+		}
+		66.66%,
+		90.46% {
+			transform: translate(0, -8px) scale(1);
+		}
+		100% {
+			transform: translate(7px, 5px) scale(1);
+		}
+	}
+
+	/* Idle halo → soft trail: long ramps, mild stretch (no hard idle/move snap) */
+	@keyframes mobile-nav-glow-a {
+		0%,
+		20% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+		24% {
+			width: 24px;
+			height: 20px;
+			margin: -10px 0 0 -12px;
+			opacity: 0.54;
+			transform: translate(-1.5px, -1px) rotate(40deg);
+			filter: blur(3.7px);
+		}
+		28.5% {
+			width: 28px;
+			height: 18px;
+			margin: -9px 0 0 -14px;
+			opacity: 0.6;
+			transform: translate(-3.5px, -2.5px) rotate(100deg);
+			filter: blur(4px);
+		}
+		31% {
+			width: 30px;
+			height: 17px;
+			margin: -8.5px 0 0 -15px;
+			opacity: 0.62;
+			transform: translate(-4px, -3px) rotate(125deg);
+			filter: blur(4.2px);
+		}
+		33.33%,
+		53.33% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+		57.33% {
+			width: 24px;
+			height: 20px;
+			margin: -10px 0 0 -12px;
+			opacity: 0.54;
+			transform: translate(1.5px, 0) rotate(60deg);
+			filter: blur(3.7px);
+		}
+		61.8% {
+			width: 28px;
+			height: 18px;
+			margin: -9px 0 0 -14px;
+			opacity: 0.6;
+			transform: translate(3.5px, 0) rotate(140deg);
+			filter: blur(4px);
+		}
+		64.3% {
+			width: 30px;
+			height: 17px;
+			margin: -8.5px 0 0 -15px;
+			opacity: 0.62;
+			transform: translate(4px, 0) rotate(180deg);
+			filter: blur(4.2px);
+		}
+		66.66%,
+		86.66% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+		90.66% {
+			width: 24px;
+			height: 20px;
+			margin: -10px 0 0 -12px;
+			opacity: 0.54;
+			transform: translate(0, 1.5px) rotate(-20deg);
+			filter: blur(3.7px);
+		}
+		95.2% {
+			width: 28px;
+			height: 18px;
+			margin: -9px 0 0 -14px;
+			opacity: 0.6;
+			transform: translate(0, 3.5px) rotate(-45deg);
+			filter: blur(4px);
+		}
+		97.7% {
+			width: 30px;
+			height: 17px;
+			margin: -8.5px 0 0 -15px;
+			opacity: 0.62;
+			transform: translate(0, 4px) rotate(-55deg);
+			filter: blur(4.2px);
+		}
+		100% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+	}
+
+	@keyframes mobile-nav-glow-b {
+		0%,
+		20% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+		24% {
+			width: 24px;
+			height: 20px;
+			margin: -10px 0 0 -12px;
+			opacity: 0.54;
+			transform: translate(-1.5px, 1px) rotate(-20deg);
+			filter: blur(3.7px);
+		}
+		28.5% {
+			width: 28px;
+			height: 18px;
+			margin: -9px 0 0 -14px;
+			opacity: 0.6;
+			transform: translate(-3px, 2.5px) rotate(-45deg);
+			filter: blur(4px);
+		}
+		31% {
+			width: 30px;
+			height: 17px;
+			margin: -8.5px 0 0 -15px;
+			opacity: 0.62;
+			transform: translate(-3.5px, 3px) rotate(-55deg);
+			filter: blur(4.2px);
+		}
+		33.33%,
+		53.33% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+		57.33% {
+			width: 24px;
+			height: 20px;
+			margin: -10px 0 0 -12px;
+			opacity: 0.54;
+			transform: translate(1.5px, -1px) rotate(40deg);
+			filter: blur(3.7px);
+		}
+		61.8% {
+			width: 28px;
+			height: 18px;
+			margin: -9px 0 0 -14px;
+			opacity: 0.6;
+			transform: translate(3.5px, -2.5px) rotate(100deg);
+			filter: blur(4px);
+		}
+		64.3% {
+			width: 30px;
+			height: 17px;
+			margin: -8.5px 0 0 -15px;
+			opacity: 0.62;
+			transform: translate(4px, -3px) rotate(125deg);
+			filter: blur(4.2px);
+		}
+		66.66%,
+		86.66% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+		90.66% {
+			width: 24px;
+			height: 20px;
+			margin: -10px 0 0 -12px;
+			opacity: 0.54;
+			transform: translate(-1.5px, 0) rotate(20deg);
+			filter: blur(3.7px);
+		}
+		95.2% {
+			width: 28px;
+			height: 18px;
+			margin: -9px 0 0 -14px;
+			opacity: 0.6;
+			transform: translate(-3.5px, 0) rotate(10deg);
+			filter: blur(4px);
+		}
+		97.7% {
+			width: 30px;
+			height: 17px;
+			margin: -8.5px 0 0 -15px;
+			opacity: 0.62;
+			transform: translate(-4px, 0) rotate(0deg);
+			filter: blur(4.2px);
+		}
+		100% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+	}
+
+	@keyframes mobile-nav-glow-c {
+		0%,
+		20% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+		24% {
+			width: 24px;
+			height: 20px;
+			margin: -10px 0 0 -12px;
+			opacity: 0.54;
+			transform: translate(1.5px, 0) rotate(20deg);
+			filter: blur(3.7px);
+		}
+		28.5% {
+			width: 28px;
+			height: 18px;
+			margin: -9px 0 0 -14px;
+			opacity: 0.6;
+			transform: translate(3.5px, 0) rotate(10deg);
+			filter: blur(4px);
+		}
+		31% {
+			width: 30px;
+			height: 17px;
+			margin: -8.5px 0 0 -15px;
+			opacity: 0.62;
+			transform: translate(4px, 0) rotate(0deg);
+			filter: blur(4.2px);
+		}
+		33.33%,
+		53.33% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+		57.33% {
+			width: 24px;
+			height: 20px;
+			margin: -10px 0 0 -12px;
+			opacity: 0.54;
+			transform: translate(0, 1.5px) rotate(-20deg);
+			filter: blur(3.7px);
+		}
+		61.8% {
+			width: 28px;
+			height: 18px;
+			margin: -9px 0 0 -14px;
+			opacity: 0.6;
+			transform: translate(0, 3.5px) rotate(-45deg);
+			filter: blur(4px);
+		}
+		64.3% {
+			width: 30px;
+			height: 17px;
+			margin: -8.5px 0 0 -15px;
+			opacity: 0.62;
+			transform: translate(0, 4px) rotate(-55deg);
+			filter: blur(4.2px);
+		}
+		66.66%,
+		86.66% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+		90.66% {
+			width: 24px;
+			height: 20px;
+			margin: -10px 0 0 -12px;
+			opacity: 0.54;
+			transform: translate(1.5px, -1px) rotate(40deg);
+			filter: blur(3.7px);
+		}
+		95.2% {
+			width: 28px;
+			height: 18px;
+			margin: -9px 0 0 -14px;
+			opacity: 0.6;
+			transform: translate(3.5px, -2.5px) rotate(100deg);
+			filter: blur(4px);
+		}
+		97.7% {
+			width: 30px;
+			height: 17px;
+			margin: -8.5px 0 0 -15px;
+			opacity: 0.62;
+			transform: translate(4px, -3px) rotate(125deg);
+			filter: blur(4.2px);
+		}
+		100% {
+			width: 22px;
+			height: 22px;
+			margin: -11px 0 0 -11px;
+			opacity: 0.5;
+			transform: translate(0, 0) rotate(0deg);
+			filter: blur(3.5px);
+		}
+	}
+
+	.mobile-nav-toggle__ring {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		/* Open core 12px + 10px gap each side → 32px */
+		width: 32px;
+		height: 32px;
+		margin: -16px 0 0 -16px;
+		border: 1.5px solid currentColor;
+		border-radius: 9999px;
+		opacity: 0;
+		transform: scale(0.35);
+		pointer-events: none;
+		transition:
+			opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.28s,
+			transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.18s;
 	}
 
 	.site-header--light-bg:not(.header-solid) .mobile-nav-toggle {
@@ -245,17 +762,23 @@ const headerClass = waitForIntro
 		color: #f5f5f5;
 	}
 
-	.mobile-nav-toggle.is-open {
-		gap: 0;
+	.mobile-nav-toggle.is-morphing .mobile-nav-toggle__dot,
+	.mobile-nav-toggle.is-morphing .mobile-nav-toggle__glow {
+		animation: none !important;
 	}
 
-	.mobile-nav-toggle.is-open .mobile-nav-toggle__line:first-child {
-		transform: translateY(3.5px);
+	.mobile-nav-toggle.is-open .mobile-nav-toggle__ring {
+		opacity: 1;
+		transform: scale(1);
 	}
 
-	.mobile-nav-toggle.is-open .mobile-nav-toggle__line:last-child {
-		transform: translateY(-3.5px);
-		opacity: 0;
+	.mobile-nav-toggle.is-open .mobile-nav-toggle__glow {
+		opacity: 0.4;
+		width: 28px;
+		height: 28px;
+		margin: -14px 0 0 -14px;
+		filter: blur(4px);
+		transform: translate(0, 0) scale(1);
 	}
 
 	.mobile-nav-panel__cta .work-with-us-button span {
@@ -265,29 +788,133 @@ const headerClass = waitForIntro
 
 	.mobile-nav-panel {
 		pointer-events: none;
-		transform: translateY(-100%);
-		opacity: 0;
 		visibility: hidden;
-		overflow: hidden;
 		overscroll-behavior: none;
 		touch-action: none;
-		transition:
-			transform 0.55s cubic-bezier(0.76, 0, 0.24, 1),
-			opacity 0.35s ease,
-			visibility 0s linear 0.55s;
+	}
+
+	.mobile-nav-bars {
+		display: flex;
+		width: 100%;
+		height: 100%;
+	}
+
+	.mobile-nav-bar {
+		flex: 1 1 0;
+		min-width: 0;
+		height: 100%;
+		margin-right: -1px;
+		background-color: #131415;
+		transform: translateY(-100%);
 		will-change: transform;
 	}
 
-	.mobile-nav-panel.is-open {
-		pointer-events: auto;
-		transform: translateY(0);
-		opacity: 1;
-		visibility: visible;
-		transition:
-			transform 0.55s cubic-bezier(0.76, 0, 0.24, 1),
-			opacity 0.35s ease,
-			visibility 0s linear 0s;
+	.mobile-nav-bar:last-child {
+		margin-right: 0;
 	}
+
+	.mobile-nav-bar:nth-child(1) {
+		--bar-delay: 0s;
+		--bar-hide-delay: 0.45s;
+	}
+	.mobile-nav-bar:nth-child(2) {
+		--bar-delay: 75ms;
+		--bar-hide-delay: 0.375s;
+	}
+	.mobile-nav-bar:nth-child(3) {
+		--bar-delay: 0.15s;
+		--bar-hide-delay: 0.3s;
+	}
+	.mobile-nav-bar:nth-child(4) {
+		--bar-delay: 0.225s;
+		--bar-hide-delay: 0.225s;
+	}
+	.mobile-nav-bar:nth-child(5) {
+		--bar-delay: 0.3s;
+		--bar-hide-delay: 0.15s;
+	}
+	.mobile-nav-bar:nth-child(6) {
+		--bar-delay: 0.375s;
+		--bar-hide-delay: 75ms;
+	}
+	.mobile-nav-bar:nth-child(7) {
+		--bar-delay: 0.45s;
+		--bar-hide-delay: 0s;
+	}
+
+	.mobile-nav-panel.is-active {
+		pointer-events: auto;
+		visibility: visible;
+	}
+
+	.mobile-nav-panel.is-open .mobile-nav-bar,
+	.mobile-nav-panel.is-covered .mobile-nav-bar,
+	.mobile-nav-panel.is-closing .mobile-nav-bar {
+		transform: translateY(0);
+	}
+
+	.mobile-nav-panel.is-covering .mobile-nav-bar {
+		animation: mobile-nav-bar-cover 900ms cubic-bezier(0.85, 0, 0.15, 1) var(--bar-delay) forwards;
+	}
+
+	.mobile-nav-panel.is-revealing .mobile-nav-bar {
+		animation: mobile-nav-bar-hide 900ms cubic-bezier(0.85, 0, 0.15, 1) var(--bar-hide-delay) forwards;
+	}
+
+	@keyframes mobile-nav-bar-cover {
+		from {
+			transform: translateY(-100%);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes mobile-nav-bar-hide {
+		from {
+			transform: translateY(0);
+		}
+		to {
+			transform: translateY(-100%);
+		}
+	}
+
+	.mobile-nav-panel__content {
+		pointer-events: none;
+	}
+
+	.mobile-nav-panel.is-covering .mobile-nav-panel__content,
+	.mobile-nav-panel.is-open:not(.is-closing) .mobile-nav-panel__content {
+		pointer-events: auto;
+	}
+
+	.mobile-nav-item__reveal {
+		display: block;
+		overflow: hidden;
+	}
+
+	.mobile-nav-item__motion {
+		display: block;
+		width: fit-content;
+		max-width: 100%;
+		transform: translateX(-110%);
+		transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+		transition-delay: 0s;
+		will-change: transform;
+	}
+
+		/* Links start shortly after bars begin covering — not after they finish. */
+		.mobile-nav-panel.is-covering .mobile-nav-item__motion,
+		.mobile-nav-panel.is-open:not(.is-closing) .mobile-nav-item__motion {
+			transform: translateX(0);
+			transition-delay: calc(220ms + var(--nav-i, 0) * 80ms);
+		}
+
+		.mobile-nav-panel.is-closing .mobile-nav-item__motion {
+			transform: translateX(-110%);
+			/* Leave immediately; bars follow after MOBILE_NAV_ITEM_LEAD_MS in JS. */
+			transition-delay: calc(var(--nav-i, 0) * 80ms);
+		}
 
 	body.mobile-nav-open {
 		overflow: hidden;
@@ -300,28 +927,133 @@ const headerClass = waitForIntro
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.site-header__logo-mark,
-		.site-header__logo-setin,
-		.site-header__logo-studio,
-		.site-header__logo-sygnet-wrap,
 		.mobile-nav-toggle,
-		.mobile-nav-toggle__line,
-		.mobile-nav-panel {
+		.mobile-nav-toggle__dot,
+		.mobile-nav-toggle__glow,
+		.mobile-nav-toggle__ring,
+		.mobile-nav-item__motion {
 			transition: none !important;
+		}
+
+		.mobile-nav-toggle__dot--a,
+		.mobile-nav-toggle__dot--b,
+		.mobile-nav-toggle__dot--c,
+		.mobile-nav-toggle__dot--a .mobile-nav-toggle__glow,
+		.mobile-nav-toggle__dot--b .mobile-nav-toggle__glow,
+		.mobile-nav-toggle__dot--c .mobile-nav-toggle__glow {
+			animation: none !important;
+		}
+
+		.mobile-nav-toggle__dot--a {
+			transform: translate(0, -8px) scale(1);
+		}
+
+		.mobile-nav-toggle__dot--b {
+			transform: translate(-7px, 5px) scale(1);
+		}
+
+		.mobile-nav-toggle__dot--c {
+			transform: translate(7px, 5px) scale(1);
+		}
+
+		.mobile-nav-toggle.is-open .mobile-nav-toggle__dot--a {
+			transform: translate(0, 0) scale(2);
+		}
+
+		.mobile-nav-toggle.is-open .mobile-nav-toggle__dot--b,
+		.mobile-nav-toggle.is-open .mobile-nav-toggle__dot--c {
+			opacity: 0;
+			transform: translate(0, 0) scale(0.2);
+		}
+
+		.mobile-nav-toggle.is-open .mobile-nav-toggle__ring {
+			opacity: 1;
+			transform: scale(1);
+		}
+
+		.mobile-nav-panel.is-covering .mobile-nav-bar,
+		.mobile-nav-panel.is-revealing .mobile-nav-bar {
+			animation: none !important;
+		}
+
+		.mobile-nav-panel.is-covering .mobile-nav-bar,
+		.mobile-nav-panel.is-open .mobile-nav-bar,
+		.mobile-nav-panel.is-covered .mobile-nav-bar {
+			transform: translateY(0);
+		}
+
+		.mobile-nav-panel.is-revealing .mobile-nav-bar {
+			transform: translateY(-100%);
+		}
+
+		.mobile-nav-panel.is-covering .mobile-nav-item__motion,
+		.mobile-nav-panel.is-open:not(.is-closing) .mobile-nav-item__motion {
+			transform: none;
 		}
 	}
 </style>
 
 <script>
 	import { hasCompletedIntro } from '../scripts/introState.ts';
+	import {
+		getLenis,
+		scrollToImmediate,
+		startSmoothScroll,
+		stopSmoothScroll,
+	} from '../scripts/initSmoothScroll.ts';
 
 	let headerScrollCleanup: (() => void) | null = null;
 	let mobileNavCleanup: (() => void) | null = null;
 	let syncHeaderAppearance: (() => void) | null = null;
 	let lockedScrollY = 0;
+	let mobileNavBusy = false;
+	let mobileNavToken = 0;
+	let mobileNavCloseTimer: number | null = null;
+
+	const MOBILE_NAV_BAR_MS = 900;
+	const MOBILE_NAV_STAGGER_MS = 75;
+	const MOBILE_NAV_TOTAL_MS = MOBILE_NAV_BAR_MS + MOBILE_NAV_STAGGER_MS * 6;
+	const MOBILE_NAV_ITEM_MS = 700;
+	const MOBILE_NAV_ITEM_STAGGER_MS = 80;
+	/** Links lag bars on open / lead bars on close. */
+	const MOBILE_NAV_ITEM_LEAD_MS = 220;
+
+	function prefersReducedMotion() {
+		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
+
+	function getMobileNavItemsOutMs(panel: HTMLElement) {
+		const count = panel.querySelectorAll('.mobile-nav-item').length;
+		if (count <= 0) return 0;
+		return MOBILE_NAV_ITEM_MS + (count - 1) * MOBILE_NAV_ITEM_STAGGER_MS;
+	}
+
+	function clearMobileNavBarAnimations(panel: HTMLElement) {
+		const bars = panel.querySelectorAll<HTMLElement>('.mobile-nav-bar');
+		bars.forEach((bar) => {
+			bar.style.animation = 'none';
+		});
+		void panel.offsetWidth;
+		bars.forEach((bar) => {
+			bar.style.animation = '';
+		});
+	}
+
+	function resetMobileNavBars(panel: HTMLElement) {
+		panel.classList.remove(
+			'is-covering',
+			'is-revealing',
+			'is-covered',
+			'is-open',
+			'is-closing',
+			'is-active',
+		);
+		clearMobileNavBarAnimations(panel);
+	}
 
 	function lockBodyScroll() {
 		lockedScrollY = window.scrollY;
+		stopSmoothScroll();
 		document.documentElement.classList.add('mobile-nav-open');
 		document.body.classList.add('mobile-nav-open');
 		document.body.style.position = 'fixed';
@@ -342,7 +1074,290 @@ const headerClass = waitForIntro
 		document.body.style.left = '';
 		document.body.style.right = '';
 		document.body.style.width = '';
-		window.scrollTo(0, scrollY);
+		scrollToImmediate(scrollY);
+		startSmoothScroll();
+		getLenis()?.resize();
+	}
+
+	function readDotPose(el: HTMLElement) {
+		const raw = getComputedStyle(el).transform;
+		if (!raw || raw === 'none') return { x: 0, y: 0, s: 1 };
+
+		if (raw.startsWith('matrix3d(')) {
+			const p = raw
+				.slice(9, -1)
+				.split(',')
+				.map((value) => Number(value.trim()));
+			return {
+				x: p[12] ?? 0,
+				y: p[13] ?? 0,
+				s: Math.max(0.01, Math.hypot(p[0] ?? 1, p[1] ?? 0)),
+			};
+		}
+
+		const p = raw
+			.slice(7, -1)
+			.split(',')
+			.map((value) => Number(value.trim()));
+		return {
+			x: p[4] ?? 0,
+			y: p[5] ?? 0,
+			s: Math.max(0.01, Math.hypot(p[0] ?? 1, p[1] ?? 0)),
+		};
+	}
+
+	function poseTransform(x: number, y: number, s: number) {
+		return `translate(${x}px, ${y}px) scale(${s})`;
+	}
+
+	const DOT_REST = [
+		{ x: 0, y: -8, s: 1 },
+		{ x: -7, y: 5, s: 1 },
+		{ x: 7, y: 5, s: 1 },
+	] as const;
+	const DOT_MERGED = { x: 0, y: 0, s: 2 } as const;
+	const DOT_MORPH_MS = 720;
+
+	function setToggleOpen(toggle: HTMLElement, isOpen: boolean) {
+		const dots = [...toggle.querySelectorAll<HTMLElement>('.mobile-nav-toggle__dot')];
+		const glows = [...toggle.querySelectorAll<HTMLElement>('.mobile-nav-toggle__glow')];
+		const ease = `transform ${DOT_MORPH_MS}ms cubic-bezier(0.22, 1, 0.36, 1), opacity ${DOT_MORPH_MS}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+		const glowEase =
+			`opacity ${DOT_MORPH_MS}ms ease, width ${DOT_MORPH_MS}ms ease, height ${DOT_MORPH_MS}ms ease, margin ${DOT_MORPH_MS}ms ease, filter ${DOT_MORPH_MS}ms ease, transform ${DOT_MORPH_MS}ms ease`;
+
+		if (isOpen) {
+			// Freeze current triangle poses as interpolatable translate+scale
+			dots.forEach((dot) => {
+				const pose = readDotPose(dot);
+				dot.style.animation = 'none';
+				dot.style.transition = 'none';
+				dot.style.opacity = '1';
+				dot.style.transform = poseTransform(pose.x, pose.y, pose.s);
+			});
+			glows.forEach((glow) => {
+				glow.style.animation = 'none';
+				glow.style.transition = 'none';
+				glow.style.opacity = '0.55';
+				glow.style.width = '22px';
+				glow.style.height = '22px';
+				glow.style.margin = '-11px 0 0 -11px';
+				glow.style.filter = 'blur(3.5px)';
+				glow.style.transform = 'translate(0, 0) scale(1)';
+			});
+
+			void toggle.offsetWidth;
+			toggle.classList.add('is-morphing', 'is-open');
+
+			requestAnimationFrame(() => {
+				// All three fly to center and grow into one stacked circle
+				dots.forEach((dot) => {
+					dot.style.transition = ease;
+					dot.style.opacity = '1';
+					dot.style.transform = poseTransform(DOT_MERGED.x, DOT_MERGED.y, DOT_MERGED.s);
+				});
+				glows.forEach((glow) => {
+					glow.style.transition = glowEase;
+					glow.style.width = '28px';
+					glow.style.height = '28px';
+					glow.style.margin = '-14px 0 0 -14px';
+					glow.style.opacity = '0.4';
+					glow.style.filter = 'blur(4px)';
+					glow.style.transform = 'translate(0, 0) scale(1)';
+				});
+			});
+		} else {
+			toggle.classList.add('is-morphing');
+
+			// Start from merged center (restore B/C so they can split out)
+			dots.forEach((dot) => {
+				dot.style.animation = 'none';
+				dot.style.transition = 'none';
+				dot.style.opacity = '1';
+				dot.style.transform = poseTransform(DOT_MERGED.x, DOT_MERGED.y, DOT_MERGED.s);
+			});
+			glows.forEach((glow) => {
+				glow.style.animation = 'none';
+				glow.style.transition = 'none';
+				glow.style.width = '28px';
+				glow.style.height = '28px';
+				glow.style.margin = '-14px 0 0 -14px';
+				glow.style.opacity = '0.4';
+				glow.style.filter = 'blur(4px)';
+				glow.style.transform = 'translate(0, 0) scale(1)';
+			});
+
+			void toggle.offsetWidth;
+			toggle.classList.remove('is-open');
+
+			requestAnimationFrame(() => {
+				dots.forEach((dot, index) => {
+					const rest = DOT_REST[index] ?? DOT_REST[0];
+					dot.style.transition = ease;
+					dot.style.opacity = '1';
+					dot.style.transform = poseTransform(rest.x, rest.y, rest.s);
+				});
+				glows.forEach((glow) => {
+					glow.style.transition = glowEase;
+					glow.style.width = '22px';
+					glow.style.height = '22px';
+					glow.style.margin = '-11px 0 0 -11px';
+					glow.style.opacity = '0.55';
+					glow.style.filter = 'blur(3.5px)';
+					glow.style.transform = 'translate(0, 0) scale(1)';
+				});
+
+				window.setTimeout(() => {
+					if (toggle.classList.contains('is-open')) return;
+					dots.forEach((dot) => {
+						dot.style.removeProperty('animation');
+						dot.style.removeProperty('transition');
+						dot.style.removeProperty('transform');
+						dot.style.removeProperty('opacity');
+					});
+					glows.forEach((glow) => {
+						glow.style.removeProperty('animation');
+						glow.style.removeProperty('transition');
+						glow.style.removeProperty('transform');
+						glow.style.removeProperty('opacity');
+						glow.style.removeProperty('width');
+						glow.style.removeProperty('height');
+						glow.style.removeProperty('margin');
+						glow.style.removeProperty('filter');
+					});
+					toggle.classList.remove('is-morphing');
+				}, DOT_MORPH_MS + 40);
+			});
+		}
+
+		toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+		toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+		toggle.setAttribute('data-i18n-aria', isOpen ? 'nav.closeMenu' : 'nav.openMenu');
+	}
+
+	async function openMobileNav() {
+		const toggle = document.getElementById('mobile-nav-toggle');
+		const panel = document.getElementById('mobile-nav-panel');
+		if (!toggle || !panel) return;
+		if (toggle.classList.contains('is-open') && panel.classList.contains('is-open')) return;
+
+		const token = ++mobileNavToken;
+		mobileNavBusy = true;
+		if (mobileNavCloseTimer != null) {
+			window.clearTimeout(mobileNavCloseTimer);
+			mobileNavCloseTimer = null;
+		}
+
+		setToggleOpen(toggle, true);
+		lockBodyScroll();
+		syncHeaderAppearance?.();
+
+		panel.setAttribute('aria-hidden', 'false');
+		panel.classList.add('is-active');
+		panel.classList.remove('is-revealing', 'is-covered', 'is-open', 'is-closing');
+		clearMobileNavBarAnimations(panel);
+
+		if (prefersReducedMotion()) {
+			if (token !== mobileNavToken) return;
+			panel.classList.add('is-covered', 'is-open');
+			syncHeaderAppearance?.();
+			mobileNavBusy = false;
+			return;
+		}
+
+		void panel.offsetWidth;
+		panel.classList.add('is-covering');
+
+		await new Promise<void>((resolve) => {
+			window.setTimeout(resolve, MOBILE_NAV_TOTAL_MS);
+		});
+
+		if (token !== mobileNavToken) return;
+
+		panel.classList.remove('is-covering');
+		panel.classList.add('is-covered', 'is-open');
+		syncHeaderAppearance?.();
+		mobileNavBusy = false;
+	}
+
+	async function closeMobileNav() {
+		const toggle = document.getElementById('mobile-nav-toggle');
+		const panel = document.getElementById('mobile-nav-panel');
+		if (!toggle || !panel) return;
+		if (!panel.classList.contains('is-active') && !toggle.classList.contains('is-open')) return;
+
+		const token = ++mobileNavToken;
+		mobileNavBusy = true;
+		if (mobileNavCloseTimer != null) {
+			window.clearTimeout(mobileNavCloseTimer);
+			mobileNavCloseTimer = null;
+		}
+
+		setToggleOpen(toggle, false);
+		panel.setAttribute('aria-hidden', 'true');
+
+		if (prefersReducedMotion()) {
+			if (token !== mobileNavToken) return;
+			resetMobileNavBars(panel);
+			unlockBodyScroll();
+			syncHeaderAppearance?.();
+			mobileNavBusy = false;
+			return;
+		}
+
+		// Items may already be mid-reveal while bars are still covering.
+		const hadItemsVisible =
+			panel.classList.contains('is-open') || panel.classList.contains('is-covering');
+		if (hadItemsVisible) {
+			panel.classList.add('is-closing');
+			panel.classList.remove('is-open');
+			void panel.offsetWidth;
+		}
+
+		// Keep bars fully covering — never drop is-covered before reveal starts,
+		// otherwise the page flashes through empty space between bars.
+		if (panel.classList.contains('is-covering')) {
+			panel.classList.remove('is-covering');
+			panel.classList.add('is-covered');
+		} else if (!panel.classList.contains('is-covered')) {
+			panel.classList.add('is-covered');
+		}
+
+		// Links leave first; bars follow after the same lead used on open.
+		if (hadItemsVisible) {
+			await new Promise<void>((resolve) => {
+				mobileNavCloseTimer = window.setTimeout(() => {
+					mobileNavCloseTimer = null;
+					resolve();
+				}, MOBILE_NAV_ITEM_LEAD_MS);
+			});
+			if (token !== mobileNavToken) return;
+		} else {
+			panel.classList.remove('is-open');
+		}
+
+		clearMobileNavBarAnimations(panel);
+		void panel.offsetWidth;
+		panel.classList.add('is-revealing');
+		syncHeaderAppearance?.();
+
+		const itemsRemainingMs = hadItemsVisible
+			? Math.max(0, getMobileNavItemsOutMs(panel) - MOBILE_NAV_ITEM_LEAD_MS)
+			: 0;
+		const closeMs = Math.max(itemsRemainingMs, MOBILE_NAV_TOTAL_MS);
+
+		await new Promise<void>((resolve) => {
+			mobileNavCloseTimer = window.setTimeout(() => {
+				mobileNavCloseTimer = null;
+				resolve();
+			}, closeMs);
+		});
+
+		if (token !== mobileNavToken) return;
+
+		resetMobileNavBars(panel);
+		unlockBodyScroll();
+		syncHeaderAppearance?.();
+		mobileNavBusy = false;
 	}
 
 	function initHeaderSolidBackground() {
@@ -357,13 +1372,14 @@ const headerClass = waitForIntro
 
 		function updateHeaderSolid() {
 			const menuOpen = document.body.classList.contains('mobile-nav-open');
-			const isLogoCompact = window.scrollY > 40;
-			header.classList.toggle('header-logo-compact', isLogoCompact && !menuOpen);
 
+			// While mobile menu bars are up they are the header backdrop — no solid fill.
 			if (menuOpen) {
-				header.classList.add('header-solid');
+				header.classList.remove('header-solid');
 				return;
 			}
+
+			const isLogoCompact = window.scrollY > 40;
 
 			if (isLightBg) {
 				header.classList.toggle('header-solid', isLogoCompact);
@@ -403,56 +1419,39 @@ const headerClass = waitForIntro
 		syncHeaderAppearance = updateHeaderSolid;
 	}
 
-	function closeMobileNav() {
-		const toggle = document.getElementById('mobile-nav-toggle');
-		const panel = document.getElementById('mobile-nav-panel');
-
-		if (!toggle || !panel) return;
-
-		toggle.classList.remove('is-open');
-		toggle.setAttribute('aria-expanded', 'false');
-		toggle.setAttribute('aria-label', 'Open menu');
-		panel.classList.remove('is-open');
-		panel.setAttribute('aria-hidden', 'true');
-		unlockBodyScroll();
-		syncHeaderAppearance?.();
-	}
-
 	function initMobileNav() {
 		mobileNavCleanup?.();
 		mobileNavCleanup = null;
+		mobileNavBusy = false;
 
 		const toggle = document.getElementById('mobile-nav-toggle');
 		const panel = document.getElementById('mobile-nav-panel');
 
 		if (!toggle || !panel) {
-			closeMobileNav();
+			void closeMobileNav();
 			return;
 		}
 
+		resetMobileNavBars(panel);
+		setToggleOpen(toggle, false);
+		unlockBodyScroll();
+
 		const onToggleClick = () => {
-			const isOpen = toggle.classList.toggle('is-open');
-			panel.classList.toggle('is-open', isOpen);
-			panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-			toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-			toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
-
-			if (isOpen) {
-				lockBodyScroll();
+			const shouldOpen = !toggle.classList.contains('is-open');
+			if (shouldOpen) {
+				void openMobileNav();
 			} else {
-				unlockBodyScroll();
+				void closeMobileNav();
 			}
-
-			syncHeaderAppearance?.();
 		};
 
 		const onPanelClick = (event: Event) => {
 			const target = event.target as HTMLElement | null;
-			if (target?.closest('[data-mobile-nav-link]')) closeMobileNav();
+			if (target?.closest('[data-mobile-nav-link]')) void closeMobileNav();
 		};
 
 		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') closeMobileNav();
+			if (event.key === 'Escape') void closeMobileNav();
 		};
 
 		toggle.addEventListener('click', onToggleClick);
@@ -463,8 +1462,40 @@ const headerClass = waitForIntro
 			toggle.removeEventListener('click', onToggleClick);
 			panel.removeEventListener('click', onPanelClick);
 			window.removeEventListener('keydown', onKeyDown);
-			closeMobileNav();
+			void closeMobileNav();
 		};
+	}
+
+	function getHeaderNavRevealItems(header: HTMLElement): HTMLElement[] {
+		const logo = header.querySelector<HTMLElement>('.site-header__logo-link');
+		const toggle = header.querySelector<HTMLElement>('.mobile-nav-toggle');
+		const nav = header.querySelector<HTMLElement>('.site-header__nav');
+		const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+		if (isMobile) {
+			return [logo, toggle].filter((el): el is HTMLElement => !!el);
+		}
+
+		const navItems = nav
+			? Array.from(nav.children).filter((el): el is HTMLElement => el instanceof HTMLElement)
+			: [];
+
+		return [logo, ...navItems].filter((el): el is HTMLElement => !!el);
+	}
+
+	function revealHeaderNav(header: HTMLElement) {
+		const items = getHeaderNavRevealItems(header);
+
+		items.forEach((item, index) => {
+			item.style.setProperty('--nav-reveal-i', String(index));
+		});
+
+		header.classList.remove('is-intro-pending', 'pointer-events-none');
+		header.classList.add('is-intro-revealing');
+
+		requestAnimationFrame(() => {
+			items.forEach((item) => item.classList.add('is-nav-revealed'));
+		});
 	}
 
 	function initHeaderIntroReveal() {
@@ -472,14 +1503,18 @@ const headerClass = waitForIntro
 		if (!header || header.dataset.waitIntro !== 'true') return;
 
 		if (hasCompletedIntro()) {
-			header.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
+			header.classList.remove('is-intro-pending', 'pointer-events-none', 'is-intro-revealing');
+			getHeaderNavRevealItems(header).forEach((item) => {
+				item.classList.add('is-nav-revealed');
+				item.style.removeProperty('--nav-reveal-i');
+			});
 			return;
 		}
 
 		window.addEventListener(
 			'intro-complete',
 			() => {
-				header.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
+				revealHeaderNav(header);
 			},
 			{ once: true },
 		);

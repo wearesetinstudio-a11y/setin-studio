@@ -1,9 +1,36 @@
 ---
+import { getCollection } from 'astro:content';
+import RollingLink from './RollingLink.astro';
+
+const emailHref = 'mailto:wearesetinstudio@gmail.com?subject=Hello%20Setin!%20:)';
+const whatsappHref =
+	'https://api.whatsapp.com/message/IDQVMTROBPOXM1?autoload=1&app_absent=0';
+const whatsappDisplay = '+507 6628 65 24';
+
+const sitemapLinks = [
+	{ href: '/projects', label: 'Projects', i18nKey: 'nav.projects' },
+	{ href: '/services', label: 'Services', i18nKey: 'nav.services' },
+	{ href: '/about', label: 'About us', i18nKey: 'nav.about' },
+	{ href: '/articles', label: 'Articles', i18nKey: 'nav.articles' },
+	{ href: '#contact', label: 'Contact us', i18nKey: 'footer.contact' },
+];
+
+const serviceLinks = [
+	{ href: '/services', label: 'Branding', i18nKey: 'hero.service.branding' },
+	{ href: '/services', label: 'UX Research', i18nKey: 'hero.service.uxResearch' },
+	{ href: '/services', label: 'UX/UI Design', i18nKey: 'hero.service.uxUi' },
+	{ href: '/services', label: 'Development', i18nKey: 'hero.service.development' },
+];
+
 const locations = [
 	{ label: 'Szczecin, PL', timezone: 'Europe/Warsaw' },
 	{ label: 'Valencia, ES', timezone: 'Europe/Madrid' },
 	{ label: 'Panama, PA', timezone: 'America/Panama' },
 ];
+
+const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const projects = allProjects.filter((project) => !project.data.comingSoon).slice(0, 4);
+const projectCount = allProjects.length;
 
 function formatLocationTime(timeZone: string, date = new Date()) {
 	return new Intl.DateTimeFormat('en-US', {
@@ -18,46 +45,199 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 }
 ---
 
-<footer class="relative z-20 border-t border-setin-border bg-[#131415]">
-	<div class="flex w-full flex-col gap-8 px-[var(--page-gutter)] py-10 md:flex-row md:items-end md:justify-between">
-		<div>
-			<img
-				src="/logo-sygnet.svg"
-				alt="Setin Studio"
-				width="32"
-				height="30"
-				class="footer-brand h-auto w-8"
-			/>
-			<p class="footer-copyright mt-3 text-[1rem] text-setin-muted">
-				&copy; {new Date().getFullYear()} Setin Studio
-			</p>
+<footer class="site-footer relative z-20 bg-[#0f1011]">
+	<div class="relative z-[1] px-[var(--page-gutter)] py-[var(--band-padding-y)]">
+		<div class="site-footer__nav grid grid-cols-2 gap-x-6 gap-y-10 pb-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 lg:pb-16">
+			<div class="site-footer__col">
+				<p class="site-footer__col-label" data-i18n="footer.sitemap">Sitemap</p>
+				<ul class="site-footer__list">
+					{
+						sitemapLinks.map((link) => (
+							<li>
+								<RollingLink
+									href={link.href}
+									label={link.label}
+									i18nKey={link.i18nKey}
+									variant="footer"
+								/>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+
+			<div class="site-footer__col">
+				<p class="site-footer__col-label" data-i18n="footer.services">Services</p>
+				<ul class="site-footer__list">
+					{
+						serviceLinks.map((link) => (
+							<li>
+								<RollingLink
+									href={link.href}
+									label={link.label}
+									i18nKey={link.i18nKey}
+									variant="footer"
+								/>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+
+			<div class="site-footer__col">
+				<p class="site-footer__col-label" data-i18n="footer.projects">Projects</p>
+				<ul class="site-footer__list">
+					{
+						projects.map((project) => (
+							<li>
+								<RollingLink href={`/projects/${project.id}`} label={project.data.title} variant="footer" />
+							</li>
+						))
+					}
+					<li>
+						<RollingLink
+							href="/projects"
+							label="All"
+							i18nKey="footer.all"
+							variant="footer"
+							underlined
+							count={projectCount}
+						/>
+					</li>
+				</ul>
+			</div>
+
+			<div class="site-footer__col col-span-2 sm:col-span-1">
+				<div class="site-footer__contact-block">
+					<p class="site-footer__col-label" data-i18n="footer.email">E-mail</p>
+					<RollingLink
+						href={emailHref}
+						label="wearesetinstudio@gmail.com"
+						variant="footer"
+						underlined
+					/>
+				</div>
+				<div class="site-footer__contact-block mt-8">
+					<p class="site-footer__col-label" data-i18n="footer.whatsapp">WhatsApp</p>
+					<RollingLink
+						href={whatsappHref}
+						label={whatsappDisplay}
+						variant="footer"
+						underlined
+						external
+					/>
+				</div>
+			</div>
 		</div>
 
-		<div class="footer-locations grid w-full grid-cols-3 gap-x-1 gap-y-4 md:flex md:w-auto md:flex-wrap md:gap-x-10">
-			{
-				locations.map((location) => (
-					<div class="footer-location flex min-w-0 flex-col gap-1">
-						<span class="footer-location__label text-[1rem] uppercase text-setin-muted">{location.label}</span>
-						<time
-							class="footer-location__time text-[1rem] uppercase text-setin-muted tabular-nums"
-							datetime={new Date().toISOString()}
-							data-timezone={location.timezone}
-						>
-							{formatLocationTime(location.timezone)}
-						</time>
-					</div>
-				))
-			}
+		<div class="site-footer__bottom flex flex-col gap-6 border-t border-white/10 pt-8 md:flex-row md:items-end md:justify-between md:gap-10">
+			<div class="flex items-center gap-3">
+				<img
+					src="/logo-sygnet.svg"
+					alt=""
+					width="28"
+					height="26"
+					class="footer-brand h-auto w-7"
+					aria-hidden="true"
+				/>
+				<span class="footer-copyright text-[0.75rem] uppercase tracking-[0.04em] text-setin-muted md:text-[0.8rem]">
+					&copy; {new Date().getFullYear()}{' '}
+					<span data-i18n="footer.rights">Setin Studio All rights reserved</span>
+				</span>
+			</div>
+
+			<div class="footer-locations flex flex-wrap items-start gap-x-0 gap-y-4">
+				{
+					locations.map((location, index) => (
+						<div class="footer-location flex items-stretch">
+							{index > 0 ? <span class="footer-location__rule" aria-hidden="true" /> : null}
+							<div class="footer-location__content flex min-w-0 flex-col gap-1">
+								<span class="footer-location__label text-[0.75rem] uppercase tracking-[0.04em] text-setin-muted md:text-[0.8rem]">
+									{location.label}
+								</span>
+								<time
+									class="footer-location__time text-[0.75rem] uppercase tracking-[0.04em] text-setin-muted tabular-nums md:text-[0.8rem]"
+									datetime={new Date().toISOString()}
+									data-timezone={location.timezone}
+								>
+									{formatLocationTime(location.timezone)}
+								</time>
+							</div>
+						</div>
+					))
+				}
+			</div>
 		</div>
 	</div>
 </footer>
 
 <style is:global>
+	.site-footer {
+		background-color: #0f1011;
+	}
+
+	.site-footer__col-label,
+	.site-footer__link,
+	.site-footer__link-line,
+	.footer-copyright,
+	.footer-location__label,
+	.footer-location__time {
+		letter-spacing: var(--letter-spacing-ui);
+	}
+
+	.site-footer__col-label {
+		margin: 0 0 1rem;
+		font-size: 0.8rem;
+		font-weight: 500;
+		line-height: 1.2;
+		text-transform: uppercase;
+		color: rgba(245, 245, 245, 0.45);
+	}
+
+	.site-footer__list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.site-footer__link {
+		display: inline-flex;
+		max-width: 100%;
+		color: #f5f5f5;
+		text-decoration: none;
+		padding-bottom: 0.2em;
+	}
+
+	.site-footer__link--underlined {
+		text-decoration: none;
+	}
+
+	.site-footer__link-line {
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		letter-spacing: var(--letter-spacing-ui);
+	}
+
+	.footer-location__rule {
+		display: block;
+		width: 1px;
+		align-self: stretch;
+		margin-inline: 1.25rem;
+		background: rgba(245, 245, 245, 0.2);
+	}
+
 	@media (max-width: 767px) {
-		.footer-copyright,
-		.footer-location__label,
-		.footer-location__time {
-			font-size: 0.8rem;
+		.site-footer__link-line {
+			font-size: 0.85rem;
+		}
+
+		.footer-location__rule {
+			margin-inline: 0.85rem;
 		}
 	}
 </style>

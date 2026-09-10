@@ -9,7 +9,25 @@ interface Props {
 }
 
 const { projects, standalone = false } = Astro.props;
-const displayedProjects = standalone ? projects : projects.slice(0, 5);
+const displayedProjects = standalone ? projects : projects.slice(0, 3);
+
+const leftProjects: CollectionEntry<'projects'>[] = [];
+const rightProjects: CollectionEntry<'projects'>[] = [];
+
+if (standalone) {
+	displayedProjects.forEach((project, index) => {
+		if (index % 2 === 0) rightProjects.push(project);
+		else leftProjects.push(project);
+	});
+} else {
+	// Homepage Figma: left (narrow) = 1 project + more; right = 2 projects
+	rightProjects.push(...displayedProjects.slice(0, 2));
+	leftProjects.push(...displayedProjects.slice(2, 3));
+}
+
+function listOrder(project: CollectionEntry<'projects'>) {
+	return displayedProjects.findIndex((entry) => entry.id === project.id) + 1;
+}
 ---
 
 <section
@@ -19,24 +37,51 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		standalone ? 'bg-white pt-[calc(var(--section-padding-y)+5.5rem)]' : 'bg-[#F5F5F5]',
 	]}
 >
-	<div class="mb-10 grid gap-6 md:mb-20 md:grid-cols-2 md:gap-16">
-		<h2 id="projects-heading" class="projects-heading max-w-md uppercase leading-[1.15]">
-			<span data-reveal-line>Our work</span>
-		</h2>
-		<p class="projects-description max-w-md leading-relaxed text-black/55 md:ml-auto">
-			Explore our latest work transforming complex visions into seamless digital experiences. Proven
-			solutions, built to lead and engineered to endure.
-		</p>
-	</div>
+	<div class="projects-layout flex flex-col md:grid md:items-stretch">
+		<div class="projects-layout__col projects-layout__col--left contents md:flex md:h-full md:flex-col">
+			<div class="projects-intro order-0 flex flex-col gap-6 md:order-none md:gap-8">
+				<h2 id="projects-heading" class="projects-heading max-w-md uppercase leading-[1.15]">
+					<span data-reveal-line data-i18n="projects.heading">Our finest work</span>
+				</h2>
+				<p
+					class="body-txt-1 projects-description max-w-md leading-relaxed text-black/55"
+					data-i18n="projects.description"
+				>
+					We don't follow trends, we set the tone. These are the collaborations that redefined the
+					standard for our partners.
+				</p>
+			</div>
 
-	<div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2">
-		{displayedProjects.map((project) => <ProjectCard project={project} />)}
-		{!standalone && <SeeAllProjectsCard count={projects.length} />}
+			{
+				leftProjects.map((project) => (
+					<div class="projects-layout__item" style={`--mobile-order: ${listOrder(project)}`}>
+						<ProjectCard project={project} />
+					</div>
+				))
+			}
+			{
+				!standalone && (
+					<div class="projects-layout__item projects-layout__item--last projects-layout__see-all">
+						<SeeAllProjectsCard count={projects.length} />
+					</div>
+				)
+			}
+		</div>
+
+		<div class="projects-layout__col projects-layout__col--right contents md:flex md:h-full md:flex-col">
+			{
+				rightProjects.map((project) => (
+					<div class="projects-layout__item" style={`--mobile-order: ${listOrder(project)}`}>
+						<ProjectCard project={project} />
+					</div>
+				))
+			}
+		</div>
 	</div>
 
 	<div id="project-cursor" class="project-cursor pointer-events-none fixed z-[200]" aria-hidden="true">
 		<span class="project-cursor__label">
-			view
+			<span data-i18n="projects.view" data-project-cursor-label>view</span>
 			<span class="project-cursor__line"></span>
 		</span>
 	</div>
@@ -44,8 +89,49 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 
 <style is:global>
 	.projects-heading {
-		font-size: 2rem;
 		color: #000000;
+	}
+
+	.projects-layout {
+		--projects-gap: 2.5rem;
+		gap: var(--projects-gap);
+	}
+
+	.projects-layout__col {
+		gap: var(--projects-gap);
+	}
+
+	.projects-layout__item {
+		order: var(--mobile-order, 0);
+	}
+
+	.projects-layout__item--last {
+		order: 99;
+	}
+
+	@media (min-width: 768px) {
+		.projects-layout {
+			--projects-gap: 3.25rem;
+			grid-template-columns: minmax(0, 0.88fr) minmax(0, 1fr);
+			column-gap: var(--projects-gap);
+			row-gap: var(--projects-gap);
+		}
+
+		.projects-layout__item,
+		.projects-layout__item--last {
+			order: unset;
+		}
+
+		.projects-layout__see-all {
+			display: flex;
+			flex: 1 1 auto;
+			min-height: 12rem;
+		}
+
+		.projects-layout__see-all .see-all-projects {
+			flex: 1 1 auto;
+			min-height: 100%;
+		}
 	}
 
 	#projects-heading .reveal-char {
@@ -119,11 +205,13 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		const workSection = document.getElementById('work');
 		if (!workSection) {
 			delete document.body.dataset.projectCursorInit;
+			document.documentElement.classList.remove('has-project-cursor');
 			return;
 		}
 
 		if (window.matchMedia('(max-width: 767px)').matches) {
 			delete document.body.dataset.projectCursorInit;
+			document.documentElement.classList.remove('has-project-cursor');
 			workSection.dataset.projectCursorReady = 'true';
 			return;
 		}
@@ -133,6 +221,7 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		const cursor = document.getElementById('project-cursor');
 		if (!cursor) return;
 
+		const cursorLabel = cursor.querySelector<HTMLElement>('[data-project-cursor-label]');
 		const cards = workSection.querySelectorAll('.project-card__cursor-target');
 		if (!cards.length) return;
 
@@ -149,6 +238,25 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		let currentScale = 0.92;
 		const lag = 0.32;
 		const scaleLag = 0.42;
+
+		function getCursorLocale(): 'en' | 'pl' | 'es' {
+			const lang = document.documentElement.lang?.toLowerCase() ?? 'en';
+			if (lang.startsWith('pl')) return 'pl';
+			if (lang.startsWith('es')) return 'es';
+			return 'en';
+		}
+
+		function setCursorLabel(i18nKey: string) {
+			if (!cursorLabel) return;
+			cursorLabel.dataset.i18n = i18nKey;
+			const locale = getCursorLocale();
+			const fallback: Record<string, Record<string, string>> = {
+				en: { 'projects.view': 'view', 'projects.soon': 'soon' },
+				pl: { 'projects.view': 'zobacz', 'projects.soon': 'wkrótce' },
+				es: { 'projects.view': 'ver', 'projects.soon': 'pronto' },
+			};
+			cursorLabel.textContent = fallback[locale]?.[i18nKey] ?? fallback.en[i18nKey] ?? 'view';
+		}
 
 		function animateCursor() {
 			currentX += (targetX - currentX) * lag;
@@ -188,12 +296,14 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 			}
 			hovering = true;
 			cursor.classList.add('is-active');
+			document.documentElement.classList.add('has-project-cursor');
 			startCursorAnimation();
 		}
 
 		function hideCursor() {
 			hovering = false;
 			cursor.classList.remove('is-active');
+			document.documentElement.classList.remove('has-project-cursor');
 			startCursorAnimation();
 		}
 
@@ -203,6 +313,12 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 				(event) => {
 					const mouseEvent = event as MouseEvent;
 					activeCard = card;
+					const key =
+						(card as HTMLElement).dataset.cursorI18n ||
+						((card as HTMLElement).dataset.comingSoon === 'true'
+							? 'projects.soon'
+							: 'projects.view');
+					setCursorLabel(key);
 					showCursor(mouseEvent.clientX, mouseEvent.clientY);
 				},
 				{ passive: true },
@@ -240,7 +356,7 @@ const displayedProjects = standalone ? projects : projects.slice(0, 5);
 		for (const char of text) {
 			const span = document.createElement('span');
 			span.className = 'reveal-char';
-			span.textContent = char === ' ' ? '\u00a0' : char;
+			span.textContent = char === ' ' ? ' ' : char;
 			element.appendChild(span);
 		}
 	}

@@ -1,0 +1,113 @@
+---
+interface Props {
+	inverted?: boolean;
+	mobile?: boolean;
+}
+
+const { inverted = false, mobile = false } = Astro.props;
+
+const languages = [
+	{ code: 'en', label: 'EN' },
+	{ code: 'pl', label: 'PL' },
+	{ code: 'es', label: 'ES' },
+] as const;
+---
+
+<div
+	class:list={[
+		'language-switcher flex shrink-0 items-center',
+		!mobile && '-mx-1 px-1',
+		inverted ? 'language-switcher--inverted' : null,
+		mobile ? 'language-switcher--mobile' : null,
+	]}
+	role="group"
+	aria-label="Language"
+	data-i18n-aria="nav.languageAria"
+	data-language-switcher
+>
+	{
+		languages.map((language, index) => (
+			<>
+				{index > 0 ? (
+					<span class="language-switcher__sep" aria-hidden="true">
+						|
+					</span>
+				) : null}
+				<button
+					type="button"
+					class="language-switcher__btn"
+					data-lang={language.code}
+					aria-pressed={language.code === 'en' ? 'true' : 'false'}
+				>
+					{language.label}
+				</button>
+			</>
+		))
+	}
+</div>
+
+<style is:global>
+	.language-switcher {
+		gap: 0.45rem;
+	}
+
+	.language-switcher__btn {
+		font-size: 1.05rem;
+		font-weight: 600;
+		line-height: 1;
+		letter-spacing: var(--letter-spacing-ui);
+		text-transform: uppercase;
+		color: #f5f5f5;
+		opacity: 0.35;
+		transition: opacity 0.25s ease;
+		background: none;
+		border: 0;
+		padding: 0.15rem 0;
+		cursor: pointer;
+	}
+
+	.language-switcher__btn[aria-pressed='true'] {
+		opacity: 1;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.language-switcher__btn:hover {
+			opacity: 1;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.language-switcher__btn:active {
+			opacity: 1;
+		}
+	}
+
+	.language-switcher__sep {
+		font-size: 1.05rem;
+		font-weight: 600;
+		line-height: 1;
+		color: #f5f5f5;
+		opacity: 0.28;
+		user-select: none;
+	}
+
+	.language-switcher--inverted .language-switcher__btn,
+	.language-switcher--inverted .language-switcher__sep {
+		color: #000000;
+	}
+
+	.language-switcher--mobile .language-switcher__btn,
+	.language-switcher--mobile .language-switcher__sep {
+		font-size: 1.2rem;
+	}
+
+	.site-header--light-bg:not(.header-solid) .language-switcher__btn,
+	.site-header--light-bg:not(.header-solid) .language-switcher__sep {
+		color: #000000;
+	}
+
+	.site-header--light-bg.header-solid .language-switcher__btn,
+	.site-header--light-bg.header-solid .language-switcher__sep {
+		color: #f5f5f5;
+	}
+</style>

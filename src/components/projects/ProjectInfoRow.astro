@@ -5,19 +5,29 @@ interface Props {
 	isLink?: boolean;
 	isLast?: boolean;
 	theme?: 'dark' | 'light';
+	labelKey?: string;
+	fieldKey?: string;
 }
 
-const { label, value, isLink = false, isLast = false, theme = 'dark' } = Astro.props;
+const {
+	label,
+	value,
+	isLink = false,
+	isLast = false,
+	theme = 'dark',
+	labelKey,
+	fieldKey,
+} = Astro.props;
 
 const labelClass =
 	theme === 'dark'
-		? 'text-sm uppercase tracking-[0.12em] text-white/40 md:text-base'
-		: 'text-sm uppercase tracking-[0.12em] text-black/40 md:text-base';
+		? 'text-sm font-semibold uppercase tracking-[0.02em] text-white/40 md:text-base'
+		: 'text-sm font-semibold uppercase tracking-[0.02em] text-black/40 md:text-base';
 
 const valueClass =
 	theme === 'dark'
-		? 'text-right text-base font-medium uppercase leading-snug tracking-[0.02em] text-white md:text-xl'
-		: 'text-right text-base font-medium uppercase leading-snug tracking-[0.02em] text-[#131415] md:text-xl';
+		? 'text-right text-sm font-semibold uppercase leading-snug tracking-[0.02em] text-white md:text-base'
+		: 'text-right text-sm font-semibold uppercase leading-snug tracking-[0.02em] text-[#131415] md:text-base';
 ---
 
 <div
@@ -26,15 +36,21 @@ const valueClass =
 		!isLast && (theme === 'dark' ? 'border-b border-white/10' : 'border-b border-black/10'),
 	]}
 >
-	<dt class={labelClass}>{label}</dt>
+	<dt class={labelClass} data-i18n={labelKey}>{label}</dt>
 	<dd class={valueClass}>
 		{
 			isLink ? (
-				<a href={value.startsWith('http') ? value : `https://${value}`} class="underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white" target="_blank" rel="noreferrer">
+				<a
+					href={value.startsWith('http') ? value : `https://${value}`}
+					class="underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white"
+					target="_blank"
+					rel="noreferrer"
+					data-project-field={fieldKey}
+				>
 					{value.replace(/^https?:\/\//, '')}
 				</a>
 			) : (
-				value
+				<span data-project-field={fieldKey}>{value}</span>
 			)
 		}
 	</dd>
