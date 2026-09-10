@@ -69,6 +69,8 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'articles.description':
 			"We're opening our internal documentation to showcase the systems, technical shifts, and strategic decisions that drive our studio.",
 		'articles.viewMore': 'View more articles',
+		'articles.writtenBy': 'Written by',
+		'articles.published': 'Published:',
 
 		'contact.heading': 'Start your legacy',
 		'contact.description':
@@ -154,6 +156,8 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'articles.description':
 			'Otwieramy naszą wewnętrzną dokumentację, by pokazać systemy, zmiany techniczne i decyzje strategiczne, które napędzają studio.',
 		'articles.viewMore': 'Więcej artykułów',
+		'articles.writtenBy': 'Autor:',
+		'articles.published': 'Opublikowano:',
 
 		'contact.heading': 'Zacznij dziedzictwo',
 		'contact.description':
@@ -239,6 +243,8 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'articles.description':
 			'Abrimos nuestra documentación interna para mostrar los sistemas, cambios técnicos y decisiones estratégicas que impulsan el estudio.',
 		'articles.viewMore': 'Ver más artículos',
+		'articles.writtenBy': 'Escrito por',
+		'articles.published': 'Publicado:',
 
 		'contact.heading': 'Empieza tu legado',
 		'contact.description':
