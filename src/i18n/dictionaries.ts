@@ -82,6 +82,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			'From identity systems to digital products and performance-focused builds — we craft work that holds up over time.',
 
 		'aboutPage.title': 'About Us',
+		'aboutPage.hero': 'Two brothers, one vision',
+		'aboutPage.introHeading': 'Setin Studio is a digital product studio built on vision and execution.',
+		'aboutPage.introBody1': 'As brothers, we have developed a unique collaborative way of working, that allows us to move fast, eliminate friction, and stay completely consistent. Operating as a specialized digital studio, we focus on transforming businesses through strategic branding, user-centric UI/UX design, and premium development.',
+		'aboutPage.introBody2': "We don't believe in one size and all fits services. Instead, we partner with you to craft custom digital tools, scalable platforms, and brand identities that mean something to your audience and bring measurable value to your business.",
+		'aboutPage.chrisRole': 'Designer & Strategist',
+		'aboutPage.chrisBio': 'I have spent the last 5 years working with brands from different corners of the world, like Panama, Spain, and Poland. My experience ranges from designing visual identities for banks to building modern apps for tech startups. I believe that design is not just about colors; it is about making your business trustworthy and easy for your customers to understand.',
+		'aboutPage.kubaRole': 'Lead Developer',
+		'aboutPage.kubaBio': 'With over 10 years in software development, I have seen the web change many times. I have worked with international companies and individual clients from the US and Europe. My job is to make sure that the engine of your website is perfect. I focus on clean code and performance, so your site stays fast and reliable, no matter how much your business grows.',
 	},
 	pl: {
 		'nav.projects': 'Projekty',
@@ -159,6 +167,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			'Od systemów identyfikacji po produkty cyfrowe i realizacje nastawione na wydajność — tworzymy rzeczy, które wytrzymują próbę czasu.',
 
 		'aboutPage.title': 'O nas',
+		'aboutPage.hero': 'Dwóch braci, jedna wizja',
+		'aboutPage.introHeading': 'Setin Studio to studio produktów cyfrowych zbudowane na wizji i sprawnej realizacji.',
+		'aboutPage.introBody1': 'Jako bracia wypracowaliśmy wyjątkowy sposób współpracy, który pozwala nam działać szybko, eliminować tarcia i zachować pełną spójność. Jako wyspecjalizowane studio cyfrowe pomagamy firmom rozwijać się dzięki strategicznemu brandingowi, projektowaniu UI/UX skoncentrowanemu na użytkowniku i wysokiej jakości developmentowi.',
+		'aboutPage.introBody2': 'Nie wierzymy w usługi skrojone według jednego szablonu. Współpracujemy z Tobą, tworząc dopasowane narzędzia cyfrowe, skalowalne platformy i identyfikacje marek, które mają znaczenie dla odbiorców i przynoszą mierzalną wartość.',
+		'aboutPage.chrisRole': 'Projektant i strateg',
+		'aboutPage.chrisBio': 'Od 5 lat pracuję z markami z różnych zakątków świata, między innymi z Panamy, Hiszpanii i Polski. Moje doświadczenie obejmuje zarówno projektowanie identyfikacji wizualnych dla banków, jak i budowanie nowoczesnych aplikacji dla startupów technologicznych. Wierzę, że design to nie tylko kolory, ale też budowanie zaufania do firmy i ułatwianie jej zrozumienia przez klientów.',
+		'aboutPage.kubaRole': 'Lead developer',
+		'aboutPage.kubaBio': 'Od ponad 10 lat pracuję w branży tworzenia oprogramowania i obserwuję, jak zmienia się web. Pracowałem z międzynarodowymi firmami i indywidualnymi klientami z USA oraz Europy. Dbam o to, by techniczne zaplecze Twojej strony działało perfekcyjnie. Stawiam na czysty kod i wydajność, dzięki czemu strona pozostaje szybka i niezawodna niezależnie od skali rozwoju firmy.',
 	},
 	es: {
 		'nav.projects': 'Proyectos',
@@ -236,6 +252,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			'Desde sistemas de identidad hasta productos digitales y desarrollos orientados al rendimiento: creamos trabajo que resiste el tiempo.',
 
 		'aboutPage.title': 'Nosotros',
+		'aboutPage.hero': 'Dos hermanos, una visión',
+		'aboutPage.introHeading': 'Setin Studio es un estudio de productos digitales construido sobre visión y ejecución.',
+		'aboutPage.introBody1': 'Como hermanos, hemos desarrollado una forma única de colaboración que nos permite avanzar rápido, eliminar fricciones y mantener una coherencia total. Como estudio digital especializado, ayudamos a transformar negocios mediante branding estratégico, diseño UI/UX centrado en las personas y desarrollo premium.',
+		'aboutPage.introBody2': 'No creemos en servicios hechos con una sola medida. Trabajamos contigo para crear herramientas digitales a medida, plataformas escalables e identidades de marca que conecten con tu audiencia y aporten un valor medible.',
+		'aboutPage.chrisRole': 'Diseñador y estratega',
+		'aboutPage.chrisBio': 'Durante los últimos 5 años he trabajado con marcas de distintos rincones del mundo, como Panamá, España y Polonia. Mi experiencia abarca desde diseñar identidades visuales para bancos hasta crear aplicaciones modernas para startups tecnológicas. Creo que el diseño no consiste solo en colores, sino en hacer que tu negocio resulte confiable y fácil de entender para tus clientes.',
+		'aboutPage.kubaRole': 'Desarrollador principal',
+		'aboutPage.kubaBio': 'Con más de 10 años en el desarrollo de software, he visto cambiar la web muchas veces. He trabajado con empresas internacionales y clientes individuales de Estados Unidos y Europa. Mi trabajo consiste en asegurar que el motor de tu sitio web sea perfecto. Me enfoco en código limpio y rendimiento para que tu sitio siga siendo rápido y confiable a medida que crece tu negocio.',
 	},
 };
 

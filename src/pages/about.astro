@@ -17,6 +17,8 @@ const teamMembers = [
 	{
 		name: 'Chris',
 		role: 'Designer & Strategist',
+		roleKey: 'aboutPage.chrisRole',
+		bioKey: 'aboutPage.chrisBio',
 		bio: "I have spent the last 5 years working with brands from different corners of the world, like Panama, Spain, and Poland. My experience ranges from designing visual identities for banks to building modern apps for tech startups. I believe that design is not just about colors; it's about making your business trustworthy and easy for your customers to understand.",
 		imageSrc: '/chris.webp',
 		imageAlt: 'Chris, Designer and Strategist at Setin Studio',
@@ -28,6 +30,8 @@ const teamMembers = [
 	{
 		name: 'Kuba',
 		role: 'Lead Developer',
+		roleKey: 'aboutPage.kubaRole',
+		bioKey: 'aboutPage.kubaBio',
 		bio: 'With over 10 years in software development, I have seen the web change many times. I\'ve worked with international companies and individual clients from the US and Europe. My job is to make sure that the "engine" of your website is perfect. I focus on clean code and performance, so your site stays fast and reliable, no matter how much your business grows.',
 		imageSrc: '/jacob.webp',
 		imageAlt: 'Kuba, Lead Developer at Setin Studio',
@@ -57,6 +61,8 @@ const teamMembers = [
 							name={member.name}
 							role={member.role}
 							bio={member.bio}
+							roleKey={member.roleKey}
+							bioKey={member.bioKey}
 							imageSrc={member.imageSrc}
 							imageAlt={member.imageAlt}
 							links={member.links}

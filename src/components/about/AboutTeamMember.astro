@@ -3,13 +3,15 @@ interface Props {
 	name: string;
 	role: string;
 	bio: string;
+	roleKey?: string;
+	bioKey?: string;
 	imageSrc: string;
 	imageAlt: string;
 	links: { label: string; href: string }[];
 	align?: 'start' | 'end';
 }
 
-const { name, role, bio, imageSrc, imageAlt, links, align = 'start' } = Astro.props;
+const { name, role, bio, roleKey, bioKey, imageSrc, imageAlt, links, align = 'start' } = Astro.props;
 ---
 
 <article
@@ -44,10 +46,10 @@ const { name, role, bio, imageSrc, imageAlt, links, align = 'start' } = Astro.pr
 	<div class="about-team-member__content min-w-0 md:max-w-[540px] md:shrink-0 md:pt-1">
 		<h2 class="about-team-member__heading uppercase text-setin-fg">
 			<span class="font-semibold">{name}</span>
-			<span class="ml-4 font-normal text-setin-fg/80">{role}</span>
+			<span class="ml-4 font-normal text-setin-fg/80" data-i18n={roleKey}>{role}</span>
 		</h2>
 
-		<p class="body-txt-1 about-team-member__bio mt-8 leading-relaxed text-setin-fg">{bio}</p>
+		<p class="body-txt-1 about-team-member__bio mt-8 leading-relaxed text-setin-fg" data-i18n={bioKey}>{bio}</p>
 
 		<div class="mt-10 flex flex-wrap gap-x-10 gap-y-3">
 			{
