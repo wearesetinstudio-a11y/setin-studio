@@ -112,20 +112,22 @@
 		const visual = document.getElementById('about-hero-visual');
 		const layer = document.getElementById('about-hero-parallax-layer');
 		if (!visual || !layer || visual.dataset.parallaxInit === 'true') return;
+		const visualElement = visual;
+		const layerElement = layer;
 
-		visual.dataset.parallaxInit = 'true';
+		visualElement.dataset.parallaxInit = 'true';
 
 		const PARALLAX_SPEED = 0.16;
 		const MAX_SHIFT_RATIO = 0.045;
 
 		function updateParallax() {
-			const containerHeight = visual.offsetHeight;
+			const containerHeight = visualElement.offsetHeight;
 			const maxShift = containerHeight * MAX_SHIFT_RATIO;
-			const scrollOffset = -visual.getBoundingClientRect().top;
+			const scrollOffset = -visualElement.getBoundingClientRect().top;
 			const rawOffset = scrollOffset * PARALLAX_SPEED;
 			const offset = Math.max(-maxShift * 0.2, Math.min(maxShift * 0.55, rawOffset));
 
-			layer.style.transform = `translate3d(0, ${offset}px, 0)`;
+			layerElement.style.transform = `translate3d(0, ${offset}px, 0)`;
 		}
 
 		let ticking = false;
@@ -191,4 +193,17 @@
 	}
 
 	document.addEventListener('astro:page-load', initAboutHero);
+	window.addEventListener('setin:language-change', () => {
+		const headline = document.querySelector<HTMLElement>('[data-about-hero-headline]');
+		if (!headline) return;
+		const wasRevealed = headline.dataset.revealed === 'true';
+		delete headline.dataset.prepared;
+		prepareAboutHeroCopy();
+		if (wasRevealed) {
+			headline.dataset.revealed = 'true';
+			headline.querySelectorAll('.hero-reveal-line').forEach((element) => {
+				element.classList.add('is-revealed');
+			});
+		}
+	});
 </script>

@@ -186,6 +186,13 @@ const { projectCount, articleCount } = await getSiteCounts();
 				});
 			}
 
+			function ensureHeroBackgroundVideo() {
+				const video = document.querySelector<HTMLVideoElement>('#hero-background-stack video');
+				if (!video) return;
+				video.muted = true;
+				void video.play().catch(() => {});
+			}
+
 			initCinemaPureNoise('cinema-pure-noise-filter', {
 				observeElementId: 'hero-section',
 				density: 0.038,
@@ -195,6 +202,7 @@ const { projectCount, articleCount } = await getSiteCounts();
 			document.documentElement.classList.add('hero-cinema-active');
 			lockHeroBackgroundViewport(true);
 			syncHeroBackgroundStack();
+			ensureHeroBackgroundVideo();
 			window.addEventListener('scroll', scheduleHeroBackgroundSync, { passive: true });
 			window.addEventListener(
 				'resize',
@@ -226,6 +234,12 @@ const { projectCount, articleCount } = await getSiteCounts();
 				lockedHeroBgHeight = 0;
 				lockHeroBackgroundViewport(true);
 				scheduleHeroBackgroundSync();
+				ensureHeroBackgroundVideo();
+			});
+			window.addEventListener('setin:language-change', () => {
+				lockHeroBackgroundViewport(true);
+				syncHeroBackgroundStack();
+				ensureHeroBackgroundVideo();
 			});
 		</script>
 

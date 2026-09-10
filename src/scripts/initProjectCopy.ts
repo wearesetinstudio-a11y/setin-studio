@@ -109,7 +109,6 @@ export function applyProjectCopy(locale: Locale) {
 	if (hero && typeof copy.heroSubtitle === 'string') {
 		hero.dataset.rawText = copy.heroSubtitle;
 		delete hero.dataset.prepared;
-		delete hero.dataset.revealed;
 		// ProjectHero resize/prepare will rebuild lines on next language event listeners;
 		// set plain text as fallback for immediate display.
 		hero.textContent = copy.heroSubtitle;
