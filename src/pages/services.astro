@@ -65,8 +65,8 @@ const services = [
 									href={`#service-${service.number}`}
 									data-service-nav-link={service.number}
 								>
-									<span>{service.number} /</span>
-									<span data-i18n={service.labelKey}>{service.label}</span>
+									<span class="services-page__nav-number">{service.number} /</span>
+									<span class="services-page__nav-label" data-i18n={service.labelKey}>{service.label}</span>
 								</a>
 							))
 						}
@@ -103,7 +103,7 @@ const services = [
 <style>
 	.services-page__layout {
 		display: grid;
-		grid-template-columns: minmax(170px, 0.7fr) minmax(0, 1.8fr);
+		grid-template-columns: minmax(max-content, 0.7fr) minmax(0, 1.8fr);
 		gap: clamp(3rem, 10vw, 12rem);
 		max-width: 1180px;
 		margin: 0 auto;
@@ -117,7 +117,7 @@ const services = [
 
 	.services-page__nav {
 		display: grid;
-		gap: 0.9rem;
+		gap: 0;
 	}
 
 	.services-page__nav-link,
@@ -133,8 +133,9 @@ const services = [
 	.services-page__nav-link {
 		position: relative;
 		display: flex;
-		padding-bottom: 0.8rem;
+		padding-block: clamp(1.4rem, 2.4vw, 2rem);
 		gap: 0.35rem;
+		white-space: nowrap;
 		color: rgb(245 245 245 / 0.5);
 		transition: color 250ms ease;
 	}
@@ -151,7 +152,11 @@ const services = [
 	}
 
 	.services-page__nav-link.is-active {
-		color: #f5f5f5;
+		color: rgb(255 255 255 / 0.6);
+	}
+
+	.services-page__nav-link.is-active .services-page__nav-label {
+		color: #fff;
 	}
 
 	.services-page__nav-link.is-active::after {
@@ -168,6 +173,7 @@ const services = [
 	}
 
 	.services-page__item {
+		width: min(100%, 900px);
 		display: block;
 		scroll-margin-top: 7rem;
 		padding: 0 0 clamp(4.5rem, 8vw, 8rem);
@@ -192,6 +198,14 @@ const services = [
 		text-align: right;
 	}
 
+	.services-page__item.is-active .services-page__meta-number {
+		color: rgb(255 255 255 / 0.6);
+	}
+
+	.services-page__item.is-active .services-page__meta-label {
+		color: #fff;
+	}
+
 	.services-page__copy h2 {
 		width: 100%;
 		max-width: none;
@@ -208,7 +222,8 @@ const services = [
 	}
 
 	.services-page__copy p {
-		max-width: 34rem;
+		width: 100%;
+		max-width: none;
 		margin-top: 2rem;
 		color: rgb(245 245 245 / 0.6);
 		line-height: 1.65;
@@ -230,7 +245,7 @@ const services = [
 		}
 
 		.services-page__nav {
-			gap: 0.7rem;
+			gap: 0;
 		}
 
 		.services-page__item {
@@ -259,6 +274,9 @@ const services = [
 		const setActiveService = (number: string) => {
 			navLinks.forEach((link) => {
 				link.classList.toggle('is-active', link.dataset.serviceNavLink === number);
+			});
+			serviceSections.forEach((section) => {
+				section.classList.toggle('is-active', section.dataset.serviceSection === number);
 			});
 		};
 
