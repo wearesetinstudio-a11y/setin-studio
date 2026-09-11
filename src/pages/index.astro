@@ -74,13 +74,13 @@ const { projectCount, articleCount } = await getSiteCounts();
 						>
 							{
 								[
-									{ key: 'hero.service.branding', label: 'Branding' },
-									{ key: 'hero.service.uxResearch', label: 'UX Research' },
-									{ key: 'hero.service.uxUi', label: 'UX/UI Design' },
-									{ key: 'hero.service.development', label: 'Development' },
+									{ key: 'services.item.branding.label', label: 'Brand Design', href: '/services#service-01' },
+									{ key: 'services.item.product.label', label: 'Product UX/UI Design', href: '/services#service-02' },
+									{ key: 'services.item.automation.label', label: 'AI & Automations', href: '/services#service-03' },
+									{ key: 'services.item.development.label', label: 'Development & Engineering', href: '/services#service-04' },
 								].map((service, index) => (
 									<a
-										href="/services"
+										href={service.href}
 										class="hero-service group"
 										style={`--i: ${index}`}
 									>

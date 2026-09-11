@@ -267,10 +267,14 @@ const services = [
 <script>
 	import { scrollToId } from '../scripts/initSmoothScroll';
 
-	const navLinks = Array.from(document.querySelectorAll<HTMLElement>('[data-service-nav-link]'));
-	const serviceSections = Array.from(document.querySelectorAll<HTMLElement>('[data-service-section]'));
+	const initializeServicesPage = () => {
+		const page = document.querySelector<HTMLElement>('.services-page');
+		const navLinks = Array.from(document.querySelectorAll<HTMLElement>('[data-service-nav-link]'));
+		const serviceSections = Array.from(document.querySelectorAll<HTMLElement>('[data-service-section]'));
 
-	if (navLinks.length && serviceSections.length) {
+		if (!page || page.dataset.servicesInitialized === 'true' || !navLinks.length || !serviceSections.length) return;
+		page.dataset.servicesInitialized = 'true';
+
 		const setActiveService = (number: string) => {
 			navLinks.forEach((link) => {
 				link.classList.toggle('is-active', link.dataset.serviceNavLink === number);
@@ -281,13 +285,22 @@ const services = [
 		};
 
 		const observer = new IntersectionObserver(
-			(entries) => {
-				const visibleSections = entries
-					.filter((entry) => entry.isIntersecting)
-					.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+			() => {
+				const activeBandTop = window.innerHeight * 0.18;
+				const activeBandBottom = window.innerHeight * 0.38;
+				const visibleSections = serviceSections
+					.filter((section) => {
+						const bounds = section.getBoundingClientRect();
+						return bounds.top < activeBandBottom && bounds.bottom > activeBandTop;
+					})
+					.sort(
+						(a, b) =>
+							Math.abs(a.getBoundingClientRect().top - activeBandTop) -
+							Math.abs(b.getBoundingClientRect().top - activeBandTop),
+					);
 
 				if (visibleSections[0]) {
-					setActiveService(visibleSections[0].target.getAttribute('data-service-section') ?? '');
+					setActiveService(visibleSections[0].dataset.serviceSection ?? '');
 				}
 			},
 			{ rootMargin: '-18% 0px -62% 0px', threshold: 0 },
@@ -307,6 +320,17 @@ const services = [
 				history.replaceState(null, '', `#${targetId}`);
 			});
 		});
-		setActiveService(serviceSections[0].dataset.serviceSection ?? '');
-	}
+		const hashTarget = window.location.hash
+			? document.getElementById(window.location.hash.slice(1))
+			: null;
+		setActiveService(
+			hashTarget?.dataset.serviceSection ?? serviceSections[0].dataset.serviceSection ?? '',
+		);
+		if (hashTarget) {
+			requestAnimationFrame(() => scrollToId(hashTarget.id, { immediate: true }));
+		}
+	};
+
+	document.addEventListener('astro:page-load', initializeServicesPage);
+	initializeServicesPage();
 </script>
