@@ -6,6 +6,45 @@ import ContactSection from '../components/ContactSection.astro';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 
 const { projectCount, articleCount } = await getSiteCounts();
+
+const services = [
+	{
+		number: '01',
+		labelKey: 'services.item.branding.label',
+		label: 'Brand Design',
+		titleKey: 'services.item.branding.title',
+		title: 'Visual identities built for measurable impact',
+		bodyKey: 'services.item.branding.body',
+		body: 'We build visual systems that make your business recognisable, credible, and ready to grow. From positioning and strategy to identity systems and guidelines, every decision is made to give your brand a clear place in the market.',
+	},
+	{
+		number: '02',
+		labelKey: 'services.item.product.label',
+		label: 'Product / UX Design',
+		titleKey: 'services.item.product.title',
+		title: 'Digital interfaces engineered for business performance',
+		bodyKey: 'services.item.product.body',
+		body: 'We design digital products that are easy to understand and satisfying to use. Research, information architecture, UX and UI design come together in interfaces that support real users and real business goals.',
+	},
+	{
+		number: '03',
+		labelKey: 'services.item.automation.label',
+		label: 'AI Automations',
+		titleKey: 'services.item.automation.title',
+		title: 'Scale your operational speed and brand output',
+		bodyKey: 'services.item.automation.body',
+		body: 'You do not need more tools. You need a smarter system. We connect AI, automation, and your existing workflows to reduce repetitive work, keep quality consistent, and help your team move with more focus.',
+	},
+	{
+		number: '04',
+		labelKey: 'services.item.development.label',
+		label: 'Development & Engineering',
+		titleKey: 'services.item.development.title',
+		title: 'Bridging design and production code with pragmatic flexibility',
+		bodyKey: 'services.item.development.body',
+		body: 'We turn considered design into fast, reliable digital experiences. Our builds are precise, maintainable, and shaped around the needs of your business, whether you are launching a new website or evolving a larger platform.',
+	},
+];
 ---
 
 <Layout
@@ -15,20 +54,36 @@ const { projectCount, articleCount } = await getSiteCounts();
 	<Header projectCount={projectCount} articleCount={articleCount} />
 
 	<main class="relative z-20 flex-1">
-		<section class="bg-[#131415] px-[var(--page-gutter)] pt-[calc(var(--section-padding-y)+5.5rem)] pb-[var(--section-padding-y)]">
-			<h1
-				class="max-w-3xl text-[2rem] font-semibold uppercase leading-[1.15] text-setin-fg md:text-[3.2rem]"
-				data-i18n="services.title"
-			>
-				Services
-			</h1>
-			<p
-				class="body-txt-1 mt-6 max-w-md leading-relaxed text-setin-fg/55"
-				data-i18n="services.description"
-			>
-				From identity systems to digital products and performance-focused builds — we craft work that
-				holds up over time.
-			</p>
+		<section class="services-page bg-[#131415] px-[var(--page-gutter)] pb-[var(--section-padding-y)] pt-[calc(var(--section-padding-y)+5.5rem)]">
+			<div class="services-page__layout">
+				<aside class="services-page__aside" aria-label="Service categories" data-i18n-aria="services.aria">
+					<nav class="services-page__nav">
+						{
+							services.map((service) => (
+								<a class="services-page__nav-link" href={`#service-${service.number}`}>
+									<span>{service.number} /</span>
+									<span data-i18n={service.labelKey}>{service.label}</span>
+								</a>
+							))
+						}
+					</nav>
+				</aside>
+
+				<div class="services-page__content">
+					{services.map((service) => (
+						<article id={`service-${service.number}`} class="services-page__item">
+							<div class="services-page__meta">
+								<span>{service.number} /</span>
+								<span data-i18n={service.labelKey}>{service.label}</span>
+							</div>
+							<div class="services-page__copy">
+								<h2 data-i18n={service.titleKey}>{service.title}</h2>
+								<p data-i18n={service.bodyKey}>{service.body}</p>
+							</div>
+						</article>
+					))}
+				</div>
+			</div>
 		</section>
 
 		<ContactSection />
@@ -36,3 +91,109 @@ const { projectCount, articleCount } = await getSiteCounts();
 
 	<Footer />
 </Layout>
+
+<style>
+	.services-page__layout {
+		display: grid;
+		grid-template-columns: minmax(170px, 0.7fr) minmax(0, 1.8fr);
+		gap: clamp(3rem, 10vw, 12rem);
+		max-width: 1180px;
+		margin: 0 auto;
+	}
+
+	.services-page__aside {
+		position: sticky;
+		top: 7rem;
+		align-self: start;
+	}
+
+	.services-page__nav {
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.services-page__nav-link,
+	.services-page__meta {
+		font-size: 0.58rem;
+		font-weight: 500;
+		line-height: 1.3;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+	}
+
+	.services-page__nav-link {
+		display: flex;
+		gap: 0.35rem;
+		color: rgb(245 245 245 / 0.5);
+		transition: color 250ms ease;
+	}
+
+	.services-page__nav-link:hover,
+	.services-page__nav-link:focus-visible {
+		color: #f5f5f5;
+	}
+
+	.services-page__content {
+		min-width: 0;
+	}
+
+	.services-page__item {
+		display: grid;
+		grid-template-columns: minmax(130px, 0.65fr) minmax(0, 1.35fr);
+		gap: clamp(2rem, 6vw, 7rem);
+		padding: 0 0 clamp(4.5rem, 8vw, 8rem);
+		margin-bottom: clamp(4.5rem, 8vw, 8rem);
+		border-bottom: 1px solid rgb(245 245 245 / 0.12);
+	}
+
+	.services-page__meta {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		color: rgb(245 245 245 / 0.45);
+	}
+
+	.services-page__copy h2 {
+		max-width: 28rem;
+		font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+		font-weight: 600;
+		line-height: 1.12;
+		text-transform: uppercase;
+	}
+
+	.services-page__copy p {
+		max-width: 34rem;
+		margin-top: 2rem;
+		color: rgb(245 245 245 / 0.6);
+		line-height: 1.65;
+	}
+
+	.services-page__item:last-child {
+		margin-bottom: 0;
+	}
+
+	@media (max-width: 767px) {
+		.services-page__layout {
+			display: block;
+		}
+
+		.services-page__aside {
+			position: static;
+			margin-bottom: 4rem;
+		}
+
+		.services-page__nav {
+			gap: 0.7rem;
+		}
+
+		.services-page__item {
+			display: block;
+			padding-bottom: 4rem;
+			margin-bottom: 4rem;
+		}
+
+		.services-page__meta {
+			margin-bottom: 2rem;
+		}
+	}
+</style>
