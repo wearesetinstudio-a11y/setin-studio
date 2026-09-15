@@ -47,6 +47,16 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KWWVCQ97C" is:inline></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				window.dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+			gtag('config', 'G-9KWWVCQ97C');
+		</script>
 		<meta name="description" content={description} />
 		<link rel="canonical" id="canonical-url" href={canonicalHref} />
 		{
