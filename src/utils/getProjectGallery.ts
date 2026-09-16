@@ -22,7 +22,7 @@ type ParsedMediaFile = GalleryMediaItem & {
 	part: number | null;
 };
 
-const FILE_PATTERN = /^(\d+)(?:\.(\d+))?\.(webp|mp4|webm)$/i;
+const FILE_PATTERN = /^(\d+)(?:[._](\d+))?\.(webp|mp4|webm)$/i;
 const MAX_SECTION_PARTS = 4;
 
 export function getCoverFilename(thumbnail: string): string {
@@ -179,7 +179,7 @@ export function getOverviewGraphic(
 
 /**
  * Media for one case-study section (group N).
- * Accepts `N.webp` / `N.mp4` and up to four parts: `N.1` … `N.4`.
+ * Accepts `N.webp` / `N.mp4` and up to four parts: `N.1` / `N_1` … `N.4`.
  */
 export function getSectionMedia(
 	folderName: string,
