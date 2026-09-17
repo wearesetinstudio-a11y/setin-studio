@@ -352,6 +352,12 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		margin-right: -1px;
 		background-color: #131415;
 		transform: translateY(-100%);
+	}
+
+	.page-transition-overlay.is-active .page-transition-bar,
+	.page-transition-overlay.is-covering .page-transition-bar,
+	.page-transition-overlay.is-revealing .page-transition-bar,
+	.page-transition-overlay.is-covered .page-transition-bar {
 		will-change: transform;
 	}
 
@@ -509,6 +515,24 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 
 	html.has-site-cursor,
 	html.has-site-cursor body {
+		cursor: none;
+	}
+
+	html.has-site-cursor :is(
+		a,
+		button,
+		label,
+		summary,
+		select,
+		[role='button'],
+		[role='link'],
+		[role='menuitem'],
+		[type='button'],
+		[type='submit'],
+		[type='reset'],
+		[type='checkbox'],
+		[type='radio']
+	) {
 		cursor: none;
 	}
 

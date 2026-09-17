@@ -162,13 +162,16 @@ export function initSmoothScroll() {
 	initAnchorScrollClicks();
 
 	if (lenis) {
+		if (!document.documentElement.classList.contains('intro-pending')) {
+			lenis.start();
+		}
 		lenis.resize();
 		return;
 	}
 
 	lenis = new Lenis({
 		autoRaf: true,
-		lerp: 0.16,
+		lerp: 0.075,
 		smoothWheel: true,
 		anchors: {
 			offset: getScrollOffset(),

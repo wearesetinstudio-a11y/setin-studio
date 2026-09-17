@@ -349,6 +349,14 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 		animation: mobile-nav-glow-c 9s cubic-bezier(0.45, 0.05, 0.25, 1) infinite;
 	}
 
+	@media (min-width: 768px) {
+		.mobile-nav-toggle__dot,
+		.mobile-nav-toggle__glow {
+			animation: none !important;
+			will-change: auto;
+		}
+	}
+
 	/* Positions every 3s (9s cycle). Hold ~2.15s, morph move ~0.85s */
 	@keyframes mobile-nav-dot-a {
 		0%,
@@ -806,7 +814,6 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 		margin-right: -1px;
 		background-color: #131415;
 		transform: translateY(-100%);
-		will-change: transform;
 	}
 
 	.mobile-nav-bar:last-child {
@@ -845,6 +852,14 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 	.mobile-nav-panel.is-active {
 		pointer-events: auto;
 		visibility: visible;
+	}
+
+	.mobile-nav-panel.is-open .mobile-nav-bar,
+	.mobile-nav-panel.is-covered .mobile-nav-bar,
+	.mobile-nav-panel.is-closing .mobile-nav-bar,
+	.mobile-nav-panel.is-covering .mobile-nav-bar,
+	.mobile-nav-panel.is-revealing .mobile-nav-bar {
+		will-change: transform;
 	}
 
 	.mobile-nav-panel.is-open .mobile-nav-bar,

@@ -237,7 +237,7 @@ export function initSiteCursor() {
 		flash.style.opacity = String(intensity * 0.85);
 		flash.style.transform = `translate(-50%, -50%) rotate(${angleDeg + 90}deg)`;
 
-		updateSparks(dt, intensity, angleRad, now);
+		updateSparks(dt, 0, angleRad, now);
 
 		const hasAliveSparks = sparks.some((spark) => spark.alive);
 		const settled =

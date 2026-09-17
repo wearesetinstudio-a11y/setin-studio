@@ -133,9 +133,9 @@ async function waitForPageReady(): Promise<void> {
 			? document.fonts.ready.catch(() => undefined)
 			: Promise.resolve();
 
-	if (document.readyState !== 'complete') {
+	if (document.readyState === 'loading') {
 		await new Promise<void>((resolve) => {
-			window.addEventListener('load', () => resolve(), { once: true });
+			document.addEventListener('DOMContentLoaded', () => resolve(), { once: true });
 		});
 	}
 
