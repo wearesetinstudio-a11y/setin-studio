@@ -28,15 +28,14 @@ export function initCinemaPureNoise(
 	if (!ctx || !container) return null;
 
 	const isMobile = window.matchMedia('(max-width: 767px)').matches;
-	const NOISE_DENSITY = options.density ?? (isMobile ? 0.022 : 0.032);
-	const GRAIN_SIZE = options.grainSize ?? (isMobile ? 0.65 : 0.75);
+	const NOISE_DENSITY = options.density ?? (isMobile ? 0.04 : 0.055);
+	const GRAIN_SIZE = options.grainSize ?? 0.5;
 	const BASE_OPACITY = options.baseOpacity ?? (isMobile ? 0.16 : 0.14);
 	const MAX_NOISE_WIDTH = isMobile ? 480 : 800;
 	const MAX_NOISE_HEIGHT = isMobile ? 320 : 500;
 	const TOTAL_BUFFERS = isMobile ? 3 : 4;
-	const FRAME_INTERVAL = isMobile ? 240 : 200;
+	const FRAME_INTERVAL = 120;
 
-	let dpr = window.devicePixelRatio || 1;
 	let noiseBuffers: HTMLCanvasElement[] = [];
 	let currentBufferFrame = 0;
 	let noiseWidth = 0;
@@ -75,7 +74,7 @@ export function initCinemaPureNoise(
 			bCtx.fillRect(
 				Math.random() * w,
 				Math.random() * (h * 0.2),
-				0.75,
+				0.4,
 				Math.random() * (h * 0.5) + h * 0.1,
 			);
 		}
@@ -132,39 +131,40 @@ export function initCinemaPureNoise(
 
 		lastLayoutWidth = nextWidth;
 		lastLayoutHeight = nextHeight;
-		dpr = window.devicePixelRatio || 1;
-
-		canvas.width = Math.max(1, Math.floor(rect.width * dpr));
-		canvas.height = Math.max(1, Math.floor(rect.height * dpr));
-		canvas.style.width = `${rect.width}px`;
-		canvas.style.height = `${rect.height}px`;
 
 		const noiseSize = getNoiseDimensions(rect.width, rect.height);
 		noiseWidth = noiseSize.w;
 		noiseHeight = noiseSize.h;
 
-		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+		canvas.width = Math.max(1, nextWidth);
+		canvas.height = Math.max(1, nextHeight);
+		canvas.style.width = `${rect.width}px`;
+		canvas.style.height = `${rect.height}px`;
+
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		preRenderNoiseAsync(noiseWidth, noiseHeight);
 	}
 
 	function drawFrame() {
-		const width = canvas.width / dpr;
-		const height = canvas.height / dpr;
 		const availableFrames = noiseBuffers.filter(Boolean).length;
 		if (!availableFrames) return;
 
 		const frame = noiseBuffers[currentBufferFrame % availableFrames];
 
-		ctx.clearRect(0, 0, width, height);
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		if (frame) {
-			ctx.drawImage(frame, 0, 0, width, height);
+			ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
 		}
 
 		currentBufferFrame = (currentBufferFrame + 1) % Math.max(availableFrames, 1);
 	}
 
+	function canRunNoise() {
+		return isObservedVisible && document.visibilityState === 'visible';
+	}
+
 	function startNoise() {
-		if (intervalId) return;
+		if (intervalId || !canRunNoise()) return;
 		drawFrame();
 		intervalId = window.setInterval(drawFrame, FRAME_INTERVAL);
 	}
@@ -177,12 +177,12 @@ export function initCinemaPureNoise(
 
 	function restart() {
 		resizeCanvas();
-		if (isObservedVisible) startNoise();
+		if (canRunNoise()) startNoise();
 	}
 
 	function initCanvas() {
 		resizeCanvas();
-		if (isObservedVisible) startNoise();
+		if (canRunNoise()) startNoise();
 	}
 
 	const onResize = () => {
@@ -190,6 +190,10 @@ export function initCinemaPureNoise(
 	};
 
 	window.addEventListener('resize', onResize, { passive: true });
+	document.addEventListener('visibilitychange', () => {
+		if (canRunNoise()) startNoise();
+		else stopNoise();
+	});
 
 	const observeElementId = options.observeElementId;
 	if (observeElementId) {
@@ -203,7 +207,7 @@ export function initCinemaPureNoise(
 						else stopNoise();
 					}
 				},
-				{ threshold: 0, rootMargin: '120px 0px 120px 0px' },
+				{ threshold: 0, rootMargin: '0px' },
 			);
 			visibilityObserver.observe(observedElement);
 		} else {

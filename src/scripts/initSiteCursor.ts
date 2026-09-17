@@ -97,16 +97,22 @@ export function initSiteCursor() {
 		};
 	});
 
+	function isSuppressed() {
+		return cursor.classList.contains('is-suppressed');
+	}
+
+	function clearSparks() {
+		for (const spark of sparks) {
+			spark.alive = false;
+			spark.el.style.opacity = '0';
+		}
+	}
+
 	function setVisible(next: boolean) {
 		if (visible === next) return;
 		visible = next;
 		cursor.classList.toggle('is-visible', next);
-		if (!next) {
-			for (const spark of sparks) {
-				spark.alive = false;
-				spark.el.style.opacity = '0';
-			}
-		}
+		if (!next) clearSparks();
 	}
 
 	function spawnSpark(intensity: number, angleRad: number) {
@@ -120,7 +126,6 @@ export function initSiteCursor() {
 
 		const cos = Math.cos(angleRad);
 		const sin = Math.sin(angleRad);
-		// Perpendicular burst + a little behind the path
 		const dirX = -sin * spread - cos * rearward;
 		const dirY = cos * spread - sin * rearward;
 		const mag = Math.hypot(dirX, dirY) || 1;
@@ -186,6 +191,12 @@ export function initSiteCursor() {
 	}
 
 	function render(now = performance.now()) {
+		if (isSuppressed() || !visible) {
+			rafId = 0;
+			clearSparks();
+			return;
+		}
+
 		const dt = Math.min(32, now - lastFrameAt);
 		lastFrameAt = now;
 
@@ -216,7 +227,6 @@ export function initSiteCursor() {
 
 		cursor.style.transform = `translate3d(${coreX}px, ${coreY}px, 0)`;
 
-		// Idle = even halo around the core; motion stretches it into a rear trail
 		const restSize = 34;
 		const moveLength = 26 + intensity * 50 + dragMag * 0.35;
 		const moveThickness = 16 + intensity * 12;
@@ -230,14 +240,13 @@ export function initSiteCursor() {
 		trail.style.opacity = String(trailOpacity);
 		trail.style.transform = `translate(-50%, -50%) rotate(${angleDeg + 180}deg) translateX(${trailOffset}px)`;
 
-		// Front arc only while moving
 		const arcSize = 26 + intensity * 8;
 		flash.style.width = `${arcSize}px`;
 		flash.style.height = `${arcSize}px`;
 		flash.style.opacity = String(intensity * 0.85);
 		flash.style.transform = `translate(-50%, -50%) rotate(${angleDeg + 90}deg)`;
 
-		updateSparks(dt, 0, angleRad, now);
+		updateSparks(dt, intensity, angleRad, now);
 
 		const hasAliveSparks = sparks.some((spark) => spark.alive);
 		const settled =
@@ -255,6 +264,7 @@ export function initSiteCursor() {
 	}
 
 	function start() {
+		if (isSuppressed() || !visible) return;
 		if (!rafId) {
 			lastFrameAt = performance.now();
 			rafId = requestAnimationFrame(render);

@@ -455,7 +455,7 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 	.noise-overlay--coarse {
 		z-index: 10;
 		background: transparent url('/noise-grain.webp') repeat 0 0;
-		background-size: 180px 180px;
+		background-size: 110px 110px;
 		opacity: 0.09;
 	}
 
@@ -482,7 +482,7 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 	@media (max-width: 767px) {
 		.noise-overlay--coarse {
 			opacity: 0.06;
-			background-size: 220px 220px;
+			background-size: 130px 130px;
 		}
 
 		.noise-scanlines {
@@ -555,7 +555,6 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		visibility: hidden;
 		mix-blend-mode: difference;
 		transition: opacity 0.2s ease, visibility 0s linear 0.2s;
-		will-change: transform;
 	}
 
 	.site-cursor.is-visible {
@@ -564,7 +563,8 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		transition: opacity 0.2s ease, visibility 0s linear 0s;
 	}
 
-	html.has-project-cursor .site-cursor {
+	.site-cursor.is-suppressed,
+	.site-cursor-sparks.is-suppressed {
 		opacity: 0 !important;
 		visibility: hidden !important;
 		transition: opacity 0.15s ease, visibility 0s linear 0.15s;
@@ -613,7 +613,6 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		width: 28px;
 		height: 28px;
 		border-radius: 9999px;
-		/* Arc on the local "front" (top half), rotated in JS toward movement */
 		background: conic-gradient(
 			from 270deg,
 			rgba(255, 255, 255, 0.08) 0deg,
@@ -650,12 +649,6 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		z-index: 10049;
 		pointer-events: none;
 		overflow: hidden;
-		mix-blend-mode: difference;
-	}
-
-	html.has-project-cursor .site-cursor-sparks {
-		opacity: 0;
-		visibility: hidden;
 	}
 
 	.site-cursor-spark {
@@ -666,8 +659,8 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		border-radius: 9999px;
 		background: #ffffff;
 		box-shadow: 0 0 5px rgba(255, 255, 255, 0.55);
+		mix-blend-mode: difference;
 		opacity: 0;
-		will-change: transform, opacity;
 		pointer-events: none;
 	}
 

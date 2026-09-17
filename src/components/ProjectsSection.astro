@@ -164,7 +164,6 @@ function listOrder(project: CollectionEntry<'projects'>) {
 		opacity: 1;
 		visibility: visible;
 		transition: opacity 0.22s ease-out, visibility 0s linear 0s;
-		will-change: transform;
 	}
 
 	.project-cursor__label {
@@ -205,13 +204,15 @@ function listOrder(project: CollectionEntry<'projects'>) {
 		const workSection = document.getElementById('work');
 		if (!workSection) {
 			delete document.body.dataset.projectCursorInit;
-			document.documentElement.classList.remove('has-project-cursor');
+			document.getElementById('site-cursor')?.classList.remove('is-suppressed');
+			document.getElementById('site-cursor-sparks')?.classList.remove('is-suppressed');
 			return;
 		}
 
 		if (window.matchMedia('(max-width: 767px)').matches) {
 			delete document.body.dataset.projectCursorInit;
-			document.documentElement.classList.remove('has-project-cursor');
+			document.getElementById('site-cursor')?.classList.remove('is-suppressed');
+			document.getElementById('site-cursor-sparks')?.classList.remove('is-suppressed');
 			workSection.dataset.projectCursorReady = 'true';
 			return;
 		}
@@ -219,6 +220,8 @@ function listOrder(project: CollectionEntry<'projects'>) {
 		if (workSection.dataset.projectCursorReady === 'true') return;
 
 		const cursor = document.getElementById('project-cursor');
+		const siteCursor = document.getElementById('site-cursor');
+		const siteSparks = document.getElementById('site-cursor-sparks');
 		if (!cursor) return;
 
 		const cursorLabel = cursor.querySelector<HTMLElement>('[data-project-cursor-label]');
@@ -275,13 +278,11 @@ function listOrder(project: CollectionEntry<'projects'>) {
 				rafId = requestAnimationFrame(animateCursor);
 			} else {
 				rafId = 0;
-				cursor.style.willChange = '';
 			}
 		}
 
 		function startCursorAnimation() {
 			if (!rafId) {
-				cursor.style.willChange = 'transform';
 				rafId = requestAnimationFrame(animateCursor);
 			}
 		}
@@ -296,14 +297,16 @@ function listOrder(project: CollectionEntry<'projects'>) {
 			}
 			hovering = true;
 			cursor.classList.add('is-active');
-			document.documentElement.classList.add('has-project-cursor');
+			siteCursor?.classList.add('is-suppressed');
+			siteSparks?.classList.add('is-suppressed');
 			startCursorAnimation();
 		}
 
 		function hideCursor() {
 			hovering = false;
 			cursor.classList.remove('is-active');
-			document.documentElement.classList.remove('has-project-cursor');
+			siteCursor?.classList.remove('is-suppressed');
+			siteSparks?.classList.remove('is-suppressed');
 			startCursorAnimation();
 		}
 
