@@ -130,6 +130,7 @@ const titlesJson = JSON.stringify(titles);
 
 <style is:global>
 	.project-card__title {
+		overflow: hidden;
 		font-size: 1.2rem;
 		font-weight: 600;
 		line-height: 1.15;
@@ -143,12 +144,16 @@ const titlesJson = JSON.stringify(titles);
 
 	.project-card__title-mask {
 		display: grid;
+		width: 100%;
+		min-width: 0;
 		overflow: hidden;
 	}
 
 	.project-card__title-copy {
 		grid-area: 1 / 1;
-		white-space: normal;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 		line-height: 1.15;
 		transition: transform 300ms ease;
 	}
@@ -189,11 +194,36 @@ const titlesJson = JSON.stringify(titles);
 			if (!src) return;
 
 			canvas.dataset.riveInitialized = 'true';
-			const rive = new Rive({
+			let restarting = false;
+			let rive: Rive;
+
+			const loopCover = () => {
+				if (restarting || !rive) return;
+				restarting = true;
+
+				const animations = rive.animationNames;
+				if (animations.length > 0) {
+					rive.play(animations);
+				} else {
+					const stateMachine = rive.stateMachineNames[0];
+					rive.reset({
+						stateMachine,
+						autoplay: true,
+					});
+				}
+
+				requestAnimationFrame(() => {
+					restarting = false;
+				});
+			};
+
+			rive = new Rive({
 				src,
 				canvas,
-				autoplay: true,
+				autoplay: false,
 				layout: Layout.new({ fit: Fit.Cover, alignment: Alignment.Center }),
+				onLoad: loopCover,
+				onStop: loopCover,
 			});
 
 			const resizeCanvas = () => {

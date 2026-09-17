@@ -12,7 +12,6 @@ heroSubtitle: |-
 overviewLabel: 'Overview'
 overviewTitle: 'Moving national cargo with absolute clarity'
 overviewText: 'See More Logistics needed a visual identity that matched their physical presence on Panamanian roads. The local logistics market often relies on generic, literal imagery that fails to communicate modern reliability or professionalism. We built a functional brand system that positions them as an institutional authority, allowing regional business owners and government contractors to experience true operational confidence.'
-overviewGraphic: '/logos/see-more.svg'
 service: 'Brand Strategy, Visual Identity, Webflow Development'
 industry: 'Industrial Logistics'
 market: 'Panama'

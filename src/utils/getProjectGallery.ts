@@ -228,7 +228,7 @@ export function getSectionMedia(
 	coverFilename = 'cover.webp',
 	excludedFilenames: string[] = [],
 ): GalleryMediaItem[] {
-	if (group < 1 || group > 10) return [];
+	if (group < 1) return [];
 
 	const portfolioDir = join(process.cwd(), 'public', PROJECT_MEDIA_DIR, folderName);
 	const excluded = new Set([coverFilename, ...DEFAULT_EXCLUDED, ...excludedFilenames]);
