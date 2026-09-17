@@ -20,8 +20,9 @@ const label = `${title} — ${index + 1}`;
 				width="1600"
 				height="1000"
 				class="block h-auto w-full"
-				loading={index < 2 ? 'eager' : 'lazy'}
+				loading={index < 1 ? 'eager' : 'lazy'}
 				decoding="async"
+				sizes="(min-width: 1024px) 75vw, 100vw"
 			/>
 		</figure>
 	) : (

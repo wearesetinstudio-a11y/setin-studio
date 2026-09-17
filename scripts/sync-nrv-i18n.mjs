@@ -98,20 +98,18 @@ const md = `---
 title: NRV Control Systems
 client: ${JSON.stringify(en.client)}
 tags: ['UX/UI Design', 'SEO', 'Webflow']
-thumbnail: '/portfolio/nrv-web/cover.webp'
+thumbnail: '/portfolio/nrv-web/cover.opt.webp'
 folderName: 'nrv-web'
 order: 8
-heroImage: '/portfolio/nrv-web/bg.webp'
+heroImage: '/portfolio/nrv-web/bg.opt.webp'
 heroSubtitle: ${JSON.stringify(en.heroSubtitle)}
 overviewLabel: ${JSON.stringify(en.overviewLabel)}
 overviewTitle: ${JSON.stringify(en.overviewTitle)}
 overviewText: ${dumpText(en.overviewText, 2)}
-overviewGraphic: '/logos/nrv.svg'
 service: ${JSON.stringify(en.service)}
 industry: ${JSON.stringify(en.industry)}
 market: ${JSON.stringify(en.market)}
 year: ${year}
-logo: '/logos/nrv.svg'
 sections:
 ${dumpSections(en.sections, 2)}
 i18n:

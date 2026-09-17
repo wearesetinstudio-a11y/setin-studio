@@ -2,7 +2,7 @@ import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const MEDIA_EXTENSIONS = new Set(['.webp', '.mp4', '.webm']);
-const DEFAULT_EXCLUDED = new Set(['bg.webp']);
+const DEFAULT_EXCLUDED = new Set(['bg.webp', 'bg.opt.webp']);
 const PROJECT_MEDIA_DIR = 'portfolio';
 
 function isVideoExtension(extension: string): boolean {
@@ -64,6 +64,71 @@ function toMediaItem(folderName: string, filename: string, type: 'image' | 'vide
 	};
 }
 
+/** Prefer `1.2.webp` over `1_2.webp` when both exist. */
+function uniqueMediaFilenames(filenames: string[]): string[] {
+	const set = new Set(filenames);
+	return filenames.filter((name) => {
+		const underscored = name.match(/^(\d+)_(\d+)\.(webp|mp4|webm)$/i);
+		if (!underscored) return true;
+		const dotted = `${underscored[1]}.${underscored[2]}.${underscored[3]}`;
+		return !set.has(dotted);
+	});
+}
+
+function toBlockItem(file: ParsedMediaFile, folderName: string): GalleryMediaItem {
+	return toMediaItem(folderName, file.filename, file.type);
+}
+
+/**
+ * Right-column gallery rhythm:
+ * X.webp / X.1 / X.4 → full width
+ * X.2 + X.3 → side by side; if only one exists → full width
+ */
+function layoutGroup(
+	folderName: string,
+	group: number,
+	files: ParsedMediaFile[],
+): GalleryLayoutBlock[] {
+	const blocks: GalleryLayoutBlock[] = [];
+	const singles = files.filter((file) => file.part === null);
+	const byPart = new Map<number, ParsedMediaFile>();
+
+	for (const file of files) {
+		if (file.part != null) byPart.set(file.part, file);
+	}
+
+	for (const single of singles) {
+		blocks.push({ kind: 'full', group, item: toBlockItem(single, folderName) });
+	}
+
+	const part1 = byPart.get(1);
+	const part2 = byPart.get(2);
+	const part3 = byPart.get(3);
+	const part4 = byPart.get(4);
+
+	if (part1) {
+		blocks.push({ kind: 'full', group, item: toBlockItem(part1, folderName) });
+	}
+
+	if (part2 && part3) {
+		blocks.push({
+			kind: 'grid',
+			group,
+			items: [toBlockItem(part2, folderName), toBlockItem(part3, folderName)],
+		});
+	} else if (part2) {
+		blocks.push({ kind: 'full', group, item: toBlockItem(part2, folderName) });
+	} else if (part3) {
+		blocks.push({ kind: 'full', group, item: toBlockItem(part3, folderName) });
+	}
+
+	if (part4) {
+		blocks.push({ kind: 'full', group, item: toBlockItem(part4, folderName) });
+	}
+
+	return blocks;
+}
+
 export function getProjectGalleryFiles(
 	folderName: string,
 	coverFilename = 'cover.webp',
@@ -73,7 +138,7 @@ export function getProjectGalleryFiles(
 	const excluded = new Set([coverFilename, ...DEFAULT_EXCLUDED, ...excludedFilenames]);
 
 	try {
-		return readdirSync(portfolioDir)
+		return uniqueMediaFilenames(readdirSync(portfolioDir))
 			.filter((filename) => {
 				if (excluded.has(filename)) return false;
 				const extension = filename.slice(filename.lastIndexOf('.')).toLowerCase();
@@ -98,7 +163,7 @@ export function buildGalleryLayout(
 	const excluded = new Set([coverFilename, ...DEFAULT_EXCLUDED, ...excludedFilenames]);
 
 	try {
-		const parsedFiles = readdirSync(portfolioDir)
+		const parsedFiles = uniqueMediaFilenames(readdirSync(portfolioDir))
 			.map((filename) => {
 				if (excluded.has(filename)) return null;
 				const parsed = parseMediaFilename(filename);
@@ -129,31 +194,7 @@ export function buildGalleryLayout(
 
 		for (const group of [...groups.keys()].sort((a, b) => a - b)) {
 			const files = groups.get(group) ?? [];
-			const parts = files.filter((file) => file.part !== null);
-			const singles = files.filter((file) => file.part === null);
-
-			if (parts.length > 0) {
-				const items = [
-					...singles.map((single) => toMediaItem(folderName, single.filename, single.type)),
-					...parts.map((part) => toMediaItem(folderName, part.filename, part.type)),
-				];
-
-				layout.push({
-					kind: 'grid',
-					group,
-					items,
-					leadFull: singles.length > 0,
-				});
-				continue;
-			}
-
-			for (const single of singles) {
-				layout.push({
-					kind: 'full',
-					group,
-					item: toMediaItem(folderName, single.filename, single.type),
-				});
-			}
+			layout.push(...layoutGroup(folderName, group, files));
 		}
 
 		if (layout.length > 0) return layout;
@@ -193,7 +234,7 @@ export function getSectionMedia(
 	const excluded = new Set([coverFilename, ...DEFAULT_EXCLUDED, ...excludedFilenames]);
 
 	try {
-		const parsed = readdirSync(portfolioDir)
+		const parsed = uniqueMediaFilenames(readdirSync(portfolioDir))
 			.map((filename) => {
 				if (excluded.has(filename)) return null;
 				const match = parseMediaFilename(filename);

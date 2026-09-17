@@ -2,10 +2,10 @@
 title: NRV Control Systems
 client: "NRV Systems"
 tags: ['UX/UI Design', 'SEO', 'Webflow']
-thumbnail: '/portfolio/nrv-web/cover.webp'
+thumbnail: '/portfolio/nrv-web/cover.opt.webp'
 folderName: 'nrv-web'
 order: 8
-heroImage: '/portfolio/nrv-web/bg.webp'
+heroImage: '/portfolio/nrv-web/bg.opt.webp'
 heroSubtitle: "Web Platform for Control System Provider"
 overviewLabel: "Overview"
 overviewTitle: "Evolving the Brand Identity into a Functional Digital Platform"
@@ -13,12 +13,10 @@ overviewText: |-
   Our partnership with NRV Control Systems began with a complete rebranding initiative. As Panama’s leading provider of physical security, access control, and building automation, the company needed a visual identity that accurately represented its technical capabilities. While the new brand system established a strong foundation, their legacy website immediately emerged as a primary bottleneck.
   
   The existing site was outdated, visually disconnected from the new branding, and structured like an unorganized document repository. Rather than building confidence among corporate buyers, it created unnecessary friction during early-stage research. We set out to bridge this gap by creating a streamlined B2B web platform that translates brand authority into straightforward commercial engagement.
-overviewGraphic: '/logos/nrv.svg'
 service: "UX/UI Design, SEO Optimization, Webflow Development & CMS"
 industry: "Security & Control Technology"
 market: "Panama"
 year: 2026
-logo: '/logos/nrv.svg'
 sections:
   - label: "Audit & Research"
     title: "Uncovering Usability Bottlenecks Through Stakeholder Audits"
