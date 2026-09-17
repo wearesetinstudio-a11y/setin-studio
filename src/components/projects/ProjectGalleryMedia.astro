@@ -22,8 +22,17 @@ const label = `${title} — ${index + 1}`;
 				class="block h-auto w-full"
 				loading={index < 1 ? 'eager' : 'lazy'}
 				decoding="async"
-				sizes="(min-width: 1024px) 75vw, 100vw"
+				sizes="(min-width: 1024px) 70vw, 100vw"
 			/>
+		</figure>
+	) : item.type === 'rive' ? (
+		<figure class="project-gallery__item project-gallery__item--rive m-0 w-full">
+			<canvas
+				class="project-gallery__rive block h-auto w-full bg-white"
+				data-rive-cover={item.src}
+				data-rive-fit="contain"
+				aria-label={label}
+			></canvas>
 		</figure>
 	) : (
 		<figure class="project-gallery__item project-gallery__item--video m-0 w-full">
@@ -46,6 +55,11 @@ const label = `${title} — ${index + 1}`;
 }
 
 <style>
+	.project-gallery__rive {
+		aspect-ratio: 1980 / 476;
+		width: 100%;
+	}
+
 	.project-video-noise__layer {
 		position: absolute !important;
 		inset: 0 !important;
@@ -55,3 +69,10 @@ const label = `${title} — ${index + 1}`;
 		height: 100% !important;
 	}
 </style>
+
+<script>
+	import { initRiveCovers } from '../../scripts/initRiveCovers';
+
+	initRiveCovers();
+	document.addEventListener('astro:page-load', initRiveCovers);
+</script>

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import CookieBanner from '../components/CookieBanner.astro';
 import { ClientRouter } from 'astro:transitions';
 import {
 	absoluteUrl,
@@ -47,15 +48,26 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!-- Google tag (gtag.js) -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KWWVCQ97C" is:inline></script>
 		<script is:inline>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				window.dataLayer.push(arguments);
-			}
-			gtag('js', new Date());
-			gtag('config', 'G-9KWWVCQ97C');
+			(function () {
+				try {
+					if (localStorage.getItem('setin-cookie-consent') !== 'analytics') return;
+				} catch (e) {
+					return;
+				}
+				window.dataLayer = window.dataLayer || [];
+				function gtag() {
+					window.dataLayer.push(arguments);
+				}
+				window.gtag = gtag;
+				window.__setinGaLoaded = true;
+				gtag('js', new Date());
+				gtag('config', 'G-9KWWVCQ97C', { anonymize_ip: true });
+				var s = document.createElement('script');
+				s.async = true;
+				s.src = 'https://www.googletagmanager.com/gtag/js?id=G-9KWWVCQ97C';
+				document.head.appendChild(s);
+			})();
 		</script>
 		<meta name="description" content={description} />
 		<link rel="canonical" id="canonical-url" href={canonicalHref} />
@@ -238,6 +250,7 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		</div>
 
 		<slot />
+		<CookieBanner />
 
 		<div id="site-cursor" class="site-cursor" aria-hidden="true" transition:persist="site-cursor">
 			<span class="site-cursor__trail"></span>
@@ -252,17 +265,20 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 			import { initSiteCursor } from '../scripts/initSiteCursor.ts';
 			import { initI18n } from '../scripts/i18n.ts';
 			import { initSmoothScroll } from '../scripts/initSmoothScroll.ts';
+			import { initCookieConsent } from '../scripts/initCookieConsent.ts';
 
 			initSmoothScroll();
 			initPageTransitionOverlay();
 			initI18n();
 			initGlobalPreloader();
 			initSiteCursor();
+			initCookieConsent();
 			document.addEventListener('astro:page-load', () => {
 				initSmoothScroll();
 				initI18n();
 				initGlobalPreloader();
 				initSiteCursor();
+				initCookieConsent();
 			});
 		</script>
 	</body>

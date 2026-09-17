@@ -1,7 +1,7 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const MEDIA_EXTENSIONS = new Set(['.webp', '.mp4', '.webm']);
+const MEDIA_EXTENSIONS = new Set(['.webp', '.mp4', '.webm', '.riv']);
 const DEFAULT_EXCLUDED = new Set(['bg.webp', 'bg.opt.webp']);
 const PROJECT_MEDIA_DIR = 'portfolio';
 
@@ -9,9 +9,16 @@ function isVideoExtension(extension: string): boolean {
 	return extension === '.mp4' || extension === '.webm';
 }
 
+function mediaTypeFromExtension(extension: string): GalleryMediaItem['type'] {
+	if (extension === '.riv') return 'rive';
+	if (isVideoExtension(extension)) return 'video';
+	return 'image';
+}
+
 export type GalleryMediaItem =
 	| { type: 'image'; src: string; filename: string }
-	| { type: 'video'; src: string; filename: string };
+	| { type: 'video'; src: string; filename: string }
+	| { type: 'rive'; src: string; filename: string };
 
 export type GalleryLayoutBlock =
 	| { kind: 'full'; item: GalleryMediaItem; group: number }
@@ -22,7 +29,7 @@ type ParsedMediaFile = GalleryMediaItem & {
 	part: number | null;
 };
 
-const FILE_PATTERN = /^(\d+)(?:[._](\d+))?\.(webp|mp4|webm)$/i;
+const FILE_PATTERN = /^(\d+)(?:[._](\d+))?\.(webp|mp4|webm|riv)$/i;
 const MAX_SECTION_PARTS = 4;
 
 export function getCoverFilename(thumbnail: string): string {
@@ -45,7 +52,7 @@ function parseMediaFilename(filename: string): ParsedMediaFile | null {
 
 	const group = Number(match[1]);
 	const part = match[2] ? Number(match[2]) : null;
-	const mediaType = isVideoExtension(extension) ? 'video' : 'image';
+	const mediaType = mediaTypeFromExtension(extension);
 
 	return {
 		type: mediaType,
@@ -56,7 +63,11 @@ function parseMediaFilename(filename: string): ParsedMediaFile | null {
 	};
 }
 
-function toMediaItem(folderName: string, filename: string, type: 'image' | 'video'): GalleryMediaItem {
+function toMediaItem(
+	folderName: string,
+	filename: string,
+	type: GalleryMediaItem['type'],
+): GalleryMediaItem {
 	return {
 		type,
 		filename,
@@ -64,14 +75,20 @@ function toMediaItem(folderName: string, filename: string, type: 'image' | 'vide
 	};
 }
 
-/** Prefer `1.2.webp` over `1_2.webp` when both exist. */
+/** Prefer `1.2.webp` over `1_2.webp`, and `.riv` over raster/video for the same slot. */
 function uniqueMediaFilenames(filenames: string[]): string[] {
-	const set = new Set(filenames);
+	const set = new Set(filenames.map((name) => name.toLowerCase()));
 	return filenames.filter((name) => {
-		const underscored = name.match(/^(\d+)_(\d+)\.(webp|mp4|webm)$/i);
-		if (!underscored) return true;
-		const dotted = `${underscored[1]}.${underscored[2]}.${underscored[3]}`;
-		return !set.has(dotted);
+		const underscored = name.match(/^(\d+)_(\d+)\.(webp|mp4|webm|riv)$/i);
+		if (underscored) {
+			const dotted = `${underscored[1]}.${underscored[2]}.${underscored[3]}`.toLowerCase();
+			if (set.has(dotted)) return false;
+		}
+
+		const raster = name.match(/^(\d+(?:[._]\d+)?)\.(webp|mp4|webm)$/i);
+		if (raster && set.has(`${raster[1].replace('_', '.')}.riv`.toLowerCase())) return false;
+
+		return true;
 	});
 }
 
@@ -147,7 +164,7 @@ export function getProjectGalleryFiles(
 			.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
 			.map((filename) => {
 				const extension = filename.slice(filename.lastIndexOf('.')).toLowerCase();
-				return toMediaItem(folderName, filename, isVideoExtension(extension) ? 'video' : 'image');
+				return toMediaItem(folderName, filename, mediaTypeFromExtension(extension));
 			});
 	} catch {
 		return [];
@@ -173,7 +190,7 @@ export function buildGalleryLayout(
 				return {
 					...parsed,
 					src: `/${PROJECT_MEDIA_DIR}/${folderName}/${filename}`,
-					type: isVideoExtension(extension) ? ('video' as const) : ('image' as const),
+					type: mediaTypeFromExtension(extension),
 				};
 			})
 			.filter((file): file is ParsedMediaFile => file !== null)
@@ -245,7 +262,7 @@ export function getSectionMedia(
 				return {
 					...match,
 					src: `/${PROJECT_MEDIA_DIR}/${folderName}/${filename}`,
-					type: isVideoExtension(extension) ? ('video' as const) : ('image' as const),
+					type: mediaTypeFromExtension(extension),
 				};
 			})
 			.filter((file): file is ParsedMediaFile => file !== null)

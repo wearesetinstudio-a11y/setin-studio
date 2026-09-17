@@ -1,22 +1,21 @@
 <section id="about-hero" class="about-hero relative min-h-[68vh] overflow-hidden md:min-h-[96vh]">
-	<div id="about-hero-visual" class="about-hero-visual absolute inset-0 overflow-hidden">
-		<div
-			id="about-hero-parallax-layer"
-			class="about-hero-parallax__layer pointer-events-none absolute inset-x-0"
-		>
-			<picture>
-				<source srcset="/brothers-intro.webp" type="image/webp" />
-				<img
-					src="/brothers-intro.webp"
-					alt="The two founders of Setin Studio"
-					width="1920"
-					height="1080"
-					class="about-hero-parallax__image h-full w-full object-cover object-[center_22%] grayscale"
-					loading="eager"
-					decoding="async"
-				/>
-			</picture>
-		</div>
+	<div
+		id="about-hero-visual"
+		class="about-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100vh] w-full overflow-hidden bg-[#131415]"
+		aria-hidden="true"
+	>
+		<picture>
+			<source srcset="/brothers-intro.webp" type="image/webp" />
+			<img
+				src="/brothers-intro.webp"
+				alt="The two founders of Setin Studio"
+				width="1920"
+				height="1080"
+				class="about-hero-photo h-full w-full object-cover object-[center_22%] grayscale"
+				loading="eager"
+				decoding="async"
+			/>
+		</picture>
 
 		<canvas
 			id="about-hero-noise-filter"
@@ -43,15 +42,13 @@
 </section>
 
 <style is:global>
-	.about-hero-parallax__layer {
-		top: -4%;
-		height: 108%;
-		will-change: transform;
+	.about-hero-visual.is-hidden {
+		opacity: 0;
+		visibility: hidden;
 	}
 
-	.about-hero-parallax__image {
-		transform: scale(1.06);
-		transform-origin: center 22%;
+	.about-hero-photo {
+		transform: none;
 	}
 
 	.about-hero__title {
@@ -65,16 +62,8 @@
 	}
 
 	@media (max-width: 767px) {
-		.about-hero-parallax__layer {
-			top: 0;
-			height: 100%;
-		}
-
-		.about-hero-parallax__image {
-			object-fit: cover;
+		.about-hero-photo {
 			object-position: center 8%;
-			transform: scale(1);
-			transform-origin: center 8%;
 		}
 	}
 
@@ -106,44 +95,23 @@
 
 <script>
 	import { initCinemaPureNoise } from '../../scripts/initCinemaPureNoise.ts';
+	import { getLenis } from '../../scripts/initSmoothScroll.ts';
 	import { splitIntoRevealLines, waitForPageReveal } from '../../scripts/lineSlideUpReveal.ts';
 
-	function initAboutHeroParallax() {
+	function initAboutHeroVisual() {
+		const hero = document.getElementById('about-hero');
 		const visual = document.getElementById('about-hero-visual');
-		const layer = document.getElementById('about-hero-parallax-layer');
-		if (!visual || !layer || visual.dataset.parallaxInit === 'true') return;
-		const visualElement = visual;
-		const layerElement = layer;
+		if (!hero || !visual || hero.dataset.heroVisualInit === 'true') return;
 
-		visualElement.dataset.parallaxInit = 'true';
+		hero.dataset.heroVisualInit = 'true';
 
-		const PARALLAX_SPEED = 0.16;
-		const MAX_SHIFT_RATIO = 0.045;
+		const syncHeroVisual = () => {
+			visual.classList.toggle('is-hidden', hero.getBoundingClientRect().bottom <= 0);
+		};
 
-		function updateParallax() {
-			const containerHeight = visualElement.offsetHeight;
-			const maxShift = containerHeight * MAX_SHIFT_RATIO;
-			const scrollOffset = -visualElement.getBoundingClientRect().top;
-			const rawOffset = scrollOffset * PARALLAX_SPEED;
-			const offset = Math.max(-maxShift * 0.2, Math.min(maxShift * 0.55, rawOffset));
-
-			layerElement.style.transform = `translate3d(0, ${offset}px, 0)`;
-		}
-
-		let ticking = false;
-
-		function onScroll() {
-			if (ticking) return;
-			ticking = true;
-			requestAnimationFrame(() => {
-				updateParallax();
-				ticking = false;
-			});
-		}
-
-		updateParallax();
-		window.addEventListener('scroll', onScroll, { passive: true });
-		window.addEventListener('resize', updateParallax, { passive: true });
+		syncHeroVisual();
+		window.addEventListener('scroll', syncHeroVisual, { passive: true });
+		getLenis()?.on('scroll', syncHeroVisual);
 	}
 
 	function prepareAboutHeroCopy() {
@@ -187,9 +155,9 @@
 
 	function initAboutHero() {
 		if (!document.getElementById('about-hero')) return;
-		initAboutHeroParallax();
+		initAboutHeroVisual();
 		initAboutHeroReveal();
-		initCinemaPureNoise('about-hero-noise-filter', { observeElementId: 'about-hero-visual' });
+		initCinemaPureNoise('about-hero-noise-filter', { observeElementId: 'about-hero' });
 	}
 
 	document.addEventListener('astro:page-load', initAboutHero);

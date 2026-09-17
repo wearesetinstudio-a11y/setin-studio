@@ -319,21 +319,28 @@ const { projectCount, articleCount } = await getSiteCounts();
 			const lines = [...container.querySelectorAll<HTMLElement>('.hero-reveal-line')];
 			if (!lines.length) return;
 
-			const available = container.clientWidth;
+			const mask = lines[0]?.parentElement;
+			const available = mask?.clientWidth || container.clientWidth;
 			if (available <= 0) return;
 
-			let longest = 0;
-			for (const line of lines) {
-				longest = Math.max(longest, line.scrollWidth);
-			}
+			const longestWidth = () =>
+				lines.reduce((max, line) => Math.max(max, line.scrollWidth), 0);
+
+			let longest = longestWidth();
 			if (longest <= 0) return;
 
 			const computed = parseFloat(getComputedStyle(container).fontSize);
 			if (!computed) return;
 
-			// Scale so the longest fixed line fills the container edge-to-edge.
-			const next = computed * (available / longest);
-			container.style.fontSize = `${Math.max(1, next * 0.995)}px`;
+			let next = computed * (available / longest);
+			container.style.fontSize = `${Math.max(1, next)}px`;
+
+			for (let i = 0; i < 10; i++) {
+				longest = longestWidth();
+				if (longest <= available) break;
+				next *= available / longest;
+				container.style.fontSize = `${Math.max(1, next)}px`;
+			}
 		}
 
 		function splitHeroHeadlineLines(container: HTMLElement) {
@@ -677,7 +684,7 @@ const { projectCount, articleCount } = await getSiteCounts();
 			position: relative;
 			display: grid;
 			grid-template-columns: minmax(0, 1fr) 28rem;
-			column-gap: 4rem;
+			column-gap: 6rem;
 			align-items: start;
 			right: auto;
 			bottom: auto;
@@ -710,10 +717,17 @@ const { projectCount, articleCount } = await getSiteCounts();
 		}
 	}
 
+	@media (min-width: 1280px) {
+		.hero-section__pin {
+			column-gap: 8rem;
+		}
+	}
+
 	.hero-headline .hero-reveal-mask {
 		display: block;
 		overflow: hidden;
 		padding-top: 0.08em;
+		padding-right: 0.22em;
 	}
 
 	.hero-headline .hero-reveal-line {

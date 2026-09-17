@@ -1,0 +1,146 @@
+<aside
+	id="cookie-banner"
+	class="cookie-banner"
+	role="dialog"
+	aria-modal="false"
+	aria-hidden="true"
+	aria-labelledby="cookie-banner-title"
+	aria-describedby="cookie-banner-body"
+	data-i18n-aria="cookies.aria"
+	transition:persist="cookie-banner-v2"
+>
+	<div class="cookie-banner__copy">
+		<p id="cookie-banner-title" class="cookie-banner__title" data-i18n="cookies.title">Cookies, not myths</p>
+		<p id="cookie-banner-body" class="cookie-banner__body" data-i18n="cookies.body">
+			We don’t read tea leaves — just Google Analytics. No black magic, and no snooping on your private life.
+		</p>
+	</div>
+	<div class="cookie-banner__actions">
+		<button type="button" class="cookie-banner__action cookie-banner__action--accept" data-cookie-accept>
+			<span data-i18n="cookies.accept">Accept analytics</span>
+		</button>
+		<button type="button" class="cookie-banner__action cookie-banner__action--necessary" data-cookie-necessary>
+			<span data-i18n="cookies.necessary">Essential only</span>
+		</button>
+	</div>
+</aside>
+
+<style is:global>
+	.cookie-banner {
+		position: fixed;
+		z-index: 42;
+		right: var(--page-gutter);
+		bottom: max(var(--page-gutter), env(safe-area-inset-bottom, 0px));
+		left: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		width: min(382px, calc(100% - (var(--page-gutter) * 2)));
+		padding: 24px;
+		background: #1d1f20;
+		border: 1px solid #373737;
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		transform: translate3d(0, calc(100% + 32px), 0);
+		transition:
+			opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+			transform 900ms cubic-bezier(0.16, 1, 0.3, 1),
+			visibility 0s linear 900ms;
+	}
+
+	.cookie-banner.is-visible {
+		opacity: 1;
+		visibility: visible;
+		pointer-events: auto;
+		transform: translate3d(0, 0, 0);
+		transition:
+			opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+			transform 900ms cubic-bezier(0.16, 1, 0.3, 1),
+			visibility 0s linear 0s;
+	}
+
+	@media (max-width: 1023px) {
+		body:has([data-project-sidebar-mobile]) .cookie-banner {
+			bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+		}
+	}
+
+	body.mobile-nav-open .cookie-banner {
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	.cookie-banner__copy {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		width: 100%;
+		color: #ffffff;
+	}
+
+	.cookie-banner__title {
+		margin: 0;
+		font-size: 16px;
+		font-weight: 600;
+		line-height: normal;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.cookie-banner__body {
+		margin: 0;
+		font-size: 14px;
+		font-weight: 400;
+		line-height: normal;
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.cookie-banner__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.cookie-banner__action {
+		padding: 0;
+		border: 0;
+		background: none;
+		font-family: inherit;
+		font-size: 14px;
+		font-weight: 700;
+		line-height: normal;
+		text-transform: uppercase;
+		white-space: nowrap;
+		transition: opacity 200ms ease;
+	}
+
+	.cookie-banner__action:hover,
+	.cookie-banner__action:focus-visible {
+		opacity: 0.72;
+	}
+
+	.cookie-banner__action--accept {
+		color: #ffffff;
+		text-decoration: underline;
+		text-underline-offset: 0.12em;
+		text-underline-position: from-font;
+	}
+
+	.cookie-banner__action--necessary {
+		color: #bababa;
+		text-decoration: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cookie-banner,
+		.cookie-banner.is-visible {
+			transition: none;
+			transform: none;
+		}
+	}
+</style>

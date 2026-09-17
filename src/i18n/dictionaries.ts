@@ -105,6 +105,13 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'aboutPage.chrisBio': 'I have spent the last 5 years working with brands from different corners of the world, like Panama, Spain, and Poland. My experience ranges from designing visual identities for banks to building modern apps for tech startups. I believe that design is not just about colors; it is about making your business trustworthy and easy for your customers to understand.',
 		'aboutPage.kubaRole': 'Lead Developer',
 		'aboutPage.kubaBio': 'With over 10 years in software development, I have seen the web change many times. I have worked with international companies and individual clients from the US and Europe. My job is to make sure that the engine of your website is perfect. I focus on clean code and performance, so your site stays fast and reliable, no matter how much your business grows.',
+
+		'cookies.aria': 'Cookie consent',
+		'cookies.title': 'Cookies, not myths',
+		'cookies.body':
+			'We don’t read tea leaves — just Google Analytics. No black magic, and no snooping on your private life.',
+		'cookies.accept': 'Accept analytics',
+		'cookies.necessary': 'Essential only',
 	},
 	pl: {
 		'nav.projects': 'Projekty',
@@ -205,6 +212,13 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'aboutPage.chrisBio': 'Od 5 lat pracuję z markami z różnych zakątków świata, między innymi z Panamy, Hiszpanii i Polski. Moje doświadczenie obejmuje zarówno projektowanie identyfikacji wizualnych dla banków, jak i budowanie nowoczesnych aplikacji dla startupów technologicznych. Wierzę, że design to nie tylko kolory, ale też budowanie zaufania do firmy i ułatwianie jej zrozumienia przez klientów.',
 		'aboutPage.kubaRole': 'Lead developer',
 		'aboutPage.kubaBio': 'Od ponad 10 lat pracuję w branży tworzenia oprogramowania i obserwuję, jak zmienia się web. Pracowałem z międzynarodowymi firmami i indywidualnymi klientami z USA oraz Europy. Dbam o to, by techniczne zaplecze Twojej strony działało perfekcyjnie. Stawiam na czysty kod i wydajność, dzięki czemu strona pozostaje szybka i niezawodna niezależnie od skali rozwoju firmy.',
+
+		'cookies.aria': 'Zgoda na pliki cookies',
+		'cookies.title': 'Cookies, nie mity',
+		'cookies.body':
+			'Nie czytamy z fusów, tylko z Google Analytics. Bez czarnej magii i śledzenia Twoich prywatnych spraw.',
+		'cookies.accept': 'Akceptuję analitykę',
+		'cookies.necessary': 'Tylko niezbędne',
 	},
 	es: {
 		'nav.projects': 'Proyectos',
@@ -305,6 +319,13 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'aboutPage.chrisBio': 'Durante los últimos 5 años he trabajado con marcas de distintos rincones del mundo, como Panamá, España y Polonia. Mi experiencia abarca desde diseñar identidades visuales para bancos hasta crear aplicaciones modernas para startups tecnológicas. Creo que el diseño no consiste solo en colores, sino en hacer que tu negocio resulte confiable y fácil de entender para tus clientes.',
 		'aboutPage.kubaRole': 'Desarrollador principal',
 		'aboutPage.kubaBio': 'Con más de 10 años en el desarrollo de software, he visto cambiar la web muchas veces. He trabajado con empresas internacionales y clientes individuales de Estados Unidos y Europa. Mi trabajo consiste en asegurar que el motor de tu sitio web sea perfecto. Me enfoco en código limpio y rendimiento para que tu sitio siga siendo rápido y confiable a medida que crece tu negocio.',
+
+		'cookies.aria': 'Consentimiento de cookies',
+		'cookies.title': 'Cookies, no mitos',
+		'cookies.body':
+			'No leemos el poso del café, solo Google Analytics. Sin magia negra y sin espiar tu vida privada.',
+		'cookies.accept': 'Acepto analítica',
+		'cookies.necessary': 'Solo esenciales',
 	},
 };
 

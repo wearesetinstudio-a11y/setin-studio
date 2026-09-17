@@ -185,61 +185,7 @@ const titlesJson = JSON.stringify(titles);
 </style>
 
 <script>
-	import { Alignment, Fit, Layout, Rive } from '@rive-app/canvas';
-
-	function initRiveCovers() {
-		document.querySelectorAll<HTMLCanvasElement>('[data-rive-cover]').forEach((canvas) => {
-			if (canvas.dataset.riveInitialized === 'true') return;
-			const src = canvas.dataset.riveCover;
-			if (!src) return;
-
-			canvas.dataset.riveInitialized = 'true';
-			let restarting = false;
-			let rive: Rive;
-
-			const loopCover = () => {
-				if (restarting || !rive) return;
-				restarting = true;
-
-				const animations = rive.animationNames;
-				if (animations.length > 0) {
-					rive.play(animations);
-				} else {
-					const stateMachine = rive.stateMachineNames[0];
-					rive.reset({
-						stateMachine,
-						autoplay: true,
-					});
-				}
-
-				requestAnimationFrame(() => {
-					restarting = false;
-				});
-			};
-
-			rive = new Rive({
-				src,
-				canvas,
-				autoplay: false,
-				layout: Layout.new({ fit: Fit.Cover, alignment: Alignment.Center }),
-				onLoad: loopCover,
-				onStop: loopCover,
-			});
-
-			const resizeCanvas = () => {
-				const rect = canvas.getBoundingClientRect();
-				const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-				if (!rect.width || !rect.height) return;
-
-				canvas.width = Math.round(rect.width * pixelRatio);
-				canvas.height = Math.round(rect.height * pixelRatio);
-				rive.resizeDrawingSurfaceToCanvas();
-			};
-
-			resizeCanvas();
-			new ResizeObserver(resizeCanvas).observe(canvas);
-		});
-	}
+	import { initRiveCovers } from '../scripts/initRiveCovers';
 
 	initRiveCovers();
 	document.addEventListener('astro:page-load', initRiveCovers);
