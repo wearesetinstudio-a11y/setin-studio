@@ -83,6 +83,7 @@ function buildLocale(lang) {
 		industry: get('Meta', 'Branża / Industry / Industria', lang),
 		market: get('Meta', 'Rynek / Market / Mercado', lang),
 		year: get('Meta', 'Rok / Year / Año', lang),
+		liveUrl: get('Meta', 'Live', lang) || get('Meta', 'Live / URL', lang),
 		overviewLabel: get('Section 1', 'Label', lang),
 		overviewTitle: get('Section 1', 'Title', lang),
 		overviewText: get('Section 1', 'Description', lang),
@@ -111,7 +112,7 @@ service: ${JSON.stringify(en.service)}
 industry: ${JSON.stringify(en.industry)}
 market: ${JSON.stringify(en.market)}
 year: ${year}
-sections:
+${en.liveUrl ? `liveUrl: ${JSON.stringify(en.liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, ''))}\n` : ''}sections:
 ${dumpSections(en.sections, 2)}
 i18n:
   pl:

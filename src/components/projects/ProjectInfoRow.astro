@@ -42,7 +42,12 @@ const valueClass =
 			isLink ? (
 				<a
 					href={value.startsWith('http') ? value : `https://${value}`}
-					class="underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white"
+					class:list={[
+						'underline underline-offset-4 transition-colors',
+						theme === 'dark'
+							? 'decoration-white/30 hover:decoration-white'
+							: 'decoration-black/30 hover:decoration-black',
+					]}
 					target="_blank"
 					rel="noreferrer"
 					data-project-field={fieldKey}

@@ -38,6 +38,7 @@ const rows = [
 	{ block: 'Meta', field: 'Branża / Industry / Industria', notes: '' },
 	{ block: 'Meta', field: 'Rynek / Market / Mercado', notes: '' },
 	{ block: 'Meta', field: 'Rok / Year / Año', notes: 'np. 2024' },
+	{ block: 'Meta', field: 'Live', notes: 'Adres live, np. nrvsystems.com (bez http). Puste = ukryj wiersz na stronie.' },
 ];
 
 for (let i = 1; i <= 10; i++) {
@@ -95,7 +96,7 @@ info.addRow(['How to fill']).font = { bold: true };
 	'3. Label = sidebar name (e.g. OVERVIEW, WYZWANIA, RESULTS).',
 	'4. Title = section heading. Description = body copy.',
 	'5. Hero Title = project hero headline.',
-	'6. Meta: Services, Industry, Market, Year.',
+	'6. Meta: Services, Industry, Market, Year, Live (adres strony, ten sam we wszystkich językach).',
 	'7. One sheet = one project. Duplicate "Project translations" for more projects.',
 ].forEach((text) => info.addRow([text]));
 

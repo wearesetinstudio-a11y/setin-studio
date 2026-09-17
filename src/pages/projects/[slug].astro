@@ -110,7 +110,7 @@ const infoRows = [
 		: null,
 	market ? { label: 'Market', value: market, labelKey: 'project.meta.market', fieldKey: 'market' } : null,
 	year ? { label: 'Year', value: String(year), labelKey: 'project.meta.year' } : null,
-	liveUrl ? { label: 'Live', value: liveUrl, isLink: true, labelKey: 'project.meta.live' } : null,
+	liveUrl ? { label: 'Live', value: liveUrl, isLink: true, labelKey: 'project.meta.live', fieldKey: 'liveUrl' } : null,
 ].filter(
 	(
 		row,

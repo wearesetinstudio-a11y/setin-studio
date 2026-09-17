@@ -17,6 +17,7 @@ service: "UX/UI Design, SEO Optimization, Webflow Development & CMS"
 industry: "Security & Control Technology"
 market: "Panama"
 year: 2026
+liveUrl: 'nrvsystems.com'
 sections:
   - label: "Audit & Research"
     title: "Uncovering Usability Bottlenecks Through Stakeholder Audits"
