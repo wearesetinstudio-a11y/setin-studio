@@ -4,7 +4,7 @@ const VELOCITY_SMOOTH = 0.22;
 const MIN_SPEED = 0.15;
 const MAX_SPEED = 42;
 
-const SPARK_POOL = 28;
+const SPARK_POOL = 12;
 const SPARK_SPAWN_MIN_MS = 48;
 const SPARK_SPAWN_MAX_MS = 110;
 const SPARK_MIN_INTENSITY = 0.12;
@@ -246,7 +246,7 @@ export function initSiteCursor() {
 			Math.abs(coreX - trailX) < 0.2 &&
 			motion < MIN_SPEED;
 
-		if (!settled || visible || hasAliveSparks) {
+		if (!settled || hasAliveSparks) {
 			rafId = requestAnimationFrame(render);
 		} else {
 			rafId = 0;

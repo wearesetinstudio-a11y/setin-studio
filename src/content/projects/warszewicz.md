@@ -5,7 +5,7 @@ tags: ['Video Production', 'Motion Design', 'AI Art Direction']
 thumbnail: '/portfolio/warszewicz/cover.webp'
 folderName: 'warszewicz'
 order: 1
-heroImage: '/portfolio/warszewicz/bg.webp'
+heroImage: '/portfolio/warszewicz/bg.opt.webp'
 heroSubtitle: "The Polish explorer who cataloged Panama's national symbol"
 overviewLabel: "Overview"
 overviewTitle: "A short-form story of a Polish botanist connecting two distant worlds"

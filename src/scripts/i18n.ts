@@ -162,6 +162,33 @@ export function applyTranslations(locale: Locale = getCurrentLocale()) {
 	rewriteLocaleLinks(locale);
 	syncSpanishHeadMeta(locale);
 
+	document.querySelectorAll<HTMLElement>('[data-project-titles]').forEach((card) => {
+		let titles: Partial<Record<Locale, string>> = {};
+		try {
+			titles = JSON.parse(card.dataset.projectTitles || '{}') as Partial<Record<Locale, string>>;
+		} catch {
+			return;
+		}
+
+		const next = (titles[locale] || titles.en || '').trim();
+		if (!next) return;
+
+		const display = next.toUpperCase();
+		card.querySelectorAll('[data-project-title-text]').forEach((node) => {
+			node.textContent = display;
+		});
+
+		const mediaLabel = card.querySelector<HTMLElement>('img[alt], canvas[aria-label]');
+		if (mediaLabel) {
+			if (mediaLabel instanceof HTMLImageElement) mediaLabel.alt = next;
+			else mediaLabel.setAttribute('aria-label', next);
+		}
+
+		if (card.dataset.comingSoon === 'true') {
+			card.setAttribute('aria-label', `${next} — ${t(locale, 'projects.soon')}`);
+		}
+	});
+
 	document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((element) => {
 		const key = element.dataset.i18n;
 		if (!key) return;

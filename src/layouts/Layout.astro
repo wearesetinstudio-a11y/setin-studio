@@ -438,38 +438,25 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 
 	.noise-overlay {
 		position: fixed;
-		top: -50%;
-		left: -50%;
-		right: -50%;
-		bottom: -50%;
-		width: 200%;
-		height: 200%;
+		inset: 0;
+		width: 100%;
+		height: 100%;
 		pointer-events: none;
+		contain: strict;
 	}
 
-	/* Gruba ziarnistość — efekt śniegu na starym TV */
+	/* Pre-rendered grain tile — SVG feTurbulence was too expensive site-wide */
 	.noise-overlay--coarse {
 		z-index: 10;
-		background: transparent
-			url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
-			repeat 0 0;
+		background: transparent url('/noise-grain.webp') repeat 0 0;
 		background-size: 180px 180px;
-		opacity: 0.1;
-		mix-blend-mode: overlay;
+		opacity: 0.09;
 	}
 
-	/* Drobniejszy szum — gęsta taśma filmowa */
 	.noise-overlay--fine {
-		z-index: 11;
-		background: transparent
-			url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
-			repeat 0 0;
-		background-size: 128px 128px;
-		opacity: 0.07;
-		mix-blend-mode: soft-light;
+		display: none;
 	}
 
-	/* Poziome linie scanline — charakterystyczny wygląd CRT */
 	.noise-scanlines {
 		position: fixed;
 		inset: 0;
@@ -482,22 +469,18 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 			transparent 1px,
 			transparent 3px
 		);
-		opacity: 0.35;
-		mix-blend-mode: multiply;
+		opacity: 0.18;
+		contain: strict;
 	}
 
 	@media (max-width: 767px) {
 		.noise-overlay--coarse {
-			opacity: 0.07;
+			opacity: 0.06;
 			background-size: 220px 220px;
 		}
 
-		.noise-overlay--fine {
-			display: none;
-		}
-
 		.noise-scanlines {
-			opacity: 0.2;
+			opacity: 0.12;
 		}
 	}
 
@@ -525,8 +508,8 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 	}
 
 	html.has-site-cursor,
-	html.has-site-cursor * {
-		cursor: none !important;
+	html.has-site-cursor body {
+		cursor: none;
 	}
 
 	html.has-site-cursor input,

@@ -105,6 +105,10 @@ export function applyProjectCopy(locale: Locale) {
 		copy.sections = bundle[locale]?.sections ?? bundle.en?.sections;
 	}
 
+	if (typeof copy.title === 'string' && copy.title.trim()) {
+		document.title = `${copy.title} — Setin Studio`;
+	}
+
 	const hero = document.querySelector<HTMLElement>('[data-project-hero-headline]');
 	if (hero && typeof copy.heroSubtitle === 'string') {
 		hero.dataset.rawText = copy.heroSubtitle;

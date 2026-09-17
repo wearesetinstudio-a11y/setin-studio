@@ -168,7 +168,7 @@ export function initSmoothScroll() {
 
 	lenis = new Lenis({
 		autoRaf: true,
-		lerp: 0.075,
+		lerp: 0.16,
 		smoothWheel: true,
 		anchors: {
 			offset: getScrollOffset(),

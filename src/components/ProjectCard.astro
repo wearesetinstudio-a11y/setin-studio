@@ -8,13 +8,17 @@ interface Props {
 
 const { project } = Astro.props;
 const { title, thumbnail, video, comingSoon = false } = project.data;
+const titles = {
+	en: title,
+	pl: project.data.i18n?.pl?.title || title,
+	es: project.data.i18n?.es?.title || title,
+};
 const label = title.toUpperCase();
 const thumbnailSrc = withPublicAssetVersion(thumbnail);
 const videoSrc = video ? withPublicAssetVersion(video) : '';
 const isRiveCover = thumbnail.toLowerCase().endsWith('.riv');
-const titleLineClass =
-	'flex h-[1.5em] items-center leading-none text-[1.2rem] font-semibold uppercase tracking-[0.02em] text-black md:text-[1.4rem]';
 const cardClass = 'project-card project-card__cursor-target group flex h-full flex-col';
+const titlesJson = JSON.stringify(titles);
 ---
 
 {
@@ -23,6 +27,7 @@ const cardClass = 'project-card project-card__cursor-target group flex h-full fl
 			class={cardClass}
 			data-coming-soon="true"
 			data-cursor-i18n="projects.soon"
+			data-project-titles={titlesJson}
 			role="group"
 			aria-label={`${title} — coming soon`}
 		>
@@ -56,19 +61,22 @@ const cardClass = 'project-card project-card__cursor-target group flex h-full fl
 				)}
 			</div>
 
-			<div class="project-card__meta mt-5 flex items-center justify-between gap-4">
-				<h3 class="project-card__title min-w-0 text-[1.2rem] font-semibold uppercase leading-none tracking-[0.02em] text-black md:text-[1.4rem]">
-					<span class="flex h-[1.5em] flex-col overflow-hidden">
-						<span class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out">
-							<span class={titleLineClass}>{label}</span>
-							<span class={titleLineClass}>{label}</span>
-						</span>
+			<div class="project-card__meta mt-5 flex items-start justify-between gap-4">
+				<h3 class="project-card__title min-w-0 flex-1 text-[1.2rem] font-semibold uppercase tracking-[0.02em] text-black md:text-[1.4rem]">
+					<span class="project-card__title-mask">
+						<span class="project-card__title-copy" data-project-title-text>{label}</span>
+						<span class="project-card__title-copy" data-project-title-text aria-hidden="true">{label}</span>
 					</span>
 				</h3>
 			</div>
 		</div>
 	) : (
-		<a href={`/projects/${project.id}`} class={cardClass} data-cursor-i18n="projects.view">
+		<a
+			href={`/projects/${project.id}`}
+			class={cardClass}
+			data-cursor-i18n="projects.view"
+			data-project-titles={titlesJson}
+		>
 			<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
 				{isRiveCover ? (
 					<canvas
@@ -99,13 +107,11 @@ const cardClass = 'project-card project-card__cursor-target group flex h-full fl
 				)}
 			</div>
 
-			<div class="project-card__meta mt-5 flex items-center justify-between gap-4">
-				<h3 class="project-card__title min-w-0 text-[1.2rem] font-semibold uppercase leading-none tracking-[0.02em] text-black md:text-[1.4rem]">
-					<span class="flex h-[1.5em] flex-col overflow-hidden">
-						<span class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out">
-							<span class={titleLineClass}>{label}</span>
-							<span class={titleLineClass}>{label}</span>
-						</span>
+			<div class="project-card__meta mt-5 flex items-start justify-between gap-4">
+				<h3 class="project-card__title min-w-0 flex-1 text-[1.2rem] font-semibold uppercase tracking-[0.02em] text-black md:text-[1.4rem]">
+					<span class="project-card__title-mask">
+						<span class="project-card__title-copy" data-project-title-text>{label}</span>
+						<span class="project-card__title-copy" data-project-title-text aria-hidden="true">{label}</span>
 					</span>
 				</h3>
 
@@ -114,7 +120,7 @@ const cardClass = 'project-card project-card__cursor-target group flex h-full fl
 					alt=""
 					width="20"
 					height="16"
-					class="project-card__arrow w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+					class="project-card__arrow mt-[0.15em] w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
 					aria-hidden="true"
 				/>
 			</div>
@@ -126,12 +132,41 @@ const cardClass = 'project-card project-card__cursor-target group flex h-full fl
 	.project-card__title {
 		font-size: 1.2rem;
 		font-weight: 600;
+		line-height: 1.15;
 	}
 
 	@media (min-width: 768px) {
 		.project-card__title {
 			font-size: 1.4rem;
 		}
+	}
+
+	.project-card__title-mask {
+		display: grid;
+		overflow: hidden;
+	}
+
+	.project-card__title-copy {
+		grid-area: 1 / 1;
+		white-space: normal;
+		line-height: 1.15;
+		transition: transform 300ms ease;
+	}
+
+	.project-card__title-copy:last-child {
+		transform: translateY(110%);
+	}
+
+	.project-card:hover .project-card__title-copy:first-child {
+		transform: translateY(-110%);
+		transition-duration: 450ms;
+		transition-timing-function: ease-out;
+	}
+
+	.project-card:hover .project-card__title-copy:last-child {
+		transform: translateY(0);
+		transition-duration: 450ms;
+		transition-timing-function: ease-out;
 	}
 
 	.project-card[data-coming-soon='true'] {

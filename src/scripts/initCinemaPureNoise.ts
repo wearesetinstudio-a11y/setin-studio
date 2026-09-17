@@ -28,13 +28,13 @@ export function initCinemaPureNoise(
 	if (!ctx || !container) return null;
 
 	const isMobile = window.matchMedia('(max-width: 767px)').matches;
-	const NOISE_DENSITY = options.density ?? (isMobile ? 0.034 : 0.052);
+	const NOISE_DENSITY = options.density ?? (isMobile ? 0.022 : 0.032);
 	const GRAIN_SIZE = options.grainSize ?? (isMobile ? 0.65 : 0.75);
-	const BASE_OPACITY = options.baseOpacity ?? (isMobile ? 0.2 : 0.17);
-	const MAX_NOISE_WIDTH = isMobile ? 640 : 1100;
-	const MAX_NOISE_HEIGHT = isMobile ? 420 : 700;
-	const TOTAL_BUFFERS = isMobile ? 4 : 6;
-	const FRAME_INTERVAL = isMobile ? 180 : 140;
+	const BASE_OPACITY = options.baseOpacity ?? (isMobile ? 0.16 : 0.14);
+	const MAX_NOISE_WIDTH = isMobile ? 480 : 800;
+	const MAX_NOISE_HEIGHT = isMobile ? 320 : 500;
+	const TOTAL_BUFFERS = isMobile ? 3 : 4;
+	const FRAME_INTERVAL = isMobile ? 240 : 200;
 
 	let dpr = window.devicePixelRatio || 1;
 	let noiseBuffers: HTMLCanvasElement[] = [];

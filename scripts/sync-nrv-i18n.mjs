@@ -76,6 +76,7 @@ function buildLocale(lang) {
 	}
 
 	return {
+		title: get('Project', 'Project name', lang) || get('Hero', 'Hero Title', lang),
 		client: get('Hero', 'Klient / Client / Cliente', lang),
 		heroSubtitle: get('Hero', 'Hero Title', lang),
 		service: get('Meta', 'Zakres / Services / Servicios', lang),
@@ -95,7 +96,7 @@ const es = buildLocale('es');
 const year = Number.parseInt(en.year, 10) || 2026;
 
 const md = `---
-title: NRV Control Systems
+title: ${JSON.stringify(en.title)}
 client: ${JSON.stringify(en.client)}
 tags: ['UX/UI Design', 'SEO', 'Webflow']
 thumbnail: '/portfolio/nrv-web/cover.opt.webp'
@@ -114,6 +115,7 @@ sections:
 ${dumpSections(en.sections, 2)}
 i18n:
   pl:
+    title: ${JSON.stringify(pl.title)}
     client: ${JSON.stringify(pl.client)}
     heroSubtitle: ${JSON.stringify(pl.heroSubtitle)}
     service: ${JSON.stringify(pl.service)}
@@ -125,6 +127,7 @@ i18n:
     sections:
 ${dumpSections(pl.sections, 6)}
   es:
+    title: ${JSON.stringify(es.title)}
     client: ${JSON.stringify(es.client)}
     heroSubtitle: ${JSON.stringify(es.heroSubtitle)}
     service: ${JSON.stringify(es.service)}

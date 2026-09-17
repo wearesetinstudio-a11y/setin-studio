@@ -1,5 +1,5 @@
 ---
-title: NRV Control Systems
+title: Web Platform for Control System Provider
 client: "NRV Systems"
 tags: ['UX/UI Design', 'SEO', 'Webflow']
 thumbnail: '/portfolio/nrv-web/cover.opt.webp'
@@ -68,6 +68,7 @@ sections:
       Combining a user-validated product taxonomy, a desktop-first layout with fixed contact triggers, and a targeted local SEO strategy transformed the website into a functional sales tool. By removing obstacles between technical evaluation and sales outreach, NRV achieved a substantial increase in qualified B2B quote requests across the region.
 i18n:
   pl:
+    title: "Platforma internetowa dla dostawcy systemów kontroli i bezpieczeństwa"
     client: "NRV Systems"
     heroSubtitle: "Platforma internetowa dla dostawcy systemów kontroli i bezpieczeństwa"
     service: "UX/UI Design, SEO Optimization, Webflow Development & CMS"
@@ -129,6 +130,7 @@ i18n:
           
           Nowa taksonomia produktów oparta na badaniach z użytkownikami, dopracowana strona produktowa z przytwierdzonym punktem kontaktu oraz uporządkowane pozycjonowanie zmieniły serwis w skuteczne narzędzie sprzedażowe. Skrócona droga od analizy parametrów do wysłania formularza przełożyła się na wyraźny wzrost liczby wartościowych zapytań ofertowych od lokalnych firm i inwestorów.
   es:
+    title: "Plataforma web para proveedor de sistemas de control y seguridad en Panamá"
     client: "NRV Systems"
     heroSubtitle: "Plataforma web para proveedor de sistemas de control y seguridad en Panamá"
     service: "Diseño UX/UI, Desarrollo en Webflow y CMS, Optimización SEO"
