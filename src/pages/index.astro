@@ -10,9 +10,10 @@ import ArticlesSection from '../components/ArticlesSection.astro';
 import ContactSection from '../components/ContactSection.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
+import { sortProjects } from '../utils/sortProjects.ts';
 
 const allProjects = await getCollection('projects');
-const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
+const projects = sortProjects(allProjects);
 const { projectCount, articleCount } = await getSiteCounts();
 ---
 

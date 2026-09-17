@@ -1,17 +1,17 @@
 <section id="about-hero" class="about-hero relative min-h-[68vh] overflow-hidden md:min-h-[96vh]">
 	<div
 		id="about-hero-visual"
-		class="about-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100vh] w-full overflow-hidden bg-[#131415]"
+		class="about-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 w-full overflow-hidden bg-[#131415]"
 		aria-hidden="true"
 	>
-		<picture>
+		<picture class="absolute inset-0">
 			<source srcset="/brothers-intro.webp" type="image/webp" />
 			<img
 				src="/brothers-intro.webp"
 				alt="The two founders of Setin Studio"
-				width="1920"
-				height="1080"
-				class="about-hero-photo h-full w-full object-cover object-[center_22%] grayscale"
+				width="4320"
+				height="1896"
+				class="about-hero-photo h-full w-full grayscale"
 				loading="eager"
 				decoding="async"
 			/>
@@ -29,7 +29,7 @@
 		></div>
 	</div>
 
-	<div class="relative z-10 flex min-h-[68vh] items-end px-[var(--page-gutter)] pb-14 pt-28 md:min-h-[96vh] md:pb-16">
+	<div class="about-hero__copy relative z-10 flex min-h-[68vh] items-end px-[var(--page-gutter)] pb-14 pt-28 md:min-h-[96vh] md:pb-16">
 		<h1
 			id="hero-headline"
 			class="about-hero__title about-hero-headline max-w-4xl uppercase text-setin-fg"
@@ -47,8 +47,15 @@
 		visibility: hidden;
 	}
 
+	.about-hero-visual {
+		height: 100vh;
+		height: 100svh;
+	}
+
 	.about-hero-photo {
 		transform: none;
+		object-fit: cover;
+		object-position: center 22%;
 	}
 
 	.about-hero__title {
@@ -62,8 +69,35 @@
 	}
 
 	@media (max-width: 767px) {
+		.about-hero {
+			min-height: 52svh;
+		}
+
+		.about-hero-visual,
+		.about-hero__copy {
+			height: 52svh;
+			min-height: 52svh;
+		}
+
 		.about-hero-photo {
-			object-position: center 8%;
+			object-fit: cover;
+			object-position: center 15%;
+		}
+	}
+
+	@media (max-width: 767px) and (orientation: landscape) {
+		.about-hero {
+			min-height: 100svh;
+		}
+
+		.about-hero-visual,
+		.about-hero__copy {
+			height: 100svh;
+			min-height: 100svh;
+		}
+
+		.about-hero-photo {
+			object-position: center center;
 		}
 	}
 

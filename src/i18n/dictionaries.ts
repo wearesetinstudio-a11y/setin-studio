@@ -47,6 +47,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'projects.seeAll': 'More projects',
 		'projects.view': 'view',
 		'projects.soon': 'soon',
+		'projects.comingSoon': 'Coming soon',
 
 		'about.eyebrow': 'Our story',
 		'about.intro':
@@ -109,7 +110,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'cookies.aria': 'Cookie consent',
 		'cookies.title': 'Cookies, not myths',
 		'cookies.body':
-			"We don't read tea leaves, we use Google Analytics. No dark magic, no tracking your personal business – just clean, analytical insight.",
+			"We don't read tea leaves, we use Google Analytics. No dark magic, no tracking your personal business.",
 		'cookies.accept': 'Accept analytics',
 		'cookies.necessary': 'Essential only',
 	},
@@ -154,6 +155,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'projects.seeAll': 'Więcej projektów',
 		'projects.view': 'zobacz',
 		'projects.soon': 'wkrótce',
+		'projects.comingSoon': 'Wkrótce',
 
 		'about.eyebrow': 'Nasza historia',
 		'about.intro':
@@ -216,7 +218,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'cookies.aria': 'Zgoda na pliki cookies',
 		'cookies.title': 'Cookies, nie mity',
 		'cookies.body':
-			'Nie czytamy z fusów, tylko z Google Analytics. Bez czarnej magii i bez śledzenia Twoich prywatnych spraw – czysta, analityczna wiedza.',
+			'Nie czytamy z fusów, tylko z Google Analytics. Bez czarnej magii i bez śledzenia Twoich prywatnych spraw.',
 		'cookies.accept': 'Akceptuję analitykę',
 		'cookies.necessary': 'Tylko niezbędne',
 	},
@@ -261,6 +263,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'projects.seeAll': 'Más proyectos',
 		'projects.view': 'ver',
 		'projects.soon': 'pronto',
+		'projects.comingSoon': 'Viene pronto',
 
 		'about.eyebrow': 'Nuestra historia',
 		'about.intro':
@@ -323,7 +326,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'cookies.aria': 'Consentimiento de cookies',
 		'cookies.title': 'Cookies, no mitos',
 		'cookies.body':
-			'No usamos una bola de cristal, sino Google Analytics. Sin magia negra ni rastreo de tus asuntos privados: solo datos claros y reales.',
+			'No usamos una bola de cristal, sino Google Analytics. Sin magia negra ni rastreo de tus asuntos privados.',
 		'cookies.accept': 'Acepto analítica',
 		'cookies.necessary': 'Solo lo esencial',
 	},
