@@ -109,7 +109,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'cookies.aria': 'Cookie consent',
 		'cookies.title': 'Cookies, not myths',
 		'cookies.body':
-			'We don’t read tea leaves — just Google Analytics. No black magic, and no snooping on your private life.',
+			"We don't read tea leaves, we use Google Analytics. No dark magic, no tracking your personal business – just clean, analytical insight.",
 		'cookies.accept': 'Accept analytics',
 		'cookies.necessary': 'Essential only',
 	},
@@ -216,7 +216,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'cookies.aria': 'Zgoda na pliki cookies',
 		'cookies.title': 'Cookies, nie mity',
 		'cookies.body':
-			'Nie czytamy z fusów, tylko z Google Analytics. Bez czarnej magii i śledzenia Twoich prywatnych spraw.',
+			'Nie czytamy z fusów, tylko z Google Analytics. Bez czarnej magii i bez śledzenia Twoich prywatnych spraw – czysta, analityczna wiedza.',
 		'cookies.accept': 'Akceptuję analitykę',
 		'cookies.necessary': 'Tylko niezbędne',
 	},
@@ -323,9 +323,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'cookies.aria': 'Consentimiento de cookies',
 		'cookies.title': 'Cookies, no mitos',
 		'cookies.body':
-			'No leemos el poso del café, solo Google Analytics. Sin magia negra y sin espiar tu vida privada.',
+			'No usamos una bola de cristal, sino Google Analytics. Sin magia negra ni rastreo de tus asuntos privados: solo datos claros y reales.',
 		'cookies.accept': 'Acepto analítica',
-		'cookies.necessary': 'Solo esenciales',
+		'cookies.necessary': 'Solo lo esencial',
 	},
 };
 
