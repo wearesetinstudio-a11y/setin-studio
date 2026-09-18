@@ -36,20 +36,16 @@ const label = `${title} — ${index + 1}`;
 		</figure>
 	) : (
 		<figure class="project-gallery__item project-gallery__item--video m-0 w-full">
-			<div class="project-video-noise relative overflow-hidden bg-white">
-				<video
-					src={item.src}
-					class="block h-auto w-full"
-					autoplay
-					muted
-					loop
-					playsinline
-					preload="metadata"
-					aria-label={label}
-				/>
-				<div class="noise-overlay noise-overlay--coarse project-video-noise__layer" aria-hidden="true"></div>
-				<div class="noise-overlay noise-overlay--fine project-video-noise__layer" aria-hidden="true"></div>
-			</div>
+			<video
+				src={item.src}
+				class="block h-auto w-full"
+				autoplay
+				muted
+				loop
+				playsinline
+				preload="metadata"
+				aria-label={label}
+			/>
 		</figure>
 	)
 }
@@ -58,15 +54,6 @@ const label = `${title} — ${index + 1}`;
 	.project-gallery__rive {
 		aspect-ratio: 1980 / 476;
 		width: 100%;
-	}
-
-	.project-video-noise__layer {
-		position: absolute !important;
-		inset: 0 !important;
-		top: 0 !important;
-		left: 0 !important;
-		width: 100% !important;
-		height: 100% !important;
 	}
 </style>
 
