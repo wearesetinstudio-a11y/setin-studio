@@ -196,9 +196,9 @@ const { projectCount, articleCount } = await getSiteCounts();
 
 			initCinemaPureNoise('cinema-pure-noise-filter', {
 				observeElementId: 'hero-section',
-				density: 0.055,
-				grainSize: 0.5,
-				baseOpacity: 0.12,
+				density: 0.09,
+				grainSize: 0.6,
+				baseOpacity: 0.11,
 			});
 			document.documentElement.classList.add('hero-cinema-active');
 			lockHeroBackgroundViewport(true);
@@ -227,9 +227,9 @@ const { projectCount, articleCount } = await getSiteCounts();
 			document.addEventListener('astro:page-load', () => {
 				initCinemaPureNoise('cinema-pure-noise-filter', {
 					observeElementId: 'hero-section',
-					density: 0.055,
-					grainSize: 0.5,
-					baseOpacity: 0.12,
+					density: 0.09,
+					grainSize: 0.6,
+					baseOpacity: 0.11,
 				});
 				document.documentElement.classList.add('hero-cinema-active');
 				lockedHeroBgHeight = 0;
