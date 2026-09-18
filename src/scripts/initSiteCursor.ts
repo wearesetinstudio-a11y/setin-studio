@@ -1,13 +1,14 @@
-const TRAIL_LAG = 0.18;
-const CORE_LAG = 0.42;
-const VELOCITY_SMOOTH = 0.22;
+const TRAIL_LAG_MOVE = 0.22;
+const TRAIL_LAG_SETTLE = 0.48;
+const CORE_LAG = 0.48;
+const VELOCITY_SMOOTH = 0.28;
 const MIN_SPEED = 0.15;
 const MAX_SPEED = 42;
 
-const SPARK_POOL = 12;
-const SPARK_SPAWN_MIN_MS = 48;
-const SPARK_SPAWN_MAX_MS = 110;
-const SPARK_MIN_INTENSITY = 0.12;
+const SPARK_POOL = 14;
+const SPARK_SPAWN_MIN_MS = 42;
+const SPARK_SPAWN_MAX_MS = 95;
+const SPARK_MIN_INTENSITY = 0.1;
 
 type CursorWindow = Window &
 	typeof globalThis & {
@@ -78,10 +79,14 @@ export function initSiteCursor() {
 	let nextSpawnIn = rand(SPARK_SPAWN_MIN_MS, SPARK_SPAWN_MAX_MS);
 	let lastFrameAt = performance.now();
 
+	// Sparks live inside the difference-blended cursor so they invert with it
+	// (visible as white on dark AND as black on light).
+	const sparkHost = cursor;
+
 	const sparks: Spark[] = Array.from({ length: SPARK_POOL }, () => {
 		const el = document.createElement('span');
 		el.className = 'site-cursor-spark';
-		sparksLayer.appendChild(el);
+		sparkHost.appendChild(el);
 		return {
 			el,
 			alive: false,
@@ -96,6 +101,9 @@ export function initSiteCursor() {
 			wobble: 0,
 		};
 	});
+
+	sparksLayer.replaceChildren();
+	sparksLayer.setAttribute('aria-hidden', 'true');
 
 	function isSuppressed() {
 		return cursor.classList.contains('is-suppressed');
@@ -131,19 +139,19 @@ export function initSiteCursor() {
 		const mag = Math.hypot(dirX, dirY) || 1;
 
 		spark.alive = true;
-		spark.x = coreX + rand(-2.5, 2.5);
-		spark.y = coreY + rand(-2.5, 2.5);
+		spark.x = rand(-2.5, 2.5);
+		spark.y = rand(-2.5, 2.5);
 		spark.vx = (dirX / mag) * launch * rand(0.7, 1.8);
 		spark.vy = (dirY / mag) * launch * rand(0.7, 1.8) - rand(0.05, 0.35);
 		spark.maxLife = rand(420, 820);
 		spark.life = spark.maxLife;
-		spark.size = rand(1.4, 3.2);
+		spark.size = rand(1.6, 3.4);
 		spark.spin = rand(-0.08, 0.08);
 		spark.wobble = rand(0, Math.PI * 2);
 
 		spark.el.style.width = `${spark.size}px`;
 		spark.el.style.height = `${spark.size}px`;
-		spark.el.style.opacity = '0.95';
+		spark.el.style.opacity = '1';
 		spark.el.style.transform = `translate3d(${spark.x}px, ${spark.y}px, 0) translate(-50%, -50%) scale(1)`;
 	}
 
@@ -185,7 +193,7 @@ export function initSiteCursor() {
 			const fade = progress < 0.15 ? progress / 0.15 : 1 - (progress - 0.15) / 0.85;
 			const scale = 1 - progress * 0.75;
 
-			spark.el.style.opacity = String(Math.max(0, fade) * 0.95);
+			spark.el.style.opacity = String(Math.max(0, fade));
 			spark.el.style.transform = `translate3d(${spark.x}px, ${spark.y}px, 0) translate(-50%, -50%) scale(${scale})`;
 		}
 	}
@@ -200,11 +208,6 @@ export function initSiteCursor() {
 		const dt = Math.min(32, now - lastFrameAt);
 		lastFrameAt = now;
 
-		coreX += (targetX - coreX) * CORE_LAG;
-		coreY += (targetY - coreY) * CORE_LAG;
-		trailX += (coreX - trailX) * TRAIL_LAG;
-		trailY += (coreY - trailY) * TRAIL_LAG;
-
 		const rawVelX = targetX - lastX;
 		const rawVelY = targetY - lastY;
 		lastX = targetX;
@@ -213,11 +216,18 @@ export function initSiteCursor() {
 		velX += (rawVelX - velX) * VELOCITY_SMOOTH;
 		velY += (rawVelY - velY) * VELOCITY_SMOOTH;
 
+		const speed = Math.min(MAX_SPEED, Math.hypot(velX, velY));
+		const trailLag = speed < 3 ? TRAIL_LAG_SETTLE : TRAIL_LAG_MOVE;
+
+		coreX += (targetX - coreX) * CORE_LAG;
+		coreY += (targetY - coreY) * CORE_LAG;
+		trailX += (coreX - trailX) * trailLag;
+		trailY += (coreY - trailY) * trailLag;
+
 		const dragX = coreX - trailX;
 		const dragY = coreY - trailY;
 		const dragMag = Math.hypot(dragX, dragY);
-		const speed = Math.min(MAX_SPEED, Math.hypot(velX, velY));
-		const motion = Math.max(speed, dragMag * 1.4);
+		const motion = Math.max(speed, dragMag * 1.05);
 		const intensity = Math.max(0, Math.min(1, (motion - MIN_SPEED) / (MAX_SPEED - MIN_SPEED)));
 
 		const dirX = Math.abs(velX) + Math.abs(velY) > MIN_SPEED ? velX : dragX;

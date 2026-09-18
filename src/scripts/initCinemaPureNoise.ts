@@ -34,7 +34,7 @@ export function initCinemaPureNoise(
 	const MAX_NOISE_WIDTH = isMobile ? 480 : 800;
 	const MAX_NOISE_HEIGHT = isMobile ? 320 : 500;
 	const TOTAL_BUFFERS = isMobile ? 3 : 4;
-	const FRAME_INTERVAL = 120;
+	const FRAME_INTERVAL = 160;
 
 	let noiseBuffers: HTMLCanvasElement[] = [];
 	let currentBufferFrame = 0;

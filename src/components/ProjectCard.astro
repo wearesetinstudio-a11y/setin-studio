@@ -215,7 +215,13 @@ const titlesJson = JSON.stringify(titles);
 
 <script>
 	import { initRiveCovers } from '../scripts/initRiveCovers';
+	import { initProjectMediaVisibility } from '../scripts/initProjectMediaVisibility';
 
-	initRiveCovers();
-	document.addEventListener('astro:page-load', initRiveCovers);
+	function initProjectCardMedia() {
+		initRiveCovers();
+		initProjectMediaVisibility();
+	}
+
+	initProjectCardMedia();
+	document.addEventListener('astro:page-load', initProjectCardMedia);
 </script>

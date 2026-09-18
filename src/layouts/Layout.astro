@@ -671,11 +671,13 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		position: absolute;
 		top: 0;
 		left: 0;
+		z-index: 2;
 		display: block;
 		border-radius: 9999px;
 		background: #ffffff;
-		box-shadow: 0 0 5px rgba(255, 255, 255, 0.55);
-		mix-blend-mode: difference;
+		box-shadow:
+			0 0 6px rgba(255, 255, 255, 0.7),
+			0 0 12px rgba(255, 255, 255, 0.35);
 		opacity: 0;
 		pointer-events: none;
 	}

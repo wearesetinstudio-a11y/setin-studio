@@ -2,7 +2,7 @@
 title: Epic Realty
 client: Epic Realty
 tags: ['Branding', 'Web Design']
-thumbnail: '/portfolio/epic-realty/cover.mp4'
+thumbnail: '/portfolio/epic-realty/cover.riv'
 folderName: 'epic-realty'
 order: 2
 video: '/portfolio/epic-realty/cover.mp4'
