@@ -20,10 +20,7 @@ export function initRiveCovers() {
 				rive.play(animations);
 			} else {
 				const stateMachine = rive.stateMachineNames[0];
-				rive.reset({
-					stateMachine,
-					autoplay: true,
-				});
+				if (stateMachine) rive.play(stateMachine);
 			}
 
 			requestAnimationFrame(() => {
@@ -57,6 +54,9 @@ export function initRiveCovers() {
 				}
 				loopCover();
 				resizeCanvas();
+			},
+			onLoadError: () => {
+				delete canvas.dataset.riveInitialized;
 			},
 			onStop: loopCover,
 		});
