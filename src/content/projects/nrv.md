@@ -4,7 +4,7 @@ client: "NRV Systems"
 tags: ['UX/UI Design', 'SEO', 'Webflow']
 thumbnail: '/portfolio/nrv-web/cover.opt.webp'
 folderName: 'nrv-web'
-order: 8
+order: 9
 heroImage: '/portfolio/nrv-web/bg.opt.webp'
 heroSubtitle: "Web Platform for Control System Provider"
 overviewLabel: "Overview"
