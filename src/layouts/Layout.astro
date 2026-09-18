@@ -566,6 +566,7 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		z-index: 10050;
 		width: 0;
 		height: 0;
+		overflow: visible;
 		pointer-events: none;
 		opacity: 0;
 		visibility: hidden;
@@ -671,13 +672,25 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 		position: absolute;
 		top: 0;
 		left: 0;
+		z-index: 0;
 		display: block;
 		border-radius: 9999px;
 		background: #ffffff;
 		box-shadow: 0 0 5px rgba(255, 255, 255, 0.55);
-		mix-blend-mode: difference;
 		opacity: 0;
 		pointer-events: none;
+	}
+
+	.site-cursor__trail {
+		z-index: 1;
+	}
+
+	.site-cursor__flash {
+		z-index: 2;
+	}
+
+	.site-cursor__core {
+		z-index: 3;
 	}
 
 	@media (max-width: 767px) {

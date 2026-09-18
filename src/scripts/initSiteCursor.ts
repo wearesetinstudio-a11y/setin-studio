@@ -59,13 +59,15 @@ export function initSiteCursor() {
 
 	root.classList.add('has-site-cursor');
 
-	// Drop orphans left from older builds that nested sparks inside the cursor.
-	cursor.querySelectorAll('.site-cursor-spark').forEach((el) => el.remove());
+	// Sparks sit inside the difference-blended cursor so they invert with it
+	// (white on dark, black on light). Physics stays in page space; we only
+	// draw them relative to the cursor so flight still feels natural.
+	sparksLayer.replaceChildren();
 
 	if (cursorWindow.__setinSiteCursorReady) {
-		if (sparksLayer.querySelectorAll('.site-cursor-spark').length >= SPARK_POOL) return;
+		if (cursor.querySelectorAll('.site-cursor-spark').length >= SPARK_POOL) return;
 		cursorWindow.__setinSiteCursorReady = false;
-		sparksLayer.replaceChildren();
+		cursor.querySelectorAll('.site-cursor-spark').forEach((el) => el.remove());
 	}
 	cursorWindow.__setinSiteCursorReady = true;
 
@@ -88,7 +90,7 @@ export function initSiteCursor() {
 	const sparks: Spark[] = Array.from({ length: SPARK_POOL }, () => {
 		const el = document.createElement('span');
 		el.className = 'site-cursor-spark';
-		sparksLayer.appendChild(el);
+		cursor.appendChild(el);
 		return {
 			el,
 			alive: false,
@@ -103,6 +105,10 @@ export function initSiteCursor() {
 			wobble: 0,
 		};
 	});
+
+	function paintSpark(spark: Spark, scale = 1) {
+		spark.el.style.transform = `translate3d(${spark.x - coreX}px, ${spark.y - coreY}px, 0) translate(-50%, -50%) scale(${scale})`;
+	}
 
 	function isSuppressed() {
 		return cursor.classList.contains('is-suppressed');
@@ -151,7 +157,7 @@ export function initSiteCursor() {
 		spark.el.style.width = `${spark.size}px`;
 		spark.el.style.height = `${spark.size}px`;
 		spark.el.style.opacity = '0.95';
-		spark.el.style.transform = `translate3d(${spark.x}px, ${spark.y}px, 0) translate(-50%, -50%) scale(1)`;
+		paintSpark(spark, 1);
 	}
 
 	function updateSparks(dt: number, intensity: number, angleRad: number, now: number) {
@@ -193,7 +199,7 @@ export function initSiteCursor() {
 			const scale = 1 - progress * 0.75;
 
 			spark.el.style.opacity = String(Math.max(0, fade) * 0.95);
-			spark.el.style.transform = `translate3d(${spark.x}px, ${spark.y}px, 0) translate(-50%, -50%) scale(${scale})`;
+			paintSpark(spark, scale);
 		}
 	}
 
