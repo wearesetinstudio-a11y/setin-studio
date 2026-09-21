@@ -59,26 +59,35 @@ i18n:
     overviewText: |-
       Rynek dystrybucji przekąsek i napojów w Panamie przez lata opierał się na tradycyjnych kanałach sprzedaży. Założyciele marek Snacks Lovers Pty oraz Mexi Munchies postanowili wykorzystać niszę rynkową i stworzyć firmę Avendin – dostawcę sprowadzającego zaawansowane technologicznie maszyny vendingowe z USA oraz Azji. Nowa marka powstawała od zera i potrzebowała spójnego pozycjonowania, które pozwoliłoby jej wejść na rynek z pozycji profesjonalnego i niezawodnego partnera.
 
-      Odbiorcą końcowym korzyści z maszyn jest konsument kupujący produkt, jednak realnym decydentem biznesowym są zarządcy biurowców, właściciele galerii handlowych, deweloperzy oraz przedstawiciele instytucji publicznych. Avendin potrzebowało powściągliwego i godnego zaufania języka wizualnego, który przekona partnerów B2B do udostępnienia przestrzeni pod instalację urządzeń.
+      W efekcie analizy modelu biznesowego zidentyfikowaliśmy kluczowe wyzwanie komunikacyjne. Odbiorcą końcowym korzyści z maszyn jest konsument kupujący produkt, jednak realnym decydentem biznesowym są zarządcy biurowców, właściciele galerii handlowych, deweloperzy oraz przedstawiciele instytucji publicznych. Avendin nie potrzebowało więc krzykliwej oprawy konsumenckiej, lecz powściągliwego i godnego zaufania języka wizualnego, który przekona partnerów B2B do udostępnienia przestrzeni pod instalację urządzeń.
     sections:
       - label: 'Badania'
         title: 'Precyzyjne zdefiniowanie grupy B2B poprzez brand sprint i warsztaty'
         text: |-
-          Z powodu braku wyjściowych badań rynkowych pracę rozpoczęliśmy od wywiadów ze stakeholderami oraz warsztatu brand sprint z właścicielami marki. Skupiliśmy się na zdefiniowaniu oczekiwań osób zarządzających nieruchomościami komercyjnymi i publicznymi. Moodboardy pozwoliły sprecyzować kierunek estetyczny oraz przeanalizować otoczenie konkurencyjne w regionie.
+          Z powodu braku wyjściowych badań rynkowych pracę rozpoczęliśmy od wywiadów ze stakeholderami oraz warsztatu brand sprint z właścicielami marki. Jako kameralne studio stawiające na twarde argumenty biznesowe, skupiliśmy się na zdefiniowaniu oczekiwań osób zarządzających nieruchomościami komercyjnymi i publicznymi. Przygotowane moodboardy pozwoliły sprecyzować kierunek estetyczny oraz przeanalizować otoczenie konkurencyjne w regionie.
 
-          Ustaliliśmy, że identyfikacja musi komunikować nowoczesność, zaawansowanie technologiczne i bezawaryjność. Zamiast przypadkowej grafiki postawiliśmy na komunikację opartą na faktach: zerowym koszcie inwestycji dla właściciela lokalu, pełnej obsłudze serwisowej oraz najwyższej jakości sprzęcie TCN High-Tech. Taki profil umożliwił budowanie relacji z biznesem na zasadzie partnerstwa technologicznego.
+          W oparciu o zebrane wnioski ustaliliśmy, że identyfikacja musi komunikować nowoczesność, zaawansowanie technologiczne i bezawaryjność. Zamiast operować przypadkową grafiką, postawiliśmy na komunikację opartą na faktach: zerowym koszcie inwestycji dla właściciela lokalu ($0.00 USD), pełnej obsłudze serwisowej oraz najwyższej jakości sprzęcie TCN High-Tech. Taki profil umożliwił budowanie relacji z biznesem na zasadzie partnerstwa technologicznego.
         afterGroup: 2
       - label: 'Symbol'
         title: 'Autorska typografia i techniczna precyzja sygnetu'
-        text: 'Większość marek vendingowych stosuje powtarzalne motywy koszyków lub przekąsek. Odeszliśmy od tych schematów, wykorzystując unikalny potencjał samej nazwy AVENDIN. Skupiliśmy całą uwagę na typografii, tworząc minimalistyczny znak o wyrazistej, inżynieryjnej strukturze. Celowe połączenie majuskuły i minuskuły oraz techniczne cięcia pod kątem 65° nadały znakowi dynamiczny, nowoczesny charakter bez utraty czytelności.'
+        text: |-
+          Większość marek vendingowych stosuje powtarzalne, ilustracyjne motywy koszyków lub przekąsek. Odeszliśmy od tych schematów, wykorzystując unikalny potencjał samej nazwy AVENDIN. Skupiliśmy całą uwagę na typografii, tworząc minimalistyczny znak o wyrazistej, inżynieryjnej strukturze.
+
+          Rozwijając ten koncept, zastosowaliśmy celowy zabieg mieszania majuskuły i minuskuły. Litery A, V, D oraz I zapisaliśmy wielkimi literami, natomiast E i N małymi znakami. Pozwoliło to uzyskać idealny balans optyczny oraz pełną kontrolę nad światłem międzyliterowym i przestrzeniami wewnętrznymi znaku. Dopełnieniem znaku stały się precyzyjne, techniczne cięcia pod kątem 65° w literach A i E, które nadają sygnetowi dynamiczny, nowoczesny charakter bez utraty czytelności.
         afterGroup: 3
       - label: 'System'
         title: 'Cyfrowa paleta barw i wyrazista struktura wizualna'
-        text: 'Zbudowaliśmy system wokół kroju Instrument Sans oraz głębokich tonów Deep Nebula (#0D002E) i Urban Graphite (#373340). Zestawiliśmy je z akcentem Signal Violet (#8B64FF) oraz czystą bielą (#FFFFFF), tworząc identyfikację, która komunikuje technologiczną precyzję i przejrzystość w relacjach B2B.'
+        text: |-
+          Budowa kompletnego systemu wizualnego wymagała doboru narzędzi komunikujących zaawansowanie cyfrowe. Jako główny krój pisma wybraliśmy otwarty font Instrument Sans, którego surowa, geometryczna konstrukcja zapewnia doskonałą czytelność w dokumentach handlowych, na ekranach oraz w opisach technicznych urządzeń.
+
+          Paletę barw zbudowaliśmy wokół głębokiego tonu Deep Nebula (#0D002E) i technicznego Urban Graphite (#373340), które tworzą stabilną bazę identyfikacji. Zestawiliśmy je z kontrastowym akcentem Signal Violet (#8B64FF) oraz czystą bielą Pure Light (#FFFFFF). Zastosowany zestaw kolorystyczny komunikuje jasność intencji – stawianie spraw czarno na białym, bez ukrytych kosztów i z pełną przejrzystością dla partnerów biznesowych.
         afterGroup: 4
       - label: 'Podsumowanie'
         title: 'Skuteczne zaistnienie na rynku i zaufanie inwestorów B2B'
-        text: 'Przekształcenie założeń biznesowych w przemyślany system tożsamości wizualnej pozwoliło firmie Avendin wyjść do partnerów biznesowych z pozycją dojrzałego dostawcy. Przejrzysta struktura oferty i spójna obecność cyfrowa skróciły proces negocjacji oraz zbudowały trwały autorytet marki na rynku panamskim.'
+        text: |-
+          Przekształcenie założeń biznesowych w przemyślany system tożsamości wizualnej pozwoliło firmie Avendin wyjść do partnerów biznesowych z pozycją dojrzałego dostawcy. Eliminacja przypadkowości graficznej i skupienie na komunikacji parametrów technicznych otworzyły marce drogę do prestiżowych lokalizacji biurowych i komercyjnych.
+
+          Dzięki przejrzystej strukturze oferty i spójnej obecności cyfrowej zespół Avendin skrócił proces negocjacji z właścicielami nieruchomości. Marka zbudowała trwały autorytet na rynku panamskim, łącząc zaawansowaną technologię automatów z biznesową przejrzystością.
   es:
     title: 'Avendin Branding'
     client: 'Avendin'
@@ -91,21 +100,33 @@ i18n:
     overviewText: |-
       El sector de distribución de snacks y bebidas en Panamá dependía tradicionalmente de canales minoristas convencionales. Los fundadores de Snacks Lovers Pty y Mexi Munchies identificaron una oportunidad de mercado y crearon Avendin, una empresa dedicada a la importación de máquinas expendedoras de alta tecnología desde EE. UU. y Asia. Al tratarse de un proyecto nuevo, la empresa requería un posicionamiento que le permitiese ingresar al mercado como un socio confiable y técnico.
 
-      Aunque el consumidor final utiliza la máquina, los verdaderos tomadores de decisión son administradores de edificios, propietarios de centros comerciales, desarrolladores inmobiliarios y funcionarios públicos. Por ello, Avendin necesitaba un lenguaje gráfico riguroso que generara certeza en negociaciones B2B para la instalación de equipos.
+      El análisis del modelo comercial expuso un reto de comunicación específico. Aunque el consumidor final utiliza la máquina, los verdaderos tomadores de decisión son administradores de edificios, propietarios de centros comerciales, desarrolladores inmobiliarios y funcionarios públicos. Por ello, Avendin no necesitaba una imagen de consumo ruidosa, sino un lenguaje gráfico riguroso que generara certeza en negociaciones B2B para la instalación de equipos.
     sections:
       - label: 'Investigación'
         title: 'Definición del público B2B mediante talleres y análisis'
-        text: 'Ante la falta de estudios de mercado previos, iniciamos el trabajo con entrevistas a los socios y un taller de brand sprint. Orientamos el análisis hacia las necesidades de administradores de fincas y responsables de compras públicas. El desarrollo de moodboards y la evaluación de la competencia local fijaron una dirección que comunica solidez técnica, operación continua y mantenimiento integral.'
+        text: |-
+          Ante la falta de estudios de mercado previos, iniciamos el trabajo con entrevistas a los socios y un taller de brand sprint. Como estudio enfocado en resultados comerciales, orientamos el análisis hacia las necesidades de administradores de fincas y responsables de compras públicas. El desarrollo de moodboards y la evaluación de la competencia local fijaron la dirección estética del proyecto.
+
+          Con base en esta información, determinamos que la identidad debía reflejar solidez técnica y operación continua. En lugar de gráficos abstractos, estructuramos la comunicación sobre argumentos operativos: costo cero de inversión ($0.00 USD) para el propietario del espacio, mantenimiento integral y equipos TCN High-Tech. Este perfil facilitó presentar a la empresa como un aliado tecnológico confiable.
         afterGroup: 2
       - label: 'Símbolo'
         title: 'Tipografía a medida y rigor técnico del símbolo'
-        text: 'Evitamos las ilustraciones convencionales del sector para aprovechar el impacto del nombre AVENDIN. Centramos el desarrollo en la tipografía, combinando mayúsculas y minúsculas con cortes diagonales a 65 grados. El resultado es un logotipo limpio, moderno y legible, con una presencia técnica distintiva.'
+        text: |-
+          Las empresas del sector suelen recurrir a ilustraciones convencionales de productos o tazas. Evitamos estos esquemas para aprovechar el impacto del nombre AVENDIN. Centramos el desarrollo en la tipografía, buscando un logotipo limpio con presencia técnica.
+
+          Desarrollando esta idea, aplicamos una combinación deliberada de mayúsculas y minúsculas. Los caracteres A, V, D e I mantienen estructura de mayúscula, mientras que E y N utilizan trazados en minúscula. Esta solución permitió equilibrar el peso visual y controlar el espacio entre letras. Para reforzar el carácter técnico, incorporamos cortes diagonales a 65° en las letras A y E, otorgando un rasgo moderno sin comprometer la legibilidad.
         afterGroup: 3
       - label: 'Sistema'
         title: 'Paleta digital y estructura visual de alto contraste'
-        text: 'Seleccionamos la tipografía Instrument Sans y una paleta basada en Deep Nebula (#0D002E), Urban Graphite (#373340), Signal Violet (#8B64FF) y Pure Light (#FFFFFF). El contraste resultante facilita la lectura de presupuestos y transmite transparencia comercial ante los socios institucionales.'
+        text: |-
+          El diseño del sistema gráfico requería recursos que proyectaran solvencia digital. Seleccionamos la tipografía Instrument Sans por su estructura geométrica y óptima legibilidad en propuestas comerciales, pantallas y hojas de especificaciones.
+
+          La paleta cromática utiliza los tonos oscuros Deep Nebula (#0D002E) y Urban Graphite (#373340) como base corporativa. Estos se combinan con el acento Signal Violet (#8B64FF) y el tono Pure Light (#FFFFFF). El contraste resultante facilita la lectura de presupuestos y transmite transparencia comercial ante los socios institucionales.
         afterGroup: 4
       - label: 'Resultados'
         title: 'Consolidación de marca y confianza comercial'
-        text: 'Convertir la visión del negocio en un sistema de identidad visual permitió a Avendin ingresar al mercado con una postura corporativa sólida. La claridad en la estructura de oferta y la presencia digital aceleraron las negociaciones con administradores de fincas y consolidaron la credibilidad de la marca en Panamá.'
+        text: |-
+          Convertir la visión del negocio en un sistema de identidad visual permitió a Avendin ingresar al mercado con una postura corporativa sólida. Eliminar elementos innecesarios y destacar la fiabilidad técnica facilitó la entrada a inmuebles comerciales de primer nivel.
+
+          La claridad en la estructura de oferta y la presencia digital aceleraron las negociaciones con administradores de fincas. La marca logró consolidar su credibilidad en Panamá combinando tecnología de vending con transparencia comercial.
 ---
