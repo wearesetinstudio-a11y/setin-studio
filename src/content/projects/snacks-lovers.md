@@ -4,7 +4,7 @@ client: Snacks Lovers
 tags: ['Branding', 'Visual Identity', 'Webflow']
 thumbnail: '/portfolio/snacks-lovers/snacks-lovers-cover.webp'
 folderName: 'snacks-lovers'
-order: 4
+order: 7
 heroImage: '/portfolio/snacks-lovers/bg.webp'
 heroSubtitle: |-
   A brand built for sweet craziness

@@ -5,7 +5,7 @@ tags: ['Branding', 'Visual Identity', 'Rebranding']
 thumbnail: '/portfolio/nrv/nrv-cover.webp'
 video: '/portfolio/nrv/cover.webm'
 folderName: 'nrv'
-order: 8
+order: 3
 heroImage: '/portfolio/nrv/bg.webp'
 heroSubtitle: "High-Tech Brand Identity for Panama’s Access Control Provider"
 overviewLabel: "Context"

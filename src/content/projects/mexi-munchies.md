@@ -4,7 +4,7 @@ client: Mexi Munchies
 tags: ['Branding', 'Visual Identity', 'Webflow']
 thumbnail: '/portfolio/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'
-order: 6
+order: 9
 heroImage: '/portfolio/mexi-munchies/bg.webp'
 heroSubtitle: |-
   A youthful brand identity built to

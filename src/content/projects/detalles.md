@@ -4,7 +4,7 @@ client: Detalles
 tags: ['Brand Identity', 'Print']
 thumbnail: '/portfolio/detalles/cover.webp'
 folderName: 'detalles'
-order: 5
+order: 8
 heroImage: '/portfolio/detalles/bg.webp'
 heroSubtitle: 'An editorial identity for a studio that treats every detail as the whole story'
 overviewTitle: 'Crafted with intention'

@@ -5,7 +5,7 @@ tags: ['UX/UI Design', 'SEO', 'Webflow']
 thumbnail: '/portfolio/nrv-web/cover.opt.webp'
 video: '/portfolio/nrv-web/cover.webm'
 folderName: 'nrv-web'
-order: 9
+order: 4
 heroImage: '/portfolio/nrv-web/bg.webp'
 heroSubtitle: "Web Platform for Control System Provider"
 overviewLabel: "Overview"

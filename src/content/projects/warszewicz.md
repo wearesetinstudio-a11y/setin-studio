@@ -4,7 +4,7 @@ client: "Internal Project"
 tags: ['Video Production', 'Motion Design', 'AI Art Direction']
 thumbnail: '/portfolio/warszewicz/cover.webp'
 folderName: 'warszewicz'
-order: 1
+order: 6
 heroImage: '/portfolio/warszewicz/bg.opt.webp'
 heroSubtitle: "The Polish explorer who cataloged Panama's national symbol"
 overviewLabel: "Overview"

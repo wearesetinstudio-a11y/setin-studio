@@ -4,7 +4,7 @@ client: Epic Realty
 tags: ['Branding', 'Web Design']
 thumbnail: '/portfolio/epic-realty/cover.riv'
 folderName: 'epic-realty'
-order: 2
+order: 5
 video: '/portfolio/epic-realty/cover.mp4'
 heroImage: '/portfolio/epic-realty/bg.webp'
 heroSubtitle: 'Elevating Panama''s premier boutique real estate agency through brand identity and digital design.'
