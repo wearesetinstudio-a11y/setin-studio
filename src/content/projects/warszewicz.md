@@ -2,10 +2,11 @@
 title: Warszewicz
 client: "Internal Project"
 tags: ['Video Production', 'Motion Design', 'AI Art Direction']
-thumbnail: '/portfolio/warszewicz/cover.webp'
+thumbnail: '/portfolio/warszewicz/cover.mp4'
 folderName: 'warszewicz'
-order: 6
-heroImage: '/portfolio/warszewicz/bg.opt.webp'
+order: 1
+video: '/portfolio/warszewicz/cover.mp4'
+heroImage: '/portfolio/warszewicz/bg.webp'
 heroSubtitle: "The Polish explorer who cataloged Panama's national symbol"
 overviewLabel: "Overview"
 overviewTitle: "A short-form story of a Polish botanist connecting two distant worlds"
