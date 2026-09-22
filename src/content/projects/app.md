@@ -4,7 +4,7 @@ client: Agencia Panamá Pacífico
 tags: ['Branding', 'Visual Identity', 'Rebranding']
 thumbnail: '/portfolio/app/Cover.webm'
 folderName: 'app'
-order: 10
+order: 0
 video: '/portfolio/app/Cover.webm'
 heroImage: '/portfolio/app/bg.webp'
 heroSubtitle: 'A New Visual Identity for Panama’s Premier Free Trade Zone Authority'
