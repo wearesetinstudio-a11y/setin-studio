@@ -98,7 +98,7 @@ client: ${JSON.stringify(en.client)}
 tags: ['Video Production', 'Motion Design', 'AI Art Direction']
 thumbnail: '/portfolio/warszewicz/cover.mp4'
 folderName: 'warszewicz'
-order: 1
+order: 6
 video: '/portfolio/warszewicz/cover.mp4'
 heroImage: '/portfolio/warszewicz/bg.webp'
 heroSubtitle: ${JSON.stringify(en.heroSubtitle)}
