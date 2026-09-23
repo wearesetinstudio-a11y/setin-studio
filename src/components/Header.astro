@@ -2,6 +2,8 @@
 import RollingLink from './RollingLink.astro';
 import WorkWithUsButton from './WorkWithUsButton.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
+import { stripLocalePrefix } from '../i18n/seo.ts';
+import { isActiveNavHref, normalizeNavPath } from '../utils/isActiveNavHref.ts';
 
 interface Props {
 	projectCount?: number;
@@ -17,14 +19,20 @@ const {
 	theme = 'default',
 } = Astro.props;
 
+const originPathname =
+	typeof Astro.originPathname === 'string' && Astro.originPathname
+		? Astro.originPathname
+		: Astro.url.pathname;
+const barePath = normalizeNavPath(stripLocalePrefix(originPathname));
+
 const hasLocalContact =
-	Astro.url.pathname === '/' ||
-	Astro.url.pathname === '/about' ||
-	Astro.url.pathname === '/services' ||
-	Astro.url.pathname === '/projects' ||
-	Astro.url.pathname === '/articles' ||
-	Astro.url.pathname.startsWith('/articles/') ||
-	/^\/projects\/[^/]+$/.test(Astro.url.pathname);
+	barePath === '/' ||
+	barePath === '/about' ||
+	barePath === '/services' ||
+	barePath === '/projects' ||
+	barePath === '/articles' ||
+	barePath.startsWith('/articles/') ||
+	/^\/projects\/[^/]+$/.test(barePath);
 
 const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
 const isLightBg = theme === 'light-bg';
@@ -79,6 +87,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 						count={item.count}
 						inverted={isLightBg}
 						i18nKey={item.i18nKey}
+						current={isActiveNavHref(item.href, barePath)}
 					/>
 				))
 			}
@@ -139,12 +148,18 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 			<nav class="flex flex-col gap-8" aria-label="Mobile" data-i18n-aria="nav.mobileAria">
 				{
 					nav.map((item, index) => {
+						const current = isActiveNavHref(item.href, barePath);
 						return (
 							<a
 								href={item.href}
-								class="mobile-nav-link mobile-nav-item text-[2rem] font-semibold uppercase leading-none text-setin-fg"
+								class:list={[
+									'mobile-nav-link mobile-nav-item text-[2rem] font-semibold uppercase leading-none text-setin-fg',
+									current && 'mobile-nav-link--current',
+								]}
 								style={`--nav-i: ${index}`}
 								data-mobile-nav-link
+								data-nav-href={item.href}
+								aria-current={current ? 'page' : undefined}
 							>
 								<span class="mobile-nav-item__reveal">
 									<span
@@ -792,6 +807,11 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 	.mobile-nav-panel__cta .work-with-us-button span {
 		font-size: 2rem;
 		line-height: 1.15;
+	}
+
+	.mobile-nav-link--current {
+		color: #6a6a6a !important;
+		opacity: 1;
 	}
 
 	.mobile-nav-panel {

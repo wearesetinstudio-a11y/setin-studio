@@ -1,0 +1,11 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Upward chevron matching Toros cursor mark: lime fill + white outline -->
+  <path
+    d="M24 4 L42 40 L24 32 L6 40 Z"
+    fill="#A4FF00"
+    stroke="#FFFFFF"
+    stroke-width="3"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+  />
+</svg>

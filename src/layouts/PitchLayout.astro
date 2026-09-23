@@ -1,0 +1,395 @@
+---
+/**
+ * Independent shell for hidden pitch / proposal pages.
+ * Pitch content uses its own type stack; ContactSection + Footer match the main site 1:1.
+ */
+import '../styles/global.css';
+import ContactSection from '../components/ContactSection.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+	/** Optional lang attribute (default es for client pitches). */
+	lang?: string;
+	/** Extra classes on `<body>` (e.g. pitch-specific root). */
+	bodyClass?: string;
+	/** Inline CSS variables applied to `.pitch-root` for per-page theming. */
+	themeVars?: Record<string, string>;
+}
+
+const {
+	title,
+	description = 'Private proposal — Setin Studio',
+	lang = 'es',
+	bodyClass = '',
+	themeVars = {},
+} = Astro.props;
+
+const pageTitle = title.includes('Setin') ? title : `${title} — Setin Studio`;
+const themeStyle = Object.entries(themeVars)
+	.map(([key, value]) => `${key}: ${value}`)
+	.join('; ');
+---
+
+<!doctype html>
+<html lang={lang} style="background-color: var(--pitch-bg, #0b140f);">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		{/* Hard-locked: pitch pages must never be indexed */}
+		<meta name="robots" content="noindex, nofollow" />
+		<meta name="googlebot" content="noindex, nofollow" />
+		<meta name="description" content={description} />
+		<link rel="icon" type="image/svg+xml" href="/favicons/favicon-dark-mode.svg" />
+		<link
+			rel="icon"
+			type="image/svg+xml"
+			href="/favicons/favicon-light-mode.svg"
+			media="(prefers-color-scheme: light)"
+		/>
+		<link
+			rel="icon"
+			type="image/svg+xml"
+			href="/favicons/favicon-dark-mode.svg"
+			media="(prefers-color-scheme: dark)"
+		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		{/* Pitch stack + Fustat for shared Contact/Footer (same as main site) */}
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=Science+Gothic:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<title>{pageTitle}</title>
+		<slot name="head" />
+	</head>
+	<body
+		class:list={[
+			'pitch-body relative flex min-h-screen max-w-[100vw] flex-col overflow-x-clip antialiased',
+			bodyClass,
+		]}
+	>
+		<div class="pitch-root flex min-h-screen flex-col" style={themeStyle || undefined}>
+			<main class="pitch-main relative z-[1] flex-1">
+				<slot />
+			</main>
+			{/* Site chrome — identical ContactSection + Footer as wearesetin.com */}
+			<div class="pitch-site-end relative z-[2]">
+				<ContactSection />
+				<Footer />
+			</div>
+		</div>
+
+		<div id="site-cursor" class="site-cursor" aria-hidden="true">
+			<span class="site-cursor__trail"></span>
+			<span class="site-cursor__flash"></span>
+			<span class="site-cursor__core"></span>
+		</div>
+		<div id="site-cursor-sparks" class="site-cursor-sparks" aria-hidden="true"></div>
+
+		<script>
+			import { initSmoothScroll } from '../scripts/initSmoothScroll.ts';
+			import { initSiteCursor } from '../scripts/initSiteCursor.ts';
+			initSmoothScroll();
+			initSiteCursor();
+		</script>
+	</body>
+</html>
+
+<style is:global>
+	.pitch-body {
+		background-color: var(--pitch-bg, #0b140f);
+		color: var(--pitch-fg, #ffffff);
+		font-family: var(--pitch-font-body, 'Montserrat', ui-sans-serif, system-ui, sans-serif);
+		margin: 0;
+	}
+
+	.pitch-root {
+		--pitch-bg: #0b140f;
+		--pitch-fg: #ffffff;
+		--pitch-muted: rgba(255, 255, 255, 0.6);
+		--pitch-accent: #a4ff00;
+		--pitch-font-display: 'Science Gothic', ui-sans-serif, system-ui, sans-serif;
+		--pitch-font-body: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+		--pitch-font-nav: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+		--pitch-gutter: 16px;
+		--pitch-section-y: 80px;
+		--pitch-nav-height: auto;
+	}
+
+	@media (width >= 768px) {
+		.pitch-root {
+			--pitch-gutter: 60px;
+			--pitch-section-y: 160px;
+		}
+	}
+
+	.pitch-display {
+		font-family: var(--pitch-font-display);
+		font-weight: 400;
+		text-transform: uppercase;
+	}
+
+	.pitch-body-copy {
+		font-family: var(--pitch-font-body);
+		font-size: 0.875rem;
+		font-weight: 400;
+		line-height: 1.7;
+	}
+
+	/* Scope pitch text resets to pitch main only — leave Contact/Footer untouched */
+	.pitch-root .pitch-main p,
+	.pitch-root .pitch-main li {
+		font-family: inherit;
+		letter-spacing: normal;
+	}
+
+	/* After the p reset — captions must keep Science Gothic + tracking */
+	.pitch-root .pitch-label {
+		font-family: var(--pitch-font-display);
+		font-weight: 300;
+		font-size: 14px;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		line-height: 1.6;
+	}
+
+	.pitch-root .pitch-body-copy,
+	.pitch-root .pitch-body-copy p {
+		font-family: var(--pitch-font-body);
+		font-size: 0.875rem;
+		font-weight: 400;
+		line-height: 1.7;
+	}
+
+	/* Contact + Footer: same type stack and surface as main Setin site */
+	.pitch-site-end {
+		font-family: 'Fustat', ui-sans-serif, system-ui, sans-serif;
+		color: #f5f5f5;
+		letter-spacing: var(--letter-spacing-body);
+		background-color: #131415;
+	}
+
+	.pitch-site-end,
+	.pitch-site-end p,
+	.pitch-site-end li,
+	.pitch-site-end h2,
+	.pitch-site-end a,
+	.pitch-site-end span,
+	.pitch-site-end button {
+		font-family: 'Fustat', ui-sans-serif, system-ui, sans-serif;
+	}
+
+	/* Line blur reveal for pitch headings */
+	.pitch-reveal {
+		display: block;
+		width: 100%;
+	}
+
+	.pitch-reveal__mask {
+		display: block;
+		width: 100%;
+		overflow: hidden;
+	}
+
+	.pitch-reveal__line {
+		display: block;
+		filter: blur(16px);
+		opacity: 0;
+		transform: translateY(0.35em);
+		transition:
+			filter 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+			opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+			transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+		transition-delay: calc(var(--i, 0) * 140ms);
+		will-change: filter, opacity, transform;
+	}
+
+	.pitch-reveal__line.is-revealed {
+		filter: blur(0);
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	/* Same custom cursor as main Setin site */
+	html.has-site-cursor,
+	html.has-site-cursor body {
+		cursor: none;
+	}
+
+	html.has-site-cursor :is(
+		a,
+		button,
+		label,
+		summary,
+		select,
+		[role='button'],
+		[role='link'],
+		[role='menuitem'],
+		[type='button'],
+		[type='submit'],
+		[type='reset'],
+		[type='checkbox'],
+		[type='radio']
+	) {
+		cursor: none;
+	}
+
+	html.has-site-cursor input,
+	html.has-site-cursor textarea,
+	html.has-site-cursor select,
+	html.has-site-cursor [contenteditable='true'] {
+		cursor: text !important;
+	}
+
+	.site-cursor {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 10050;
+		width: 0;
+		height: 0;
+		overflow: visible;
+		pointer-events: none;
+		opacity: 0;
+		visibility: hidden;
+		mix-blend-mode: difference;
+		transition:
+			opacity 0.2s ease,
+			visibility 0s linear 0.2s;
+	}
+
+	.site-cursor.is-visible {
+		opacity: 1;
+		visibility: visible;
+		transition:
+			opacity 0.2s ease,
+			visibility 0s linear 0s;
+	}
+
+	.site-cursor.is-suppressed,
+	.site-cursor-sparks.is-suppressed {
+		opacity: 0 !important;
+		visibility: hidden !important;
+		transition:
+			opacity 0.15s ease,
+			visibility 0s linear 0.15s;
+	}
+
+	.site-cursor__core,
+	.site-cursor__trail,
+	.site-cursor__flash {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+		pointer-events: none;
+	}
+
+	.site-cursor__core {
+		width: 11px;
+		height: 11px;
+		border-radius: 9999px;
+		background: #ffffff;
+		box-shadow: 0 0 6px rgba(255, 255, 255, 0.35);
+		transform: translate(-50%, -50%);
+		transition: transform 0.18s ease;
+		z-index: 3;
+	}
+
+	.site-cursor.is-pressed .site-cursor__core {
+		transform: translate(-50%, -50%) scale(0.82);
+	}
+
+	.site-cursor__trail {
+		border-radius: 9999px;
+		background: radial-gradient(
+			ellipse at center,
+			rgba(255, 255, 255, 0.5) 0%,
+			rgba(255, 255, 255, 0.22) 40%,
+			rgba(255, 255, 255, 0.06) 65%,
+			rgba(255, 255, 255, 0) 80%
+		);
+		filter: blur(5px);
+		opacity: 0.5;
+		transform: translate(-50%, -50%);
+		transform-origin: center;
+		z-index: 1;
+	}
+
+	.site-cursor__flash {
+		width: 28px;
+		height: 28px;
+		border-radius: 9999px;
+		background: conic-gradient(
+			from 270deg,
+			rgba(255, 255, 255, 0.08) 0deg,
+			rgba(255, 255, 255, 0.55) 40deg,
+			rgba(255, 255, 255, 0.95) 90deg,
+			rgba(255, 255, 255, 0.55) 140deg,
+			rgba(255, 255, 255, 0.08) 180deg,
+			transparent 180deg,
+			transparent 360deg
+		);
+		-webkit-mask-image: radial-gradient(
+			farthest-side,
+			transparent calc(100% - 3.5px),
+			#000 calc(100% - 2.5px),
+			#000 calc(100% - 0.5px),
+			transparent 100%
+		);
+		mask-image: radial-gradient(
+			farthest-side,
+			transparent calc(100% - 3.5px),
+			#000 calc(100% - 2.5px),
+			#000 calc(100% - 0.5px),
+			transparent 100%
+		);
+		filter: blur(1.25px) drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
+		opacity: 0;
+		transform: translate(-50%, -50%);
+		transform-origin: center;
+		z-index: 2;
+	}
+
+	.site-cursor-sparks {
+		position: fixed;
+		inset: 0;
+		z-index: 10049;
+		pointer-events: none;
+		overflow: hidden;
+	}
+
+	.site-cursor-spark {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 0;
+		display: block;
+		border-radius: 9999px;
+		background: #ffffff;
+		box-shadow: 0 0 5px rgba(255, 255, 255, 0.55);
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.site-cursor,
+		.site-cursor-sparks {
+			display: none !important;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.site-cursor,
+		.site-cursor-sparks {
+			display: none !important;
+		}
+
+		html.has-site-cursor,
+		html.has-site-cursor * {
+			cursor: auto !important;
+		}
+	}
+</style>

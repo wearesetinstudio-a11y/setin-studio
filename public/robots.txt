@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /pitches/
+
+Sitemap: https://wearesetin.com/sitemap-index.xml

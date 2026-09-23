@@ -24,3 +24,8 @@ pnpm-debug.log*
 .idea/
 
 .vercel
+
+# local pitch design refs (not for deploy)
+public/pitches/**/_mobile-ref/
+public/pitches/**/_video-ref/
+public/pitches/**/_preview/

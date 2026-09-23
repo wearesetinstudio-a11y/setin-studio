@@ -31,7 +31,8 @@ export function scrollToImmediate(y: number) {
 }
 
 function getScrollOffset() {
-	const header = document.getElementById('site-header');
+	const header =
+		document.getElementById('site-header') ?? document.getElementById('pitch-nav');
 	return -(header?.offsetHeight ?? 0) - 12;
 }
 
@@ -93,6 +94,11 @@ function waitForMobileNavClosed(timeoutMs = 2200): Promise<void> {
 	});
 }
 
+function barePathname(pathname: string) {
+	const stripped = pathname.replace(/^\/(pl|es)(?=\/|$)/, '') || '/';
+	return stripped.replace(/\/$/, '') || '/';
+}
+
 function initAnchorScrollClicks() {
 	const scrollWindow = window as SmoothScrollWindow;
 	if (scrollWindow.__setinSmoothScrollClicksReady) return;
@@ -112,7 +118,7 @@ function initAnchorScrollClicks() {
 			if (!(anchor instanceof HTMLAnchorElement)) return;
 
 			const hrefAttr = anchor.getAttribute('href');
-			if (!hrefAttr || !hrefAttr.includes('#contact')) return;
+			if (!hrefAttr || !hrefAttr.includes('#')) return;
 
 			let url: URL;
 			try {
@@ -122,8 +128,12 @@ function initAnchorScrollClicks() {
 			}
 
 			if (url.origin !== window.location.origin) return;
-			if (url.pathname !== window.location.pathname) return;
-			if (url.hash !== '#contact') return;
+			if (barePathname(url.pathname) !== barePathname(window.location.pathname)) return;
+
+			const hash = url.hash;
+			if (!hash || hash === '#') return;
+			const id = decodeURIComponent(hash.slice(1));
+			if (!id || !document.getElementById(id)) return;
 
 			event.preventDefault();
 			event.stopPropagation();
@@ -142,12 +152,12 @@ function initAnchorScrollClicks() {
 					});
 				}
 
-				scrollToId('contact');
-				if (window.location.hash !== '#contact') {
+				scrollToId(id);
+				if (window.location.hash !== hash) {
 					window.history.pushState(
 						window.history.state,
 						'',
-						`${window.location.pathname}${window.location.search}#contact`,
+						`${window.location.pathname}${window.location.search}${hash}`,
 					);
 				}
 			})();

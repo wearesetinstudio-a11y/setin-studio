@@ -266,6 +266,7 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 			import { initI18n } from '../scripts/i18n.ts';
 			import { initSmoothScroll } from '../scripts/initSmoothScroll.ts';
 			import { initCookieConsent } from '../scripts/initCookieConsent.ts';
+			import { initCurrentNavLinks } from '../scripts/initCurrentNavLinks.ts';
 
 			initSmoothScroll();
 			initPageTransitionOverlay();
@@ -273,14 +274,18 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 			initGlobalPreloader();
 			initSiteCursor();
 			initCookieConsent();
+			initCurrentNavLinks();
 			document.addEventListener('astro:page-load', () => {
 				initSmoothScroll();
 				initI18n();
 				initGlobalPreloader();
 				initSiteCursor();
 				initCookieConsent();
+				initCurrentNavLinks();
 			});
-		</script>
+			document.addEventListener('astro:after-swap', () => {
+				initCurrentNavLinks();
+			});</script>
 	</body>
 </html>
 

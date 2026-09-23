@@ -1,11 +1,19 @@
 ---
 import { getCollection } from 'astro:content';
 import RollingLink from './RollingLink.astro';
+import { stripLocalePrefix } from '../i18n/seo.ts';
+import { isActiveNavHref, normalizeNavPath } from '../utils/isActiveNavHref.ts';
 
 const emailHref = 'mailto:wearesetinstudio@gmail.com?subject=Hello%20Setin!%20:)';
 const whatsappHref =
 	'https://api.whatsapp.com/message/IDQVMTROBPOXM1?autoload=1&app_absent=0';
 const whatsappDisplay = '+507 6628 65 24';
+
+const originPathname =
+	typeof Astro.originPathname === 'string' && Astro.originPathname
+		? Astro.originPathname
+		: Astro.url.pathname;
+const barePath = normalizeNavPath(stripLocalePrefix(originPathname));
 
 const sitemapLinks = [
 	{ href: '/projects', label: 'Projects', i18nKey: 'nav.projects' },
@@ -16,10 +24,26 @@ const sitemapLinks = [
 ];
 
 const serviceLinks = [
-	{ href: '/services', label: 'Branding', i18nKey: 'hero.service.branding' },
-	{ href: '/services', label: 'UX Research', i18nKey: 'hero.service.uxResearch' },
-	{ href: '/services', label: 'UX/UI Design', i18nKey: 'hero.service.uxUi' },
-	{ href: '/services', label: 'Development', i18nKey: 'hero.service.development' },
+	{
+		href: '/services#service-01',
+		label: 'Brand Design',
+		i18nKey: 'services.item.branding.label',
+	},
+	{
+		href: '/services#service-02',
+		label: 'Product UX/UI Design',
+		i18nKey: 'services.item.product.label',
+	},
+	{
+		href: '/services#service-03',
+		label: 'AI Automations',
+		i18nKey: 'services.item.automation.label',
+	},
+	{
+		href: '/services#service-04',
+		label: 'Development & Engineering',
+		i18nKey: 'services.item.development.label',
+	},
 ];
 
 const locations = [
@@ -59,6 +83,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 									label={link.label}
 									i18nKey={link.i18nKey}
 									variant="footer"
+									current={isActiveNavHref(link.href, barePath)}
 								/>
 							</li>
 						))
@@ -77,6 +102,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 									label={link.label}
 									i18nKey={link.i18nKey}
 									variant="footer"
+									markCurrent={false}
 								/>
 							</li>
 						))
@@ -90,7 +116,12 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 					{
 						projects.map((project) => (
 							<li>
-								<RollingLink href={`/projects/${project.id}`} label={project.data.title} variant="footer" />
+								<RollingLink
+									href={`/projects/${project.id}`}
+									label={project.data.title}
+									variant="footer"
+									current={isActiveNavHref(`/projects/${project.id}`, barePath)}
+								/>
 							</li>
 						))
 					}
@@ -102,6 +133,8 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 							variant="footer"
 							underlined
 							count={projectCount}
+							current={barePath === '/projects'}
+							exact
 						/>
 					</li>
 				</ul>
