@@ -7,7 +7,6 @@ import ClientsSection from '../components/ClientsSection.astro';
 import AboutSection from '../components/AboutSection.astro';
 import TestimonialsSection from '../components/TestimonialsSection.astro';
 import ArticlesSection from '../components/ArticlesSection.astro';
-import ContactSection from '../components/ContactSection.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { sortProjects } from '../utils/sortProjects.ts';
@@ -254,7 +253,6 @@ const { projectCount, articleCount } = await getSiteCounts();
 
 		<ArticlesSection />
 
-		<ContactSection />
 	</main>
 
 	<Footer />

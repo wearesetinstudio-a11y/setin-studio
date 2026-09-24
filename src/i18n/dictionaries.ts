@@ -85,7 +85,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'footer.whatsapp': 'WhatsApp',
 		'footer.contact': 'Contact us',
 		'footer.all': 'All',
-		'footer.rights': 'Setin Studio All rights reserved',
+		'footer.rights': 'All rights reserved',
 
 		'services.title': 'Services',
 		'services.description':
@@ -200,7 +200,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'footer.whatsapp': 'WhatsApp',
 		'footer.contact': 'Kontakt',
 		'footer.all': 'Wszystkie',
-		'footer.rights': 'Setin Studio Wszelkie prawa zastrzeżone',
+		'footer.rights': 'Wszelkie prawa zastrzeżone',
 
 		'services.title': 'Usługi',
 		'services.description':
@@ -315,7 +315,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'footer.whatsapp': 'WhatsApp',
 		'footer.contact': 'Contáctanos',
 		'footer.all': 'Todos',
-		'footer.rights': 'Setin Studio Todos los derechos reservados',
+		'footer.rights': 'Todos los derechos reservados',
 
 		'services.title': 'Servicios',
 		'services.description':

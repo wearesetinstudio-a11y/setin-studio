@@ -7,7 +7,6 @@ import ProjectOverviewSection from '../../components/projects/ProjectOverviewSec
 import ProjectContentBlock from '../../components/projects/ProjectContentBlock.astro';
 import ProjectGallerySection from '../../components/projects/ProjectGallerySection.astro';
 import ProjectSidebar, { type SidebarNavItem } from '../../components/projects/ProjectSidebar.astro';
-import ContactSection from '../../components/ContactSection.astro';
 import { getCollection } from 'astro:content';
 import {
 	buildGalleryLayout,
@@ -265,7 +264,6 @@ const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
 			</div>
 		</div>
 
-		<ContactSection />
 	</main>
 
 	<Footer />

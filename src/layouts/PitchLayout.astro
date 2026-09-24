@@ -1,10 +1,9 @@
 ---
 /**
  * Independent shell for hidden pitch / proposal pages.
- * Pitch content uses its own type stack; ContactSection + Footer match the main site 1:1.
+ * Pitch content uses its own type stack; Footer (contact + nav) matches the main site 1:1.
  */
 import '../styles/global.css';
-import ContactSection from '../components/ContactSection.astro';
 import Footer from '../components/Footer.astro';
 import { isLocale, type Locale } from '../i18n/dictionaries.ts';
 import { htmlLang } from '../i18n/seo.ts';
@@ -15,7 +14,7 @@ interface Props {
 	/** Optional lang attribute (default es for client pitches). */
 	lang?: string;
 	/**
-	 * Locale for shared Setin chrome (Contact + Footer + nav i18n).
+	 * Locale for shared Setin chrome (Footer + nav i18n).
 	 * Defaults to Spanish so client pitches match wearesetin.com/es.
 	 */
 	locale?: Locale;
@@ -85,9 +84,8 @@ const themeStyle = Object.entries(themeVars)
 			<main class="pitch-main relative z-[1] flex-1">
 				<slot />
 			</main>
-			{/* Site chrome — identical ContactSection + Footer as wearesetin.com/es */}
+			{/* Site chrome — unified Footer (contact + nav) as wearesetin.com */}
 			<div class="pitch-site-end relative z-[2]">
-				<ContactSection locale={locale} />
 				<Footer locale={locale} />
 			</div>
 		</div>
@@ -179,12 +177,12 @@ const themeStyle = Object.entries(themeVars)
 		line-height: 1.7;
 	}
 
-	/* Contact + Footer: same type stack and surface as main Setin site */
+	/* Footer: same type stack and surface as main Setin site */
 	.pitch-site-end {
 		font-family: 'Fustat', ui-sans-serif, system-ui, sans-serif;
 		color: #f5f5f5;
 		letter-spacing: var(--letter-spacing-body);
-		background-color: #131415;
+		background-color: #0f1011;
 	}
 
 	.pitch-site-end,

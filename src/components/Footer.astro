@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import RollingLink from './RollingLink.astro';
 import { t, type Locale } from '../i18n/dictionaries.ts';
 import { buildLocalePath, stripLocalePrefix } from '../i18n/seo.ts';
@@ -61,15 +60,38 @@ const serviceLinks = [
 	},
 ];
 
+const socialLinks = [
+	{
+		label: 'WhatsApp',
+		href: 'https://api.whatsapp.com/message/IDQVMTROBPOXM1?autoload=1&app_absent=0',
+	},
+	{
+		label: 'Instagram',
+		href: 'https://www.instagram.com/weare_setin_studio/',
+	},
+	{
+		label: 'Facebook',
+		href: 'https://www.facebook.com/wearesetinstudio?locale=pl_PL',
+	},
+	{
+		label: 'LinkedIn',
+		href: 'https://www.linkedin.com/company/wearesetin',
+	},
+	{
+		label: 'YouTube',
+		href: 'https://www.youtube.com/channel/UCqJVj469YiK-Lg51OJ7FVoQ',
+	},
+];
+
 const locations = [
 	{ label: 'Szczecin, PL', timezone: 'Europe/Warsaw' },
 	{ label: 'Valencia, ES', timezone: 'Europe/Madrid' },
 	{ label: 'Panama, PA', timezone: 'America/Panama' },
 ];
 
-const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const projects = allProjects.filter((project) => !project.data.comingSoon).slice(0, 4);
-const projectCount = allProjects.length;
+const contactHeading = t(locale, 'contact.heading');
+const contactDescription = t(locale, 'contact.description');
+const contactEmail = t(locale, 'contact.email');
 
 function formatLocationTime(timeZone: string, date = new Date()) {
 	return new Intl.DateTimeFormat('en-US', {
@@ -84,78 +106,136 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 }
 ---
 
-<footer class="site-footer relative z-20 bg-[#0f1011]">
-	<div class="relative z-[1] px-[var(--page-gutter)] py-[var(--band-padding-y)]">
-		<div class="site-footer__nav grid grid-cols-2 gap-x-6 gap-y-10 pb-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 lg:pb-16">
-			<div class="site-footer__col">
-				<p class="site-footer__col-label" data-i18n="footer.sitemap">{t(locale, 'footer.sitemap')}</p>
-				<ul class="site-footer__list">
+<footer id="contact" class="site-footer relative z-20 bg-[#0f1011]">
+	<div class="site-footer__inner relative z-[1] px-[var(--page-gutter)] pt-[var(--band-padding-y)] pb-8 md:pb-10">
+		<div class="site-footer__grid">
+			{/* —— Col 1: CTA + socials —— */}
+			<div class="site-footer__col site-footer__col--cta">
+				<h2
+					id="contact-heading"
+					class="contact-heading w-full max-w-full uppercase leading-[1.15] text-setin-fg md:max-w-[18rem] lg:max-w-[20rem]"
+				>
+					<span data-reveal-line data-i18n="contact.heading">{contactHeading}</span>
+				</h2>
+
+				<p
+					class="body-txt-1 contact-description mt-5 w-full max-w-full leading-relaxed text-setin-fg/55 md:mt-6 md:max-w-[22rem]"
+					data-i18n="contact.description"
+				>
+					{contactDescription}
+				</p>
+
+				<div id="contact-email-wrap" class="contact-email-cta-wrap mt-8 w-full min-w-0 max-w-full md:mt-10 md:max-w-[22rem]">
+					<a
+						href={emailHref}
+						id="contact-email-cta"
+						class="contact-email-cta group relative box-border block w-full max-w-full px-5 py-5 md:px-8 md:py-6"
+					>
+						<span class="contact-email-cta__inner relative z-10 flex w-full items-center justify-between">
+							<span class="contact-email-cta__label-wrap flex h-[1.5em] flex-col overflow-hidden">
+								<span class="contact-email-cta__roll-inner flex flex-col">
+									<span
+										class="contact-email-cta__label-line contact-email-cta__label-line--default flex h-[1.5em] items-center text-[1rem] font-semibold uppercase leading-none md:text-[1.05rem]"
+										data-i18n="contact.email"
+									>
+										{contactEmail}
+									</span>
+									<span
+										class="contact-email-cta__label-line contact-email-cta__label-line--hover flex h-[1.5em] items-center text-[1rem] font-semibold uppercase leading-none md:text-[1.05rem]"
+										data-i18n="contact.email"
+									>
+										{contactEmail}
+									</span>
+								</span>
+							</span>
+							<img
+								src="/icons/arrow.svg"
+								alt=""
+								width="20"
+								height="16"
+								class="contact-email-cta__arrow w-[20px] shrink-0"
+							/>
+						</span>
+					</a>
+				</div>
+
+				<div class="contact-social mt-10 md:mt-12">
 					{
-						sitemapLinks.map((link) => (
-							<li>
-								<RollingLink
-									href={localeHref(link.href)}
-									label={link.label}
-									i18nKey={link.i18nKey}
-									variant="footer"
-									current={isActiveNavHref(link.href, barePath)}
-								/>
-							</li>
+						socialLinks.map((link) => (
+							<a
+								href={link.href}
+								class="contact-social__link group block border-b border-white/15 py-5 transition-colors duration-300 hover:border-b-white first:border-t first:border-t-white/15 md:py-6"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<span class="contact-social__inner flex items-center justify-between gap-8">
+									<span class="contact-social__label-wrap flex h-[1.5em] flex-col overflow-hidden">
+										<span class="flex flex-col transition-transform duration-300 ease-in group-hover:-translate-y-1/2 group-hover:duration-[450ms] group-hover:ease-out">
+											<span class="contact-social__label-line flex h-[1.5em] items-center text-[1rem] font-semibold uppercase leading-none text-setin-fg">
+												{link.label}
+											</span>
+											<span class="contact-social__label-line flex h-[1.5em] items-center text-[1rem] font-semibold uppercase leading-none text-setin-fg">
+												{link.label}
+											</span>
+										</span>
+									</span>
+									<img
+										src="/icons/simple-arrow.svg"
+										alt=""
+										width="22"
+										height="18"
+										class="contact-social__arrow h-4 w-auto"
+									/>
+								</span>
+							</a>
 						))
 					}
-				</ul>
+				</div>
 			</div>
 
-			<div class="site-footer__col">
-				<p class="site-footer__col-label" data-i18n="footer.services">{t(locale, 'footer.services')}</p>
-				<ul class="site-footer__list">
-					{
-						serviceLinks.map((link) => (
-							<li>
-								<RollingLink
-									href={localeHref(link.href)}
-									label={link.label}
-									i18nKey={link.i18nKey}
-									variant="footer"
-									markCurrent={false}
-								/>
-							</li>
-						))
-					}
-				</ul>
+			{/* —— Col 2: Sitemap + Services —— */}
+			<div class="site-footer__col site-footer__col--nav">
+				<div class="site-footer__nav-block">
+					<p class="site-footer__col-label" data-i18n="footer.sitemap">{t(locale, 'footer.sitemap')}</p>
+					<ul class="site-footer__list">
+						{
+							sitemapLinks.map((link) => (
+								<li>
+									<RollingLink
+										href={localeHref(link.href)}
+										label={link.label}
+										i18nKey={link.i18nKey}
+										variant="footer"
+										current={isActiveNavHref(link.href, barePath)}
+									/>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+
+				<div class="site-footer__nav-block site-footer__nav-block--services">
+					<p class="site-footer__col-label" data-i18n="footer.services">{t(locale, 'footer.services')}</p>
+					<ul class="site-footer__list">
+						{
+							serviceLinks.map((link) => (
+								<li>
+									<RollingLink
+										href={localeHref(link.href)}
+										label={link.label}
+										i18nKey={link.i18nKey}
+										variant="footer"
+										markCurrent={false}
+									/>
+								</li>
+							))
+						}
+					</ul>
+				</div>
 			</div>
 
-			<div class="site-footer__col">
-				<p class="site-footer__col-label" data-i18n="footer.projects">{t(locale, 'footer.projects')}</p>
-				<ul class="site-footer__list">
-					{
-						projects.map((project) => (
-							<li>
-								<RollingLink
-									href={localeHref(`/projects/${project.id}`)}
-									label={project.data.title}
-									variant="footer"
-									current={isActiveNavHref(`/projects/${project.id}`, barePath)}
-								/>
-							</li>
-						))
-					}
-					<li>
-						<RollingLink
-							href={localeHref('/projects')}
-							label={t(locale, 'footer.all')}
-							i18nKey="footer.all"
-							variant="footer"
-							underlined
-							count={projectCount}
-							current={barePath === '/projects'}
-							exact
-						/>
-					</li>
-				</ul>
-			</div>
-
-			<div class="site-footer__col col-span-2 sm:col-span-1">
+			{/* —— Col 3: Contact + logo + locations —— */}
+			<div class="site-footer__col site-footer__col--brand">
 				<div class="site-footer__contact-block">
 					<p class="site-footer__col-label" data-i18n="footer.email">{t(locale, 'footer.email')}</p>
 					<RollingLink
@@ -165,7 +245,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 						underlined
 					/>
 				</div>
-				<div class="site-footer__contact-block mt-8">
+				<div class="site-footer__contact-block mt-7 md:mt-8">
 					<p class="site-footer__col-label" data-i18n="footer.whatsapp">{t(locale, 'footer.whatsapp')}</p>
 					<RollingLink
 						href={whatsappHref}
@@ -175,46 +255,51 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 						external
 					/>
 				</div>
-			</div>
-		</div>
 
-		<div class="site-footer__bottom flex flex-col gap-6 border-t border-white/10 pt-8 md:flex-row md:items-end md:justify-between md:gap-10">
-			<div class="flex items-center gap-3">
 				<img
-					src="/logo-sygnet.svg"
-					alt=""
-					width="28"
-					height="26"
-					class="footer-brand h-auto w-7"
-					aria-hidden="true"
+					src="/logo-setin.svg"
+					alt="Setin"
+					width="111"
+					height="42"
+					class="site-footer__wordmark"
 				/>
-				<span class="footer-copyright text-[0.75rem] uppercase tracking-[0.04em] text-setin-muted md:text-[0.8rem]">
-					&copy; {new Date().getFullYear()}{' '}
-					<span data-i18n="footer.rights">{t(locale, 'footer.rights')}</span>
-				</span>
-			</div>
 
-			<div class="footer-locations flex flex-wrap items-start gap-x-0 gap-y-4">
-				{
-					locations.map((location, index) => (
-						<div class="footer-location flex items-stretch">
-							{index > 0 ? <span class="footer-location__rule" aria-hidden="true" /> : null}
-							<div class="footer-location__content flex min-w-0 flex-col gap-1">
-								<span class="footer-location__label text-[0.75rem] uppercase tracking-[0.04em] text-setin-muted md:text-[0.8rem]">
-									{location.label}
-								</span>
+				<div class="footer-locations">
+					{
+						locations.flatMap((location, index) => [
+							index > 0 ? (
+								<span class="footer-location__rule" aria-hidden="true" />
+							) : null,
+							<div class="footer-location">
+								<span class="footer-location__label">{location.label}</span>
 								<time
-									class="footer-location__time text-[0.75rem] uppercase tracking-[0.04em] text-setin-muted tabular-nums md:text-[0.8rem]"
+									class="footer-location__time"
 									datetime={new Date().toISOString()}
 									data-timezone={location.timezone}
 								>
 									{formatLocationTime(location.timezone)}
 								</time>
-							</div>
-						</div>
-					))
-				}
+							</div>,
+						])
+					}
+				</div>
 			</div>
+		</div>
+
+		<div class="site-footer__bottom">
+			<img
+				src="/logo-sygnet.svg"
+				alt=""
+				width="22"
+				height="20"
+				class="footer-brand h-auto w-[22px] shrink-0"
+				aria-hidden="true"
+			/>
+			<span class="footer-copyright text-[0.7rem] uppercase tracking-[0.04em] text-setin-muted md:text-[0.75rem]">
+				&copy; {new Date().getFullYear()} Setin Studio
+				<span class="footer-copyright__sep" aria-hidden="true">|</span>
+				<span data-i18n="footer.rights">{t(locale, 'footer.rights')}</span>
+			</span>
 		</div>
 	</div>
 </footer>
@@ -222,6 +307,29 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 <style is:global>
 	.site-footer {
 		background-color: #0f1011;
+	}
+
+	.site-footer__grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 3.5rem;
+		padding-bottom: 3rem;
+	}
+
+	.site-footer__col--nav {
+		display: flex;
+		flex-direction: column;
+		gap: 2.75rem;
+		/* Match grid gap above the rule so spacing above/below the line is equal */
+		padding-top: 3.5rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.12);
+	}
+
+	.site-footer__col--brand {
+		display: flex;
+		flex-direction: column;
+		border-top: 1px solid rgba(255, 255, 255, 0.12);
+		padding-top: 3.5rem;
 	}
 
 	.site-footer__col-label,
@@ -245,7 +353,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 	.site-footer__list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.85rem;
+		gap: 1.25rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;
@@ -271,21 +379,396 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 		letter-spacing: var(--letter-spacing-ui);
 	}
 
-	.footer-location__rule {
+	.site-footer__wordmark {
 		display: block;
+		width: 100%;
+		height: auto;
+		margin-top: 3rem;
+		margin-bottom: 1.75rem;
+	}
+
+	.footer-locations {
+		display: flex;
+		width: 100%;
+		align-items: stretch;
+		justify-content: space-between;
+		gap: 0;
+	}
+
+	.footer-location {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.4rem;
+		flex: 0 1 auto;
+		min-width: 0;
+		text-align: left;
+	}
+
+	.footer-location__rule {
+		flex: 0 0 1px;
 		width: 1px;
 		align-self: stretch;
-		margin-inline: 1.25rem;
 		background: rgba(245, 245, 245, 0.2);
 	}
 
-	@media (max-width: 767px) {
-		.site-footer__link-line {
-			font-size: 0.85rem;
+	.footer-location__label,
+	.footer-location__time {
+		display: block;
+		font-size: 0.7rem;
+		line-height: 1.3;
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-ui);
+		color: rgba(245, 245, 245, 0.55);
+		text-align: left;
+		white-space: nowrap;
+	}
+
+	.footer-location__time {
+		font-variant-numeric: tabular-nums;
+		color: rgba(245, 245, 245, 0.85);
+	}
+
+	.site-footer__bottom {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding-top: 1.75rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.footer-copyright__sep {
+		margin-inline: 0.45em;
+		opacity: 0.55;
+	}
+
+	.contact-heading {
+		color: #f5f5f5;
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	#contact-heading [data-reveal-line] {
+		white-space: normal;
+	}
+
+	#contact-heading .reveal-char {
+		color: rgba(255, 255, 255, 0.15);
+		transition: color 0.35s ease-out;
+	}
+
+	#contact-heading .reveal-char.active {
+		color: rgba(255, 255, 255, 1);
+	}
+
+	.contact-description {
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	.contact-email-cta-wrap {
+		max-width: 100%;
+	}
+
+	.contact-email-cta {
+		background-color: #252628;
+		max-width: 100%;
+		transition:
+			transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+			background-color 0.35s ease;
+	}
+
+	.contact-email-cta__inner {
+		padding-inline: 0;
+		transition: padding-inline 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.contact-email-cta:focus-visible .contact-email-cta__inner,
+	.contact-email-cta.is-hovering .contact-email-cta__inner {
+		padding-inline: 8px;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.contact-email-cta:hover .contact-email-cta__inner {
+			padding-inline: 8px;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.contact-email-cta:active .contact-email-cta__inner {
+			padding-inline: 8px;
+		}
+	}
+
+	.contact-email-cta__label-line,
+	.contact-email-cta__arrow {
+		transition:
+			color 0.35s ease,
+			filter 0.35s ease;
+	}
+
+	.contact-email-cta__label-line--default {
+		color: #f5f5f5;
+	}
+
+	.contact-email-cta__label-line--hover {
+		color: #18191b !important;
+	}
+
+	.contact-email-cta__roll-inner {
+		transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+	}
+
+	.contact-email-cta:focus-visible .contact-email-cta__roll-inner,
+	.contact-email-cta.is-hovering .contact-email-cta__roll-inner {
+		transform: translateY(-50%);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.contact-email-cta:hover .contact-email-cta__roll-inner {
+			transform: translateY(-50%);
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.contact-email-cta:active .contact-email-cta__roll-inner {
+			transform: translateY(-50%);
+		}
+	}
+
+	.contact-email-cta:focus-visible .contact-email-cta__label-line--default,
+	.contact-email-cta.is-hovering .contact-email-cta__label-line--default {
+		color: #18191b;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.contact-email-cta:hover .contact-email-cta__label-line--default {
+			color: #18191b;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.contact-email-cta:active .contact-email-cta__label-line--default {
+			color: #18191b;
+		}
+	}
+
+	.contact-email-cta__arrow {
+		filter: brightness(0) invert(1);
+	}
+
+	.contact-email-cta:focus-visible,
+	.contact-email-cta.is-hovering {
+		background-color: #ffffff;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.contact-email-cta:hover {
+			background-color: #ffffff;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.contact-email-cta:active {
+			background-color: #ffffff;
+		}
+	}
+
+	.contact-email-cta:focus-visible .contact-email-cta__arrow,
+	.contact-email-cta.is-hovering .contact-email-cta__arrow {
+		filter: none;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.contact-email-cta:hover .contact-email-cta__arrow {
+			filter: none;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.contact-email-cta:active .contact-email-cta__arrow {
+			filter: none;
+		}
+	}
+
+	.contact-social__inner {
+		padding-inline: 0;
+		transition: padding-inline 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.contact-social__link:focus-visible .contact-social__inner {
+		padding-inline: 8px;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.contact-social__link:hover .contact-social__inner {
+			padding-inline: 8px;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.contact-social__link:active .contact-social__inner {
+			padding-inline: 8px;
+		}
+	}
+
+	.contact-social__arrow {
+		transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+	}
+
+	.contact-social__link:focus-visible .contact-social__arrow {
+		transform: translateX(-6px) rotate(45deg);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.contact-social__link:hover .contact-social__arrow {
+			transform: translateX(-6px) rotate(45deg);
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.contact-social__link:active .contact-social__arrow {
+			transform: translateX(-6px) rotate(45deg);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.site-footer__grid {
+			grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr) minmax(0, 1.05fr);
+			gap: 0;
+			align-items: stretch;
+			padding-bottom: 3.5rem;
 		}
 
-		.footer-location__rule {
-			margin-inline: 0.85rem;
+		.site-footer__col--cta {
+			padding-right: 3.75rem;
+		}
+
+		.site-footer__col--nav {
+			border-top: 0;
+			border-left: 1px solid rgba(255, 255, 255, 0.12);
+			border-right: 1px solid rgba(255, 255, 255, 0.12);
+			padding: 0 3.75rem;
+			gap: 3.75rem;
+		}
+
+		.site-footer__col--brand {
+			border-top: 0;
+			padding: 0 0 0 3.75rem;
+			/* Stretch with tallest column; push logo + clocks to the bottom */
+			min-height: 100%;
+		}
+
+		.site-footer__list {
+			gap: 1.35rem;
+		}
+
+		.site-footer__col-label {
+			margin-bottom: 1.25rem;
+		}
+
+		.site-footer__wordmark {
+			width: 100%;
+			max-width: none;
+			margin-top: auto;
+			margin-bottom: 2rem;
+		}
+
+		.footer-location__label,
+		.footer-location__time {
+			font-size: 0.75rem;
+		}
+
+		.site-footer__bottom {
+			justify-content: space-between;
+			padding-top: 2rem;
+		}
+
+		.site-footer__bottom .footer-brand {
+			order: 0;
+		}
+
+		.site-footer__bottom .footer-copyright {
+			margin-left: auto;
+		}
+	}
+
+	@media (max-width: 1023px) {
+		.site-footer__link-line {
+			font-size: 0.95rem;
+		}
+
+		.site-footer__col--brand {
+			width: 100%;
+		}
+
+		.site-footer__wordmark {
+			width: 100%;
+			max-width: none;
+			margin-inline: 0;
+		}
+
+		.footer-locations {
+			width: 100%;
+			align-self: stretch;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.contact-email-cta:focus-visible,
+		.contact-email-cta.is-hovering {
+			background-color: #ffffff;
+		}
+
+		.contact-email-cta:focus-visible .contact-email-cta__label-line--default,
+		.contact-email-cta.is-hovering .contact-email-cta__label-line--default {
+			color: #18191b;
+		}
+
+		.contact-email-cta:focus-visible .contact-email-cta__roll-inner,
+		.contact-email-cta.is-hovering .contact-email-cta__roll-inner {
+			transform: none;
+		}
+
+		.contact-email-cta:focus-visible .contact-email-cta__arrow,
+		.contact-email-cta.is-hovering .contact-email-cta__arrow {
+			filter: none;
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+			.contact-email-cta:hover {
+				background-color: #ffffff;
+			}
+
+			.contact-email-cta:hover .contact-email-cta__label-line--default {
+				color: #18191b;
+			}
+
+			.contact-email-cta:hover .contact-email-cta__roll-inner {
+				transform: none;
+			}
+
+			.contact-email-cta:hover .contact-email-cta__arrow {
+				filter: none;
+			}
+		}
+
+		@media (hover: none), (pointer: coarse) {
+			.contact-email-cta:active {
+				background-color: #ffffff;
+			}
+
+			.contact-email-cta:active .contact-email-cta__label-line--default {
+				color: #18191b;
+			}
+
+			.contact-email-cta:active .contact-email-cta__roll-inner {
+				transform: none;
+			}
+
+			.contact-email-cta:active .contact-email-cta__arrow {
+				filter: none;
+			}
 		}
 	}
 </style>
@@ -335,6 +818,152 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 		footerClockInterval = window.setInterval(updateClocks, 1000);
 	}
 
-	initFooterLocationTimes();
-	document.addEventListener('astro:page-load', initFooterLocationTimes);
+	function wrapLetters(element: HTMLElement) {
+		const text = element.textContent ?? '';
+		element.textContent = '';
+
+		for (const char of text) {
+			const span = document.createElement('span');
+			span.className = 'reveal-char';
+			span.textContent = char === ' ' ? ' ' : char;
+			element.appendChild(span);
+		}
+	}
+
+	function updateContactHeadingReveal() {
+		const heading = document.getElementById('contact-heading');
+		if (!heading) return;
+
+		const chars = heading.querySelectorAll('.reveal-char');
+		if (!chars.length) return;
+
+		const rect = heading.getBoundingClientRect();
+		const viewportHeight = window.innerHeight;
+		const startLine = viewportHeight * 0.88;
+		const endLine = viewportHeight * 0.45;
+		const range = startLine - endLine;
+		const progress = Math.min(1, Math.max(0, (startLine - rect.top) / range));
+		const activeCount = Math.ceil(progress * chars.length);
+
+		chars.forEach((char, index) => {
+			char.classList.toggle('active', index < activeCount);
+		});
+	}
+
+	let scrollTicking = false;
+
+	function onContactScroll() {
+		if (scrollTicking) return;
+		scrollTicking = true;
+		requestAnimationFrame(() => {
+			updateContactHeadingReveal();
+			scrollTicking = false;
+		});
+	}
+
+	function initContactHeadingReveal() {
+		const heading = document.getElementById('contact-heading');
+		if (!heading) return;
+
+		if (heading.dataset.revealInit !== 'true') {
+			heading.dataset.revealInit = 'true';
+
+			heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
+				wrapLetters(line as HTMLElement);
+			});
+
+			window.addEventListener('scroll', onContactScroll, { passive: true });
+			window.addEventListener('resize', updateContactHeadingReveal, { passive: true });
+		}
+
+		updateContactHeadingReveal();
+	}
+
+	function initContactEmailButton() {
+		const section = document.getElementById('contact');
+		const button = document.getElementById('contact-email-cta');
+
+		if (!section || !button || button.dataset.emailInit === 'true') return;
+
+		button.dataset.emailInit = 'true';
+
+		const MAX_MOVE = 10;
+
+		function onSectionMove(event: MouseEvent) {
+			if (window.matchMedia('(hover: none), (pointer: coarse)').matches) {
+				return;
+			}
+
+			const rect = button.getBoundingClientRect();
+			const centerX = rect.left + rect.width / 2;
+			const centerY = rect.top + rect.height / 2;
+			const deltaX = event.clientX - centerX;
+			const deltaY = event.clientY - centerY;
+			const moveX = Math.max(-MAX_MOVE, Math.min(MAX_MOVE, deltaX * 0.075));
+			const moveY = Math.max(-MAX_MOVE, Math.min(MAX_MOVE, deltaY * 0.075));
+
+			const isHovering =
+				event.clientX >= rect.left &&
+				event.clientX <= rect.right &&
+				event.clientY >= rect.top &&
+				event.clientY <= rect.bottom;
+
+			button.classList.toggle('is-hovering', isHovering);
+
+			const scale = isHovering ? 1.02 : 1;
+			button.style.transform = `translate3d(${moveX}px, ${moveY}px, 0) scale(${scale})`;
+		}
+
+		function onSectionLeave() {
+			button.classList.remove('is-hovering');
+			button.style.transform = 'translate3d(0, 0, 0) scale(1)';
+		}
+
+		function onPressStart() {
+			if (!window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+			button.classList.add('is-hovering');
+		}
+
+		function onPressEnd() {
+			if (!window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+			button.classList.remove('is-hovering');
+		}
+
+		section.addEventListener('mousemove', onSectionMove, { passive: true });
+		section.addEventListener('mouseleave', onSectionLeave, { passive: true });
+		button.addEventListener('pointerdown', onPressStart);
+		button.addEventListener('pointerup', onPressEnd);
+		button.addEventListener('pointercancel', onPressEnd);
+		button.addEventListener('pointerleave', onPressEnd);
+	}
+
+	function bootSiteFooter() {
+		initFooterLocationTimes();
+		initContactHeadingReveal();
+		initContactEmailButton();
+
+		const section = document.getElementById('contact');
+		if (!section || section.dataset.revealObserved === 'true') return;
+
+		section.dataset.revealObserved = 'true';
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) updateContactHeadingReveal();
+				}
+			},
+			{ threshold: [0, 0.25, 0.5, 0.75, 1] },
+		);
+
+		observer.observe(section);
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', bootSiteFooter, { once: true });
+	} else {
+		bootSiteFooter();
+	}
+
+	document.addEventListener('astro:page-load', bootSiteFooter);
 </script>
