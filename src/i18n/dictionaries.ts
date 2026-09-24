@@ -78,7 +78,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			"Every great brand begins with a single conversation. Whether you're building from the ground up or redefining your edge, let's create something that lasts.",
 		'contact.email': 'Send us e-mail',
 
+		'footer.sitemap': 'Sitemap',
+		'footer.services': 'Services',
+		'footer.projects': 'Projects',
+		'footer.email': 'E-mail',
+		'footer.whatsapp': 'WhatsApp',
+		'footer.contact': 'Contact us',
 		'footer.all': 'All',
+		'footer.rights': 'Setin Studio All rights reserved',
 
 		'services.title': 'Services',
 		'services.description':
@@ -186,7 +193,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			'Każda wielka marka zaczyna się od jednej rozmowy. Niezależnie czy budujesz od zera, czy redefiniujesz swoją przewagę — stwórzmy coś, co przetrwa.',
 		'contact.email': 'Napisz e-mail',
 
+		'footer.sitemap': 'Mapa strony',
+		'footer.services': 'Usługi',
+		'footer.projects': 'Projekty',
+		'footer.email': 'E-mail',
+		'footer.whatsapp': 'WhatsApp',
+		'footer.contact': 'Kontakt',
 		'footer.all': 'Wszystkie',
+		'footer.rights': 'Setin Studio Wszelkie prawa zastrzeżone',
 
 		'services.title': 'Usługi',
 		'services.description':
@@ -294,7 +308,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			'Toda gran marca comienza con una sola conversación. Ya sea que construyas desde cero o redefines tu ventaja, creemos algo que dure.',
 		'contact.email': 'Envíanos un e-mail',
 
+		'footer.sitemap': 'Mapa del sitio',
+		'footer.services': 'Servicios',
+		'footer.projects': 'Proyectos',
+		'footer.email': 'E-mail',
+		'footer.whatsapp': 'WhatsApp',
+		'footer.contact': 'Contáctanos',
 		'footer.all': 'Todos',
+		'footer.rights': 'Setin Studio Todos los derechos reservados',
 
 		'services.title': 'Servicios',
 		'services.description':

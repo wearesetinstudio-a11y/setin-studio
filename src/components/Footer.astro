@@ -35,7 +35,7 @@ const sitemapLinks = [
 	{ href: '/services', label: t(locale, 'nav.services'), i18nKey: 'nav.services' },
 	{ href: '/about', label: t(locale, 'nav.about'), i18nKey: 'nav.about' },
 	{ href: '/articles', label: t(locale, 'nav.articles'), i18nKey: 'nav.articles' },
-	{ href: '#contact', label: 'Contact us', i18nKey: 'footer.contact' },
+	{ href: '#contact', label: t(locale, 'footer.contact'), i18nKey: 'footer.contact' },
 ];
 
 const serviceLinks = [
@@ -88,7 +88,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 	<div class="relative z-[1] px-[var(--page-gutter)] py-[var(--band-padding-y)]">
 		<div class="site-footer__nav grid grid-cols-2 gap-x-6 gap-y-10 pb-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 lg:pb-16">
 			<div class="site-footer__col">
-				<p class="site-footer__col-label" data-i18n="footer.sitemap">Sitemap</p>
+				<p class="site-footer__col-label" data-i18n="footer.sitemap">{t(locale, 'footer.sitemap')}</p>
 				<ul class="site-footer__list">
 					{
 						sitemapLinks.map((link) => (
@@ -107,7 +107,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 			</div>
 
 			<div class="site-footer__col">
-				<p class="site-footer__col-label" data-i18n="footer.services">Services</p>
+				<p class="site-footer__col-label" data-i18n="footer.services">{t(locale, 'footer.services')}</p>
 				<ul class="site-footer__list">
 					{
 						serviceLinks.map((link) => (
@@ -126,7 +126,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 			</div>
 
 			<div class="site-footer__col">
-				<p class="site-footer__col-label" data-i18n="footer.projects">Projects</p>
+				<p class="site-footer__col-label" data-i18n="footer.projects">{t(locale, 'footer.projects')}</p>
 				<ul class="site-footer__list">
 					{
 						projects.map((project) => (
@@ -157,7 +157,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 
 			<div class="site-footer__col col-span-2 sm:col-span-1">
 				<div class="site-footer__contact-block">
-					<p class="site-footer__col-label" data-i18n="footer.email">E-mail</p>
+					<p class="site-footer__col-label" data-i18n="footer.email">{t(locale, 'footer.email')}</p>
 					<RollingLink
 						href={emailHref}
 						label="wearesetinstudio@gmail.com"
@@ -166,7 +166,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 					/>
 				</div>
 				<div class="site-footer__contact-block mt-8">
-					<p class="site-footer__col-label" data-i18n="footer.whatsapp">WhatsApp</p>
+					<p class="site-footer__col-label" data-i18n="footer.whatsapp">{t(locale, 'footer.whatsapp')}</p>
 					<RollingLink
 						href={whatsappHref}
 						label={whatsappDisplay}
@@ -190,7 +190,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 				/>
 				<span class="footer-copyright text-[0.75rem] uppercase tracking-[0.04em] text-setin-muted md:text-[0.8rem]">
 					&copy; {new Date().getFullYear()}{' '}
-					<span data-i18n="footer.rights">Setin Studio All rights reserved</span>
+					<span data-i18n="footer.rights">{t(locale, 'footer.rights')}</span>
 				</span>
 			</div>
 
