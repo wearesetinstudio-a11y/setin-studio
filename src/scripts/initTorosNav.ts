@@ -1,55 +1,27 @@
 import { getLenis } from './initSmoothScroll.ts';
 
 /**
- * Toros pitch nav:
- * - solid bar after leaving the hero
- * - active section link at 50% opacity
- * - links stay fixed in place (no horizontal shifting)
+ * Toros pitch nav: background fades in gently over the hero height,
+ * reaching full opacity as the hero bottom clears the nav.
  */
 export function initTorosNav() {
 	const nav = document.getElementById('pitch-nav');
 	const hero = document.getElementById('toros-hero');
-	const links = nav
-		? Array.from(nav.querySelectorAll<HTMLAnchorElement>('.toros-nav__link[data-section]'))
-		: [];
-
-	if (!nav || !hero || !links.length) return;
-
-	const sections = links
-		.map((link) => {
-			const id = link.dataset.section;
-			if (!id) return null;
-			const el = document.getElementById(id);
-			return el ? { id, el, link } : null;
-		})
-		.filter((item): item is { id: string; el: HTMLElement; link: HTMLAnchorElement } => !!item);
-
-	let activeId = '';
+	if (!nav || !hero) return;
 
 	const update = () => {
 		const navH = nav.offsetHeight;
+		document.documentElement.style.setProperty('--pitch-nav-offset', `${navH}px`);
+
 		const heroBottom = hero.getBoundingClientRect().bottom;
-		nav.classList.toggle('is-scrolled', heroBottom <= navH + 8);
+		// 0 at top of page (hero fully covering viewport under nav)
+		// 1 when hero bottom has cleared the nav
+		const range = Math.max(hero.offsetHeight - navH, 1);
+		const scrolled = Math.min(Math.max(hero.offsetHeight - heroBottom, 0), range);
+		const progress = Math.min(1, Math.max(0, scrolled / range));
 
-		const probe = navH + 48;
-		let nextActive = '';
-
-		// Only highlight once a linked section has reached the probe — never default on hero
-		for (const section of sections) {
-			const top = section.el.getBoundingClientRect().top;
-			if (top <= probe) nextActive = section.id;
-		}
-
-		if (heroBottom > navH + 8) {
-			nextActive = '';
-		}
-
-		if (nextActive !== activeId) {
-			activeId = nextActive;
-			for (const section of sections) {
-				section.link.classList.toggle('is-active', section.id === activeId);
-			}
-		}
+		nav.style.setProperty('--toros-nav-bg', String(progress));
+		nav.classList.toggle('is-scrolled', progress > 0.02);
 	};
 
 	update();

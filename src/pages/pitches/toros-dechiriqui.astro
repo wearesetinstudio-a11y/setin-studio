@@ -1,23 +1,14 @@
 ---
 import PitchLayout from '../../layouts/PitchLayout.astro';
+import WorkWithUsButton from '../../components/WorkWithUsButton.astro';
 
 const asset = (file: string) => `/pitches/toros-dechiriqui/${file}`;
-
-const navLinks = [
-	{ href: '#estrategia', id: 'estrategia', label: 'Strategia' },
-	{ href: '#simbolo', id: 'simbolo', label: 'Símbolo' },
-	{ href: '#logotipo', id: 'logotipo', label: 'Logotipo' },
-	{ href: '#home-kit', id: 'home-kit', label: 'Home Kit' },
-	{ href: '#away-kit', id: 'away-kit', label: 'Away Kit' },
-	{ href: '#merchandising', id: 'merchandising', label: 'Merchandising' },
-	{ href: '#promocion', id: 'promocion', label: 'Promoción' },
-];
 
 const simboloSteps = [
 	{
 		label: 'Símbolo',
 		title: 'Geometría diseñada para dominar',
-		text: 'El nuevo símbolo sintetiza fuerza, movimiento y precisión geométrica. Eliminamos la ilustración recargada y los detalles complejos que perdían nitidez en las plataformas digitales actuales. En su lugar, construimos la figura del toro mediante trazos angulares y planos firmes, enfatizando los cuernos y una postura de combate frontal. Esta estructura otorga una presencia dominante en la pista y asegura un equilibrio visual perfecto.',
+		text: 'El nuevo símbolo sintetiza fuerza, movimiento y precisión geométrica. En su lugar, construimos la figura del toro mediante trazos angulares y planos firmes, enfatizando los cuernos y una postura de combate frontal. Esta estructura otorga una presencia dominante en la pista y asegura un equilibrio visual perfecto.',
 		visual: 'simbolo-0.svg',
 	},
 	{
@@ -32,12 +23,12 @@ const simboloSteps = [
 	},
 	{
 		title: 'La estrella',
-		text: 'Como un guiño discreto a la identidad local, el diseño incorpora una estrella solitaria y bien definida. Este elemento sustituye la representación literal de las catorce estrellas de la bandera provincial, cuya concentración masiva habría fragmentado la geometría del símbolo. La estrella funciona como un indicador clásico y sobrio de orgullo territorial. Es un detalle que demuestra el rigor en la arquitectura de la marca, elevando el valor percibido del club y reforzando su vínculo con la provincia de Chiriquí.',
+		text: 'Como un guiño discreto a la identidad local, el diseño incorpora una estrella solitaria y bien definida. Este elemento sustituye la representación literal de las catorce estrellas de la bandera provincial, cuya concentración masiva habría fragmentado la geometría del símbolo. Es un detalle que demuestra el rigor en la arquitectura de la marca, elevando el valor percibido del club y reforzando su vínculo con la provincia de Chiriquí.',
 		visual: 'simbolo-3.svg',
 	},
 	{
 		title: 'Contorno estructural',
-		text: 'Un contorno exterior unificado integra todos los elementos en una sola estructura sólida. Esta solución técnica evita que los detalles individuales parezcan flotar en el espacio, otorgando al escudo un acabado compacto y ejecutado bajo los más altos estándares. Gracias a esta forma cerrada, el símbolo alcanza una adaptabilidad total, permitiendo su aplicación sobre cualquier fondo, textura, soporte textil o plataforma digital sin comprometer el contraste ni la legibilidad.',
+		text: 'Un contorno exterior unificado integra todos los elementos en una sola estructura sólida. Esta solución técnica evita que los detalles individuales parezcan flotar en el espacio, otorgando al escudo un acabado compacto y ejecutado bajo los más altos estándares.',
 		visual: 'simbolo-4.svg',
 	},
 ];
@@ -48,6 +39,7 @@ const cases = [
 		logoAlt: 'Anadolu Efes',
 		logoClass: 'w-[100px] sm:w-[126px]',
 		title: 'Anadolu Efes',
+		titleLines: 'Anadolu|Efes',
 		text: 'La actualización integral de la marca y su adaptación a entornos digitales generó un incremento del 711% en las ventas de merchandising, un aumento del 11% en ingresos por patrocinio con la entrada de marcas globales, y un crecimiento del 120% en la asistencia al pabellón.',
 	},
 	{
@@ -55,6 +47,7 @@ const cases = [
 		logoAlt: 'Euroleague Basketball',
 		logoClass: 'w-[120px] sm:w-[154px]',
 		title: 'Euroleague basketball',
+		titleLines: 'Euroleague|basketball',
 		text: 'La unificación de la identidad digital en los clubes de la EuroLiga impulsó un crecimiento del 40% en los ingresos de mercado de los equipos a lo largo de 3 temporadas, destacando un aumento del 30% en patrocinios comerciales y un 85% en facturación durante los días de partido.',
 	},
 	{
@@ -62,6 +55,7 @@ const cases = [
 		logoAlt: 'Milwaukee Bucks',
 		logoClass: 'w-[100px] sm:w-[130px]',
 		title: 'Milwaukee Bucks',
+		titleLines: 'Milwaukee|Bucks',
 		text: 'La franquicia transformó su emblema en 2015 mediante un símbolo más agresivo, geométrico y limpio. La implementación del nuevo sistema visual permitió superar los $10 millones de dólares anuales en ventas de mercancía oficial.',
 	},
 	{
@@ -69,8 +63,22 @@ const cases = [
 		logoAlt: 'Charlotte Hornets',
 		logoClass: 'w-[120px] sm:w-[161px]',
 		title: 'Charlotte Hornets',
+		titleLines: 'Charlotte|Hornets',
 		text: 'En 2014, el equipo ejecutó un rediseño integral para cerrar la etapa de los Bobcats y recuperar su identidad histórica en un formato modernizado. El impacto gráfico permitió incrementar un 300% la venta de indumentaria en su primera temporada y escalar seis posiciones en la asistencia al pabellón, superando las métricas registradas en años anteriores.',
 	},
+];
+
+const pitchNav = [
+	{ id: 'motivacion', num: '01', label: 'Motivación' },
+	{ id: 'valor', num: '02', label: 'Valor' },
+	{ id: 'estrategia', num: '03', label: 'Estrategia' },
+	{ id: 'simbolo', num: '04', label: 'Símbolo' },
+	{ id: 'logotipo', num: '05', label: 'Logotipo' },
+	{ id: 'home-kit', num: '06', label: 'Home Kit' },
+	{ id: 'away-kit', num: '07', label: 'Away Kit' },
+	{ id: 'merchandising', num: '08', label: 'Merch' },
+	{ id: 'promocion', num: '09', label: 'Promoción' },
+	{ id: 'futuro', num: '10', label: 'Futuro' },
 ];
 ---
 
@@ -88,10 +96,10 @@ const cases = [
 		'--pitch-font-nav': "'Montserrat', ui-sans-serif, system-ui, sans-serif",
 	}}
 >
-	{/* —— Custom pitch navbar (Figma 6052:64) —— */}
+	{/* —— Pitch navbar (Navbar.pdf / Mobile.pdf) —— */}
 	<header id="pitch-nav" class="toros-nav fixed inset-x-0 top-0 z-40">
 		<div
-			class="toros-nav__inner flex items-center justify-between gap-8 px-[var(--pitch-gutter)] py-8 md:py-10"
+			class="toros-nav__inner flex items-center justify-between gap-6 px-[var(--pitch-gutter)] py-5 md:py-6"
 		>
 			<a href="/" class="toros-nav__brand shrink-0" aria-label="Setin × Toros">
 				<img
@@ -99,28 +107,15 @@ const cases = [
 					alt="setin × TOROS"
 					width="297"
 					height="59"
-					class="h-10 w-auto md:h-[59px]"
+					class="h-8 w-auto md:h-[48px]"
 				/>
 			</a>
 
-			<nav
-				class="toros-nav__links relative hidden min-w-0 flex-1 items-center justify-center overflow-hidden px-5 lg:flex"
-				aria-label="Secciones de la propuesta"
-			>
-				{
-					navLinks.map((link) => (
-						<a href={link.href} class="toros-nav__link" data-section={link.id}>
-							{link.label}
-						</a>
-					))
-				}
-			</nav>
-
-			<a href="#contact" class="toros-nav__cta shrink-0">Contacta nos</a>
+			<WorkWithUsButton href="#contact" variant="light" label="Work with us" />
 		</div>
 	</header>
 
-	{/* —— Hero (Figma 6039:569) —— */}
+	{/* —— Hero —— */}
 	<section
 		id="toros-hero"
 		class="toros-hero relative min-h-[100svh] overflow-hidden"
@@ -128,28 +123,25 @@ const cases = [
 	>
 		<div class="toros-hero__stage" aria-hidden="true">
 			<img
-				src={asset('hero-bg.webp')}
+				src={asset('bg.webp')}
 				alt=""
 				class="toros-hero__bg-image"
-				width="1440"
-				height="891"
+				width="3275"
+				height="2026"
 			/>
-			{/* Figma 6080:8642 */}
-			<div
-				class="toros-hero__gradient"
-				style="background-image: linear-gradient(180deg, rgba(11, 20, 15, 0.7) 0%, rgba(11, 20, 15, 0.011) 33.407%, rgba(11, 20, 15, 0.6) 64.478%, rgb(11, 20, 15) 100%)"
-			></div>
 		</div>
 
 		<div
-			class="toros-hero__content relative z-10 flex min-h-[100svh] flex-col justify-end px-[var(--pitch-gutter)] pb-16 pt-36 md:pb-[60px]"
+			class="toros-hero__content relative z-10 flex min-h-[100svh] flex-col px-[var(--pitch-gutter)] pt-24 md:pt-0"
 		>
-			<div class="mx-auto flex max-w-[843px] flex-col items-center gap-3 text-center text-white">
+			<div
+				class="toros-hero__copy mx-auto flex w-full max-w-[843px] flex-1 flex-col items-center justify-center gap-3 text-center text-white md:gap-4"
+			>
 				<p class="pitch-label">Propuesta de Rebranding</p>
 				<h1
 					class="pitch-display w-full text-[clamp(1.75rem,6.2vw,3.5rem)] font-normal leading-[1.4] md:whitespace-nowrap"
 					data-pitch-reveal
-					data-pitch-lines="La Nueva|Era del Toro"
+					data-pitch-lines="La Nueva Era|del Toro"
 					data-pitch-lines-desktop="La Nueva Era del Toro"
 				>
 					La Nueva Era del Toro
@@ -159,253 +151,334 @@ const cases = [
 					<br class="hidden sm:block" aria-hidden="true" />
 					para transformar su legado en un activo comercial de alto impacto.
 				</p>
-				<div class="mt-1 flex flex-col items-center gap-1" aria-hidden="true">
-					<span class="h-4 w-px bg-white/80"></span>
-					<img
-						src={asset('scroll-bull.svg')}
-						alt=""
-						width="72"
-						height="78"
-						class="h-[78px] w-[72px]"
-					/>
-					<span class="h-4 w-px bg-gradient-to-b from-white/80 to-transparent"></span>
-				</div>
 			</div>
-		</div>
-	</section>
 
-	{/* —— Intro / Motivación —— */}
-	<section
-		id="motivacion"
-		class="toros-intro relative z-[2] overflow-hidden bg-[#0b140f] px-[var(--pitch-gutter)] pb-[60px] pt-[var(--pitch-section-y)]"
-	>
-		<img
-			src={asset('intro-line.svg')}
-			alt=""
-			class="pointer-events-none absolute -left-[40%] top-0 w-[180%] max-w-none opacity-80"
-			aria-hidden="true"
-		/>
-		<div
-			class="relative mx-auto grid max-w-[1320px] gap-10 md:grid-cols-2 md:gap-[60px] md:px-10 lg:px-40"
-		>
-			<div class="flex flex-col gap-[26px] uppercase text-white">
-				<p class="pitch-label">Motivación</p>
-				<h2
-					class="pitch-display w-full max-w-none text-[clamp(1.25rem,2.4vw,1.75rem)] font-normal leading-[1.4] md:max-w-[470px]"
-					data-pitch-reveal
-				>
-					Una identidad a la altura de sus ambiciones
-				</h2>
-			</div>
-			<div class="pitch-body-copy flex flex-col justify-end gap-5 text-white">
-				<p>
-					Somos un estudio de diseño independiente. Creamos marcas, productos y sistemas digitales
-					concebidos para perdurar y generar resultados de negocio claros.
-				</p>
-				<p>
-					Decidimos desarrollar esta propuesta para Toros de Chiriquí porque la energía de su marca y
-					la fidelidad de su afición nos sirvieron de inspiración directa. Identificamos en la
-					institución una fuerza genuina que merece un sistema gráfico de nivel internacional.
-					Nuestro trabajo transforma esa identidad en una herramienta comercial precisa, diseñada
-					para unificar la comunicación del club, incrementar el valor de los patrocinios y acelerar
-					las ventas de indumentaria en cada punto de contacto.
-				</p>
-			</div>
-		</div>
-		<figure class="relative mx-auto mt-[clamp(4rem,10vw,7.5rem)] max-w-[1320px] overflow-hidden">
-			<img
-				src={asset('intro-flag.webp')}
-				alt="Bandera Toros de Chiriquí"
-				width="1320"
-				height="884"
-				class="aspect-[1320/884] h-auto w-full object-cover"
-				loading="lazy"
-			/>
-		</figure>
-	</section>
-
-	{/* —— Business value —— */}
-	<section
-		id="valor"
-		class="toros-value relative z-[2] bg-[#111a15] px-[var(--pitch-gutter)] py-[var(--pitch-section-y)] md:px-16 lg:px-40 xl:px-56"
-	>
-		<div
-			class="toros-value__grid mx-auto grid max-w-[1320px] grid-cols-1 gap-16 lg:grid-cols-[minmax(320px,0.42fr)_minmax(0,1fr)] lg:items-start lg:gap-x-24 xl:gap-x-32"
-		>
 			<div
-				class="toros-value__sticky flex w-full flex-col gap-[26px] text-white lg:sticky lg:top-[calc(var(--pitch-nav-offset,8.5rem)+2.5rem)] lg:self-start"
+				class="toros-hero__scroll pointer-events-none flex shrink-0 flex-col items-center pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] md:absolute md:inset-x-0 md:bottom-10 md:pb-0"
+				aria-hidden="true"
 			>
-				<p class="pitch-label">Mas que un imagen</p>
-				<h2
-					class="pitch-display w-full text-[clamp(1.25rem,2.4vw,1.75rem)] font-normal leading-[1.4]"
-					data-pitch-reveal
-				>
-					El futuro del baloncesto comienza en Chiriquí
-				</h2>
-			</div>
-
-			<div class="toros-value__scroll flex min-w-0 flex-col gap-[clamp(3rem,8vw,5.625rem)]">
-				<p class="pitch-body-copy text-white">
-					El rediseño de marca en el deporte profesional cada vez responde a un impulso puramente
-					estético. Para una franquicia en desarrollo, representa una palanca de negocio capaz de
-					multiplicar el valor de los patrocinios, acelerar la venta de indumentaria y ampliar el
-					alcance digital. Un sistema gráfico preciso unifica la arquitectura de la organización,
-					abre nuevas vías de ingresos y consolida el patrimonio institucional a largo plazo.
-				</p>
-
-				<ul class="flex flex-col gap-[clamp(3rem,6vw,5.625rem)]">
-					{
-						cases.map((item) => (
-							<li class="flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-[60px]">
-								<div class="flex w-full shrink-0 items-center justify-center sm:w-40">
-									<img
-										src={item.logo}
-										alt={item.logoAlt}
-										class:list={['toros-case-logo h-auto w-auto object-contain', item.logoClass]}
-										loading="lazy"
-									/>
-								</div>
-								<div class="flex min-w-0 flex-1 flex-col gap-[30px] text-white">
-									<h3
-										class="pitch-display text-[clamp(1.05rem,1.5vw,1.25rem)] font-normal leading-[1.4]"
-										data-pitch-reveal
-									>
-										{item.title}
-									</h3>
-									<p class="pitch-body-copy">{item.text}</p>
-								</div>
-							</li>
-						))
-					}
-				</ul>
-			</div>
-		</div>
-	</section>
-
-	{/* —— Strategy —— */}
-	<section id="estrategia" class="toros-strategy relative z-[2] bg-[#0b140f]">
-		<div class="mx-auto grid max-w-[1440px] lg:grid-cols-2">
-			<div
-				class="flex flex-col gap-[26px] px-[var(--pitch-gutter)] py-[var(--pitch-section-y)] text-white lg:pl-40 lg:pr-20"
-			>
-				<p class="pitch-label">Strategia</p>
-				<h2
-					class="pitch-display text-[clamp(1.25rem,2.4vw,1.75rem)] font-normal leading-[1.4]"
-					data-pitch-reveal
-				>
-					Diagnóstico de marca y dirección estratégica
-				</h2>
-				<div class="pitch-body-copy flex flex-col gap-5">
-					<p>
-						La identidad histórica de Toros de Chiriquí dependía de gráficos obsoletos que limitaban
-						el crecimiento comercial de la institución. Identificamos deficiencias graves en la
-						escalabilidad del logotipo en pantallas móviles, inconsistencia tipográfica en soportes
-						impresos y una baja legibilidad del escudo durante las transmisiones en directo.
-					</p>
-					<p>
-						Nuestro objetivo fue construir un sistema visual rotundo que conserve la esencia del
-						club mientras responde a las exigencias de producción actuales. Eliminamos la
-						ornamentación innecesaria a favor de una geometría limpia, logrando una figura de
-						impacto inmediato.
-					</p>
-				</div>
-			</div>
-			<figure class="relative min-h-[420px] lg:min-h-full">
+				<span class="block h-7 w-px shrink-0 bg-white/80"></span>
 				<img
-					src={asset('strategy-ball.webp')}
-					alt="Balón Toros de Chiriquí"
-					width="600"
-					height="708"
-					class="absolute inset-0 h-full w-full object-cover"
-					loading="lazy"
+					src={asset('scroll-bull.svg')}
+					alt=""
+					width="56"
+					height="60"
+					class="toros-hero__scroll-bull block h-[60px] w-14 shrink-0"
 				/>
-			</figure>
+				<img
+					src={asset('scroll-arrow.svg')}
+					alt=""
+					width="12"
+					height="8"
+					class="toros-hero__scroll-arrow block h-2 w-3 shrink-0"
+				/>
+			</div>
 		</div>
 	</section>
 
-	{/* —— Símbolo —— */}
-	<section
-		id="simbolo"
-		class="toros-simbolo relative z-[2] scroll-mt-32 bg-[#111a15] px-[var(--pitch-gutter)] pt-[var(--pitch-section-y)]"
-		aria-label="Símbolo"
-	>
+	{/* —— Body (project-analog: sidebar + content) —— */}
+	<div class="toros-body relative z-[2] bg-[#111a15]">
 		<div
-			class="toros-simbolo__grid mx-auto grid max-w-[1200px] grid-cols-1 gap-12 pb-[var(--pitch-section-y)] lg:grid-cols-[minmax(260px,280px)_minmax(0,1fr)] lg:items-start lg:gap-x-[100px] lg:gap-y-16 lg:pb-[max(var(--pitch-section-y),calc(50vh-150px))]"
+			class="toros-body__container mx-auto w-full pt-16 pb-20 md:pt-24 md:pb-28 lg:pt-32 lg:pb-32"
 		>
-			{/* Desktop sticky swap stage — hidden on mobile (per-step visuals below) */}
 			<div
-				class="toros-simbolo__stage relative mx-auto hidden h-[300px] w-[280px] lg:sticky lg:top-[max(calc(var(--pitch-nav-offset,7.5rem)+1.5rem),calc(50vh-150px))] lg:mx-0 lg:block lg:self-start"
+				class="toros-body__layout grid grid-cols-1 gap-12 lg:grid-cols-[320px_minmax(0,1fr)] lg:gap-0"
 			>
-				{
-					simboloSteps.map((step, index) => (
-						<img
-							src={asset(step.visual)}
-							alt=""
-							width="280"
-							height="300"
-							class:list={['toros-simbolo__visual', index === 0 && 'is-active']}
-							data-simbolo-visual={index}
-							aria-hidden={index === 0 ? 'false' : 'true'}
-						/>
-					))
-				}
-			</div>
+				<aside
+					class="toros-sidebar relative hidden self-stretch pl-[var(--pitch-gutter)] pr-6 lg:block"
+					data-toros-sidebar
+				>
+					<div class="toros-sidebar__inner sticky top-[calc(var(--pitch-nav-offset,6.5rem)+3.5rem)]">
+						<nav class="toros-sidebar__nav" aria-label="Secciones de la propuesta">
+							{
+								pitchNav.map((item, idx) => (
+									<a
+										href={`#${item.id}`}
+										class:list={['toros-sidebar__link', idx === 0 && 'is-active']}
+										data-toros-section-target={item.id}
+									>
+										<span class="toros-sidebar__index">{item.num}&nbsp;/&nbsp;</span>
+										<span class="toros-sidebar__name">{item.label}</span>
+									</a>
+								))
+							}
+						</nav>
+					</div>
+				</aside>
 
-			<div class="toros-simbolo__steps flex flex-col gap-[clamp(3.5rem,10vw,5.625rem)]">
-				{
-					simboloSteps.map((step, index) => (
-						<article
-							class:list={[
-								'toros-simbolo__step flex flex-col justify-center gap-[30px] text-white',
-								index < simboloSteps.length - 1
-									? 'min-h-0 lg:min-h-[min(70vh,520px)]'
-									: 'min-h-0 pb-0',
-							]}
-							data-simbolo-step={index}
+				{/* Mobile section nav */}
+				<div
+					class="toros-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-0 bg-[#0d0e0f]/95 px-[var(--pitch-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden"
+					data-toros-sidebar-mobile
+				>
+					<div
+						id="toros-mobile-dropdown"
+						class="toros-sidebar-mobile__dropdown grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in"
+						data-toros-mobile-nav-dropdown
+					>
+						<div class="overflow-hidden">
+							<nav
+								class="toros-sidebar-mobile__nav flex max-h-[60vh] flex-col gap-[18px] overflow-y-auto pb-5 pt-4"
+								aria-label="Secciones de la propuesta (móvil)"
+							>
+								{
+									pitchNav.map((item, idx) => (
+										<a
+											href={`#${item.id}`}
+											class:list={['toros-sidebar__link', idx === 0 && 'is-active']}
+											data-toros-section-target={item.id}
+										>
+											<span class="toros-sidebar__index">{item.num}&nbsp;/&nbsp;</span>
+											<span class="toros-sidebar__name">{item.label}</span>
+										</a>
+									))
+								}
+							</nav>
+						</div>
+					</div>
+					<button
+						type="button"
+						class="flex w-full items-center justify-between py-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] text-left uppercase"
+						aria-expanded="false"
+						aria-controls="toros-mobile-dropdown"
+						data-toros-mobile-nav-trigger
+					>
+						<span class="toros-sidebar-mobile__current">
+							<span class="toros-sidebar__index" data-toros-mobile-current-num>
+								{pitchNav[0].num}&nbsp;/&nbsp;
+							</span>
+							<span class="toros-sidebar__name is-active" data-toros-mobile-current-label>
+								{pitchNav[0].label}
+							</span>
+						</span>
+						<svg
+							width="14"
+							height="14"
+							viewBox="0 0 14 14"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+							class="toros-sidebar-mobile__chevron shrink-0"
+							aria-hidden="true"
 						>
-							<figure class="toros-simbolo__mobile-visual mx-auto flex h-[240px] w-[220px] items-center justify-center lg:hidden">
-								<img
-									src={asset(step.visual)}
-									alt=""
-									width="220"
-									height="240"
-									class="h-full w-full object-contain"
-									loading={index === 0 ? 'eager' : 'lazy'}
-									aria-hidden="true"
-								/>
-							</figure>
-							{step.label ? <p class="pitch-label">{step.label}</p> : null}
+							<path d="M1 3.5L7 9.5L13 3.5" stroke="currentColor" stroke-width="2"></path>
+						</svg>
+					</button>
+				</div>
+
+				<div class="toros-body__content flex min-w-0 flex-col gap-20 md:gap-28 lg:gap-36">
+					{/* —— Intro / Motivación (Intro.pdf) —— */}
+					<section
+						id="motivacion"
+						class="toros-section toros-intro scroll-mt-32 text-white"
+						aria-label="Motivación"
+					>
+						<div class="toros-section__pad">
+							<div class="toros-section__label">
+								<span class="toros-section__num">01&nbsp;/&nbsp;</span>
+								<span class="toros-section__label-name">Motivación</span>
+							</div>
 							<h2
-								class:list={[
-									'pitch-display font-normal leading-[1.4]',
-									index === 0
-										? 'text-[clamp(1.25rem,2.4vw,1.75rem)]'
-										: 'text-[clamp(1.1rem,1.8vw,1.25rem)]',
-								]}
+								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
 								data-pitch-reveal
 							>
-								{step.title}
+								Una identidad a la altura de sus ambiciones
 							</h2>
-							<p class="pitch-body-copy max-w-[38rem]">{step.text}</p>
-						</article>
-					))
-				}
-			</div>
-		</div>
+							<div class="pitch-body-copy mt-6 flex w-full flex-col gap-5 text-white/85 md:mt-8">
+								<p>
+									Somos un estudio de diseño independiente. Creamos marcas, productos y sistemas
+									digitales concebidos para perdurar y generar resultados de negocio claros.
+								</p>
+								<p>
+									Decidimos desarrollar esta propuesta para Toros de Chiriquí porque la energía de su
+									marca y la fidelidad de su afición nos sirvieron de inspiración directa.
+									Identificamos en la institución una fuerza genuina que merece un sistema gráfico de
+									nivel internacional. Nuestro trabajo transforma esa identidad en una herramienta
+									comercial precisa, diseñada para unificar la comunicación del club, incrementar el
+									valor de los patrocinios y acelerar las ventas de indumentaria en cada punto de
+									contacto.
+								</p>
+							</div>
+						</div>
+						<figure class="toros-section__visual mt-12 w-full overflow-hidden md:mt-16">
+							<img
+								src={asset('intro-flag.webp')}
+								alt="Bandera Toros de Chiriquí"
+								width="1536"
+								height="1536"
+								class="block h-auto w-full object-cover"
+								loading="lazy"
+							/>
+						</figure>
+					</section>
 
-		<figure class="relative mx-auto aspect-[1252/935] w-full max-w-[1252px] overflow-hidden">
-			<img
-				src={asset('simbolo-crest.webp')}
-				alt="Escudo Toros bordado"
-				width="1252"
-				height="935"
-				class="h-full w-full object-cover"
-				loading="lazy"
-			/>
-		</figure>
-	</section>
+					{/* —— Valor / Business examples —— */}
+					<section
+						id="valor"
+						class="toros-section toros-value scroll-mt-32 text-white"
+						aria-label="Valor"
+					>
+						<div class="toros-section__pad">
+						<div class="toros-section__label">
+							<span class="toros-section__num">02&nbsp;/&nbsp;</span>
+							<span class="toros-section__label-name">Valor</span>
+						</div>
+						<h2
+							class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
+							data-pitch-reveal
+							data-pitch-lines="El futuro del|baloncesto comienza|en Chiriquí"
+							data-pitch-lines-desktop="El futuro del baloncesto comienza en|Chiriquí"
+						>
+							El futuro del baloncesto comienza en Chiriquí
+						</h2>
+						<p class="pitch-body-copy mt-6 w-full text-white/85 md:mt-8">
+							El rediseño de marca en el deporte profesional cada vez responde a un impulso
+							puramente estético. Para una franquicia en desarrollo, representa una palanca de
+							negocio capaz de multiplicar el valor de los patrocinios, acelerar la venta de
+							indumentaria y ampliar el alcance digital. Un sistema gráfico preciso unifica la
+							arquitectura de la organización, abre nuevas vías de ingresos y consolida el
+							patrimonio institucional a largo plazo.
+						</p>
 
-	{/* —— Logotipo (Figma 6059:276) —— */}
+						<ul class="toros-value__cases mt-14 flex flex-col gap-14 md:mt-20 md:gap-16 lg:gap-20">
+							{
+								cases.map((item) => (
+									<li class="toros-value__case">
+										<div class="toros-value__case-logo">
+											<img
+												src={item.logo}
+												alt={item.logoAlt}
+												class:list={['toros-case-logo', item.logoClass]}
+												loading="lazy"
+											/>
+										</div>
+										<h3
+											class="toros-value__case-title pitch-display font-normal leading-[1.25]"
+											data-pitch-reveal
+											data-pitch-lines={item.titleLines}
+											data-pitch-lines-desktop={item.title}
+										>
+											{item.title}
+										</h3>
+										<p class="toros-value__case-text pitch-body-copy text-white/85">{item.text}</p>
+									</li>
+								))
+							}
+						</ul>
+						</div>
+					</section>
+
+					{/* —— Strategy (Strategy.pdf) —— */}
+					<section
+						id="estrategia"
+						class="toros-section toros-strategy scroll-mt-32 text-white"
+						aria-label="Estrategia"
+					>
+						<div class="toros-section__pad">
+							<div class="toros-section__label">
+								<span class="toros-section__num">03&nbsp;/&nbsp;</span>
+								<span class="toros-section__label-name">Estrategia</span>
+							</div>
+							<h2
+								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
+								data-pitch-reveal
+								data-pitch-lines="Diagnóstico de marca y|dirección estratégica"
+								data-pitch-lines-desktop="Diagnóstico de marca y dirección|estratégica"
+							>
+								Diagnóstico de marca y dirección estratégica
+							</h2>
+							<p class="pitch-body-copy mt-6 w-full text-white/85 md:mt-8">
+								La identidad histórica de Toros de Chiriquí dependía de gráficos obsoletos que
+								limitaban el crecimiento comercial de la institución. Identificamos deficiencias graves
+								en la escalabilidad del logotipo en pantallas móviles, inconsistencia tipográfica en
+								soportes impresos y una baja legibilidad del escudo durante las transmisiones en
+								directo. Nuestro objetivo fue construir un sistema visual rotundo que conserve la
+								esencia del club mientras responde a las exigencias de producción actuales. Eliminamos
+								la ornamentación innecesaria a favor de una geometría limpia, logrando una figura de
+								impacto inmediato.
+							</p>
+						</div>
+						<figure class="toros-section__visual mt-12 w-full overflow-hidden md:mt-16">
+							<img
+								src={asset('strategy-ball.webp')}
+								alt="Balón Toros de Chiriquí"
+								width="4096"
+								height="3058"
+								class="block h-auto w-full object-cover"
+								loading="lazy"
+							/>
+						</figure>
+					</section>
+
+					{/* —— Símbolo (sticky mark + scroll swap) —— */}
+					<section
+						id="simbolo"
+						class="toros-section toros-simbolo scroll-mt-32 text-white"
+						aria-label="Símbolo"
+						style={`--simbolo-steps: ${simboloSteps.length}`}
+					>
+						<div class="toros-simbolo__scroller" data-simbolo-scroller>
+							<div class="toros-section__pad toros-simbolo__grid">
+								<div class="toros-simbolo__stage" aria-hidden="true">
+									{
+										simboloSteps.map((step, index) => (
+											<img
+												src={asset(step.visual)}
+												alt=""
+												width="260"
+												height="280"
+												class:list={['toros-simbolo__visual', index === 0 && 'is-active']}
+												data-simbolo-visual={index}
+												loading={index === 0 ? 'eager' : 'lazy'}
+												aria-hidden={index === 0 ? 'false' : 'true'}
+											/>
+										))
+									}
+								</div>
+
+								<div class="toros-simbolo__steps">
+									{
+										simboloSteps.map((step, index) => (
+											<article
+												class:list={[
+													'toros-simbolo__step',
+													index === 0 && 'is-active',
+													index < simboloSteps.length - 1 && 'lg:min-h-[75vh] lg:pb-24',
+												]}
+												data-simbolo-step={index}
+											>
+												{index === 0 ? (
+													<div class="toros-section__label">
+														<span class="toros-section__num">04&nbsp;/&nbsp;</span>
+														<span class="toros-section__label-name">Símbolo</span>
+													</div>
+												) : null}
+												<h2
+													class="pitch-display w-full text-[clamp(1.35rem,2.8vw,2rem)] font-normal leading-[1.2]"
+													data-pitch-reveal
+												>
+													{step.title}
+												</h2>
+												<p class="pitch-body-copy mt-5 w-full text-white/85 md:mt-6">{step.text}</p>
+											</article>
+										))
+									}
+								</div>
+							</div>
+						</div>
+
+						<figure class="toros-section__visual toros-simbolo__crest w-full overflow-hidden">
+							<img
+								src={asset('simbolo-crest.webp')}
+								alt="Escudo Toros bordado"
+								width="1252"
+								height="935"
+								class="block h-auto w-full object-cover"
+								loading="lazy"
+							/>
+						</figure>
+					</section>
+
+					{/* —— Logotipo —— */}
 	<section
 		id="logotipo"
 		class="toros-logotipo relative z-[2] scroll-mt-32 bg-[#0b140f]"
@@ -891,6 +964,15 @@ const cases = [
 		</figure>
 	</section>
 
+				</div>
+				{/* /.toros-body__content */}
+			</div>
+			{/* /.toros-body__layout */}
+		</div>
+		{/* /.toros-body__container */}
+	</div>
+	{/* /.toros-body */}
+
 	{/* —— Closing mark (Figma 1093:242) —— */}
 	<section class="relative z-[2] overflow-hidden bg-[#ba0000]" aria-hidden="true">
 		<figure class="relative aspect-[1440/621] w-full">
@@ -910,11 +992,13 @@ const cases = [
 		import { initTorosVideos } from '../../scripts/initTorosVideos.ts';
 		import { initPitchBlurReveal } from '../../scripts/initPitchBlurReveal.ts';
 		import { initSimboloSwap } from '../../scripts/initSimboloSwap.ts';
+		import { initTorosSidebar } from '../../scripts/initTorosSidebar.ts';
 
 		initTorosNav();
 		initTorosVideos();
 		initPitchBlurReveal();
 		initSimboloSwap();
+		initTorosSidebar();
 	</script>
 </PitchLayout>
 
@@ -937,30 +1021,55 @@ const cases = [
 	}
 
 	.toros-nav {
-		background: transparent;
-		transition: background-color 0.35s ease;
+		background: rgba(13, 14, 15, var(--toros-nav-bg, 0));
 	}
 
-	.toros-nav.is-scrolled {
-		background: #0d0e0f;
+	.toros-nav :global(.work-with-us-button),
+	.toros-nav :global(.work-with-us-button span) {
+		font-family: 'Fustat', ui-sans-serif, system-ui, sans-serif;
+		color: #f5f5f5;
 	}
 
-	.toros-nav__cta {
-		font-size: 0.8125rem;
+	.toros-nav :global(.work-with-us-button__underline) {
+		background: #ffffff;
 	}
 
-	@media (width >= 768px) {
-		.toros-nav__cta {
-			font-size: 1rem;
-		}
+	/* Mobile: pin logo + copy in viewport; scroll swaps steps in place */
+	.toros-simbolo__scroller {
+		height: calc(var(--simbolo-steps, 5) * 85svh);
+		position: relative;
 	}
 
-	.toros-value__sticky {
-		--pitch-nav-offset: 8.75rem;
+	.toros-simbolo__grid {
+		position: sticky;
+		top: calc(var(--pitch-nav-offset, 6.5rem) + 0.5rem);
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 1.25rem;
+		height: calc(
+			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
+		);
+		max-height: calc(
+			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
+		);
+		overflow: hidden;
+		background: #111a15;
+		padding-top: 0.5rem;
+		padding-bottom: 0.75rem;
+		box-sizing: border-box;
 	}
 
-	.toros-simbolo {
-		--pitch-nav-offset: 7.5rem;
+	.toros-simbolo__stage {
+		position: relative;
+		z-index: 1;
+		width: min(168px, 42vw);
+		height: min(180px, calc(42vw * 280 / 260));
+		margin-inline: auto;
+		flex-shrink: 0;
+		pointer-events: none;
+		isolation: isolate;
 	}
 
 	.toros-simbolo__visual {
@@ -978,46 +1087,166 @@ const cases = [
 		opacity: 1;
 	}
 
-	.toros-nav__links {
-		gap: 36px;
+	.toros-simbolo__steps {
+		position: relative;
+		flex: 1 1 auto;
+		min-height: 0;
+		min-width: 0;
 	}
 
-	.toros-nav__link {
-		font-family: var(--pitch-font-nav);
-		font-size: 13px;
-		font-weight: 500;
-		line-height: normal;
-		text-transform: uppercase;
-		color: #fff;
-		white-space: nowrap;
-		text-decoration: none;
+	.toros-simbolo__step {
+		position: absolute;
+		inset: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		transition:
+			opacity 0.35s ease,
+			visibility 0.35s ease;
+	}
+
+	.toros-simbolo__step.is-active {
 		opacity: 1;
-		transition: opacity 0.25s ease;
-		flex-shrink: 0;
+		visibility: visible;
+		pointer-events: auto;
 	}
 
-	.toros-nav__link.is-active {
-		opacity: 0.5;
+	.toros-simbolo__step .toros-section__label {
+		margin-bottom: 1rem;
 	}
 
-	.toros-nav__cta {
-		font-family: var(--pitch-font-nav);
-		font-weight: 600;
-		line-height: normal;
-		text-transform: uppercase;
-		color: #fff;
-		text-decoration: underline;
-		text-underline-offset: 4px;
-		white-space: nowrap;
+	.toros-simbolo__crest {
+		margin-top: 3rem;
+	}
+
+	@media (min-width: 1024px) {
+		.toros-simbolo__scroller {
+			height: auto;
+		}
+
+		.toros-simbolo__grid {
+			position: static;
+			top: auto;
+			height: auto;
+			max-height: none;
+			overflow: visible;
+			background: transparent;
+			padding: 0;
+			display: grid;
+			grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+			gap: 3.75rem;
+			align-items: start;
+		}
+
+		.toros-simbolo__stage {
+			position: sticky;
+			top: max(calc(var(--pitch-nav-offset, 6.5rem) + 1.5rem), calc(50vh - 140px));
+			width: 260px;
+			height: 280px;
+			margin-inline: 0;
+		}
+
+		.toros-simbolo__steps {
+			position: static;
+			flex: none;
+			display: flex;
+			flex-direction: column;
+			gap: 0;
+			padding-bottom: 4rem;
+			min-height: 0;
+		}
+
+		.toros-simbolo__step {
+			position: static;
+			inset: auto;
+			overflow: visible;
+			opacity: 1;
+			visibility: visible;
+			pointer-events: auto;
+			transition: none;
+		}
+
+		.toros-simbolo__step .toros-section__label {
+			margin-bottom: 1.75rem;
+		}
+
+		.toros-simbolo__crest {
+			margin-top: 6.5rem;
+		}
+	}
+
+	.toros-value__case {
+		display: grid;
+		grid-template-columns: minmax(5.5rem, 7rem) minmax(0, 1fr);
+		grid-template-areas:
+			'logo title'
+			'text text';
+		column-gap: 1.25rem;
+		row-gap: 1.25rem;
+		align-items: center;
+	}
+
+	.toros-value__case-logo {
+		grid-area: logo;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.toros-value__case-title {
+		grid-area: title;
+		margin: 0;
+		font-size: clamp(1.15rem, 5vw, 1.5rem);
+	}
+
+	.toros-value__case-text {
+		grid-area: text;
+		margin: 0;
 	}
 
 	.toros-case-logo {
-		max-height: 120px;
+		display: block;
+		width: auto;
+		height: auto;
+		max-width: 100%;
+		max-height: 88px;
+		object-fit: contain;
 	}
 
 	@media (width >= 640px) {
+		.toros-value__case {
+			grid-template-columns: 9rem minmax(0, 1fr);
+			grid-template-areas:
+				'logo title'
+				'logo text';
+			column-gap: 3.75rem;
+			row-gap: 1.25rem;
+			align-items: start;
+		}
+
+		.toros-value__case-logo {
+			padding-top: 0.15rem;
+		}
+
+		.toros-value__case-title {
+			font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+		}
+
 		.toros-case-logo {
-			max-height: 171px;
+			max-height: 140px;
+		}
+	}
+
+	@media (width >= 1024px) {
+		.toros-value__case {
+			grid-template-columns: 10rem minmax(0, 1fr);
+			column-gap: 4.5rem;
+		}
+
+		.toros-case-logo {
+			max-height: 160px;
 		}
 	}
 
@@ -1044,17 +1273,174 @@ const cases = [
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		object-position: center top;
+		object-position: 28% center;
 		pointer-events: none;
 		user-select: none;
 	}
 
-	.toros-hero__gradient {
-		position: absolute;
-		inset: 0;
-		z-index: 1;
+	.toros-hero__scroll {
+		--toros-hero-scroll-gap: 1.5rem;
+		gap: var(--toros-hero-scroll-gap);
+	}
+
+	@media (min-width: 768px) {
+		.toros-hero__bg-image {
+			object-position: center center;
+		}
+	}
+
+	/* —— Project-analog body / sidebar —— */
+	.toros-body {
+		background: #111a15;
+	}
+
+	@media (min-width: 1024px) {
+		.toros-body {
+			background: linear-gradient(to right, #0d0e0f 320px, #111a15 320px);
+		}
+	}
+
+	.toros-body__content {
+		background: transparent;
+		min-width: 0;
+	}
+
+	.toros-sidebar {
+		background: transparent;
+	}
+
+	.toros-section__pad {
+		padding-inline: var(--pitch-gutter);
+	}
+
+	.toros-section__visual {
+		display: block;
 		width: 100%;
-		height: 100%;
-		pointer-events: none;
+		max-width: none;
+		margin-inline: 0;
+	}
+
+	.toros-section__label,
+	.toros-section__label .toros-section__num,
+	.toros-section__label .toros-section__label-name {
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+		line-height: 1.4;
+		text-transform: uppercase;
+	}
+
+	.toros-section__label {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.35);
+	}
+
+	.toros-section__num {
+		color: inherit;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.12em;
+	}
+
+	.toros-section__label-name {
+		color: #ffffff;
+	}
+
+	.toros-sidebar__inner {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.toros-sidebar__nav {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	.toros-sidebar__link {
+		display: block;
+		width: 100%;
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+		line-height: 1.4;
+		text-decoration: none;
+		text-transform: uppercase;
+		white-space: nowrap;
+		color: rgba(255, 255, 255, 0.35);
+		transition: color 180ms ease;
+	}
+
+	.toros-sidebar__index {
+		color: inherit;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.12em;
+	}
+
+	.toros-sidebar__name {
+		color: inherit;
+	}
+
+	.toros-sidebar__link:hover {
+		color: rgba(255, 255, 255, 0.7);
+	}
+
+	.toros-sidebar__link.is-active {
+		color: rgba(255, 255, 255, 0.35);
+	}
+
+	.toros-sidebar__link.is-active .toros-sidebar__name {
+		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile__current {
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+	}
+
+	.toros-sidebar-mobile__current .toros-sidebar__index {
+		color: rgba(255, 255, 255, 0.45);
+	}
+
+	.toros-sidebar-mobile__current .toros-sidebar__name {
+		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile__chevron {
+		transform: rotate(180deg);
+		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile.is-open .toros-sidebar-mobile__chevron {
+		transform: rotate(0deg);
+	}
+
+	.toros-sidebar-mobile.is-open .toros-sidebar-mobile__dropdown {
+		grid-template-rows: 1fr;
+	}
+
+	/* Nested legacy sections: no outer gutters so media can reach the right edge */
+	.toros-body__content > section {
+		max-width: none;
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	.toros-body__content > section :global(.mx-auto) {
+		max-width: none;
+	}
+
+	.toros-body__content > section:not(.toros-section) {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+
+	.toros-body__content > section figure:not(.toros-simbolo__mark),
+	.toros-body__content > section .toros-section__visual {
+		width: 100%;
+		max-width: none;
 	}
 </style>
