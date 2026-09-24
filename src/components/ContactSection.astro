@@ -1,4 +1,13 @@
 ---
+import { t, type Locale } from '../i18n/dictionaries.ts';
+
+interface Props {
+	/** When set, render chrome copy in this locale (pitch pages). */
+	locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
 const emailHref =
 	'mailto:wearesetinstudio@gmail.com?subject=Hello%20Setin!%20:)';
 
@@ -24,6 +33,10 @@ const socialLinks = [
 		href: 'https://www.youtube.com/channel/UCqJVj469YiK-Lg51OJ7FVoQ',
 	},
 ];
+
+const contactHeading = t(locale, 'contact.heading');
+const contactDescription = t(locale, 'contact.description');
+const contactEmail = t(locale, 'contact.email');
 ---
 
 <section
@@ -36,15 +49,14 @@ const socialLinks = [
 				id="contact-heading"
 				class="contact-heading w-full max-w-full uppercase leading-[1.15] text-setin-fg md:max-w-md"
 			>
-				<span data-reveal-line data-i18n="contact.heading">Start your legacy</span>
+				<span data-reveal-line data-i18n="contact.heading">{contactHeading}</span>
 			</h2>
 
 			<p
 				class="body-txt-1 contact-description mt-6 w-full max-w-full leading-relaxed text-setin-fg/55"
 				data-i18n="contact.description"
 			>
-				Every great brand begins with a single conversation. Whether you're building from the ground
-				up or redefining your edge, let's create something that lasts.
+				{contactDescription}
 			</p>
 
 			<div id="contact-email-wrap" class="contact-email-cta-wrap mt-10 w-full min-w-0 max-w-full">
@@ -60,13 +72,13 @@ const socialLinks = [
 									class="contact-email-cta__label-line contact-email-cta__label-line--default flex h-[1.5em] items-center text-[1rem] font-semibold uppercase leading-none md:text-[1.05rem]"
 									data-i18n="contact.email"
 								>
-									Send us e-mail
+									{contactEmail}
 								</span>
 								<span
 									class="contact-email-cta__label-line contact-email-cta__label-line--hover flex h-[1.5em] items-center text-[1rem] font-semibold uppercase leading-none md:text-[1.05rem]"
 									data-i18n="contact.email"
 								>
-									Send us e-mail
+									{contactEmail}
 								</span>
 							</span>
 						</span>

@@ -1,34 +1,36 @@
 ---
 import PitchLayout from '../../layouts/PitchLayout.astro';
 import WorkWithUsButton from '../../components/WorkWithUsButton.astro';
+import { t } from '../../i18n/dictionaries.ts';
 
 const asset = (file: string) => `/pitches/toros-dechiriqui/${file}`;
+const workWithUsLabel = t('es', 'nav.workWithUs');
 
 const simboloSteps = [
 	{
 		label: 'Símbolo',
 		title: 'Geometría diseñada para dominar',
-		text: 'El nuevo símbolo sintetiza fuerza, movimiento y precisión geométrica. En su lugar, construimos la figura del toro mediante trazos angulares y planos firmes, enfatizando los cuernos y una postura de combate frontal. Esta estructura otorga una presencia dominante en la pista y asegura un equilibrio visual perfecto.',
+		text: 'Sintetizamos fuerza y precisión mediante trazos angulares y planos firmes. Enfatizamos los cuernos y una postura frontal para asegurar presencia dominante en la pista y un equilibrio visual perfecto.',
 		visual: 'simbolo-0.svg',
 	},
 	{
 		title: 'La baloncesto',
-		text: 'El balón de baloncesto en la parte inferior del escudo actúa como una extensión anatómica natural del torso del toro. La cabeza masiva del animal se transforma de forma fluida en la pelota, la cual se sintetiza en únicamente ocho planos geométricos primarios. Esta solución directa comunica de manera inmediata y sin interferencias la disciplina deportiva del club.',
+		text: 'El balón en la parte inferior actúa como una extensión anatómica del toro, sintetizado en solo ocho planos geométricos. Esta solución comunica de forma directa e inmediata la disciplina deportiva del club.',
 		visual: 'simbolo-1.svg',
 	},
 	{
 		title: 'La cabeza del toro',
-		text: 'La cabeza del toro está construida a partir de formas geométricas fundamentales para garantizar el reconocimiento inmediato del símbolo a gran distancia. En el plano anatómico, la expresión facial evita conscientemente tanto la agresividad desmedida como los rasgos cómicos. Apostamos por un carácter serio, stoico y sobrio que transmite confianza y exige respeto hacia la organización.',
+		text: 'Construida con formas geométricas fundamentales para garantizar su reconocimiento a distancia. Su expresión evita la agresividad desmedida y los rasgos cómicos, apostando por un carácter estoico que transmite confianza y respeto.',
 		visual: 'simbolo-2.svg',
 	},
 	{
 		title: 'La estrella',
-		text: 'Como un guiño discreto a la identidad local, el diseño incorpora una estrella solitaria y bien definida. Este elemento sustituye la representación literal de las catorce estrellas de la bandera provincial, cuya concentración masiva habría fragmentado la geometría del símbolo. Es un detalle que demuestra el rigor en la arquitectura de la marca, elevando el valor percibido del club y reforzando su vínculo con la provincia de Chiriquí.',
+		text: 'Una estrella solitaria representa la identidad local sin recargar el diseño con las catorce estrellas de la bandera provincial. Este detalle aporta rigor a la arquitectura de marca y refuerza el vínculo con Chiriquí.',
 		visual: 'simbolo-3.svg',
 	},
 	{
 		title: 'Contorno estructural',
-		text: 'Un contorno exterior unificado integra todos los elementos en una sola estructura sólida. Esta solución técnica evita que los detalles individuales parezcan flotar en el espacio, otorgando al escudo un acabado compacto y ejecutado bajo los más altos estándares.',
+		text: 'Sintetizamos fuerza, movimiento y precisión mediante trazos angulares y planos firmes. Enfatizamos los cuernos y una postura de combate frontal para asegurar una presencia dominante en la pista y un equilibrio visual perfecto.',
 		visual: 'simbolo-4.svg',
 	},
 ];
@@ -111,7 +113,7 @@ const pitchNav = [
 				/>
 			</a>
 
-			<WorkWithUsButton href="#contact" variant="light" label="Work with us" />
+			<WorkWithUsButton href="#contact" variant="light" label={workWithUsLabel} />
 		</div>
 	</header>
 
@@ -137,7 +139,7 @@ const pitchNav = [
 			<div
 				class="toros-hero__copy mx-auto flex w-full max-w-[843px] flex-1 flex-col items-center justify-center gap-3 text-center text-white md:gap-4"
 			>
-				<p class="pitch-label">Propuesta de Rebranding</p>
+				<p class="pitch-label">Propuesta de&nbsp;Rebranding</p>
 				<h1
 					class="pitch-display w-full text-[clamp(1.75rem,6.2vw,3.5rem)] font-normal leading-[1.4] md:whitespace-nowrap"
 					data-pitch-reveal
@@ -147,9 +149,7 @@ const pitchNav = [
 					La Nueva Era del Toro
 				</h1>
 				<p class="pitch-body-copy max-w-[42rem] text-white">
-					En Setin Studio rediseñamos la identidad visual de Toros de Chiriquí
-					<br class="hidden sm:block" aria-hidden="true" />
-					para transformar su legado en un activo comercial de alto impacto.
+					En&nbsp;Setin&nbsp;Studio&nbsp;rediseñamos&nbsp;la&nbsp;identidad visual&nbsp;de&nbsp;Toros&nbsp;de&nbsp;Chiriquí&nbsp;para&nbsp;transformar su&nbsp;legado&nbsp;en&nbsp;un&nbsp;activo&nbsp;comercial de&nbsp;alto&nbsp;impacto.
 				</p>
 			</div>
 
@@ -177,7 +177,7 @@ const pitchNav = [
 	</section>
 
 	{/* —— Body (project-analog: sidebar + content) —— */}
-	<div class="toros-body relative z-[2] bg-[#111a15]">
+	<div class="toros-body relative z-[2]">
 		<div
 			class="toros-body__container mx-auto w-full pt-16 pb-20 md:pt-24 md:pb-28 lg:pt-32 lg:pb-32"
 		>
@@ -265,7 +265,7 @@ const pitchNav = [
 					</button>
 				</div>
 
-				<div class="toros-body__content flex min-w-0 flex-col gap-20 md:gap-28 lg:gap-36">
+				<div class="toros-body__content flex min-w-0 flex-col gap-0">
 					{/* —— Intro / Motivación (Intro.pdf) —— */}
 					<section
 						id="motivacion"
@@ -317,7 +317,7 @@ const pitchNav = [
 						class="toros-section toros-value scroll-mt-32 text-white"
 						aria-label="Valor"
 					>
-						<div class="toros-section__pad">
+						<div class="toros-section__pad pt-[var(--pitch-section-y)]">
 						<div class="toros-section__label">
 							<span class="toros-section__num">02&nbsp;/&nbsp;</span>
 							<span class="toros-section__label-name">Valor</span>
@@ -373,7 +373,7 @@ const pitchNav = [
 						class="toros-section toros-strategy scroll-mt-32 text-white"
 						aria-label="Estrategia"
 					>
-						<div class="toros-section__pad">
+						<div class="toros-section__pad pt-[var(--pitch-section-y)]">
 							<div class="toros-section__label">
 								<span class="toros-section__num">03&nbsp;/&nbsp;</span>
 								<span class="toros-section__label-name">Estrategia</span>
@@ -418,50 +418,50 @@ const pitchNav = [
 					>
 						<div class="toros-simbolo__scroller" data-simbolo-scroller>
 							<div class="toros-section__pad toros-simbolo__grid">
-								<div class="toros-simbolo__stage" aria-hidden="true">
-									{
-										simboloSteps.map((step, index) => (
-											<img
-												src={asset(step.visual)}
-												alt=""
-												width="260"
-												height="280"
-												class:list={['toros-simbolo__visual', index === 0 && 'is-active']}
-												data-simbolo-visual={index}
-												loading={index === 0 ? 'eager' : 'lazy'}
-												aria-hidden={index === 0 ? 'false' : 'true'}
-											/>
-										))
-									}
+								<div class="toros-section__label toros-simbolo__mobile-label lg:hidden">
+									<span class="toros-section__num">04&nbsp;/&nbsp;</span>
+									<span class="toros-section__label-name">Símbolo</span>
 								</div>
 
-								<div class="toros-simbolo__steps">
-									{
-										simboloSteps.map((step, index) => (
-											<article
-												class:list={[
-													'toros-simbolo__step',
-													index === 0 && 'is-active',
-													index < simboloSteps.length - 1 && 'lg:min-h-[75vh] lg:pb-24',
-												]}
-												data-simbolo-step={index}
-											>
-												{index === 0 ? (
-													<div class="toros-section__label">
-														<span class="toros-section__num">04&nbsp;/&nbsp;</span>
-														<span class="toros-section__label-name">Símbolo</span>
-													</div>
-												) : null}
-												<h2
-													class="pitch-display w-full text-[clamp(1.35rem,2.8vw,2rem)] font-normal leading-[1.2]"
-													data-pitch-reveal
+								<div class="toros-simbolo__stage-wrap">
+									<div class="toros-simbolo__stage" aria-hidden="true">
+										{
+											simboloSteps.map((step, index) => (
+												<img
+													src={asset(step.visual)}
+													alt=""
+													width="260"
+													height="280"
+													class:list={['toros-simbolo__visual', index === 0 && 'is-active']}
+													data-simbolo-visual={index}
+													loading={index === 0 ? 'eager' : 'lazy'}
+													aria-hidden={index === 0 ? 'false' : 'true'}
+												/>
+											))
+										}
+									</div>
+								</div>
+
+								<div class="toros-simbolo__copy">
+									<div class="toros-section__label toros-simbolo__desktop-label hidden lg:block">
+										<span class="toros-section__num">04&nbsp;/&nbsp;</span>
+										<span class="toros-section__label-name">Símbolo</span>
+									</div>
+									<div class="toros-simbolo__steps">
+										{
+											simboloSteps.map((step, index) => (
+												<article
+													class:list={['toros-simbolo__step', index === 0 && 'is-active']}
+													data-simbolo-step={index}
 												>
-													{step.title}
-												</h2>
-												<p class="pitch-body-copy mt-5 w-full text-white/85 md:mt-6">{step.text}</p>
-											</article>
-										))
-									}
+													<h2 class="pitch-display w-full text-[clamp(1.35rem,2.8vw,2rem)] font-normal leading-[1.2]">
+														{step.title}
+													</h2>
+													<p class="pitch-body-copy w-full text-white/85">{step.text}</p>
+												</article>
+											))
+										}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -481,39 +481,40 @@ const pitchNav = [
 					{/* —— Logotipo —— */}
 	<section
 		id="logotipo"
-		class="toros-logotipo relative z-[2] scroll-mt-32 bg-[#0b140f]"
+		class="toros-logotipo relative z-[2] scroll-mt-32"
 		aria-label="Logotipo"
 	>
 		<div
-			class="mx-auto flex max-w-[1440px] flex-col gap-[26px] px-[var(--pitch-gutter)] py-[var(--pitch-section-y)] text-white lg:px-40"
+			class="mx-auto flex max-w-[1440px] flex-col px-[var(--pitch-gutter)] pb-[clamp(2.5rem,6vw,3.75rem)] pt-[var(--pitch-section-y)] text-white lg:px-[120px]"
 		>
-			<p class="pitch-label">Logotipo</p>
-			<div class="grid gap-10 lg:grid-cols-[minmax(0,526px)_minmax(0,1fr)] lg:gap-[60px]">
-				<h2
-					class="pitch-display text-[clamp(1.25rem,2.4vw,2.125rem)] font-normal leading-[1.4]"
-					data-pitch-reveal
-				>
-					Rotulación artesanal con carácter deportivo
-				</h2>
-				<div class="pitch-body-copy flex flex-col justify-end gap-5">
-					<p>
-						El logotipo fue dibujado a mano desde cero, tomando como referencia la tradición gráfica
-						de los clubes de baloncesto profesionales. La estructura se apoya en una letra T inicial
-						de gran escala que da paso a trazos caligráficos fluidos en el resto de la palabra.
-						Aplicamos una inclinación diagonal precisa para otorgar al conjunto una sensación de
-						velocidad y dinamismo en la cancha.
-					</p>
-					<p>
-						El rasgo distintivo del diseño reside en los remates de cada carácter, donde integramos
-						cortes angulares que evocan la forma de los cuernos del toro. El resultado es un activo
-						tipográfico exclusivo que conserva una visibilidad impecable en composiciones
-						monocromáticas, impresiones textiles, plataformas publicitarias digitales y soportes de
-						gran formato.
-					</p>
-				</div>
+			<div class="toros-section__label">
+				<span class="toros-section__num">05&nbsp;/&nbsp;</span>
+				<span class="toros-section__label-name">Logotipo</span>
+			</div>
+			<h2
+				class="pitch-display mt-7 w-full max-w-[52rem] text-[clamp(1.35rem,2.8vw,2.125rem)] font-normal leading-[1.25] md:mt-8"
+				data-pitch-reveal
+			>
+				Rotulación artesanal con carácter deportivo
+			</h2>
+			<div class="pitch-body-copy mt-6 flex max-w-[52rem] flex-col gap-5 text-white/85 md:mt-8">
+				<p>
+					El logotipo fue dibujado a mano desde cero, tomando como referencia la tradición gráfica de
+					los clubes de baloncesto profesionales. La estructura se apoya en una letra T inicial de
+					gran escala que da paso a trazos caligráficos fluidos en el resto de la palabra. Aplicamos
+					una inclinación diagonal precisa para otorgar al conjunto una sensación de velocidad y
+					dinamismo en la cancha.
+				</p>
+				<p>
+					El rasgo distintivo del diseño reside en los remates de cada carácter, donde integramos
+					cortes angulares que evocan la forma de los cuernos del toro. El resultado es un activo
+					tipográfico exclusivo que conserva una visibilidad impecable en composiciones
+					monocromáticas, impresiones textiles, plataformas publicitarias digitales y soportes de
+					gran formato.
+				</p>
 			</div>
 		</div>
-		<figure class="relative w-full overflow-hidden bg-[#111a15]">
+		<figure class="relative w-full overflow-hidden">
 			<video
 				class="block h-auto w-full"
 				data-toros-video
@@ -525,29 +526,32 @@ const pitchNav = [
 				preload="auto"
 				aria-label="Wordmark TOROS"
 			>
-				<source src={asset('logotipo-wordmark.webm')} type="video/webm" />
+				<source src={asset('Torors-Logotype.webm')} type="video/webm" />
 			</video>
 		</figure>
 	</section>
 
-	{/* —— Home Kit (Figma 6059:6697) —— */}
+	{/* —— Home Kit (Home Kit.pdf / HomeKit_Mobile.pdf) —— */}
 	<section
 		id="home-kit"
-		class="toros-home-kit relative z-[2] scroll-mt-32 bg-[#0b140f]"
+		class="toros-home-kit relative z-[2] scroll-mt-32"
 		aria-label="Home Kit"
 	>
 		<div
-			class="mx-auto flex max-w-[1440px] flex-col items-start gap-12 px-[var(--pitch-gutter)] pb-[60px] pt-[var(--pitch-section-y)] lg:flex-row lg:gap-10 lg:px-[120px]"
+			class="mx-auto flex max-w-[1440px] flex-col items-start gap-10 px-[var(--pitch-gutter)] pb-[clamp(2.5rem,6vw,3.75rem)] pt-[var(--pitch-section-y)] lg:flex-row lg:items-center lg:gap-[60px] lg:px-[120px]"
 		>
-			<div class="flex w-full flex-col gap-[26px] text-white lg:max-w-[400px] lg:shrink-0">
-				<p class="pitch-label">Home Kit</p>
+			<div class="flex w-full flex-col text-white lg:max-w-[400px] lg:shrink-0">
+				<div class="toros-section__label">
+					<span class="toros-section__num">06&nbsp;/&nbsp;</span>
+					<span class="toros-section__label-name">Home Kit</span>
+				</div>
 				<h2
-					class="pitch-display text-[clamp(1.25rem,2.4vw,2.125rem)] font-normal leading-[1.4]"
+					class="pitch-display mt-7 text-[clamp(1.35rem,2.8vw,2.125rem)] font-normal leading-[1.25] md:mt-8"
 					data-pitch-reveal
 				>
 					Volcanic lava
 				</h2>
-				<p class="pitch-body-copy">
+				<p class="pitch-body-copy mt-6 text-white/85 md:mt-8">
 					Diseñamos una camiseta que responde a la profundidad pura de nuestra naturaleza. Su concepto
 					no se dibuja, brota como la lava desde lo más profundo de nuestra tierra, de la misma forma
 					en que nuestras ambiciones, el valor y el orgullo emergen de este territorio para dominar
@@ -557,75 +561,77 @@ const pitchNav = [
 					sostiene esa fuerza. Salir a jugar con esta camiseta es vestir el fuego puro de Chiriquí.
 				</p>
 			</div>
-			<figure class="relative aspect-square w-full overflow-hidden lg:max-w-[800px]">
+			<figure class="relative w-full overflow-hidden lg:max-w-[800px]">
 				<img
-					src={asset('home-kit-flat.webp')}
+					src={asset('home_1.webp')}
 					alt="Camiseta home Volcanic Lava"
-					width="800"
-					height="800"
-					class="h-full w-full object-cover"
+					width="2230"
+					height="2000"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
 		</div>
-		<figure class="relative aspect-[1440/847] w-full overflow-hidden bg-[#111a15]">
-			<video
-				class="h-full w-full object-cover object-top"
-				data-toros-video
-				autoplay
-				muted
-				loop
-				playsinline
-				webkit-playsinline
-				preload="auto"
-				poster={asset('home-kit-hero.webp')}
-				aria-label="Jugador con camiseta home Toros"
-			>
-				<source src={asset('home-kit-hero.mp4')} type="video/mp4" />
-			</video>
-		</figure>
-		<div class="toros-media-grid grid grid-cols-1 bg-[#0b140f] md:grid-cols-2">
-			<figure class="overflow-hidden">
+		<div class="toros-media-stack">
+			<figure class="relative w-full overflow-hidden">
+				<video
+					class="block h-auto w-full"
+					data-toros-video
+					autoplay
+					muted
+					loop
+					playsinline
+					webkit-playsinline
+					preload="auto"
+					aria-label="Jugador con camiseta home Toros"
+				>
+					<source src={asset('home_2.webm')} type="video/webm" />
+				</video>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('home-kit-detail-1.webp')}
+					src={asset('home_3.webp')}
 					alt="Detalle camiseta home en percha"
-					width="630"
-					height="630"
-					class="aspect-square h-auto w-full object-cover"
+					width="1673"
+					height="1673"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
-			<figure class="overflow-hidden">
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('home-kit-detail-2.webp')}
+					src={asset('home_4.webp')}
 					alt="Camiseta home en el pabellón"
-					width="630"
-					height="643"
-					class="h-auto w-full object-cover"
+					width="2230"
+					height="2277"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
 		</div>
 	</section>
 
-	{/* —— Away Kit (Figma 6059:6780) —— */}
+	{/* —— Away Kit (Away Kit.pdf / AwayKit_Mobile.pdf) —— */}
 	<section
 		id="away-kit"
-		class="toros-away-kit relative z-[2] scroll-mt-32 bg-[#111a15]"
+		class="toros-away-kit relative z-[2] scroll-mt-32"
 		aria-label="Away Kit"
 	>
 		<div
-			class="mx-auto flex max-w-[1440px] flex-col items-start gap-12 px-[var(--pitch-gutter)] pb-[60px] pt-[var(--pitch-section-y)] lg:flex-row lg:gap-10 lg:px-[120px]"
+			class="mx-auto flex max-w-[1440px] flex-col items-start gap-10 px-[var(--pitch-gutter)] pb-[clamp(2.5rem,6vw,3.75rem)] pt-[var(--pitch-section-y)] lg:flex-row lg:items-center lg:gap-[60px] lg:px-[120px]"
 		>
-			<div class="flex w-full flex-col gap-[26px] text-white lg:max-w-[400px] lg:shrink-0">
-				<p class="pitch-label">Away Kit</p>
+			<div class="flex w-full flex-col text-white lg:max-w-[400px] lg:shrink-0">
+				<div class="toros-section__label">
+					<span class="toros-section__num">07&nbsp;/&nbsp;</span>
+					<span class="toros-section__label-name">Away Kit</span>
+				</div>
 				<h2
-					class="pitch-display text-[clamp(1.25rem,2.4vw,2.125rem)] font-normal leading-[1.4]"
+					class="pitch-display mt-7 text-[clamp(1.35rem,2.8vw,2.125rem)] font-normal leading-[1.25] md:mt-8"
 					data-pitch-reveal
 				>
 					Jungle Nocturne
 				</h2>
-				<p class="pitch-body-copy">
+				<p class="pitch-body-copy mt-6 text-white/85 md:mt-8">
 					Para conquistar territorio ajeno, debemos recurrir a la densidad de nuestra propia sombra.
 					“Jungle Nocturne” es la manifestación de la selva chiricana bajo la noche. El diseño se
 					sumerge en una transición de verde bosque profundo y negro absoluto, donde las siluetas de
@@ -635,277 +641,241 @@ const pitchNav = [
 					quien conoce cada centímetro de su propio territorio.
 				</p>
 			</div>
-			<figure class="relative aspect-square w-full overflow-hidden lg:max-w-[800px]">
+			<figure class="relative w-full overflow-hidden lg:max-w-[800px]">
 				<img
-					src={asset('away-kit-flat.webp')}
+					src={asset('away_1.webp')}
 					alt="Camiseta away Jungle Nocturne"
-					width="800"
-					height="800"
-					class="h-full w-full object-cover"
+					width="2230"
+					height="2000"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
 		</div>
-		<figure class="relative aspect-[1440/847] w-full overflow-hidden">
-			<video
-				class="h-full w-full object-cover object-top"
-				data-toros-video
-				autoplay
-				muted
-				loop
-				playsinline
-				webkit-playsinline
-				preload="auto"
-				poster={asset('away-kit-hero.webp')}
-				aria-label="Jugador con camiseta away Toros"
-			>
-				<source src={asset('away-kit-hero.mp4')} type="video/mp4" />
-			</video>
-		</figure>
-		<div class="toros-media-grid grid grid-cols-1 md:grid-cols-2">
-			<figure class="overflow-hidden">
+		<div class="toros-media-stack">
+			<figure class="relative w-full overflow-hidden">
+				<video
+					class="block h-auto w-full"
+					data-toros-video
+					autoplay
+					muted
+					loop
+					playsinline
+					webkit-playsinline
+					preload="auto"
+					aria-label="Jugador con camiseta away Toros"
+				>
+					<source src={asset('away_2.webm')} type="video/webm" />
+				</video>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('away-kit-detail-1.webp')}
+					src={asset('away_3.webp')}
 					alt="Detalle camiseta away en percha"
-					width="630"
-					height="630"
-					class="aspect-square h-auto w-full object-cover"
+					width="1673"
+					height="1673"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
-			<figure class="overflow-hidden">
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('away-kit-detail-2.webp')}
+					src={asset('away_4.webp')}
 					alt="Detalle tipografía camiseta away"
-					width="624"
-					height="624"
-					class="aspect-square h-auto w-full object-cover"
+					width="1673"
+					height="1708"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
 		</div>
 	</section>
 
-	{/* —— Merchandising (Figma 1093:190) —— */}
+	{/* —— Merchandising (Merch.pdf / Merch_Mobile.pdf) —— */}
 	<section
 		id="merchandising"
-		class="toros-merch relative z-[2] scroll-mt-32 bg-[#0b140f]"
-		aria-label="Merchandising"
+		class="toros-merch relative z-[2] scroll-mt-32"
+		aria-label="Merch"
 	>
 		<div
-			class="mx-auto flex max-w-[1440px] flex-col gap-[26px] px-[var(--pitch-gutter)] py-[var(--pitch-section-y)] text-white lg:px-40"
+			class="mx-auto flex max-w-[1440px] flex-col px-[var(--pitch-gutter)] pb-[clamp(2.5rem,6vw,3.75rem)] pt-[var(--pitch-section-y)] text-white lg:px-[120px]"
 		>
-			<p class="pitch-label">Merchandising</p>
-			<div class="grid gap-10 lg:grid-cols-2 lg:gap-[60px]">
-				<h2
-					class="pitch-display w-full text-[clamp(1.25rem,2.4vw,2.125rem)] font-normal leading-[1.4]"
-					data-pitch-reveal
-				>
-					Productos diseñados para el crecimiento comercial
-				</h2>
-				<div class="pitch-body-copy flex max-w-[570px] flex-col gap-5 lg:justify-self-end">
-					<p>
-						El sistema de productos incluye las equipaciones de juego y una línea de ropa urbana
-						pensada para los aficionados. Trasladamos la identidad gráfica a camisetas, gorras y
-						bolsas de tela, logrando artículos funcionales y de estética cuidada.
-					</p>
-					<p>
-						Tratar la indumentaria del club como una colección streetwear convierte los objetos
-						promocionales en artículos comerciales de alto valor. Esta propuesta incrementa la
-						presencia de la marca en las calles, eleva las ventas directas y potencia la reputación
-						de la franquicia frente a patrocinadores.
-					</p>
-				</div>
+			<div class="toros-section__label">
+				<span class="toros-section__num">08&nbsp;/&nbsp;</span>
+				<span class="toros-section__label-name">Merch</span>
 			</div>
-		</div>
-		<figure class="relative aspect-[1440/729] w-full overflow-hidden bg-[#111a15]">
-			<video
-				class="h-full w-full object-cover"
-				data-toros-video
-				autoplay
-				muted
-				loop
-				playsinline
-				webkit-playsinline
-				preload="auto"
-				poster={asset('merch-hero.webp')}
-				aria-label="Camiseta urbana Toros en cancha"
+			<h2
+				class="pitch-display mt-7 w-full max-w-[52rem] text-[clamp(1.35rem,2.8vw,2.125rem)] font-normal leading-[1.25] md:mt-8"
+				data-pitch-reveal
 			>
-				<source src={asset('merch-hero.mp4')} type="video/mp4" />
-			</video>
-		</figure>
-		<div class="toros-media-grid grid grid-cols-1 md:grid-cols-2">
-			<figure class="overflow-hidden">
+				Productos diseñados para el crecimiento comercial
+			</h2>
+			<p class="pitch-body-copy mt-6 max-w-[52rem] text-white/85 md:mt-8">
+				El sistema de productos incluye las equipaciones de juego y una línea de ropa urbana pensada
+				para los aficionados. Trasladamos la identidad gráfica a camisetas, gorras y bolsas de tela,
+				logrando artículos funcionales y de estética cuidada. Tratar la indumentaria del club como una
+				colección streetwear convierte los objetos promocionales en artículos comerciales de alto valor.
+				Esta propuesta incrementa la presencia de la marca en las calles, eleva las ventas directas y
+				potencia la reputación de la franquicia frente a patrocinadores.
+			</p>
+		</div>
+		<div class="toros-media-stack">
+			<figure class="relative w-full overflow-hidden">
+				<video
+					class="block h-auto w-full"
+					data-toros-video
+					autoplay
+					muted
+					loop
+					playsinline
+					webkit-playsinline
+					preload="auto"
+					aria-label="Camiseta urbana Toros en cancha"
+				>
+					<source src={asset('merch_1.webm')} type="video/webm" />
+				</video>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('merch-bag.webp')}
-					alt="Bolsa Toros"
-					width="630"
-					height="630"
-					class="aspect-square h-auto w-full object-cover"
+					src={asset('merch_2.webp')}
+					alt="Merchandising Toros en el pabellón"
+					width="1673"
+					height="1523"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
-			<figure class="overflow-hidden">
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('merch-cap.webp')}
+					src={asset('merch_3.webp')}
+					alt="Bolsa Toros"
+					width="1673"
+					height="1673"
+					class="block h-auto w-full"
+					loading="lazy"
+				/>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
+				<img
+					src={asset('merch_4.webp')}
 					alt="Gorra Toros"
-					width="630"
-					height="630"
-					class="aspect-square h-auto w-full object-cover"
+					width="1673"
+					height="1708"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
 		</div>
-		<figure class="relative aspect-[1440/882] w-full overflow-hidden bg-[#111a15]">
-			<img
-				src={asset('merch-lifestyle.webp')}
-				alt="Merchandising Toros en el pabellón"
-				width="1440"
-				height="882"
-				class="h-full w-full object-cover"
-				loading="lazy"
-			/>
-		</figure>
 	</section>
 
-	{/* —— Promoción (Figma 1093:205) —— */}
+	{/* —— Promoción (Merch.pdf export = sección 09 / Promoción) —— */}
 	<section
 		id="promocion"
-		class="toros-promo relative z-[2] scroll-mt-32 bg-[#111a15]"
+		class="toros-promo relative z-[2] scroll-mt-32"
 		aria-label="Promoción"
 	>
 		<div
-			class="mx-auto flex max-w-[1440px] flex-col gap-[26px] px-[var(--pitch-gutter)] py-[var(--pitch-section-y)] text-white lg:px-40"
+			class="mx-auto flex max-w-[1440px] flex-col px-[var(--pitch-gutter)] pb-[clamp(2.5rem,6vw,3.75rem)] pt-[var(--pitch-section-y)] text-white lg:px-[120px]"
 		>
-			<p class="pitch-label">Promoción</p>
-			<div class="grid gap-10 lg:grid-cols-2 lg:gap-[60px]">
-				<h2
-					class="pitch-display w-full text-[clamp(1.25rem,2.4vw,2.125rem)] font-normal leading-[1.4]"
-					data-pitch-reveal
-				>
-					Comunicación gráfica diseñada para movilizar a la afición
-				</h2>
-				<div class="pitch-body-copy flex max-w-[570px] flex-col gap-5 lg:justify-self-end">
-					<p>
-						Desarrollamos un sistema de soporte publicitario que traslada la agresividad visual de la
-						marca a vallas de gran formato, cartelería de partidos y campañas digitales. El lenguaje
-						gráfico utiliza una tipografía rotunda, contrastes marcados y encuadres dinámicos de los
-						jugadores, fijando un estándar visual de nivel internacional.
-					</p>
-					<p>
-						Esta presencia en las calles y redes transforma la relación del equipo con la comunidad.
-						La nueva identidad gráfica genera un sentimiento de orgullo local, incrementa la venta de
-						entradas en el pabellón y ofrece a los patrocinadores un escaparate comercial sólido y
-						profesional.
-					</p>
-				</div>
+			<div class="toros-section__label">
+				<span class="toros-section__num">09&nbsp;/&nbsp;</span>
+				<span class="toros-section__label-name">Promoción</span>
+			</div>
+			<h2
+				class="pitch-display mt-7 w-full max-w-[52rem] text-[clamp(1.35rem,2.8vw,2.125rem)] font-normal leading-[1.25] md:mt-8"
+				data-pitch-reveal
+			>
+				Comunicación gráfica diseñada para movilizar a la afición
+			</h2>
+			<div class="pitch-body-copy mt-6 flex max-w-[52rem] flex-col gap-5 text-white/85 md:mt-8">
+				<p>
+					Desarrollamos un sistema de soporte publicitario que traslada la agresividad visual de la
+					marca a vallas de gran formato, cartelería de partidos y campañas digitales. El lenguaje
+					gráfico utiliza una tipografía rotunda, contrastes marcados y encuadres dinámicos de los
+					jugadores, fijando un estándar visual de nivel internacional.
+				</p>
+				<p>
+					Esta presencia en las calles y redes transforma la relación del equipo con la comunidad. La
+					nueva identidad gráfica genera un sentimiento de orgullo local, incrementa la venta de
+					entradas en el pabellón y ofrece a los patrocinadores un escaparate comercial sólido y
+					profesional.
+				</p>
 			</div>
 		</div>
-		<figure class="relative aspect-[1440/729] w-full overflow-hidden bg-[#0b140f]">
-			<img
-				src={asset('promo-hero.webp')}
-				alt="Valla Aquí el aire es más denso"
-				width="1440"
-				height="729"
-				class="h-full w-full object-cover"
-				loading="lazy"
-			/>
-		</figure>
-		<div class="toros-media-grid grid grid-cols-1 md:grid-cols-2">
-			<figure class="overflow-hidden">
+		<div class="toros-media-stack">
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('promo-left.webp')}
+					src={asset('promo_1.webp')}
+					alt="Valla Aquí el aire es más denso"
+					width="1673"
+					height="945"
+					class="block h-auto w-full"
+					loading="lazy"
+				/>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
+				<img
+					src={asset('promo_2.webp')}
 					alt="Cartel El volcán nunca duerme"
-					width="630"
-					height="832"
-					class="h-auto w-full object-cover"
+					width="1673"
+					height="1484"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
-			<figure class="overflow-hidden">
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('promo-right.webp')}
+					src={asset('promo_3.webp')}
 					alt="Valla Bienvenido a Chiriquí"
-					width="630"
-					height="832"
-					class="h-auto w-full object-cover"
+					width="1673"
+					height="1433"
+					class="block h-auto w-full"
+					loading="lazy"
+				/>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
+				<img
+					src={asset('promo_4.webp')}
+					alt="Promoción Toros"
+					width="1673"
+					height="914"
+					class="block h-auto w-full"
+					loading="lazy"
+				/>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
+				<img
+					src={asset('promo_5.webp')}
+					alt="Promoción Toros"
+					width="1673"
+					height="1168"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
 		</div>
 	</section>
 
-	{/* —— Social media (Figma 1093:218) —— */}
-	<section
-		id="social"
-		class="toros-social relative z-[2] bg-[#0b140f]"
-		aria-label="Social media"
-	>
-		<div
-			class="mx-auto grid max-w-[1440px] grid-cols-3 items-start gap-2 px-[var(--pitch-gutter)] py-[clamp(3rem,6vw,5rem)] sm:gap-6 md:gap-8"
-		>
-			{
-				[
-					{ src: 'social-1.webp', alt: 'Story Toros victoria', offset: 'md:mt-0' },
-					{ src: 'social-2.webp', alt: 'Story Toros stats', offset: 'md:mt-8' },
-					{ src: 'social-3.webp', alt: 'Story Toros partido', offset: 'md:mt-16' },
-				].map((item) => (
-					<figure class:list={['overflow-hidden', item.offset]}>
-						<img
-							src={asset(item.src)}
-							alt={item.alt}
-							width="405"
-							height="571"
-							class="h-auto w-full object-cover"
-							loading="lazy"
-						/>
-					</figure>
-				))
-			}
-		</div>
-		<div
-			class="mx-auto grid max-w-[1440px] grid-cols-3 items-start gap-2 bg-[#111a15] px-[var(--pitch-gutter)] py-[clamp(3rem,6vw,5rem)] sm:gap-6 md:gap-8"
-		>
-			{
-				[
-					{ src: 'social-4.webp', alt: 'Story Toros victory', offset: 'md:mt-0' },
-					{ src: 'social-5.webp', alt: 'Story Toros MVP', offset: 'md:mt-8' },
-					{ src: 'social-6.webp', alt: 'Story Toros vs Correcaminos', offset: 'md:mt-16' },
-				].map((item) => (
-					<figure class:list={['overflow-hidden', item.offset]}>
-						<img
-							src={asset(item.src)}
-							alt={item.alt}
-							width="376"
-							height="719"
-							class="h-auto w-full object-cover"
-							loading="lazy"
-						/>
-					</figure>
-				))
-			}
-		</div>
-	</section>
-
-	{/* —— Futuro (Figma 1093:227) —— */}
+	{/* —— Futuro (Futuro.pdf / Futuro_Mobile.pdf) —— */}
 	<section
 		id="futuro"
-		class="toros-futuro relative z-[2] scroll-mt-32 bg-[#111a15]"
+		class="toros-futuro relative z-[2] scroll-mt-32"
 		aria-label="Futuro"
 	>
 		<div
-			class="mx-auto flex max-w-[860px] flex-col gap-[26px] px-[var(--pitch-gutter)] py-[var(--pitch-section-y)] text-left text-white lg:text-center"
+			class="mx-auto flex max-w-[1440px] flex-col px-[var(--pitch-gutter)] pb-[clamp(2.5rem,6vw,3.75rem)] pt-[var(--pitch-section-y)] text-left text-white lg:px-[120px]"
 		>
-			<p class="pitch-label">Futuro</p>
+			<div class="toros-section__label">
+				<span class="toros-section__num">10&nbsp;/&nbsp;</span>
+				<span class="toros-section__label-name">Futuro</span>
+			</div>
 			<h2
-				class="pitch-display text-[clamp(1.35rem,2.8vw,2.5rem)] font-normal leading-[1.4]"
+				class="pitch-display mt-7 w-full max-w-[52rem] text-[clamp(1.35rem,2.8vw,2.5rem)] font-normal leading-[1.25] md:mt-8"
 				data-pitch-reveal
 			>
-				La nueva era de Toros{' '}
-				<br aria-hidden="true" />
-				de Chiriquí comienza aquí
+				La nueva era de Toros de Chiriquí comienza aquí
 			</h2>
-			<div class="pitch-body-copy mx-auto flex max-w-[860px] flex-col gap-5 text-left lg:text-center">
+			<div class="pitch-body-copy mt-6 flex max-w-[52rem] flex-col gap-5 text-white/85 md:mt-8">
 				<p>
 					Esta propuesta refleja nuestra visión independiente sobre la dirección gráfica y comercial
 					que puede tomar la marca Toros de Chiriquí. Diseñamos un sistema visual integral que
@@ -920,48 +890,58 @@ const pitchNav = [
 				</p>
 			</div>
 		</div>
-		<figure class="relative aspect-[1440/729] w-full overflow-hidden">
-			<img
-				src={asset('futuro-hero.webp')}
-				alt="Cancha Casa Toro"
-				width="1440"
-				height="729"
-				class="h-full w-full object-cover"
-				loading="lazy"
-			/>
-		</figure>
-		<div class="toros-media-grid grid grid-cols-1 md:grid-cols-2">
-			<figure class="overflow-hidden">
+		<div class="toros-media-stack">
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('futuro-left.webp')}
-					alt="Perspectiva de la cancha Toros"
-					width="630"
-					height="630"
-					class="aspect-square h-auto w-full object-cover"
+					src={asset('futuro_1.webp')}
+					alt="Cancha Casa Toro"
+					width="1673"
+					height="1673"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
-			<figure class="overflow-hidden">
+			<figure class="relative w-full overflow-hidden">
 				<img
-					src={asset('futuro-right.webp')}
+					src={asset('futuro_2.webp')}
+					alt="Perspectiva de la cancha Toros"
+					width="1673"
+					height="1249"
+					class="block h-auto w-full"
+					loading="lazy"
+				/>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
+				<img
+					src={asset('futuro_3.webp')}
 					alt="Detalle del piso Casa Toro"
-					width="630"
-					height="630"
-					class="aspect-square h-auto w-full object-cover"
+					width="1673"
+					height="1406"
+					class="block h-auto w-full"
+					loading="lazy"
+				/>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
+				<img
+					src={asset('futuro_4.webp')}
+					alt="Autobús con identidad Toros"
+					width="1673"
+					height="1249"
+					class="block h-auto w-full"
+					loading="lazy"
+				/>
+			</figure>
+			<figure class="relative w-full overflow-hidden">
+				<img
+					src={asset('futuro_5.webp')}
+					alt="Futuro Toros de Chiriquí"
+					width="1673"
+					height="1135"
+					class="block h-auto w-full"
 					loading="lazy"
 				/>
 			</figure>
 		</div>
-		<figure class="relative aspect-[1440/959] w-full overflow-hidden">
-			<img
-				src={asset('futuro-bus.webp')}
-				alt="Autobús con identidad Toros"
-				width="1440"
-				height="959"
-				class="h-full w-full object-cover"
-				loading="lazy"
-			/>
-		</figure>
 	</section>
 
 				</div>
@@ -972,20 +952,6 @@ const pitchNav = [
 		{/* /.toros-body__container */}
 	</div>
 	{/* /.toros-body */}
-
-	{/* —— Closing mark (Figma 1093:242) —— */}
-	<section class="relative z-[2] overflow-hidden bg-[#ba0000]" aria-hidden="true">
-		<figure class="relative aspect-[1440/621] w-full">
-			<img
-				src={asset('closing-brand.webp')}
-				alt=""
-				width="1440"
-				height="621"
-				class="h-full w-full object-cover"
-				loading="lazy"
-			/>
-		</figure>
-	</section>
 
 	<script>
 		import { initTorosNav } from '../../scripts/initTorosNav.ts';
@@ -1005,19 +971,26 @@ const pitchNav = [
 <style>
 	:global(.toros-pitch .pitch-root) {
 		--pitch-gutter: 20px;
-		--toros-media-gap: 24px;
+		/* Merch.pdf / full-bleed stacks: ~20px between media */
+		--toros-media-gap: 20px;
 	}
 
 	@media (width >= 768px) {
 		:global(.toros-pitch .pitch-root) {
 			--pitch-gutter: 60px;
-			--toros-media-gap: 60px;
+			--toros-media-gap: 20px;
 		}
 	}
 
+	:global(.toros-media-stack) {
+		display: flex;
+		flex-direction: column;
+		gap: var(--toros-media-gap, 20px);
+	}
+
 	:global(.toros-media-grid) {
-		gap: var(--toros-media-gap, 24px);
-		padding: var(--toros-media-gap, 24px) var(--pitch-gutter, 20px);
+		gap: var(--toros-media-gap, 20px);
+		padding-inline: var(--pitch-gutter, 20px);
 	}
 
 	.toros-nav {
@@ -1034,7 +1007,9 @@ const pitchNav = [
 		background: #ffffff;
 	}
 
-	/* Mobile: pin logo + copy in viewport; scroll swaps steps in place */
+	/* Pin mark + copy; scroll progress swaps steps in place (blur crossfade).
+	   Mobile: center the PDF-spaced stack in the sticky viewport.
+	   overflow: clip (not hidden) so touch pan scrolls the page, not a dead nested scroller. */
 	.toros-simbolo__scroller {
 		height: calc(var(--simbolo-steps, 5) * 85svh);
 		position: relative;
@@ -1043,29 +1018,56 @@ const pitchNav = [
 	.toros-simbolo__grid {
 		position: sticky;
 		top: calc(var(--pitch-nav-offset, 6.5rem) + 0.5rem);
-		z-index: 1;
+		z-index: 2;
 		display: flex;
 		flex-direction: column;
 		align-items: stretch;
-		gap: 1.25rem;
+		justify-content: flex-start;
+		gap: 0;
 		height: calc(
 			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
 		);
 		max-height: calc(
 			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
 		);
-		overflow: hidden;
+		overflow: clip;
+		touch-action: pan-y;
 		background: #111a15;
-		padding-top: 0.5rem;
-		padding-bottom: 0.75rem;
+		/* Clear previous-section media + keep label fully visible */
+		padding-top: 1.75rem;
+		padding-bottom: 0.5rem;
 		box-sizing: border-box;
+	}
+
+	.toros-simbolo__mobile-label {
+		flex: 0 0 auto;
+	}
+
+	.toros-simbolo__grid > .toros-simbolo__mobile-label {
+		margin: 0 0 1.25rem;
+	}
+
+	.toros-simbolo__stage-wrap {
+		flex: 0 0 auto;
+		min-height: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: clip;
+		/* PDF: ~43px symbol → title */
+		margin-bottom: clamp(1.5rem, 10.5vw, 2.7rem);
+		padding: 0;
+		pointer-events: none;
+		touch-action: pan-y;
 	}
 
 	.toros-simbolo__stage {
 		position: relative;
 		z-index: 1;
-		width: min(168px, 42vw);
-		height: min(180px, calc(42vw * 280 / 260));
+		/* Locked box so mark never jumps/shrinks between steps */
+		width: min(195px, 47.5vw);
+		aspect-ratio: 260 / 280;
+		max-height: min(210px, 32svh);
 		margin-inline: auto;
 		flex-shrink: 0;
 		pointer-events: none;
@@ -1078,98 +1080,138 @@ const pitchNav = [
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
+		object-position: center;
 		opacity: 0;
-		transition: opacity 0.35s ease;
+		transition: opacity 0.45s ease;
 		pointer-events: none;
+		-webkit-user-drag: none;
+		user-select: none;
+		touch-action: pan-y;
 	}
 
 	.toros-simbolo__visual.is-active {
 		opacity: 1;
 	}
 
-	.toros-simbolo__steps {
-		position: relative;
-		flex: 1 1 auto;
-		min-height: 0;
+	.toros-simbolo__desktop-label {
+		flex: 0 0 auto;
+	}
+
+	.toros-simbolo__copy > .toros-simbolo__desktop-label {
+		margin: 0 0 1.25rem;
+	}
+
+	.toros-simbolo__copy {
+		flex: 0 0 auto;
 		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		touch-action: pan-y;
+		pointer-events: none;
+	}
+
+	/* Stack all steps in one cell → height = tallest step → no reflow / symbol jump */
+	.toros-simbolo__steps {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		flex: 0 0 auto;
+		min-width: 0;
+		overflow: clip;
+		touch-action: pan-y;
 	}
 
 	.toros-simbolo__step {
-		position: absolute;
-		inset: 0;
-		overflow-y: auto;
-		overscroll-behavior: contain;
+		grid-area: 1 / 1;
+		position: relative;
+		width: 100%;
 		opacity: 0;
 		visibility: hidden;
 		pointer-events: none;
+		filter: blur(14px);
 		transition:
-			opacity 0.35s ease,
-			visibility 0.35s ease;
+			opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+			filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+			visibility 0.5s;
 	}
 
 	.toros-simbolo__step.is-active {
 		opacity: 1;
 		visibility: visible;
-		pointer-events: auto;
+		pointer-events: none;
+		filter: blur(0);
+		z-index: 1;
 	}
 
-	.toros-simbolo__step .toros-section__label {
-		margin-bottom: 1rem;
+	.toros-simbolo__step .pitch-body-copy {
+		margin-top: 0.75rem;
 	}
 
 	.toros-simbolo__crest {
 		margin-top: 3rem;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.toros-simbolo__step,
+		.toros-simbolo__visual {
+			transition: none;
+			filter: none;
+			transform: none;
+		}
+	}
+
 	@media (min-width: 1024px) {
 		.toros-simbolo__scroller {
-			height: auto;
+			height: calc(var(--simbolo-steps, 5) * 95vh);
 		}
 
 		.toros-simbolo__grid {
-			position: static;
-			top: auto;
-			height: auto;
-			max-height: none;
-			overflow: visible;
-			background: transparent;
-			padding: 0;
+			top: calc(var(--pitch-nav-offset, 6.5rem) + 1rem);
+			height: calc(100svh - var(--pitch-nav-offset, 6.5rem) - 2rem);
+			max-height: calc(100svh - var(--pitch-nav-offset, 6.5rem) - 2rem);
 			display: grid;
 			grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
 			gap: 3.75rem;
-			align-items: start;
+			align-items: center;
+			background: transparent;
+			padding: 0;
+			overflow: hidden;
+		}
+
+		.toros-simbolo__mobile-label {
+			display: none;
+		}
+
+		.toros-simbolo__stage-wrap {
+			flex: none;
+			min-height: 0;
+			height: auto;
+			padding: 0;
+			margin-bottom: 0;
+			align-items: center;
+			justify-content: flex-start;
+			overflow: visible;
+			align-self: center;
 		}
 
 		.toros-simbolo__stage {
-			position: sticky;
-			top: max(calc(var(--pitch-nav-offset, 6.5rem) + 1.5rem), calc(50vh - 140px));
 			width: 260px;
 			height: 280px;
+			max-width: none;
+			max-height: none;
+			aspect-ratio: auto;
 			margin-inline: 0;
+			flex-shrink: 0;
 		}
 
-		.toros-simbolo__steps {
-			position: static;
-			flex: none;
-			display: flex;
-			flex-direction: column;
-			gap: 0;
-			padding-bottom: 4rem;
-			min-height: 0;
+		.toros-simbolo__copy {
+			grid-column: 2;
+			justify-self: stretch;
+			align-self: center;
 		}
 
-		.toros-simbolo__step {
-			position: static;
-			inset: auto;
-			overflow: visible;
-			opacity: 1;
-			visibility: visible;
-			pointer-events: auto;
-			transition: none;
-		}
-
-		.toros-simbolo__step .toros-section__label {
-			margin-bottom: 1.75rem;
+		.toros-simbolo__step .pitch-body-copy {
+			margin-top: 1.25rem;
 		}
 
 		.toros-simbolo__crest {
@@ -1301,7 +1343,7 @@ const pitchNav = [
 	}
 
 	.toros-body__content {
-		background: transparent;
+		background: #111a15;
 		min-width: 0;
 	}
 
@@ -1390,6 +1432,11 @@ const pitchNav = [
 		color: rgba(255, 255, 255, 0.35);
 	}
 
+	/* Active: num brighter than inactive, dimmer than label */
+	.toros-sidebar__link.is-active .toros-sidebar__index {
+		color: rgba(255, 255, 255, 0.55);
+	}
+
 	.toros-sidebar__link.is-active .toros-sidebar__name {
 		color: #ffffff;
 	}
@@ -1402,7 +1449,7 @@ const pitchNav = [
 	}
 
 	.toros-sidebar-mobile__current .toros-sidebar__index {
-		color: rgba(255, 255, 255, 0.45);
+		color: rgba(255, 255, 255, 0.55);
 	}
 
 	.toros-sidebar-mobile__current .toros-sidebar__name {
@@ -1424,6 +1471,7 @@ const pitchNav = [
 
 	/* Nested legacy sections: no outer gutters so media can reach the right edge */
 	.toros-body__content > section {
+		background: transparent;
 		max-width: none;
 		margin-left: 0;
 		margin-right: 0;

@@ -1,8 +1,16 @@
 ---
 import { getCollection } from 'astro:content';
 import RollingLink from './RollingLink.astro';
-import { stripLocalePrefix } from '../i18n/seo.ts';
+import { t, type Locale } from '../i18n/dictionaries.ts';
+import { buildLocalePath, stripLocalePrefix } from '../i18n/seo.ts';
 import { isActiveNavHref, normalizeNavPath } from '../utils/isActiveNavHref.ts';
+
+interface Props {
+	/** When set, render chrome copy + links in this locale (pitch pages). */
+	locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
 
 const emailHref = 'mailto:wearesetinstudio@gmail.com?subject=Hello%20Setin!%20:)';
 const whatsappHref =
@@ -15,33 +23,40 @@ const originPathname =
 		: Astro.url.pathname;
 const barePath = normalizeNavPath(stripLocalePrefix(originPathname));
 
+const localeHref = (href: string) => {
+	if (locale === 'en') return href;
+	if (href.startsWith('#') || href.startsWith('mailto:') || /^https?:/i.test(href)) return href;
+	const url = new URL(href, 'https://wearesetin.com');
+	return `${buildLocalePath(locale, url.pathname)}${url.search}${url.hash}`;
+};
+
 const sitemapLinks = [
-	{ href: '/projects', label: 'Projects', i18nKey: 'nav.projects' },
-	{ href: '/services', label: 'Services', i18nKey: 'nav.services' },
-	{ href: '/about', label: 'About us', i18nKey: 'nav.about' },
-	{ href: '/articles', label: 'Articles', i18nKey: 'nav.articles' },
+	{ href: '/projects', label: t(locale, 'nav.projects'), i18nKey: 'nav.projects' },
+	{ href: '/services', label: t(locale, 'nav.services'), i18nKey: 'nav.services' },
+	{ href: '/about', label: t(locale, 'nav.about'), i18nKey: 'nav.about' },
+	{ href: '/articles', label: t(locale, 'nav.articles'), i18nKey: 'nav.articles' },
 	{ href: '#contact', label: 'Contact us', i18nKey: 'footer.contact' },
 ];
 
 const serviceLinks = [
 	{
 		href: '/services#service-01',
-		label: 'Brand Design',
+		label: t(locale, 'services.item.branding.label'),
 		i18nKey: 'services.item.branding.label',
 	},
 	{
 		href: '/services#service-02',
-		label: 'Product UX/UI Design',
+		label: t(locale, 'services.item.product.label'),
 		i18nKey: 'services.item.product.label',
 	},
 	{
 		href: '/services#service-03',
-		label: 'AI Automations',
+		label: t(locale, 'services.item.automation.label'),
 		i18nKey: 'services.item.automation.label',
 	},
 	{
 		href: '/services#service-04',
-		label: 'Development & Engineering',
+		label: t(locale, 'services.item.development.label'),
 		i18nKey: 'services.item.development.label',
 	},
 ];
@@ -79,7 +94,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 						sitemapLinks.map((link) => (
 							<li>
 								<RollingLink
-									href={link.href}
+									href={localeHref(link.href)}
 									label={link.label}
 									i18nKey={link.i18nKey}
 									variant="footer"
@@ -98,7 +113,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 						serviceLinks.map((link) => (
 							<li>
 								<RollingLink
-									href={link.href}
+									href={localeHref(link.href)}
 									label={link.label}
 									i18nKey={link.i18nKey}
 									variant="footer"
@@ -117,7 +132,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 						projects.map((project) => (
 							<li>
 								<RollingLink
-									href={`/projects/${project.id}`}
+									href={localeHref(`/projects/${project.id}`)}
 									label={project.data.title}
 									variant="footer"
 									current={isActiveNavHref(`/projects/${project.id}`, barePath)}
@@ -127,8 +142,8 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 					}
 					<li>
 						<RollingLink
-							href="/projects"
-							label="All"
+							href={localeHref('/projects')}
+							label={t(locale, 'footer.all')}
 							i18nKey="footer.all"
 							variant="footer"
 							underlined

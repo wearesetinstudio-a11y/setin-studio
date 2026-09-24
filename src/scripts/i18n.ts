@@ -146,18 +146,31 @@ export function getCurrentLocale(): Locale {
 	return defaultLocale;
 }
 
-export function applyTranslations(locale: Locale = getCurrentLocale()) {
+export type ApplyTranslationsOptions = {
+	/** Rewrite the URL to the locale-prefixed path (default true). */
+	syncUrl?: boolean;
+	/** Persist locale in localStorage (default true). */
+	persist?: boolean;
+};
+
+export function applyTranslations(
+	locale: Locale = getCurrentLocale(),
+	options: ApplyTranslationsOptions = {},
+) {
+	const { syncUrl = true, persist = true } = options;
 	const dict = dictionaries[locale];
 
 	document.documentElement.lang = htmlLang(locale);
 
-	try {
-		window.localStorage.setItem(LANG_STORAGE_KEY, locale);
-	} catch {
-		/* ignore */
+	if (persist) {
+		try {
+			window.localStorage.setItem(LANG_STORAGE_KEY, locale);
+		} catch {
+			/* ignore */
+		}
 	}
 
-	syncLocaleUrl(locale);
+	if (syncUrl) syncLocaleUrl(locale);
 	syncCanonicalLink(locale);
 	rewriteLocaleLinks(locale);
 	syncSpanishHeadMeta(locale);

@@ -6,12 +6,19 @@
 import '../styles/global.css';
 import ContactSection from '../components/ContactSection.astro';
 import Footer from '../components/Footer.astro';
+import { isLocale, type Locale } from '../i18n/dictionaries.ts';
+import { htmlLang } from '../i18n/seo.ts';
 
 interface Props {
 	title: string;
 	description?: string;
 	/** Optional lang attribute (default es for client pitches). */
 	lang?: string;
+	/**
+	 * Locale for shared Setin chrome (Contact + Footer + nav i18n).
+	 * Defaults to Spanish so client pitches match wearesetin.com/es.
+	 */
+	locale?: Locale;
 	/** Extra classes on `<body>` (e.g. pitch-specific root). */
 	bodyClass?: string;
 	/** Inline CSS variables applied to `.pitch-root` for per-page theming. */
@@ -22,9 +29,13 @@ const {
 	title,
 	description = 'Private proposal — Setin Studio',
 	lang = 'es',
+	locale: localeProp,
 	bodyClass = '',
 	themeVars = {},
 } = Astro.props;
+
+const locale: Locale = localeProp ?? (isLocale(lang) ? lang : 'es');
+const documentLang = htmlLang(locale);
 
 const pageTitle = title.includes('Setin') ? title : `${title} — Setin Studio`;
 const themeStyle = Object.entries(themeVars)
@@ -33,7 +44,7 @@ const themeStyle = Object.entries(themeVars)
 ---
 
 <!doctype html>
-<html lang={lang} style="background-color: var(--pitch-bg, #0b140f);">
+<html lang={documentLang} style="background-color: var(--pitch-bg, #0b140f);">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -74,10 +85,10 @@ const themeStyle = Object.entries(themeVars)
 			<main class="pitch-main relative z-[1] flex-1">
 				<slot />
 			</main>
-			{/* Site chrome — identical ContactSection + Footer as wearesetin.com */}
+			{/* Site chrome — identical ContactSection + Footer as wearesetin.com/es */}
 			<div class="pitch-site-end relative z-[2]">
-				<ContactSection />
-				<Footer />
+				<ContactSection locale={locale} />
+				<Footer locale={locale} />
 			</div>
 		</div>
 
@@ -89,8 +100,12 @@ const themeStyle = Object.entries(themeVars)
 		<div id="site-cursor-sparks" class="site-cursor-sparks" aria-hidden="true"></div>
 
 		<script>
+			import { applyTranslations } from '../scripts/i18n.ts';
 			import { initSmoothScroll } from '../scripts/initSmoothScroll.ts';
 			import { initSiteCursor } from '../scripts/initSiteCursor.ts';
+
+			/* Force Spanish chrome like /es — don't rewrite the pitch URL or clobber user lang prefs. */
+			applyTranslations('es', { syncUrl: false, persist: false });
 			initSmoothScroll();
 			initSiteCursor();
 		</script>

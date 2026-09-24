@@ -29,3 +29,4 @@ pnpm-debug.log*
 public/pitches/**/_mobile-ref/
 public/pitches/**/_video-ref/
 public/pitches/**/_preview/
+.env*
