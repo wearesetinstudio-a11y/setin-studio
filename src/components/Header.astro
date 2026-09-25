@@ -10,6 +10,11 @@ interface Props {
 	articleCount?: number;
 	waitForIntro?: boolean;
 	theme?: 'default' | 'light-bg';
+	/** Optional lockup (e.g. Setin × client) for pitch/proposal pages. */
+	logoSrc?: string;
+	logoAlt?: string;
+	logoWidth?: number;
+	logoHeight?: number;
 }
 
 const {
@@ -17,6 +22,10 @@ const {
 	articleCount = 0,
 	waitForIntro = false,
 	theme = 'default',
+	logoSrc = '/logo-setin.svg',
+	logoAlt = '',
+	logoWidth = 111,
+	logoHeight = 42,
 } = Astro.props;
 
 const originPathname =
@@ -37,6 +46,7 @@ const hasLocalContact =
 
 const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
 const isLightBg = theme === 'light-bg';
+const isLockupLogo = logoSrc !== '/logo-setin.svg';
 
 const nav = [
 	{ href: '/projects', label: 'Projects', count: projectCount, i18nKey: 'nav.projects' },
@@ -62,16 +72,19 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 		<a
 			href="/"
 			class="site-header__logo-link justify-self-start block w-fit transition-opacity hover:opacity-70"
-			aria-label="Setin Studio — home"
-			data-i18n-aria="nav.homeAria"
+			aria-label={logoAlt || 'Setin Studio — home'}
+			data-i18n-aria={isLockupLogo ? undefined : 'nav.homeAria'}
 		>
 			<img
-				src="/logo-setin.svg"
-				alt=""
-				width="111"
-				height="42"
-				class="site-header__logo-setin h-[32px] w-auto"
-				aria-hidden="true"
+				src={logoSrc}
+				alt={logoAlt}
+				width={logoWidth}
+				height={logoHeight}
+				class:list={[
+					'site-header__logo-setin w-auto',
+					isLockupLogo ? 'h-8 md:h-12' : 'h-[32px]',
+				]}
+				aria-hidden={logoAlt ? undefined : 'true'}
 			/>
 		</a>
 

@@ -24,6 +24,11 @@ interface Props {
 	bodyClass?: string;
 	/** Inline CSS variables applied to `.pitch-root` for per-page theming. */
 	themeVars?: Record<string, string>;
+	/** Navbar lockup: Setin × client (replaces default Setin wordmark). */
+	navLogoSrc?: string;
+	navLogoAlt?: string;
+	navLogoWidth?: number;
+	navLogoHeight?: number;
 }
 
 const {
@@ -33,6 +38,10 @@ const {
 	locale: localeProp,
 	bodyClass = '',
 	themeVars = {},
+	navLogoSrc,
+	navLogoAlt = 'Setin × client',
+	navLogoWidth = 297,
+	navLogoHeight = 59,
 } = Astro.props;
 
 const locale: Locale = localeProp ?? (isLocale(lang) ? lang : 'es');
@@ -83,7 +92,14 @@ const themeStyle = Object.entries(themeVars)
 			bodyClass,
 		]}
 	>
-		<Header projectCount={projectCount} articleCount={articleCount} />
+		<Header
+			projectCount={projectCount}
+			articleCount={articleCount}
+			logoSrc={navLogoSrc ?? '/logo-setin.svg'}
+			logoAlt={navLogoSrc ? navLogoAlt : ''}
+			logoWidth={navLogoSrc ? navLogoWidth : 111}
+			logoHeight={navLogoSrc ? navLogoHeight : 42}
+		/>
 		<div class="pitch-root flex min-h-screen flex-col" style={themeStyle || undefined}>
 			<main class="pitch-main relative z-[1] flex-1">
 				<slot />
