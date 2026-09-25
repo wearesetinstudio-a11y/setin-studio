@@ -32,6 +32,7 @@ const hasLocalContact =
 	barePath === '/projects' ||
 	barePath === '/articles' ||
 	barePath.startsWith('/articles/') ||
+	barePath.startsWith('/pitches/') ||
 	/^\/projects\/[^/]+$/.test(barePath);
 
 const workWithUsHref = hasLocalContact ? '#contact' : '/#contact';
@@ -1101,7 +1102,21 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 	function unlockBodyScroll() {
 		if (!document.body.classList.contains('mobile-nav-open')) return;
 
-		const scrollY = lockedScrollY;
+		const pendingRaw = document.body.dataset.mobileNavUnlockY;
+		const pendingFromDataset = pendingRaw != null ? Number(pendingRaw) : NaN;
+		const pendingFromWindow = (window as Window & { __setinMobileNavUnlockY?: number })
+			.__setinMobileNavUnlockY;
+		const pendingY = Number.isFinite(pendingFromDataset)
+			? pendingFromDataset
+			: typeof pendingFromWindow === 'number'
+				? pendingFromWindow
+				: NaN;
+		const scrollY = Number.isFinite(pendingY) ? pendingY : lockedScrollY;
+
+		delete document.body.dataset.mobileNavUnlockY;
+		delete (window as Window & { __setinMobileNavUnlockY?: number }).__setinMobileNavUnlockY;
+		lockedScrollY = scrollY;
+
 		document.documentElement.classList.remove('mobile-nav-open');
 		document.body.classList.remove('mobile-nav-open');
 		document.body.style.position = '';
@@ -1112,6 +1127,11 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 		scrollToImmediate(scrollY);
 		startSmoothScroll();
 		getLenis()?.resize();
+		// Lenis can snap back to its pre-lock scroll on start/resize — re-assert once.
+		requestAnimationFrame(() => {
+			scrollToImmediate(scrollY);
+			getLenis()?.resize();
+		});
 	}
 
 	function readDotPose(el: HTMLElement) {
@@ -1471,6 +1491,14 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 		setToggleOpen(toggle, false);
 		unlockBodyScroll();
 
+		const onUnlockTarget = (event: Event) => {
+			const detail = (event as CustomEvent<number>).detail;
+			if (typeof detail === 'number' && Number.isFinite(detail)) {
+				lockedScrollY = Math.max(0, detail);
+			}
+		};
+		window.addEventListener('setin:mobile-nav-unlock-y', onUnlockTarget);
+
 		const onToggleClick = () => {
 			const shouldOpen = !toggle.classList.contains('is-open');
 			if (shouldOpen) {
@@ -1497,6 +1525,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 			toggle.removeEventListener('click', onToggleClick);
 			panel.removeEventListener('click', onPanelClick);
 			window.removeEventListener('keydown', onKeyDown);
+			window.removeEventListener('setin:mobile-nav-unlock-y', onUnlockTarget);
 			void closeMobileNav();
 		};
 	}

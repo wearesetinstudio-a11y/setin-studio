@@ -5,6 +5,8 @@ type SmoothScrollWindow = Window &
 	typeof globalThis & {
 		__setinLenis?: Lenis | null;
 		__setinSmoothScrollClicksReady?: boolean;
+		/** When set, mobile-nav unlock jumps here (no visible scroll). */
+		__setinMobileNavUnlockY?: number;
 	};
 
 let lenis: Lenis | null = null;
@@ -28,6 +30,21 @@ export function scrollToImmediate(y: number) {
 		return;
 	}
 	window.scrollTo(0, y);
+}
+
+export function getDocumentScrollY(): number {
+	if (document.body.style.position === 'fixed') {
+		const locked = Math.abs(Number.parseInt(document.body.style.top || '0', 10));
+		if (Number.isFinite(locked)) return locked;
+	}
+	return window.scrollY || window.pageYOffset || 0;
+}
+
+export function getElementScrollTop(id: string): number | null {
+	const target = document.getElementById(id);
+	if (!target) return null;
+	const offset = getScrollOffset();
+	return Math.max(0, target.getBoundingClientRect().top + getDocumentScrollY() + offset);
 }
 
 function getScrollOffset() {
@@ -141,18 +158,30 @@ function initAnchorScrollClicks() {
 			void (async () => {
 				const menuWasOpen = document.body.classList.contains('mobile-nav-open');
 				if (menuWasOpen) {
+					const unlockY = getElementScrollTop(id);
+					if (unlockY != null) {
+						const y = Math.round(unlockY);
+						(window as SmoothScrollWindow).__setinMobileNavUnlockY = y;
+						document.body.dataset.mobileNavUnlockY = String(y);
+						// Shift page under the cover so reveal already shows the target section.
+						document.body.style.top = `-${y}px`;
+						window.dispatchEvent(
+							new CustomEvent('setin:mobile-nav-unlock-y', { detail: y }),
+						);
+					}
+
 					const toggle = document.getElementById('mobile-nav-toggle');
 					if (toggle?.classList.contains('is-open')) {
 						toggle.click();
 					}
 					await waitForMobileNavClosed();
-					// Body unlock restores scroll; Lenis still has a stale limit until resize.
-					await new Promise<void>((resolve) => {
-						requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-					});
+					const finalY = getElementScrollTop(id);
+					if (finalY != null) scrollToImmediate(finalY);
+					getLenis()?.resize();
+				} else {
+					scrollToId(id);
 				}
 
-				scrollToId(id);
 				if (window.location.hash !== hash) {
 					window.history.pushState(
 						window.history.state,

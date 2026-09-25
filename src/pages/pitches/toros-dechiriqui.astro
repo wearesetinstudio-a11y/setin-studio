@@ -1,10 +1,7 @@
 ---
 import PitchLayout from '../../layouts/PitchLayout.astro';
-import WorkWithUsButton from '../../components/WorkWithUsButton.astro';
-import { t } from '../../i18n/dictionaries.ts';
 
 const asset = (file: string) => `/pitches/toros-dechiriqui/${file}`;
-const workWithUsLabel = t('es', 'nav.workWithUs');
 
 const simboloSteps = [
 	{
@@ -98,25 +95,6 @@ const pitchNav = [
 		'--pitch-font-nav': "'Montserrat', ui-sans-serif, system-ui, sans-serif",
 	}}
 >
-	{/* —— Pitch navbar (Navbar.pdf / Mobile.pdf) —— */}
-	<header id="pitch-nav" class="toros-nav fixed inset-x-0 top-0 z-40">
-		<div
-			class="toros-nav__inner flex items-center justify-between gap-6 px-[var(--pitch-gutter)] py-5 md:py-6"
-		>
-			<a href="/" class="toros-nav__brand shrink-0" aria-label="Setin × Toros">
-				<img
-					src={asset('nav-lockup.svg')}
-					alt="setin × TOROS"
-					width="297"
-					height="59"
-					class="h-8 w-auto md:h-[48px]"
-				/>
-			</a>
-
-			<WorkWithUsButton href="#contact" variant="light" label={workWithUsLabel} />
-		</div>
-	</header>
-
 	{/* —— Hero —— */}
 	<section
 		id="toros-hero"
@@ -991,20 +969,6 @@ const pitchNav = [
 	:global(.toros-media-grid) {
 		gap: var(--toros-media-gap, 20px);
 		padding-inline: var(--pitch-gutter, 20px);
-	}
-
-	.toros-nav {
-		background: rgba(13, 14, 15, var(--toros-nav-bg, 0));
-	}
-
-	.toros-nav :global(.work-with-us-button),
-	.toros-nav :global(.work-with-us-button span) {
-		font-family: 'Fustat', ui-sans-serif, system-ui, sans-serif;
-		color: #f5f5f5;
-	}
-
-	.toros-nav :global(.work-with-us-button__underline) {
-		background: #ffffff;
 	}
 
 	/* Pin mark + copy; scroll progress swaps steps in place (blur crossfade).

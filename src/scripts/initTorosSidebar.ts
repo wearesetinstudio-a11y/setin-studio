@@ -81,7 +81,7 @@ export function initTorosSidebar() {
 			const target = document.getElementById(targetId);
 			if (!target) return;
 
-			const nav = document.getElementById('pitch-nav');
+			const nav = document.getElementById('site-header');
 			const offset = (nav?.offsetHeight ?? 80) + 16;
 			const top = target.getBoundingClientRect().top + window.scrollY - offset;
 			window.scrollTo({ top, behavior: 'smooth' });

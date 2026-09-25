@@ -1,12 +1,14 @@
 ---
 /**
  * Independent shell for hidden pitch / proposal pages.
- * Pitch content uses its own type stack; Footer (contact + nav) matches the main site 1:1.
+ * Pitch content uses its own type stack; Header + Footer match the main site 1:1.
  */
 import '../styles/global.css';
+import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { isLocale, type Locale } from '../i18n/dictionaries.ts';
 import { htmlLang } from '../i18n/seo.ts';
+import { getSiteCounts } from '../utils/getSiteCounts.ts';
 
 interface Props {
 	title: string;
@@ -14,7 +16,7 @@ interface Props {
 	/** Optional lang attribute (default es for client pitches). */
 	lang?: string;
 	/**
-	 * Locale for shared Setin chrome (Footer + nav i18n).
+	 * Locale for shared Setin chrome (Header + Footer + nav i18n).
 	 * Defaults to Spanish so client pitches match wearesetin.com/es.
 	 */
 	locale?: Locale;
@@ -35,6 +37,7 @@ const {
 
 const locale: Locale = localeProp ?? (isLocale(lang) ? lang : 'es');
 const documentLang = htmlLang(locale);
+const { projectCount, articleCount } = await getSiteCounts();
 
 const pageTitle = title.includes('Setin') ? title : `${title} — Setin Studio`;
 const themeStyle = Object.entries(themeVars)
@@ -66,7 +69,7 @@ const themeStyle = Object.entries(themeVars)
 		/>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		{/* Pitch stack + Fustat for shared Contact/Footer (same as main site) */}
+		{/* Pitch stack + Fustat for shared Header/Footer (same as main site) */}
 		<link
 			href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=Science+Gothic:wght@300;400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -80,6 +83,7 @@ const themeStyle = Object.entries(themeVars)
 			bodyClass,
 		]}
 	>
+		<Header projectCount={projectCount} articleCount={articleCount} />
 		<div class="pitch-root flex min-h-screen flex-col" style={themeStyle || undefined}>
 			<main class="pitch-main relative z-[1] flex-1">
 				<slot />
@@ -114,7 +118,6 @@ const themeStyle = Object.entries(themeVars)
 	.pitch-body {
 		background-color: var(--pitch-bg, #0b140f);
 		color: var(--pitch-fg, #ffffff);
-		font-family: var(--pitch-font-body, 'Montserrat', ui-sans-serif, system-ui, sans-serif);
 		margin: 0;
 	}
 
@@ -129,6 +132,7 @@ const themeStyle = Object.entries(themeVars)
 		--pitch-gutter: 16px;
 		--pitch-section-y: 80px;
 		--pitch-nav-height: auto;
+		font-family: var(--pitch-font-body, 'Montserrat', ui-sans-serif, system-ui, sans-serif);
 	}
 
 	@media (width >= 768px) {
@@ -177,9 +181,16 @@ const themeStyle = Object.entries(themeVars)
 		line-height: 1.7;
 	}
 
-	/* Footer: same type stack and surface as main Setin site */
+	/* Header + Footer: same type stack as main Setin site */
+	.site-header,
+	.site-header a,
+	.site-header span,
+	.site-header button,
 	.pitch-site-end {
 		font-family: 'Fustat', ui-sans-serif, system-ui, sans-serif;
+	}
+
+	.pitch-site-end {
 		color: #f5f5f5;
 		letter-spacing: var(--letter-spacing-body);
 		background-color: #0f1011;
