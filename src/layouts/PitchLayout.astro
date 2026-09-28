@@ -4,6 +4,7 @@
  * Pitch content uses its own type stack; Header + Footer match the main site 1:1.
  */
 import '../styles/global.css';
+import '../styles/page-transition.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { isLocale, type Locale } from '../i18n/dictionaries.ts';
@@ -80,10 +81,30 @@ const themeStyle = Object.entries(themeVars)
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		{/* Pitch stack + Fustat for shared Header/Footer (same as main site) */}
 		<link
-			href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=Science+Gothic:wght@300;400;500;600;700&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&family=Science+Gothic:wght@300;400;500;600;700&family=Saira:wght@300;400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
 		/>
 		<title>{pageTitle}</title>
+		<style is:inline>
+			html.intro-pending #page-transition-overlay {
+				pointer-events: auto;
+			}
+
+			html.intro-pending:not(.intro-revealing) .page-transition-bar {
+				transform: translateY(0);
+			}
+
+			html.intro-pending body {
+				overflow: hidden;
+			}
+
+			html.intro-pending:not(.intro-revealing) body > :not(#page-transition-overlay) {
+				visibility: hidden;
+			}
+		</style>
+		<script is:inline>
+			document.documentElement.classList.add('intro-pending');
+		</script>
 		<slot name="head" />
 	</head>
 	<body
@@ -92,6 +113,33 @@ const themeStyle = Object.entries(themeVars)
 			bodyClass,
 		]}
 	>
+		<div
+			id="page-transition-overlay"
+			class="page-transition-overlay pointer-events-none fixed inset-0 z-[9999] overflow-hidden"
+			data-pitch-preloader
+			aria-hidden="true"
+		>
+			<div class="page-transition-bars">
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar page-transition-bar--center">
+					<div class="sygnet-flip-stage">
+						<img
+							src="/logo-sygnet.svg"
+							alt=""
+							width="64"
+							height="64"
+							class="page-transition-overlay__logo sygnet-flip-x"
+							decoding="async"
+						/>
+					</div>
+				</div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
+				<div class="page-transition-bar" aria-hidden="true"></div>
+			</div>
+		</div>
 		<Header
 			projectCount={projectCount}
 			articleCount={articleCount}
@@ -121,10 +169,14 @@ const themeStyle = Object.entries(themeVars)
 			import { applyTranslations } from '../scripts/i18n.ts';
 			import { initSmoothScroll } from '../scripts/initSmoothScroll.ts';
 			import { initSiteCursor } from '../scripts/initSiteCursor.ts';
+			import { initPitchPreloader } from '../scripts/initPitchPreloader.ts';
+			import { initPitchMediaAhead } from '../scripts/initPitchMediaAhead.ts';
 
 			/* Force Spanish chrome like /es — don't rewrite the pitch URL or clobber user lang prefs. */
 			applyTranslations('es', { syncUrl: false, persist: false });
 			initSmoothScroll();
+			initPitchPreloader();
+			initPitchMediaAhead();
 			initSiteCursor();
 		</script>
 	</body>

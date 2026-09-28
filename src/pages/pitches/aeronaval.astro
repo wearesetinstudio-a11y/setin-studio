@@ -1,0 +1,1049 @@
+---
+import PitchLayout from '../../layouts/PitchLayout.astro';
+
+const asset = (file: string) => `/pitches/aeronaval/${encodeURI(file)}`;
+
+const cases = [
+	{
+		logo: asset('Royal Air Force.svg'),
+		logoAlt: 'Royal Air Force',
+		title: 'Royal Air Force (Reino Unido)',
+		titleLines: 'Royal Air Force|(Reino Unido)',
+		text: 'Oficialmente rediseñada para su centenario en 2018, esta identidad unifica la escarapela histórica de 1914 con una tipografía aeronáutica precisa. El desarrollo resolvió la incapacidad legal de registrar el círculo clásico, estableciendo una marca protegida y optimizada para merchandising, patrocinios y campañas de reclutamiento.',
+	},
+	{
+		logo: asset('WP.svg'),
+		logoAlt: 'Wojsko Polskie',
+		title: 'Wojsko Polskie (Polonia)',
+		titleLines: 'Wojsko Polskie|(Polonia)',
+		text: 'El sistema de identificación visual introducido en 2009 respondió a la necesidad de dotar a las fuerzas armadas de un lenguaje gráfico coherente para el siglo XXI. Se requería un signo dinámico y universal, libre de elementos agresivos, ideal para la promoción, el reclutamiento y los soportes oficiales.',
+	},
+	{
+		logo: asset('US Air Force.svg'),
+		logoAlt: 'US Air Force',
+		title: 'US Air Force (Estados Unidos)',
+		titleLines: 'US Air Force|(Estados Unidos)',
+		text: 'Su rediseño modernizó la imagen institucional para la era digital, optimizando los esfuerzos de reclutamiento y marketing mediante una geometría estilizada que rinde tributo a sus raíces históricas.',
+	},
+	{
+		logo: asset('Forsvaret.svg'),
+		logoAlt: 'Forsvaret',
+		title: 'Forsvaret (Dinamarca)',
+		titleLines: 'Forsvaret|(Dinamarca)',
+		text: 'Implementado en 2005 para unificar bajo una arquitectura monolítica al ejército, la marina y la aviación. Su diseño deconstruye elementos tradicionales: la corona superior simboliza la soberanía, mientras que el cuadrante estructurado evoca la cruz nacional y las antiguas fortalezas circulares vikingas.',
+	},
+];
+
+const simboloSteps = [
+	{
+		title: 'Anatomía y codificación del lenguaje visual',
+		text: 'El emblema propuesto para el Servicio Nacional Aeronaval (SENAN) traduce los valores fundacionales de la institución en un lenguaje visual limpio, minimalista y de gran potencia expresiva.',
+		visual: 'symbol_1.svg',
+	},
+	{
+		title: 'Ancla',
+		text: 'El ancla se consolida como el eje firme de mando y liderazgo estratégico, definiendo con absoluta solidez táctica la presencia inquebrantable del SENAN en la defensa de los mares territoriales, litorales y extensas costas de la República de Panamá.',
+		visual: 'symbol_2.svg',
+	},
+	{
+		title: 'Rosa de los vientos',
+		text: 'La rosa de los vientos actúa como el símbolo definitivo de vigilancia integral y orientación multidireccional en todas las coordenadas geográficas, asegurando la infatigable capacidad de control y dominio operativo en cualquier teatro de operaciones.',
+		visual: 'symbol_3.svg',
+	},
+	{
+		title: 'Alas',
+		text: 'Las alas estilizadas representan la soberanía aérea y la superioridad táctica de la institución, concebidas para salvaguardar de forma permanente y con absoluta precisión milimétrica todo el espacio aéreo nacional desde el aire.',
+		visual: 'symbol_4.svg',
+	},
+	{
+		title: 'Escudo',
+		text: 'El escudo conforma el marco histórico y estructural que resguarda la unidad fundacional, la robustez institucional y la inquebrantable lealtad patriótica de la fuerza mediante una presencia sobria, solemne y profundamente respetuosa.',
+		visual: 'symbol_5.svg',
+	},
+	{
+		title: 'Protección',
+		text: 'El anillo central cerrado envuelve y protege el núcleo operativo del emblema, simbolizando el perímetro absoluto de seguridad institucional y concentrando una fuerza visual que garantiza una legibilidad impecable.',
+		visual: 'symbol_6.svg',
+	},
+];
+
+const simboloMedia = [
+	{ file: 'simbolo_1.webp', alt: 'Del escudo al símbolo', width: 3345, height: 2298 },
+	{ file: 'simbolo_2.webm', alt: 'Construcción del símbolo' },
+	{ file: 'simbolo_3.webp', alt: 'Escalado del logotipo vertical', width: 3345, height: 1958 },
+	{ file: 'simbolo_4.webp', alt: 'Escalado del logotipo horizontal', width: 3345, height: 1958 },
+];
+
+const textSectionsData = [
+	{
+		id: 'operativa',
+		label: 'Operativa',
+		title: 'Eficacia visual en entornos operacionales complejos',
+		media: [
+			'operativa_1.webm',
+			'operativa_2.webm',
+			'operativa_3.webm',
+			'operativa_4.webm',
+			'operativa_5.webp',
+			'operativa_6.webp',
+			'operativa_7.webp',
+			'operativa_8.webp',
+		],
+		text: 'Ya sea sobre patrulleras sometidas a la fuerza del oleaje, vehículos todoterreno cubiertos de fango o aeronaves expuestas a condiciones meteorológicas extremas, el símbolo conserva inalterable su integridad gráfica. Su arquitectura resiste abrasiones, impactos y acumulación de suciedad sin comprometer su impacto visual. El diseño garantiza una identificación inmediata a larga distancia, proyectando la capacidad tecnológica y la firmeza institucional en mar, tierra y aire.',
+	},
+	{
+		id: 'indumentaria',
+		label: 'Indumentaria',
+		title: 'Integración rigurosa en el equipamiento táctico',
+		media: [
+			'Indumentaria_1.webm',
+			'Indumentaria_2.webm',
+			'Indumentaria_3.webm',
+			'Indumentaria_4.webm',
+			'indumentaria_5.webp',
+			'indumentaria_6.webp',
+			'indumentaria_7.webp',
+		],
+		text: 'El diseño ha sido concebido para integrarse sin fricciones en las exigencias del equipamiento militar. Su estructura simplificada estandariza con precisión la producción de parches, insignias bordadas y aplicaciones térmicas sobre los uniformes. La economía de líneas reduce los costes operativos y garantiza una durabilidad excepcional frente al uso intensivo y el desgaste ambiental. Ya sea mediante bordados de alta densidad o termosellados, el emblema preserva una presencia sobria, respetuosa y plenamente distinguible.',
+	},
+	{
+		id: 'entorno',
+		label: 'Entorno',
+		title: 'Coherencia señalética en LA infraestructura',
+		media: [
+			'entorno_1.webm',
+			'entorno_2.webp',
+			'entorno_3.webp',
+			'entorno_4.webp',
+			'entorno_5.webp',
+			'entorno_6.webp',
+			'entorno_7.webp',
+			'entorno_8.webp',
+			'entorno_9.webp',
+		],
+		text: 'La legibilidad optimizada del símbolo asegura una señalización impecable en hangares, controles de acceso, equipos de comunicación y centros logísticos. A diferencia de los escudos convencionales, propensos a perder definición con el tiempo, este diseño mantiene una claridad absoluta en rótulos metálicos, marcajes pintados o soportes vinílicos. Cada punto de contacto físico proyecta una disciplina institucional unificada y de absoluta solvencia ante la ciudadanía.',
+	},
+	{
+		id: 'promocion',
+		label: 'Promoción',
+		title: 'Expansión pública y posicionamiento de vanguardia',
+		text: 'La nueva identidad se acopla con naturalidad a los canales de comunicación contemporáneos, desde producciones audiovisuales hasta plataformas digitales y soportes urbanos. Al potenciar piezas de formato corto y contenidos dinámicos para redes sociales, el sistema refuerza la percepción del SENAN como una fuerza moderna, altamente capacitada y atractiva para las nuevas generaciones. Cada mensaje comunica profesionalismo, disuasión y un firme compromiso con la seguridad nacional.',
+	},
+	{
+		id: 'contacto',
+		label: 'Contacto',
+		title: 'Una aportación conceptual al servicio de la institución',
+		text: 'Este proyecto independiente refleja nuestra visión sobre el potencial de desarrollo y modernización de la identidad visual del Servicio Nacional Aeronaval. Ponemos este trabajo a disposición de las autoridades como una contribución técnica orientada a enaltecer el prestigio de la institución. Si estiman oportuno profundizar en las especificaciones operativas de esta propuesta, estaremos encantados de coordinar una presentación formal.',
+	},
+];
+
+const textSections = textSectionsData.map((section, index) => ({
+	...section,
+	num: String(index + 5).padStart(2, '0'),
+}));
+
+const pitchNav = [
+	{ id: 'motivacion', num: '01', label: 'Motivación' },
+	{ id: 'estandares', num: '02', label: 'Estándares' },
+	{ id: 'estrategia', num: '03', label: 'Estrategia' },
+	{ id: 'simbolo', num: '04', label: 'Símbolo' },
+	...textSections.map(({ id, num, label }) => ({ id, num, label })),
+];
+---
+
+<PitchLayout
+	title="Aeronaval — Propuesta"
+	description="Propuesta privada de extensión de identidad visual para el Servicio Nacional Aeronaval por Setin Studio."
+	lang="es"
+	bodyClass="aero-pitch"
+	navLogoSrc="/pitches/aeronaval/nav-lockup.svg"
+	navLogoAlt="setin × Aeronaval"
+	navLogoWidth={235}
+	navLogoHeight={59}
+	themeVars={{
+		'--pitch-bg': '#0d0e0f',
+		'--pitch-fg': '#ffffff',
+		'--pitch-accent': '#ffffff',
+		'--pitch-font-display': "'Saira', ui-sans-serif, system-ui, sans-serif",
+		'--pitch-font-body': "'Public Sans', ui-sans-serif, system-ui, sans-serif",
+		'--pitch-font-nav': "'Public Sans', ui-sans-serif, system-ui, sans-serif",
+	}}
+>
+	{/* —— Hero —— */}
+	<section id="aero-hero" class="aero-hero relative min-h-[100svh] overflow-hidden" aria-label="Hero">
+		<div class="aero-hero__stage" aria-hidden="true">
+			<video
+				class="aero-hero__bg-video"
+				data-toros-video
+				autoplay
+				muted
+				loop
+				playsinline
+				webkit-playsinline
+				preload="auto"
+			>
+				<source src={asset('hero_bg.webm')} type="video/webm" />
+			</video>
+			<span class="aero-hero__shade"></span>
+		</div>
+
+		<div
+			class="aero-hero__content relative z-10 flex min-h-[100svh] flex-col px-[var(--pitch-gutter)] pt-24 md:pt-0"
+		>
+			<div
+				class="mx-auto flex w-full max-w-[843px] flex-1 flex-col items-center justify-center gap-3 text-center text-white md:gap-4"
+			>
+				<p class="pitch-label">Propuesta</p>
+				<h1
+					class="pitch-display w-full text-[clamp(1.75rem,6.2vw,3.5rem)] font-normal leading-[1.4] md:whitespace-nowrap"
+					data-pitch-reveal
+					data-pitch-lines="La Nueva era|deL Aeronaval"
+					data-pitch-lines-desktop="La Nueva era deL Aeronaval"
+				>
+					La Nueva era deL Aeronaval
+				</h1>
+				<p class="pitch-body-copy max-w-[42rem] text-white">
+					En Setin Studio hemos desarrollado una extensión visual para el SENAN que potencia su reconocimiento, consolida su autoridad y proyecta una imagen de máxima vanguardia operativa.
+				</p>
+			</div>
+
+			<div
+				class="aero-hero__scroll pointer-events-none flex shrink-0 flex-col items-center pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] md:absolute md:inset-x-0 md:bottom-10 md:pb-0"
+				aria-hidden="true"
+			>
+				<span class="block h-7 w-px shrink-0 bg-white/80"></span>
+				<img
+					src={asset('aeronaval_symbol.svg')}
+					alt=""
+					width="77"
+					height="56"
+					class="block h-[44px] w-auto shrink-0"
+				/>
+				<svg width="12" height="8" viewBox="0 0 12 8" fill="none" class="block h-2 w-3 shrink-0">
+					<path d="M1 1.5L6 6.5L11 1.5" stroke="white" stroke-width="1.5"></path>
+				</svg>
+			</div>
+		</div>
+	</section>
+
+	{/* —— Body (sidebar + content) —— */}
+	<div class="toros-body relative z-[2]">
+		<div class="mx-auto w-full pt-16 pb-20 md:pt-24 md:pb-28 lg:pt-32 lg:pb-32">
+			<div class="grid grid-cols-1 gap-12 lg:grid-cols-[320px_minmax(0,1fr)] lg:gap-0">
+				<aside
+					class="toros-sidebar relative hidden self-stretch pl-[var(--pitch-gutter)] pr-6 lg:block"
+					data-toros-sidebar
+				>
+					<div class="w-full sticky top-[calc(var(--pitch-nav-offset,6.5rem)+3.5rem)]">
+						<nav class="toros-sidebar__nav" aria-label="Secciones de la propuesta">
+							{
+								pitchNav.map((item, idx) => (
+									<a
+										href={`#${item.id}`}
+										class:list={['toros-sidebar__link', idx === 0 && 'is-active']}
+										data-toros-section-target={item.id}
+									>
+										<span class="toros-sidebar__index">{item.num}&nbsp;/&nbsp;</span>
+										<span class="toros-sidebar__name">{item.label}</span>
+									</a>
+								))
+							}
+						</nav>
+					</div>
+				</aside>
+
+				{/* Mobile section nav */}
+				<div
+					class="toros-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-0 bg-[#0d0e0f]/95 px-[var(--pitch-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden"
+					data-toros-sidebar-mobile
+				>
+					<div
+						id="aero-mobile-dropdown"
+						class="toros-sidebar-mobile__dropdown grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in"
+					>
+						<div class="overflow-hidden">
+							<nav
+								class="flex max-h-[60vh] flex-col gap-[18px] overflow-y-auto pb-5 pt-4"
+								aria-label="Secciones de la propuesta (móvil)"
+							>
+								{
+									pitchNav.map((item, idx) => (
+										<a
+											href={`#${item.id}`}
+											class:list={['toros-sidebar__link', idx === 0 && 'is-active']}
+											data-toros-section-target={item.id}
+										>
+											<span class="toros-sidebar__index">{item.num}&nbsp;/&nbsp;</span>
+											<span class="toros-sidebar__name">{item.label}</span>
+										</a>
+									))
+								}
+							</nav>
+						</div>
+					</div>
+					<button
+						type="button"
+						class="flex w-full items-center justify-between py-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] text-left uppercase"
+						aria-expanded="false"
+						aria-controls="aero-mobile-dropdown"
+						data-toros-mobile-nav-trigger
+					>
+						<span class="toros-sidebar-mobile__current">
+							<span class="toros-sidebar__index" data-toros-mobile-current-num>
+								{pitchNav[0].num}&nbsp;/&nbsp;
+							</span>
+							<span class="toros-sidebar__name is-active" data-toros-mobile-current-label>
+								{pitchNav[0].label}
+							</span>
+						</span>
+						<svg
+							width="14"
+							height="14"
+							viewBox="0 0 14 14"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+							class="toros-sidebar-mobile__chevron shrink-0"
+							aria-hidden="true"
+						>
+							<path d="M1 3.5L7 9.5L13 3.5" stroke="currentColor" stroke-width="2"></path>
+						</svg>
+					</button>
+				</div>
+
+				<div class="toros-body__content flex min-w-0 flex-col gap-0">
+					{/* —— 01 / Motivación —— */}
+					<section id="motivacion" class="toros-section scroll-mt-32 text-white" aria-label="Motivación">
+						<div class="toros-section__pad">
+							<div class="toros-section__label">
+								<span class="toros-section__num">01&nbsp;/&nbsp;</span>
+								<span class="toros-section__label-name">Motivación</span>
+							</div>
+							<h2
+								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
+								data-pitch-reveal
+							>
+								El origen de nuestra iniciativa conceptual
+							</h2>
+							<p class="pitch-body-copy mt-6 w-full text-white/85 md:mt-8">
+								Observamos que el tradicional escudo del SENAN, si bien es indispensable para preservar
+								el legado histórico, enfrenta limitaciones prácticas evidentes en escenarios operativos
+								contemporáneos. Su complejidad cromática y riqueza de detalles reducen su impacto visual
+								a distancia y dificultan su correcta implementación en soportes digitales y tácticos
+								actuales. Al analizar las directrices adoptadas por las principales instituciones de
+								defensa a nivel mundial, detectamos la oportunidad de dotar a la entidad de un símbolo
+								complementario, ágil y versátil. Como admiradores de la incansable labor de esta fuerza
+								soberana, decidimos estructurar este proyecto de forma independiente para aportar una
+								herramienta de comunicación a la altura de los más altos estándares internacionales.
+							</p>
+						</div>
+						<figure class="aero-play mt-12 w-full overflow-hidden md:mt-16" data-pitch-play>
+							<video
+								class="block aspect-video h-auto w-full bg-black object-cover"
+								preload="none"
+								data-pitch-preload="metadata"
+								playsinline
+								webkit-playsinline
+								aria-label="Video Motivación Aeronaval"
+							>
+								<source src={`${asset('motivacion_1.mp4')}#t=0.1`} type="video/mp4" />
+							</video>
+							<button
+								type="button"
+								class="aero-play__button"
+								data-pitch-play-button
+								aria-label="Reproducir video con sonido"
+							>
+								<svg width="28" height="32" viewBox="0 0 28 32" fill="none" aria-hidden="true">
+									<path d="M27 16L1 31V1L27 16Z" fill="white"></path>
+								</svg>
+							</button>
+						</figure>
+					</section>
+
+					{/* —— 02 / Estándares —— */}
+					<section id="estandares" class="toros-section scroll-mt-32 text-white" aria-label="Estándares">
+						<div class="toros-section__pad pt-[var(--pitch-section-y)]">
+							<div class="toros-section__label">
+								<span class="toros-section__num">02&nbsp;/&nbsp;</span>
+								<span class="toros-section__label-name">Estándares</span>
+							</div>
+							<h2
+								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
+								data-pitch-reveal
+							>
+								La evolución EN LA referencia internacional
+							</h2>
+							<p class="pitch-body-copy mt-6 w-full text-white/85 md:mt-8">
+								Desde hace décadas, las organizaciones militares y de defensa más respetadas del mundo
+								implementan extensiones en sus sistemas de identidad. Esta estrategia no busca suplantar
+								la tradición, sino optimizar la funcionalidad táctica, racionalizar los costos de
+								producción y asegurar una presencia institucional unificada y reconocible.
+							</p>
+
+							<ul class="mt-14 flex flex-col gap-14 md:mt-20 md:gap-16 lg:gap-20">
+								{
+									cases.map((item) => (
+										<li class="toros-value__case">
+											<div class="toros-value__case-logo">
+												<img
+													src={item.logo}
+													alt={item.logoAlt}
+													width="100"
+													height="80"
+													class="toros-case-logo w-[100px] sm:w-[130px]"
+													loading="lazy"
+												/>
+											</div>
+											<h3
+												class="toros-value__case-title pitch-display font-normal leading-[1.25]"
+												data-pitch-reveal
+												data-pitch-lines={item.titleLines}
+												data-pitch-lines-desktop={item.title}
+											>
+												{item.title}
+											</h3>
+											<p class="toros-value__case-text pitch-body-copy text-white/85">{item.text}</p>
+										</li>
+									))
+								}
+							</ul>
+						</div>
+					</section>
+
+					{/* —— 03 / Estrategia —— */}
+					<section id="estrategia" class="toros-section scroll-mt-32 text-white" aria-label="Estrategia">
+						<div class="toros-section__pad pt-[var(--pitch-section-y)]">
+							<div class="toros-section__label">
+								<span class="toros-section__num">03&nbsp;/&nbsp;</span>
+								<span class="toros-section__label-name">Estrategia</span>
+							</div>
+							<h2
+								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
+								data-pitch-reveal
+							>
+								Síntesis de herencia y funcionalidad operativa
+							</h2>
+							<p class="pitch-body-copy mt-6 w-full text-white/85 md:mt-8">
+								Nuestra aproximación metodológica se fundamenta en el principio de evolución, descartando
+								cualquier intento de sustitución. Tomamos la esencia del escudo original para
+								reinterpretarla en un símbolo contemporáneo, de lectura inmediata y alta rentabilidad en su
+								reproducción física y digital. Esta solución sitúa al SENAN en la vanguardia de las agencias
+								de seguridad modernas, proyectando una imagen de pericia técnica, disciplina y solvencia
+								profesional en cualquier escenario de actuación.
+							</p>
+						</div>
+					</section>
+
+					{/* —— 04 / Símbolo (sticky mark + scroll swap) —— */}
+					<section
+						id="simbolo"
+						class="toros-section toros-simbolo scroll-mt-32 pt-[var(--pitch-section-y)] text-white"
+						aria-label="Símbolo"
+						style={`--simbolo-steps: ${simboloSteps.length}`}
+					>
+						<div class="toros-simbolo__scroller" data-simbolo-scroller>
+							<div class="toros-section__pad toros-simbolo__grid">
+								<div class="toros-section__label toros-simbolo__mobile-label lg:hidden">
+									<span class="toros-section__num">04&nbsp;/&nbsp;</span>
+									<span class="toros-section__label-name">Símbolo</span>
+								</div>
+
+								<div class="toros-simbolo__stage-wrap">
+									<div class="toros-simbolo__stage" aria-hidden="true">
+										{
+											simboloSteps.map((step, index) => (
+												<img
+													src={asset(step.visual)}
+													alt=""
+													width="224"
+													height="165"
+													class:list={['toros-simbolo__visual', index === 0 && 'is-active']}
+													data-simbolo-visual={index}
+													loading={index === 0 ? 'eager' : 'lazy'}
+													aria-hidden={index === 0 ? 'false' : 'true'}
+												/>
+											))
+										}
+									</div>
+								</div>
+
+								<div class="toros-simbolo__copy">
+									<div class="toros-section__label toros-simbolo__desktop-label hidden lg:block">
+										<span class="toros-section__num">04&nbsp;/&nbsp;</span>
+										<span class="toros-section__label-name">Símbolo</span>
+									</div>
+									<div class="toros-simbolo__steps">
+										{
+											simboloSteps.map((step, index) => (
+												<article
+													class:list={['toros-simbolo__step', index === 0 && 'is-active']}
+													data-simbolo-step={index}
+												>
+													<h2 class="pitch-display w-full text-[clamp(1.35rem,2.8vw,2rem)] font-normal leading-[1.2]">
+														{step.title}
+													</h2>
+													<p class="pitch-body-copy w-full text-white/85">{step.text}</p>
+												</article>
+											))
+										}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="aero-media-stack aero-simbolo__media">
+							{
+								simboloMedia.map((item) => (
+									<figure class="w-full overflow-hidden">
+										{item.file.endsWith('.webm') ? (
+											<video
+												class="block h-auto w-full"
+												data-toros-video
+												muted
+												loop
+												playsinline
+												webkit-playsinline
+												preload="none"
+												aria-label={item.alt}
+											>
+												<source src={asset(item.file)} type="video/webm" />
+											</video>
+										) : (
+											<img
+												src={asset(item.file)}
+												alt={item.alt}
+												width={item.width}
+												height={item.height}
+												class="block h-auto w-full"
+												loading="lazy"
+											/>
+										)}
+									</figure>
+								))
+							}
+						</div>
+					</section>
+
+					{/* —— 05–09 —— */}
+					{
+						textSections.map((section) => (
+							<section
+								id={section.id}
+								class="toros-section scroll-mt-32 text-white"
+								aria-label={section.label}
+							>
+								<div class="toros-section__pad pt-[var(--pitch-section-y)]">
+									<div class="toros-section__label">
+										<span class="toros-section__num">{section.num}&nbsp;/&nbsp;</span>
+										<span class="toros-section__label-name">{section.label}</span>
+									</div>
+									<h2
+										class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
+										data-pitch-reveal
+									>
+										{section.title}
+									</h2>
+									<p class="pitch-body-copy mt-6 w-full text-white/85 md:mt-8">{section.text}</p>
+								</div>
+								{section.media && (
+									<div class="aero-media-stack mt-12 md:mt-16">
+										{section.media.map((file) => (
+											<figure class="w-full overflow-hidden">
+												{file.endsWith('.webp') ? (
+													<img
+														src={asset(file)}
+														alt={section.label}
+														width="1760"
+														height="1328"
+														class="block h-auto w-full"
+														loading="lazy"
+														decoding="async"
+													/>
+												) : (
+												<video
+													class="block h-auto w-full"
+													data-toros-video
+													muted
+													loop
+													playsinline
+													webkit-playsinline
+													preload="none"
+													aria-label={section.label}
+												>
+													<source src={asset(file)} type="video/webm" />
+												</video>
+												)}
+											</figure>
+										))}
+									</div>
+								)}
+							</section>
+						))
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		import { initTorosNav } from '../../scripts/initTorosNav.ts';
+		import { initTorosVideos } from '../../scripts/initTorosVideos.ts';
+		import { initPitchBlurReveal } from '../../scripts/initPitchBlurReveal.ts';
+		import { initTorosSidebar } from '../../scripts/initTorosSidebar.ts';
+		import { initPitchPlayVideo } from '../../scripts/initPitchPlayVideo.ts';
+		import { initSimboloSwap } from '../../scripts/initSimboloSwap.ts';
+
+		initTorosNav();
+		initTorosVideos();
+		initPitchBlurReveal();
+		initSimboloSwap();
+		initTorosSidebar();
+		initPitchPlayVideo();
+	</script>
+</PitchLayout>
+
+<style>
+	:global(.aero-pitch .pitch-root) {
+		--pitch-gutter: 20px;
+	}
+
+	@media (width >= 768px) {
+		:global(.aero-pitch .pitch-root) {
+			--pitch-gutter: 60px;
+		}
+	}
+
+	/* —— Hero —— */
+	.aero-hero {
+		z-index: 0;
+	}
+
+	.aero-hero__stage {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100svh;
+		background: #0d0e0f;
+		pointer-events: none;
+		overflow: hidden;
+	}
+
+	.aero-hero__bg-video {
+		position: absolute;
+		inset: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+		pointer-events: none;
+	}
+
+	.aero-hero__shade {
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.25);
+	}
+
+	.aero-hero__scroll {
+		gap: 1.5rem;
+	}
+
+	/* —— Click-to-play video —— */
+	.aero-play {
+		position: relative;
+		display: block;
+	}
+
+	.aero-play__button {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 88px;
+		height: 88px;
+		padding-left: 6px;
+		border: 1px solid rgba(255, 255, 255, 0.6);
+		border-radius: 9999px;
+		background: rgba(13, 14, 15, 0.35);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		transform: translate(-50%, -50%);
+		transition:
+			transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+			background-color 0.3s ease,
+			opacity 0.3s ease;
+	}
+
+	.aero-play__button:hover {
+		background: rgba(13, 14, 15, 0.55);
+		transform: translate(-50%, -50%) scale(1.06);
+	}
+
+	.aero-play.is-playing .aero-play__button {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	@media (width < 768px) {
+		.aero-play__button {
+			width: 64px;
+			height: 64px;
+			padding-left: 4px;
+		}
+
+		.aero-play__button svg {
+			width: 20px;
+			height: 23px;
+		}
+	}
+
+	/* —— Body / sidebar —— */
+	.toros-body {
+		background: #17181c;
+	}
+
+	@media (min-width: 1024px) {
+		.toros-body {
+			background: linear-gradient(to right, #0d0e0f 320px, #17181c 320px);
+		}
+	}
+
+	.toros-body__content {
+		background: #17181c;
+		min-width: 0;
+	}
+
+	.toros-section__pad {
+		padding-inline: var(--pitch-gutter);
+	}
+
+	.toros-section__label,
+	.toros-section__label .toros-section__num,
+	.toros-section__label .toros-section__label-name {
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+		line-height: 1.4;
+		text-transform: uppercase;
+	}
+
+	.toros-section__label {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.35);
+	}
+
+	.toros-section__num {
+		color: inherit;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.12em;
+	}
+
+	.toros-section__label-name {
+		color: #ffffff;
+	}
+
+	.aero-media-stack {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	/* —— Símbolo: pinned mark + copy, scroll progress swaps steps in place —— */
+	.toros-simbolo__scroller {
+		height: calc(var(--simbolo-steps, 6) * 85svh);
+		position: relative;
+	}
+
+	.toros-simbolo__grid {
+		position: sticky;
+		top: calc(var(--pitch-nav-offset, 6.5rem) + 0.5rem);
+		z-index: 2;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: flex-start;
+		height: calc(
+			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
+		);
+		max-height: calc(
+			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
+		);
+		overflow: clip;
+		touch-action: pan-y;
+		background: #17181c;
+		padding-top: 1.75rem;
+		padding-bottom: 0.5rem;
+		box-sizing: border-box;
+	}
+
+	.toros-simbolo__grid > .toros-simbolo__mobile-label {
+		flex: 0 0 auto;
+		margin: 0 0 1.25rem;
+	}
+
+	.toros-simbolo__stage-wrap {
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: clamp(1.5rem, 10.5vw, 2.7rem);
+		pointer-events: none;
+	}
+
+	.toros-simbolo__stage {
+		position: relative;
+		width: min(224px, 60vw);
+		aspect-ratio: 224 / 165;
+		margin-inline: auto;
+		flex-shrink: 0;
+		pointer-events: none;
+	}
+
+	.toros-simbolo__visual {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		opacity: 0;
+		transition: opacity 0.45s ease;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.toros-simbolo__visual.is-active {
+		opacity: 1;
+	}
+
+	.toros-simbolo__copy {
+		flex: 0 0 auto;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		pointer-events: none;
+	}
+
+	.toros-simbolo__copy > .toros-simbolo__desktop-label {
+		margin: 0 0 1.25rem;
+	}
+
+	/* All steps share one grid cell → height = tallest step → no layout jump */
+	.toros-simbolo__steps {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		min-width: 0;
+		overflow: clip;
+	}
+
+	.toros-simbolo__step {
+		grid-area: 1 / 1;
+		opacity: 0;
+		visibility: hidden;
+		filter: blur(14px);
+		transition:
+			opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+			filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+			visibility 0.5s;
+	}
+
+	.toros-simbolo__step.is-active {
+		opacity: 1;
+		visibility: visible;
+		filter: blur(0);
+		z-index: 1;
+	}
+
+	.toros-simbolo__step .pitch-body-copy {
+		margin-top: 0.75rem;
+	}
+
+	.aero-simbolo__media {
+		margin-top: 3rem;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.toros-simbolo__step,
+		.toros-simbolo__visual {
+			transition: none;
+			filter: none;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.toros-simbolo__scroller {
+			height: calc(var(--simbolo-steps, 6) * 95vh);
+		}
+
+		.toros-simbolo__grid {
+			top: calc(var(--pitch-nav-offset, 6.5rem) + 1rem);
+			height: calc(100svh - var(--pitch-nav-offset, 6.5rem) - 2rem);
+			max-height: calc(100svh - var(--pitch-nav-offset, 6.5rem) - 2rem);
+			display: grid;
+			grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+			gap: 3.75rem;
+			align-items: center;
+			background: transparent;
+			padding-top: 0;
+			padding-bottom: 0;
+			overflow: hidden;
+		}
+
+		.toros-simbolo__stage-wrap {
+			margin-bottom: 0;
+			justify-content: flex-start;
+		}
+
+		.toros-simbolo__stage {
+			width: 300px;
+			margin-inline: 0;
+		}
+
+		.toros-simbolo__step .pitch-body-copy {
+			margin-top: 1.25rem;
+		}
+
+		.aero-simbolo__media {
+			margin-top: 6.5rem;
+		}
+	}
+
+	/* —— Cases —— */
+	.toros-value__case {
+		display: grid;
+		grid-template-columns: minmax(5.5rem, 7rem) minmax(0, 1fr);
+		grid-template-areas:
+			'logo title'
+			'text text';
+		column-gap: 1.25rem;
+		row-gap: 1.25rem;
+		align-items: center;
+	}
+
+	.toros-value__case-logo {
+		grid-area: logo;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.toros-value__case-title {
+		grid-area: title;
+		margin: 0;
+		font-size: clamp(1.15rem, 5vw, 1.5rem);
+	}
+
+	.toros-value__case-text {
+		grid-area: text;
+		margin: 0;
+	}
+
+	.toros-case-logo {
+		display: block;
+		height: auto;
+		max-width: 100%;
+		object-fit: contain;
+	}
+
+	@media (width >= 640px) {
+		.toros-value__case {
+			grid-template-columns: 9rem minmax(0, 1fr);
+			grid-template-areas:
+				'logo title'
+				'logo text';
+			column-gap: 3.75rem;
+			align-items: start;
+		}
+
+		.toros-value__case-logo {
+			padding-top: 0.15rem;
+		}
+
+		.toros-value__case-title {
+			font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+		}
+	}
+
+	@media (width >= 1024px) {
+		.toros-value__case {
+			grid-template-columns: 10rem minmax(0, 1fr);
+			column-gap: 4.5rem;
+		}
+	}
+
+	/* —— Sidebar —— */
+	.toros-sidebar__nav {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	.toros-sidebar__link {
+		display: block;
+		width: 100%;
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+		line-height: 1.4;
+		text-decoration: none;
+		text-transform: uppercase;
+		white-space: nowrap;
+		color: rgba(255, 255, 255, 0.35);
+		transition: color 180ms ease;
+	}
+
+	.toros-sidebar__index {
+		color: inherit;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.12em;
+	}
+
+	.toros-sidebar__name {
+		color: inherit;
+	}
+
+	.toros-sidebar__link:hover {
+		color: rgba(255, 255, 255, 0.7);
+	}
+
+	.toros-sidebar__link.is-active .toros-sidebar__index {
+		color: rgba(255, 255, 255, 0.55);
+	}
+
+	.toros-sidebar__link.is-active .toros-sidebar__name {
+		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile__current {
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+	}
+
+	.toros-sidebar-mobile__current .toros-sidebar__index {
+		color: rgba(255, 255, 255, 0.55);
+	}
+
+	.toros-sidebar-mobile__current .toros-sidebar__name {
+		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile__chevron {
+		transform: rotate(180deg);
+		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile.is-open .toros-sidebar-mobile__chevron {
+		transform: rotate(0deg);
+	}
+
+	.toros-sidebar-mobile.is-open .toros-sidebar-mobile__dropdown {
+		grid-template-rows: 1fr;
+	}
+</style>

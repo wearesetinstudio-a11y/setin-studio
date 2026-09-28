@@ -21,10 +21,14 @@ export function initTorosVideos() {
 		}
 	};
 
+	const visible = new Set<HTMLVideoElement>();
+
 	const observer = new IntersectionObserver(
 		(entries) => {
 			for (const entry of entries) {
 				const video = entry.target as HTMLVideoElement;
+				if (entry.isIntersecting) visible.add(video);
+				else visible.delete(video);
 				if (entry.isIntersecting && entry.intersectionRatio > 0.15) {
 					tryPlay(video);
 				} else if (!entry.isIntersecting) {
@@ -40,9 +44,12 @@ export function initTorosVideos() {
 		video.defaultMuted = true;
 		video.setAttribute('muted', '');
 		video.setAttribute('playsinline', '');
-		// Always try play once metadata is ready (covers iOS / strict autoplay)
-		if (video.readyState >= 2) tryPlay(video);
-		else video.addEventListener('loadeddata', () => tryPlay(video), { once: true });
+		// Play once data is ready, but only if on screen (media is also preloaded ahead of scroll)
+		const playIfVisible = () => {
+			if (visible.has(video)) tryPlay(video);
+		};
+		if (video.readyState >= 2) playIfVisible();
+		else video.addEventListener('loadeddata', playIfVisible);
 		observer.observe(video);
 	});
 }

@@ -1,4 +1,5 @@
 import { measureWrappedLines, normalizeCopy } from './lineSlideUpReveal.ts';
+import { pitchReady } from './pitchReady.ts';
 
 /**
  * Pitch headings: blur each wrapped line from soft → sharp, staggered on enter.
@@ -119,5 +120,5 @@ export function initPitchBlurReveal() {
 	};
 
 	const fontsReady = document.fonts?.ready ?? Promise.resolve();
-	fontsReady.then(start).catch(start);
+	Promise.all([fontsReady, pitchReady]).then(start).catch(start);
 }
