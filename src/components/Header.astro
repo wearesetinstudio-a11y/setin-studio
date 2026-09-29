@@ -1058,6 +1058,30 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 	let mobileNavBusy = false;
 	let mobileNavToken = 0;
 	let mobileNavCloseTimer: number | null = null;
+	let mobileNavPendingNavigation = false;
+
+	function isCrossPageNavigation(link: HTMLAnchorElement | null, event: MouseEvent) {
+		if (!link || event.defaultPrevented) return false;
+		if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+		if (link.target && link.target !== '_self') return false;
+		if (link.hasAttribute('download') || link.hasAttribute('data-astro-reload')) return false;
+		const href = link.getAttribute('href');
+		if (!href || href.startsWith('#')) return false;
+		const url = new URL(link.href, window.location.href);
+		if (url.origin !== window.location.origin) return false;
+		return url.pathname !== window.location.pathname;
+	}
+
+	function resetMobileNavAfterNavigation() {
+		if (!mobileNavPendingNavigation) return;
+		mobileNavPendingNavigation = false;
+		mobileNavToken++;
+		mobileNavBusy = false;
+		document.documentElement.classList.remove('mobile-nav-open');
+		document.body.classList.remove('mobile-nav-open');
+		startSmoothScroll();
+		getLenis()?.resize();
+	}
 
 	const MOBILE_NAV_BAR_MS = 900;
 	const MOBILE_NAV_STAGGER_MS = 75;
@@ -1523,7 +1547,26 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 
 		const onPanelClick = (event: Event) => {
 			const target = event.target as HTMLElement | null;
-			if (target?.closest('[data-mobile-nav-link]')) void closeMobileNav();
+			if (!target?.closest('[data-mobile-nav-link]')) return;
+			// Menu stays up until the page transition overlay covers it.
+			if (isCrossPageNavigation(target.closest('a'), event as MouseEvent)) {
+				mobileNavPendingNavigation = true;
+				let navigationStarted = false;
+				document.addEventListener(
+					'astro:before-preparation',
+					() => {
+						navigationStarted = true;
+					},
+					{ once: true },
+				);
+				window.setTimeout(() => {
+					if (navigationStarted || !mobileNavPendingNavigation) return;
+					mobileNavPendingNavigation = false;
+					void closeMobileNav();
+				}, 400);
+				return;
+			}
+			void closeMobileNav();
 		};
 
 		const onKeyDown = (event: KeyboardEvent) => {
@@ -1604,7 +1647,9 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 	}
 
 	initHeader();
+	document.addEventListener('astro:after-swap', resetMobileNavAfterNavigation);
 	document.addEventListener('astro:page-load', () => {
+		resetMobileNavAfterNavigation();
 		closeMobileNav();
 		initHeader();
 	});
