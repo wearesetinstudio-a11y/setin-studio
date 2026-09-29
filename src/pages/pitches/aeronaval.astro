@@ -1,7 +1,11 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import PitchLayout from '../../layouts/PitchLayout.astro';
 
 const asset = (file: string) => `/pitches/aeronaval/${encodeURI(file)}`;
+/** Media removed from the folder is skipped instead of rendering a broken slot. */
+const hasAsset = (file: string) => existsSync(join(process.cwd(), 'public/pitches/aeronaval', file));
 
 const cases = [
 	{
@@ -9,28 +13,28 @@ const cases = [
 		logoAlt: 'Royal Air Force',
 		title: 'Royal Air Force (Reino Unido)',
 		titleLines: 'Royal Air Force|(Reino Unido)',
-		text: 'Oficialmente rediseñada para su centenario en 2018, esta identidad unifica la escarapela histórica de 1914 con una tipografía aeronáutica precisa. El desarrollo resolvió la incapacidad legal de registrar el círculo clásico, estableciendo una marca protegida y optimizada para merchandising, patrocinios y campañas de reclutamiento.',
+		text: 'Reestructuró su identidad unificando su escarapela histórica con tipografía precisa, resolviendo restricciones legales de registro y optimizando la marca para patrocinios y difusión pública.',
 	},
 	{
 		logo: asset('WP.svg'),
 		logoAlt: 'Wojsko Polskie',
 		title: 'Wojsko Polskie (Polonia)',
 		titleLines: 'Wojsko Polskie|(Polonia)',
-		text: 'El sistema de identificación visual introducido en 2009 respondió a la necesidad de dotar a las fuerzas armadas de un lenguaje gráfico coherente para el siglo XXI. Se requería un signo dinámico y universal, libre de elementos agresivos, ideal para la promoción, el reclutamiento y los soportes oficiales.',
+		text: 'Introdujeron un lenguaje gráfico coherente para eliminar la fragmentación heredada, apostando por un símbolo dinámico y accesible enfocado en la comunicación abierta con la sociedad.',
 	},
 	{
 		logo: asset('US Air Force.svg'),
 		logoAlt: 'US Air Force',
 		title: 'US Air Force (Estados Unidos)',
 		titleLines: 'US Air Force|(Estados Unidos)',
-		text: 'Su rediseño modernizó la imagen institucional para la era digital, optimizando los esfuerzos de reclutamiento y marketing mediante una geometría estilizada que rinde tributo a sus raíces históricas.',
+		text: 'Modernizó su geometría institucional para la era digital, superando la desconexión visual entre unidades y optimizando drásticamente las campañas de reclutamiento y marketing online.',
 	},
 	{
 		logo: asset('Forsvaret.svg'),
 		logoAlt: 'Forsvaret',
 		title: 'Forsvaret (Dinamarca)',
 		titleLines: 'Forsvaret|(Dinamarca)',
-		text: 'Implementado en 2005 para unificar bajo una arquitectura monolítica al ejército, la marina y la aviación. Su diseño deconstruye elementos tradicionales: la corona superior simboliza la soberanía, mientras que el cuadrante estructurado evoca la cruz nacional y las antiguas fortalezas circulares vikingas.',
+		text: 'Implementaron una arquitectura monolítica para integrar bajo un mismo paraguas visual al ejército, la marina y la aviación, reinterpretando elementos tradicionales en un sistema sólido.',
 	},
 ];
 
@@ -72,7 +76,7 @@ const simboloMedia = [
 	{ file: 'simbolo_2.webm', alt: 'Construcción del símbolo' },
 	{ file: 'simbolo_3.webp', alt: 'Escalado del logotipo vertical', width: 3345, height: 1958 },
 	{ file: 'simbolo_4.webp', alt: 'Escalado del logotipo horizontal', width: 3345, height: 1958 },
-];
+].filter((item) => hasAsset(item.file));
 
 const textSectionsData = [
 	{
@@ -127,20 +131,25 @@ const textSectionsData = [
 		id: 'promocion',
 		label: 'Promoción',
 		title: 'Expansión pública y posicionamiento de vanguardia',
+		media: ['promocion_1.webm', 'promocion_2.webm', 'promocion_3.webp'],
 		text: 'La nueva identidad se acopla con naturalidad a los canales de comunicación contemporáneos, desde producciones audiovisuales hasta plataformas digitales y soportes urbanos. Al potenciar piezas de formato corto y contenidos dinámicos para redes sociales, el sistema refuerza la percepción del SENAN como una fuerza moderna, altamente capacitada y atractiva para las nuevas generaciones. Cada mensaje comunica profesionalismo, disuasión y un firme compromiso con la seguridad nacional.',
 	},
 	{
-		id: 'contacto',
-		label: 'Contacto',
+		id: 'resumen',
+		label: 'Resumen',
 		title: 'Una aportación conceptual al servicio de la institución',
 		text: 'Este proyecto independiente refleja nuestra visión sobre el potencial de desarrollo y modernización de la identidad visual del Servicio Nacional Aeronaval. Ponemos este trabajo a disposición de las autoridades como una contribución técnica orientada a enaltecer el prestigio de la institución. Si estiman oportuno profundizar en las especificaciones operativas de esta propuesta, estaremos encantados de coordinar una presentación formal.',
 	},
 ];
 
-const textSections = textSectionsData.map((section, index) => ({
-	...section,
-	num: String(index + 5).padStart(2, '0'),
-}));
+const textSections = textSectionsData.map((section, index) => {
+	const media = section.media?.filter(hasAsset);
+	return {
+		...section,
+		media: media?.length ? media : undefined,
+		num: String(index + 5).padStart(2, '0'),
+	};
+});
 
 const pitchNav = [
 	{ id: 'motivacion', num: '01', label: 'Motivación' },
@@ -191,19 +200,19 @@ const pitchNav = [
 			class="aero-hero__content relative z-10 flex min-h-[100svh] flex-col px-[var(--pitch-gutter)] pt-24 md:pt-0"
 		>
 			<div
-				class="mx-auto flex w-full max-w-[843px] flex-1 flex-col items-center justify-center gap-3 text-center text-white md:gap-4"
+				class="mx-auto flex w-full max-w-[1100px] flex-1 flex-col items-center justify-center gap-3 text-center text-white md:gap-4"
 			>
 				<p class="pitch-label">Propuesta</p>
 				<h1
-					class="pitch-display w-full text-[clamp(1.75rem,6.2vw,3.5rem)] font-normal leading-[1.4] md:whitespace-nowrap"
+					class="pitch-display w-full text-[clamp(1.75rem,6.2vw,3.5rem)] font-normal leading-[1.4] md:whitespace-nowrap md:text-[clamp(1.75rem,4.6vw,3.5rem)]"
 					data-pitch-reveal
-					data-pitch-lines="La Nueva era|deL Aeronaval"
-					data-pitch-lines-desktop="La Nueva era deL Aeronaval"
+					data-pitch-lines="La nueva identidad|del Aeronaval"
+					data-pitch-lines-desktop="La nueva identidad del Aeronaval"
 				>
-					La Nueva era deL Aeronaval
+					La nueva identidad del Aeronaval
 				</h1>
 				<p class="pitch-body-copy max-w-[42rem] text-white">
-					En Setin Studio hemos desarrollado una extensión visual para el SENAN que potencia su reconocimiento, consolida su autoridad y proyecta una imagen de máxima vanguardia operativa.
+					Una evolución gráfica diseñada para potenciar la presencia institucional, modernizar la imagen de la fuerza y consolidar tanto el reconocimiento de marca como el orgullo operativo a nivel global.
 				</p>
 			</div>
 
@@ -322,18 +331,21 @@ const pitchNav = [
 								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
 								data-pitch-reveal
 							>
-								El origen de nuestra iniciativa conceptual
+								El origen de Iniciativa conceptual
 							</h2>
 							<p class="pitch-body-copy mt-6 w-full text-white/85 md:mt-8">
-								Observamos que el tradicional escudo del SENAN, si bien es indispensable para preservar
-								el legado histórico, enfrenta limitaciones prácticas evidentes en escenarios operativos
-								contemporáneos. Su complejidad cromática y riqueza de detalles reducen su impacto visual
-								a distancia y dificultan su correcta implementación en soportes digitales y tácticos
-								actuales. Al analizar las directrices adoptadas por las principales instituciones de
-								defensa a nivel mundial, detectamos la oportunidad de dotar a la entidad de un símbolo
-								complementario, ágil y versátil. Como admiradores de la incansable labor de esta fuerza
-								soberana, decidimos estructurar este proyecto de forma independiente para aportar una
-								herramienta de comunicación a la altura de los más altos estándares internacionales.
+								El escudo tradicional del SENAN es indispensable para preservar el legado histórico, pero
+								la institución padece hoy una evidente falta de estandarización visual y una fragmentación
+								en su comunicación digital y operativa. La ausencia de un lenguaje gráfico unificado y de
+								una estrategia clara de posicionamiento debilita la narrativa de la marca en los canales
+								contemporáneos.
+							</p>
+							<p class="pitch-body-copy mt-5 w-full text-white/85">
+								Por esto, desarrollamos una propuesta que estandariza el sistema visual del Aeronaval y
+								consolida su posicionamiento como una fuerza moderna, soberana y de élite. Un estándar
+								alineado con los modelos de las fuerzas armadas globales, diseñado para proyectar orgullo
+								patrio, especialización táctica e innovación a través de una identidad coherente y
+								contundente.
 							</p>
 						</div>
 						<figure class="aero-play mt-12 w-full overflow-hidden md:mt-16" data-pitch-play>
@@ -371,13 +383,12 @@ const pitchNav = [
 								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
 								data-pitch-reveal
 							>
-								La evolución EN LA referencia internacional
+								La evolución en la referencia internacional
 							</h2>
 							<p class="pitch-body-copy mt-6 w-full text-white/85 md:mt-8">
-								Desde hace décadas, las organizaciones militares y de defensa más respetadas del mundo
-								implementan extensiones en sus sistemas de identidad. Esta estrategia no busca suplantar
-								la tradición, sino optimizar la funcionalidad táctica, racionalizar los costos de
-								producción y asegurar una presencia institucional unificada y reconocible.
+								A nivel global, las fuerzas armadas de referencia implementan transformaciones en sus
+								sistemas de identidad para resolver problemas estructurales críticos, optimizar la
+								funcionalidad y unificar su presencia institucional.
 							</p>
 
 							<ul class="mt-14 flex flex-col gap-14 md:mt-20 md:gap-16 lg:gap-20">
@@ -388,9 +399,9 @@ const pitchNav = [
 												<img
 													src={item.logo}
 													alt={item.logoAlt}
-													width="100"
-													height="80"
-													class="toros-case-logo w-[100px] sm:w-[130px]"
+													width="300"
+													height="100"
+													class="toros-case-logo"
 													loading="lazy"
 												/>
 											</div>
@@ -421,17 +432,33 @@ const pitchNav = [
 								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
 								data-pitch-reveal
 							>
-								Síntesis de herencia y funcionalidad operativa
+								Síntesis de herencia y evolución operativa
 							</h2>
 							<p class="pitch-body-copy mt-6 w-full text-white/85 md:mt-8">
-								Nuestra aproximación metodológica se fundamenta en el principio de evolución, descartando
-								cualquier intento de sustitución. Tomamos la esencia del escudo original para
-								reinterpretarla en un símbolo contemporáneo, de lectura inmediata y alta rentabilidad en su
-								reproducción física y digital. Esta solución sitúa al SENAN en la vanguardia de las agencias
-								de seguridad modernas, proyectando una imagen de pericia técnica, disciplina y solvencia
-								profesional en cualquier escenario de actuación.
+								Nuestra aproximación metodológica se fundamenta en la evolución y no en la sustitución:
+								cada elemento del nuevo sistema visual brota directamente del escudo tradicional para
+								transformarlo en una herramienta funcional y contemporánea. Esta extensión respetuosa honra
+								el legado de la institución sin borrarlo, resolviendo la falta de estandarización previa
+								mediante un lenguaje gráfico unificado que sitúa al SENAN a la vanguardia de las fuerzas de
+								seguridad globales, proyectando pericia técnica, disciplina y solvencia profesional en
+								cualquier escenario.
 							</p>
 						</div>
+						{
+							hasAsset('estrategia_1.webp') && (
+								<figure class="mt-12 w-full overflow-hidden md:mt-16">
+									<img
+										src={asset('estrategia_1.webp')}
+										alt="Del escudo al símbolo"
+										width="3345"
+										height="2298"
+										class="block h-auto w-full"
+										loading="lazy"
+										decoding="async"
+									/>
+								</figure>
+							)
+						}
 					</section>
 
 					{/* —— 04 / Símbolo (sticky mark + scroll swap) —— */}
@@ -443,9 +470,12 @@ const pitchNav = [
 					>
 						<div class="toros-simbolo__scroller" data-simbolo-scroller>
 							<div class="toros-section__pad toros-simbolo__grid">
-								<div class="toros-section__label toros-simbolo__mobile-label lg:hidden">
-									<span class="toros-section__num">04&nbsp;/&nbsp;</span>
-									<span class="toros-section__label-name">Símbolo</span>
+								<div class="toros-section__label toros-simbolo__mobile-label aero-simbolo__label flex lg:hidden">
+									<span>
+										<span class="toros-section__num">04&nbsp;/&nbsp;</span>
+										<span class="toros-section__label-name">Símbolo</span>
+									</span>
+									<span class="aero-simbolo__scroll" aria-hidden="true">[Scroll]</span>
 								</div>
 
 								<div class="toros-simbolo__stage-wrap">
@@ -468,9 +498,12 @@ const pitchNav = [
 								</div>
 
 								<div class="toros-simbolo__copy">
-									<div class="toros-section__label toros-simbolo__desktop-label hidden lg:block">
-										<span class="toros-section__num">04&nbsp;/&nbsp;</span>
-										<span class="toros-section__label-name">Símbolo</span>
+									<div class="toros-section__label toros-simbolo__desktop-label aero-simbolo__label hidden lg:flex">
+										<span>
+											<span class="toros-section__num">04&nbsp;/&nbsp;</span>
+											<span class="toros-section__label-name">Símbolo</span>
+										</span>
+										<span class="aero-simbolo__scroll" aria-hidden="true">[Scroll]</span>
 									</div>
 									<div class="toros-simbolo__steps">
 										{
@@ -783,7 +816,7 @@ const pitchNav = [
 
 	.toros-simbolo__grid > .toros-simbolo__mobile-label {
 		flex: 0 0 auto;
-		margin: 0 0 1.25rem;
+		margin: 0 0 2rem;
 	}
 
 	.toros-simbolo__stage-wrap {
@@ -830,6 +863,22 @@ const pitchNav = [
 
 	.toros-simbolo__copy > .toros-simbolo__desktop-label {
 		margin: 0 0 1.25rem;
+	}
+
+	.aero-simbolo__label {
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.aero-simbolo__scroll {
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+		line-height: 1.4;
+		text-transform: uppercase;
+		color: #ffffff;
 	}
 
 	/* All steps share one grid cell → height = tallest step → no layout jump */
@@ -915,20 +964,19 @@ const pitchNav = [
 	/* —— Cases —— */
 	.toros-value__case {
 		display: grid;
-		grid-template-columns: minmax(5.5rem, 7rem) minmax(0, 1fr);
+		grid-template-columns: minmax(0, 1fr);
 		grid-template-areas:
-			'logo title'
-			'text text';
-		column-gap: 1.25rem;
+			'logo'
+			'title'
+			'text';
 		row-gap: 1.25rem;
-		align-items: center;
 	}
 
 	.toros-value__case-logo {
 		grid-area: logo;
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
 	}
 
 	.toros-value__case-title {
@@ -944,14 +992,14 @@ const pitchNav = [
 
 	.toros-case-logo {
 		display: block;
+		width: min(240px, 100%);
 		height: auto;
-		max-width: 100%;
 		object-fit: contain;
 	}
 
 	@media (width >= 640px) {
 		.toros-value__case {
-			grid-template-columns: 9rem minmax(0, 1fr);
+			grid-template-columns: 15rem minmax(0, 1fr);
 			grid-template-areas:
 				'logo title'
 				'logo text';
@@ -966,11 +1014,15 @@ const pitchNav = [
 		.toros-value__case-title {
 			font-size: clamp(1.15rem, 1.6vw, 1.35rem);
 		}
+
+		.toros-case-logo {
+			width: 100%;
+		}
 	}
 
 	@media (width >= 1024px) {
 		.toros-value__case {
-			grid-template-columns: 10rem minmax(0, 1fr);
+			grid-template-columns: 20rem minmax(0, 1fr);
 			column-gap: 4.5rem;
 		}
 	}

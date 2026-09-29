@@ -3,47 +3,31 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
+import { dictionaries, t } from '../i18n/dictionaries.ts';
 
 const { projectCount, articleCount } = await getSiteCounts();
 
-const services = [
-	{
-		number: '01',
-		labelKey: 'services.item.branding.label',
-		label: 'Brand Design',
-		titleKey: 'services.item.branding.title',
-		title: 'Visual identities built for measurable impact',
-		bodyKey: 'services.item.branding.body',
-		body: 'We build visual systems that make your business recognisable, credible, and ready to grow. From positioning and strategy to identity systems and guidelines, every decision is made to give your brand a clear place in the market.',
-	},
-	{
-		number: '02',
-		labelKey: 'services.item.product.label',
-		label: 'Product UX/UI Design',
-		titleKey: 'services.item.product.title',
-		title: 'Digital interfaces engineered for business performance',
-		bodyKey: 'services.item.product.body',
-		body: 'We design digital products that are easy to understand and satisfying to use. Research, information architecture, UX and UI design come together in interfaces that support real users and real business goals.',
-	},
-	{
-		number: '03',
-		labelKey: 'services.item.automation.label',
-		label: 'AI Automations',
-		titleKey: 'services.item.automation.title',
-		title: 'Scale your operational speed and brand output',
-		bodyKey: 'services.item.automation.body',
-		body: 'You do not need more tools. You need a smarter system. We connect AI, automation, and your existing workflows to reduce repetitive work, keep quality consistent, and help your team move with more focus.',
-	},
-	{
-		number: '04',
-		labelKey: 'services.item.development.label',
-		label: 'Development & Engineering',
-		titleKey: 'services.item.development.title',
-		title: 'Bridging design and production code with pragmatic flexibility',
-		bodyKey: 'services.item.development.body',
-		body: 'We turn considered design into fast, reliable digital experiences. Our builds are precise, maintainable, and shaped around the needs of your business, whether you are launching a new website or evolving a larger platform.',
-	},
-];
+const serviceIds = ['branding', 'product', 'development', 'cloud', 'data', 'automation'];
+
+const services = serviceIds.map((id, index) => {
+	const base = `services.item.${id}`;
+	const points = [];
+	for (let n = 1; `${base}.point${n}.title` in dictionaries.en; n++) {
+		const titleKey = `${base}.point${n}.title`;
+		const textKey = `${base}.point${n}.text`;
+		points.push({ titleKey, title: t('en', titleKey), textKey, text: t('en', textKey) });
+	}
+	return {
+		number: String(index + 1).padStart(2, '0'),
+		labelKey: `${base}.label`,
+		label: t('en', `${base}.label`),
+		titleKey: `${base}.title`,
+		title: t('en', `${base}.title`),
+		bodyKey: `${base}.body`,
+		body: t('en', `${base}.body`),
+		points,
+	};
+});
 ---
 
 <Layout
@@ -86,6 +70,14 @@ const services = [
 							<div class="services-page__copy">
 								<h2 data-i18n={service.titleKey}>{service.title}</h2>
 								<p data-i18n={service.bodyKey}>{service.body}</p>
+								<ul class="services-page__points">
+									{service.points.map((point) => (
+										<li class="services-page__point">
+											<strong data-i18n={point.titleKey}>{point.title}</strong>
+											<span data-i18n={point.textKey}>{point.text}</span>
+										</li>
+									))}
+								</ul>
 							</div>
 						</article>
 					))}
@@ -93,12 +85,51 @@ const services = [
 			</div>
 		</section>
 
+		<div class="services-mobile-nav" data-services-mobile-nav>
+			<div id="services-mobile-dropdown" class="services-mobile-nav__dropdown">
+				<div class="services-mobile-nav__dropdown-inner">
+					<nav class="services-mobile-nav__list" aria-label="Service categories" data-i18n-aria="services.aria">
+						{
+							services.map((service) => (
+								<a
+									class="services-mobile-nav__link"
+									href={`#service-${service.number}`}
+									data-service-nav-link={service.number}
+								>
+									<span class="services-mobile-nav__num">{service.number}&nbsp;/&nbsp;</span>
+									<span class="services-mobile-nav__label">[<span data-i18n={service.labelKey}>{service.label}</span>]</span>
+								</a>
+							))
+						}
+					</nav>
+				</div>
+			</div>
+			<button
+				type="button"
+				class="services-mobile-nav__trigger"
+				aria-expanded="false"
+				aria-controls="services-mobile-dropdown"
+				data-services-mobile-trigger
+			>
+				<span>
+					<span class="services-mobile-nav__num" data-services-mobile-num>{services[0].number}&nbsp;/&nbsp;</span>
+					<span class="services-mobile-nav__current">[<span data-services-mobile-label data-i18n={services[0].labelKey}>{services[0].label}</span>]</span>
+				</span>
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="services-mobile-nav__chevron" aria-hidden="true">
+					<path d="M1 3.5L7 9.5L13 3.5" stroke="currentColor" stroke-width="2"></path>
+				</svg>
+			</button>
+		</div>
 	</main>
 
 	<Footer />
 </Layout>
 
 <style>
+	.services-page {
+		padding-top: calc(5.5rem + 5rem);
+	}
+
 	.services-page__layout {
 		display: grid;
 		grid-template-columns: minmax(max-content, 0.7fr) minmax(0, 1.8fr);
@@ -228,8 +259,125 @@ const services = [
 		white-space: pre-line;
 	}
 
+	.services-page__points {
+		margin-top: clamp(2.5rem, 4vw, 3.5rem);
+		border-bottom: 1px solid rgb(245 245 245 / 0.12);
+	}
+
+	.services-page__point {
+		display: grid;
+		grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+		gap: 0.5rem 2rem;
+		padding-block: 1.25rem;
+		border-top: 1px solid rgb(245 245 245 / 0.12);
+		line-height: 1.55;
+	}
+
+	.services-page__point strong {
+		font-weight: 500;
+		color: #f5f5f5;
+	}
+
+	.services-page__point span {
+		color: rgb(245 245 245 / 0.6);
+	}
+
 	.services-page__item:last-child {
 		margin-bottom: 0;
+	}
+
+	.services-mobile-nav {
+		display: none;
+	}
+
+	@media (max-width: 767px) {
+		.services-mobile-nav {
+			position: fixed;
+			inset-inline: 0;
+			bottom: 0;
+			z-index: 40;
+			display: block;
+			padding-inline: var(--page-gutter);
+			background: rgb(19 20 21 / 0.95);
+			backdrop-filter: blur(12px);
+		}
+	}
+
+	.services-mobile-nav__dropdown {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 250ms cubic-bezier(0.4, 0, 1, 1);
+	}
+
+	.services-mobile-nav.is-open .services-mobile-nav__dropdown {
+		grid-template-rows: 1fr;
+		transition-duration: 350ms;
+		transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+	}
+
+	.services-mobile-nav__dropdown-inner {
+		overflow: hidden;
+	}
+
+	.services-mobile-nav__list {
+		display: flex;
+		max-height: 60vh;
+		flex-direction: column;
+		gap: 18px;
+		overflow-y: auto;
+		padding: 1rem 0 1.25rem;
+	}
+
+	.services-mobile-nav__link,
+	.services-mobile-nav__trigger {
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.2;
+		text-transform: uppercase;
+	}
+
+	.services-mobile-nav__num {
+		font-variant-numeric: tabular-nums;
+	}
+
+	.services-mobile-nav__link {
+		display: block;
+		white-space: nowrap;
+		color: rgb(255 255 255 / 0.4);
+		transition: color 180ms ease;
+	}
+
+	.services-mobile-nav__link.is-active {
+		color: #fff;
+	}
+
+	.services-mobile-nav__link.is-active .services-mobile-nav__num {
+		color: rgb(255 255 255 / 0.55);
+	}
+
+	.services-mobile-nav__trigger {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.875rem 0 max(0.875rem, env(safe-area-inset-bottom));
+		line-height: 1.5;
+		color: #fff;
+		text-align: left;
+	}
+
+	.services-mobile-nav__trigger .services-mobile-nav__num {
+		color: rgb(255 255 255 / 0.45);
+	}
+
+	.services-mobile-nav__chevron {
+		flex-shrink: 0;
+		transform: rotate(180deg);
+		transition: transform 300ms ease-in-out;
+	}
+
+	.services-mobile-nav.is-open .services-mobile-nav__chevron {
+		transform: rotate(0deg);
 	}
 
 	@media (max-width: 767px) {
@@ -237,9 +385,12 @@ const services = [
 			display: block;
 		}
 
+		.services-page {
+			padding-top: calc(5.5rem + 2rem);
+		}
+
 		.services-page__aside {
-			position: static;
-			margin-bottom: 4rem;
+			display: none;
 		}
 
 		.services-page__nav {
@@ -259,6 +410,10 @@ const services = [
 		.services-page__copy {
 			margin-top: 0;
 		}
+
+		.services-page__point {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>
 
@@ -273,6 +428,33 @@ const services = [
 		if (!page || page.dataset.servicesInitialized === 'true' || !navLinks.length || !serviceSections.length) return;
 		page.dataset.servicesInitialized = 'true';
 
+		const mobileNav = document.querySelector<HTMLElement>('[data-services-mobile-nav]');
+		const mobileTrigger = document.querySelector<HTMLButtonElement>('[data-services-mobile-trigger]');
+		const mobileNum = document.querySelector<HTMLElement>('[data-services-mobile-num]');
+		const mobileLabel = document.querySelector<HTMLElement>('[data-services-mobile-label]');
+
+		const setMobileOpen = (open: boolean) => {
+			mobileNav?.classList.toggle('is-open', open);
+			mobileTrigger?.setAttribute('aria-expanded', String(open));
+		};
+
+		mobileTrigger?.addEventListener('click', (event) => {
+			event.stopPropagation();
+			setMobileOpen(!mobileNav?.classList.contains('is-open'));
+		});
+
+		// Window capture: the global smooth-scroll handler stops hash-link clicks at the document.
+		const onWindowClick = (event: MouseEvent) => {
+			if (!mobileNav || mobileTrigger?.contains(event.target as Node)) return;
+			const link = (event.target as Element | null)?.closest<HTMLElement>('[data-service-nav-link]');
+			if (link && mobileNav.contains(link)) setActiveService(link.dataset.serviceNavLink ?? '');
+			setMobileOpen(false);
+		};
+		window.addEventListener('click', onWindowClick, true);
+		document.addEventListener('astro:before-swap', () => window.removeEventListener('click', onWindowClick, true), {
+			once: true,
+		});
+
 		const setActiveService = (number: string) => {
 			navLinks.forEach((link) => {
 				link.classList.toggle('is-active', link.dataset.serviceNavLink === number);
@@ -280,6 +462,15 @@ const services = [
 			serviceSections.forEach((section) => {
 				section.classList.toggle('is-active', section.dataset.serviceSection === number);
 			});
+
+			const activeLabel = serviceSections
+				.find((section) => section.dataset.serviceSection === number)
+				?.querySelector<HTMLElement>('.services-page__meta-label');
+			if (mobileNum) mobileNum.textContent = `${number}\u00A0/\u00A0`;
+			if (mobileLabel && activeLabel) {
+				mobileLabel.textContent = activeLabel.textContent;
+				mobileLabel.dataset.i18n = activeLabel.dataset.i18n;
+			}
 		};
 
 		const observer = new IntersectionObserver(
@@ -313,6 +504,7 @@ const services = [
 				if (!target) return;
 
 				event.preventDefault();
+				setMobileOpen(false);
 				setActiveService(link.dataset.serviceNavLink ?? '');
 				scrollToId(targetId ?? '');
 				history.replaceState(null, '', `#${targetId}`);
