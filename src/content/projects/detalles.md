@@ -1,10 +1,11 @@
 ---
 title: Detalles
 client: Detalles
-tags: ['Brand Identity', 'Print']
+tags: ['Coming Soon']
 thumbnail: '/portfolio/detalles/cover.webp'
 folderName: 'detalles'
 order: 8
+comingSoon: true
 heroImage: '/portfolio/detalles/bg.webp'
 heroSubtitle: 'An editorial identity for a studio that treats every detail as the whole story'
 overviewTitle: 'Crafted with intention'
