@@ -2,6 +2,9 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import PitchLayout from '../../layouts/PitchLayout.astro';
+import PitchSectionLabel from '../../components/pitches/PitchSectionLabel.astro';
+import PitchSidebar from '../../components/pitches/PitchSidebar.astro';
+import PitchSimbolo from '../../components/pitches/PitchSimbolo.astro';
 
 const asset = (file: string) => `/pitches/aeronaval/${encodeURI(file)}`;
 /** Media removed from the folder is skipped instead of rendering a broken slot. */
@@ -69,7 +72,7 @@ const simboloSteps = [
 		text: 'El anillo central cerrado envuelve y protege el núcleo operativo del emblema, simbolizando el perímetro absoluto de seguridad institucional y concentrando una fuerza visual que garantiza una legibilidad impecable.',
 		visual: 'symbol_6.svg',
 	},
-];
+].map(({ visual, ...step }) => ({ ...step, src: asset(visual) }));
 
 const simboloMedia = [
 	{ file: 'simbolo_1.webp', alt: 'Del escudo al símbolo', width: 3345, height: 2298 },
@@ -239,94 +242,13 @@ const pitchNav = [
 	<div class="toros-body relative z-[2]">
 		<div class="mx-auto w-full pt-16 pb-20 md:pt-24 md:pb-28 lg:pt-32 lg:pb-32">
 			<div class="grid grid-cols-1 gap-12 lg:grid-cols-[320px_minmax(0,1fr)] lg:gap-0">
-				<aside
-					class="toros-sidebar relative hidden self-stretch pl-[var(--pitch-gutter)] pr-6 lg:block"
-					data-toros-sidebar
-				>
-					<div class="w-full sticky top-[calc(var(--pitch-nav-offset,6.5rem)+3.5rem)]">
-						<nav class="toros-sidebar__nav" aria-label="Secciones de la propuesta">
-							{
-								pitchNav.map((item, idx) => (
-									<a
-										href={`#${item.id}`}
-										class:list={['toros-sidebar__link', idx === 0 && 'is-active']}
-										data-toros-section-target={item.id}
-									>
-										<span class="toros-sidebar__index">{item.num}&nbsp;/&nbsp;</span>
-										<span class="toros-sidebar__name">{item.label}</span>
-									</a>
-								))
-							}
-						</nav>
-					</div>
-				</aside>
-
-				{/* Mobile section nav */}
-				<div
-					class="toros-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-0 bg-[#0d0e0f]/95 px-[var(--pitch-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden"
-					data-toros-sidebar-mobile
-				>
-					<div
-						id="aero-mobile-dropdown"
-						class="toros-sidebar-mobile__dropdown grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in"
-					>
-						<div class="overflow-hidden">
-							<nav
-								class="flex max-h-[60vh] flex-col gap-[18px] overflow-y-auto pb-5 pt-4"
-								aria-label="Secciones de la propuesta (móvil)"
-							>
-								{
-									pitchNav.map((item, idx) => (
-										<a
-											href={`#${item.id}`}
-											class:list={['toros-sidebar__link', idx === 0 && 'is-active']}
-											data-toros-section-target={item.id}
-										>
-											<span class="toros-sidebar__index">{item.num}&nbsp;/&nbsp;</span>
-											<span class="toros-sidebar__name">{item.label}</span>
-										</a>
-									))
-								}
-							</nav>
-						</div>
-					</div>
-					<button
-						type="button"
-						class="flex w-full items-center justify-between py-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] text-left uppercase"
-						aria-expanded="false"
-						aria-controls="aero-mobile-dropdown"
-						data-toros-mobile-nav-trigger
-					>
-						<span class="toros-sidebar-mobile__current">
-							<span class="toros-sidebar__index" data-toros-mobile-current-num>
-								{pitchNav[0].num}&nbsp;/&nbsp;
-							</span>
-							<span class="toros-sidebar__name is-active" data-toros-mobile-current-label>
-								{pitchNav[0].label}
-							</span>
-						</span>
-						<svg
-							width="14"
-							height="14"
-							viewBox="0 0 14 14"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-							class="toros-sidebar-mobile__chevron shrink-0"
-							aria-hidden="true"
-						>
-							<path d="M1 3.5L7 9.5L13 3.5" stroke="currentColor" stroke-width="2"></path>
-						</svg>
-					</button>
-				</div>
+				<PitchSidebar items={pitchNav} />
 
 				<div class="toros-body__content flex min-w-0 flex-col gap-0">
 					{/* —— 01 / Motivación —— */}
 					<section id="motivacion" class="toros-section scroll-mt-32 text-white" aria-label="Motivación">
 						<div class="toros-section__pad">
-							<div class="toros-section__label">
-								<span class="toros-section__num">01&nbsp;/&nbsp;</span>
-								<span class="toros-section__label-name">Motivación</span>
-							</div>
+							<PitchSectionLabel num="01" label="Motivación" />
 							<h2
 								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
 								data-pitch-reveal
@@ -375,10 +297,7 @@ const pitchNav = [
 					{/* —— 02 / Estándares —— */}
 					<section id="estandares" class="toros-section scroll-mt-32 text-white" aria-label="Estándares">
 						<div class="toros-section__pad pt-[var(--pitch-section-y)]">
-							<div class="toros-section__label">
-								<span class="toros-section__num">02&nbsp;/&nbsp;</span>
-								<span class="toros-section__label-name">Estándares</span>
-							</div>
+							<PitchSectionLabel num="02" label="Estándares" />
 							<h2
 								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
 								data-pitch-reveal
@@ -424,10 +343,7 @@ const pitchNav = [
 					{/* —— 03 / Estrategia —— */}
 					<section id="estrategia" class="toros-section scroll-mt-32 text-white" aria-label="Estrategia">
 						<div class="toros-section__pad pt-[var(--pitch-section-y)]">
-							<div class="toros-section__label">
-								<span class="toros-section__num">03&nbsp;/&nbsp;</span>
-								<span class="toros-section__label-name">Estrategia</span>
-							</div>
+							<PitchSectionLabel num="03" label="Estrategia" />
 							<h2
 								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
 								data-pitch-reveal
@@ -462,100 +378,46 @@ const pitchNav = [
 					</section>
 
 					{/* —— 04 / Símbolo (sticky mark + scroll swap) —— */}
-					<section
-						id="simbolo"
-						class="toros-section toros-simbolo scroll-mt-32 pt-[var(--pitch-section-y)] text-white"
-						aria-label="Símbolo"
-						style={`--simbolo-steps: ${simboloSteps.length}`}
+					<PitchSimbolo
+						num="04"
+						steps={simboloSteps}
+						visualWidth={224}
+						visualHeight={165}
+						stageWidth={300}
+						stageMobileWidth="min(224px, 60vw)"
+						surface="#17181c"
+						class="pt-[var(--pitch-section-y)]"
 					>
-						<div class="toros-simbolo__scroller" data-simbolo-scroller>
-							<div class="toros-section__pad toros-simbolo__grid">
-								<div class="toros-section__label toros-simbolo__mobile-label aero-simbolo__label flex lg:hidden">
-									<span>
-										<span class="toros-section__num">04&nbsp;/&nbsp;</span>
-										<span class="toros-section__label-name">Símbolo</span>
-									</span>
-									<span class="aero-simbolo__scroll" aria-hidden="true">[Scroll]</span>
-								</div>
-
-								<div class="toros-simbolo__stage-wrap">
-									<div class="toros-simbolo__stage" aria-hidden="true">
-										{
-											simboloSteps.map((step, index) => (
-												<img
-													src={asset(step.visual)}
-													alt=""
-													width="224"
-													height="165"
-													class:list={['toros-simbolo__visual', index === 0 && 'is-active']}
-													data-simbolo-visual={index}
-													loading={index === 0 ? 'eager' : 'lazy'}
-													aria-hidden={index === 0 ? 'false' : 'true'}
-												/>
-											))
-										}
-									</div>
-								</div>
-
-								<div class="toros-simbolo__copy">
-									<div class="toros-section__label toros-simbolo__desktop-label aero-simbolo__label hidden lg:flex">
-										<span>
-											<span class="toros-section__num">04&nbsp;/&nbsp;</span>
-											<span class="toros-section__label-name">Símbolo</span>
-										</span>
-										<span class="aero-simbolo__scroll" aria-hidden="true">[Scroll]</span>
-									</div>
-									<div class="toros-simbolo__steps">
-										{
-											simboloSteps.map((step, index) => (
-												<article
-													class:list={['toros-simbolo__step', index === 0 && 'is-active']}
-													data-simbolo-step={index}
-												>
-													<h2 class="pitch-display w-full text-[clamp(1.35rem,2.8vw,2rem)] font-normal leading-[1.2]">
-														{step.title}
-													</h2>
-													<p class="pitch-body-copy w-full text-white/85">{step.text}</p>
-												</article>
-											))
-										}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="aero-media-stack aero-simbolo__media">
-							{
-								simboloMedia.map((item) => (
-									<figure class="w-full overflow-hidden">
-										{item.file.endsWith('.webm') ? (
-											<video
-												class="block h-auto w-full"
-												data-toros-video
-												muted
-												loop
-												playsinline
-												webkit-playsinline
-												preload="none"
-												aria-label={item.alt}
-											>
-												<source src={asset(item.file)} type="video/webm" />
-											</video>
-										) : (
-											<img
-												src={asset(item.file)}
-												alt={item.alt}
-												width={item.width}
-												height={item.height}
-												class="block h-auto w-full"
-												loading="lazy"
-											/>
-										)}
-									</figure>
-								))
-							}
-						</div>
-					</section>
+						{
+							simboloMedia.map((item) => (
+								<figure class="w-full overflow-hidden">
+									{item.file.endsWith('.webm') ? (
+										<video
+											class="block h-auto w-full"
+											data-toros-video
+											muted
+											loop
+											playsinline
+											webkit-playsinline
+											preload="none"
+											aria-label={item.alt}
+										>
+											<source src={asset(item.file)} type="video/webm" />
+										</video>
+									) : (
+										<img
+											src={asset(item.file)}
+											alt={item.alt}
+											width={item.width}
+											height={item.height}
+											class="block h-auto w-full"
+											loading="lazy"
+										/>
+									)}
+								</figure>
+							))
+						}
+					</PitchSimbolo>
 
 					{/* —— 05–09 —— */}
 					{
@@ -566,10 +428,7 @@ const pitchNav = [
 								aria-label={section.label}
 							>
 								<div class="toros-section__pad pt-[var(--pitch-section-y)]">
-									<div class="toros-section__label">
-										<span class="toros-section__num">{section.num}&nbsp;/&nbsp;</span>
-										<span class="toros-section__label-name">{section.label}</span>
-									</div>
+									<PitchSectionLabel num={section.num} label={section.label} />
 									<h2
 										class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.2]"
 										data-pitch-reveal
@@ -754,211 +613,10 @@ const pitchNav = [
 		padding-inline: var(--pitch-gutter);
 	}
 
-	.toros-section__label,
-	.toros-section__label .toros-section__num,
-	.toros-section__label .toros-section__label-name {
-		font-family: var(--pitch-font-display);
-		font-size: 14px;
-		font-weight: 300;
-		letter-spacing: 0.22em;
-		line-height: 1.4;
-		text-transform: uppercase;
-	}
-
-	.toros-section__label {
-		margin: 0;
-		color: rgba(255, 255, 255, 0.35);
-	}
-
-	.toros-section__num {
-		color: inherit;
-		font-variant-numeric: tabular-nums;
-		letter-spacing: 0.12em;
-	}
-
-	.toros-section__label-name {
-		color: #ffffff;
-	}
-
 	.aero-media-stack {
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
-	}
-
-	/* —— Símbolo: pinned mark + copy, scroll progress swaps steps in place —— */
-	.toros-simbolo__scroller {
-		height: calc(var(--simbolo-steps, 6) * 85svh);
-		position: relative;
-	}
-
-	.toros-simbolo__grid {
-		position: sticky;
-		top: calc(var(--pitch-nav-offset, 6.5rem) + 0.5rem);
-		z-index: 2;
-		display: flex;
-		flex-direction: column;
-		align-items: stretch;
-		justify-content: flex-start;
-		height: calc(
-			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
-		);
-		max-height: calc(
-			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
-		);
-		overflow: clip;
-		touch-action: pan-y;
-		background: #17181c;
-		padding-top: 1.75rem;
-		padding-bottom: 0.5rem;
-		box-sizing: border-box;
-	}
-
-	.toros-simbolo__grid > .toros-simbolo__mobile-label {
-		flex: 0 0 auto;
-		margin: 0 0 2rem;
-	}
-
-	.toros-simbolo__stage-wrap {
-		flex: 0 0 auto;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: clamp(1.5rem, 10.5vw, 2.7rem);
-		pointer-events: none;
-	}
-
-	.toros-simbolo__stage {
-		position: relative;
-		width: min(224px, 60vw);
-		aspect-ratio: 224 / 165;
-		margin-inline: auto;
-		flex-shrink: 0;
-		pointer-events: none;
-	}
-
-	.toros-simbolo__visual {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-		opacity: 0;
-		transition: opacity 0.45s ease;
-		pointer-events: none;
-		user-select: none;
-	}
-
-	.toros-simbolo__visual.is-active {
-		opacity: 1;
-	}
-
-	.toros-simbolo__copy {
-		flex: 0 0 auto;
-		min-width: 0;
-		display: flex;
-		flex-direction: column;
-		pointer-events: none;
-	}
-
-	.toros-simbolo__copy > .toros-simbolo__desktop-label {
-		margin: 0 0 1.25rem;
-	}
-
-	.aero-simbolo__label {
-		align-items: baseline;
-		justify-content: space-between;
-		gap: 1rem;
-	}
-
-	.aero-simbolo__scroll {
-		font-family: var(--pitch-font-display);
-		font-size: 14px;
-		font-weight: 300;
-		letter-spacing: 0.22em;
-		line-height: 1.4;
-		text-transform: uppercase;
-		color: #ffffff;
-	}
-
-	/* All steps share one grid cell → height = tallest step → no layout jump */
-	.toros-simbolo__steps {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		min-width: 0;
-		overflow: clip;
-	}
-
-	.toros-simbolo__step {
-		grid-area: 1 / 1;
-		opacity: 0;
-		visibility: hidden;
-		filter: blur(14px);
-		transition:
-			opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-			filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-			visibility 0.5s;
-	}
-
-	.toros-simbolo__step.is-active {
-		opacity: 1;
-		visibility: visible;
-		filter: blur(0);
-		z-index: 1;
-	}
-
-	.toros-simbolo__step .pitch-body-copy {
-		margin-top: 0.75rem;
-	}
-
-	.aero-simbolo__media {
-		margin-top: 3rem;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.toros-simbolo__step,
-		.toros-simbolo__visual {
-			transition: none;
-			filter: none;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.toros-simbolo__scroller {
-			height: calc(var(--simbolo-steps, 6) * 95vh);
-		}
-
-		.toros-simbolo__grid {
-			top: calc(var(--pitch-nav-offset, 6.5rem) + 1rem);
-			height: calc(100svh - var(--pitch-nav-offset, 6.5rem) - 2rem);
-			max-height: calc(100svh - var(--pitch-nav-offset, 6.5rem) - 2rem);
-			display: grid;
-			grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
-			gap: 3.75rem;
-			align-items: center;
-			background: transparent;
-			padding-top: 0;
-			padding-bottom: 0;
-			overflow: hidden;
-		}
-
-		.toros-simbolo__stage-wrap {
-			margin-bottom: 0;
-			justify-content: flex-start;
-		}
-
-		.toros-simbolo__stage {
-			width: 300px;
-			margin-inline: 0;
-		}
-
-		.toros-simbolo__step .pitch-body-copy {
-			margin-top: 1.25rem;
-		}
-
-		.aero-simbolo__media {
-			margin-top: 6.5rem;
-		}
 	}
 
 	/* —— Cases —— */
@@ -1027,75 +685,4 @@ const pitchNav = [
 		}
 	}
 
-	/* —— Sidebar —— */
-	.toros-sidebar__nav {
-		display: flex;
-		flex-direction: column;
-		gap: 18px;
-	}
-
-	.toros-sidebar__link {
-		display: block;
-		width: 100%;
-		font-family: var(--pitch-font-display);
-		font-size: 14px;
-		font-weight: 300;
-		letter-spacing: 0.22em;
-		line-height: 1.4;
-		text-decoration: none;
-		text-transform: uppercase;
-		white-space: nowrap;
-		color: rgba(255, 255, 255, 0.35);
-		transition: color 180ms ease;
-	}
-
-	.toros-sidebar__index {
-		color: inherit;
-		font-variant-numeric: tabular-nums;
-		letter-spacing: 0.12em;
-	}
-
-	.toros-sidebar__name {
-		color: inherit;
-	}
-
-	.toros-sidebar__link:hover {
-		color: rgba(255, 255, 255, 0.7);
-	}
-
-	.toros-sidebar__link.is-active .toros-sidebar__index {
-		color: rgba(255, 255, 255, 0.55);
-	}
-
-	.toros-sidebar__link.is-active .toros-sidebar__name {
-		color: #ffffff;
-	}
-
-	.toros-sidebar-mobile__current {
-		font-family: var(--pitch-font-display);
-		font-size: 14px;
-		font-weight: 300;
-		letter-spacing: 0.22em;
-	}
-
-	.toros-sidebar-mobile__current .toros-sidebar__index {
-		color: rgba(255, 255, 255, 0.55);
-	}
-
-	.toros-sidebar-mobile__current .toros-sidebar__name {
-		color: #ffffff;
-	}
-
-	.toros-sidebar-mobile__chevron {
-		transform: rotate(180deg);
-		color: #ffffff;
-	}
-
-	.toros-sidebar-mobile.is-open .toros-sidebar-mobile__chevron {
-		transform: rotate(0deg);
-	}
-
-	.toros-sidebar-mobile.is-open .toros-sidebar-mobile__dropdown {
-		grid-template-rows: 1fr;
-	}
 </style>

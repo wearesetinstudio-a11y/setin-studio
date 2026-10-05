@@ -1,0 +1,289 @@
+---
+import PitchSectionLabel from './PitchSectionLabel.astro';
+
+export interface PitchSimboloStep {
+	title: string;
+	text: string;
+	/** Public URL of the step's symbol visual. */
+	src: string;
+}
+
+interface Props {
+	num: string;
+	label?: string;
+	id?: string;
+	steps: PitchSimboloStep[];
+	/** Intrinsic size of the visuals — sets the stage aspect ratio. */
+	visualWidth: number;
+	visualHeight: number;
+	/** Desktop stage width in px. */
+	stageWidth?: number;
+	/** Mobile stage width (CSS length). */
+	stageMobileWidth?: string;
+	/** Optional mobile stage max height (CSS length). */
+	stageMobileMaxHeight?: string;
+	/** Background of the pinned panel on mobile — match the page content surface. */
+	surface?: string;
+	class?: string;
+}
+
+const {
+	num,
+	label = 'Símbolo',
+	id = 'simbolo',
+	steps,
+	visualWidth,
+	visualHeight,
+	stageWidth = 300,
+	stageMobileWidth = 'min(224px, 60vw)',
+	stageMobileMaxHeight = 'none',
+	surface = 'transparent',
+	class: className,
+} = Astro.props;
+
+const style = [
+	`--simbolo-steps: ${steps.length}`,
+	`--simbolo-ratio: ${visualWidth} / ${visualHeight}`,
+	`--simbolo-stage-w: ${stageWidth}px`,
+	`--simbolo-stage-mobile-w: ${stageMobileWidth}`,
+	`--simbolo-stage-mobile-max-h: ${stageMobileMaxHeight}`,
+	`--simbolo-surface: ${surface}`,
+].join('; ');
+const hasMedia = Astro.slots.has('default');
+---
+
+<section
+	id={id}
+	class:list={['toros-section toros-simbolo scroll-mt-32 text-white', className]}
+	aria-label={label}
+	style={style}
+>
+	<div class="toros-simbolo__scroller" data-simbolo-scroller>
+		<div class="toros-simbolo__grid">
+			<PitchSectionLabel num={num} label={label} scroll class="toros-simbolo__mobile-label" />
+
+			<div class="toros-simbolo__stage-wrap">
+				<div class="toros-simbolo__stage" aria-hidden="true">
+					{
+						steps.map((step, index) => (
+							<img
+								src={step.src}
+								alt=""
+								width={visualWidth}
+								height={visualHeight}
+								class:list={['toros-simbolo__visual', index === 0 && 'is-active']}
+								data-simbolo-visual={index}
+								loading={index === 0 ? 'eager' : 'lazy'}
+								aria-hidden={index === 0 ? 'false' : 'true'}
+							/>
+						))
+					}
+				</div>
+			</div>
+
+			<div class="toros-simbolo__copy">
+				<PitchSectionLabel num={num} label={label} scroll class="toros-simbolo__desktop-label" />
+				<div class="toros-simbolo__steps">
+					{
+						steps.map((step, index) => (
+							<article
+								class:list={['toros-simbolo__step', index === 0 && 'is-active']}
+								data-simbolo-step={index}
+							>
+								<h2 class="pitch-display w-full text-[clamp(1.35rem,2.8vw,2rem)] font-normal leading-[1.2]">
+									{step.title}
+								</h2>
+								<p class="pitch-body-copy w-full text-white/85">{step.text}</p>
+							</article>
+						))
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{
+		hasMedia && (
+			<div class="toros-simbolo__media">
+				<slot />
+			</div>
+		)
+	}
+</section>
+
+<style>
+	/* Pinned mark + copy; scroll progress swaps steps in place (blur crossfade).
+	   overflow: clip (not hidden) so touch pan scrolls the page, not a nested scroller. */
+	.toros-simbolo__scroller {
+		height: calc(var(--simbolo-steps, 5) * 85svh);
+		position: relative;
+	}
+
+	.toros-simbolo__grid {
+		position: sticky;
+		top: calc(var(--pitch-nav-offset, 6.5rem) + 0.5rem);
+		z-index: 2;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: flex-start;
+		height: calc(
+			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
+		);
+		max-height: calc(
+			100svh - var(--pitch-nav-offset, 6.5rem) - 4.75rem - env(safe-area-inset-bottom, 0px)
+		);
+		overflow: clip;
+		touch-action: pan-y;
+		background: var(--simbolo-surface, transparent);
+		padding: 1.75rem var(--pitch-gutter) 0.5rem;
+		box-sizing: border-box;
+	}
+
+	.toros-simbolo__grid > :global(.toros-simbolo__mobile-label) {
+		flex: 0 0 auto;
+		margin: 0 0 2rem;
+	}
+
+	.toros-simbolo__copy > :global(.toros-simbolo__desktop-label) {
+		display: none;
+		margin: 0 0 1.25rem;
+	}
+
+	.toros-simbolo__stage-wrap {
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: clamp(1.5rem, 10.5vw, 2.7rem);
+		pointer-events: none;
+		touch-action: pan-y;
+	}
+
+	.toros-simbolo__stage {
+		position: relative;
+		width: var(--simbolo-stage-mobile-w);
+		max-height: var(--simbolo-stage-mobile-max-h);
+		aspect-ratio: var(--simbolo-ratio);
+		margin-inline: auto;
+		flex-shrink: 0;
+		pointer-events: none;
+	}
+
+	.toros-simbolo__visual {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		opacity: 0;
+		transition: opacity 0.45s ease;
+		pointer-events: none;
+		-webkit-user-drag: none;
+		user-select: none;
+	}
+
+	.toros-simbolo__visual.is-active {
+		opacity: 1;
+	}
+
+	.toros-simbolo__copy {
+		flex: 0 0 auto;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		pointer-events: none;
+		touch-action: pan-y;
+	}
+
+	/* All steps share one grid cell → height = tallest step → no layout jump */
+	.toros-simbolo__steps {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		min-width: 0;
+		overflow: clip;
+	}
+
+	.toros-simbolo__step {
+		grid-area: 1 / 1;
+		opacity: 0;
+		visibility: hidden;
+		filter: blur(14px);
+		transition:
+			opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+			filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+			visibility 0.5s;
+	}
+
+	.toros-simbolo__step.is-active {
+		opacity: 1;
+		visibility: visible;
+		filter: blur(0);
+		z-index: 1;
+	}
+
+	.toros-simbolo__step .pitch-body-copy {
+		margin-top: 0.75rem;
+	}
+
+	.toros-simbolo__media {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		margin-top: 3rem;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.toros-simbolo__step,
+		.toros-simbolo__visual {
+			transition: none;
+			filter: none;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.toros-simbolo__scroller {
+			height: calc(var(--simbolo-steps, 5) * 95vh);
+		}
+
+		.toros-simbolo__grid {
+			top: calc(var(--pitch-nav-offset, 6.5rem) + 1rem);
+			height: calc(100svh - var(--pitch-nav-offset, 6.5rem) - 2rem);
+			max-height: calc(100svh - var(--pitch-nav-offset, 6.5rem) - 2rem);
+			display: grid;
+			grid-template-columns: var(--simbolo-stage-w) minmax(0, 1fr);
+			gap: 3.75rem;
+			align-items: center;
+			background: transparent;
+			padding-block: 0;
+			overflow: hidden;
+		}
+
+		.toros-simbolo__grid > :global(.toros-simbolo__mobile-label) {
+			display: none;
+		}
+
+		.toros-simbolo__copy > :global(.toros-simbolo__desktop-label) {
+			display: flex;
+		}
+
+		.toros-simbolo__stage-wrap {
+			margin-bottom: 0;
+			justify-content: flex-start;
+		}
+
+		.toros-simbolo__stage {
+			width: var(--simbolo-stage-w);
+			max-height: none;
+			margin-inline: 0;
+		}
+
+		.toros-simbolo__step .pitch-body-copy {
+			margin-top: 1.25rem;
+		}
+
+		.toros-simbolo__media {
+			margin-top: 6.5rem;
+		}
+	}
+</style>

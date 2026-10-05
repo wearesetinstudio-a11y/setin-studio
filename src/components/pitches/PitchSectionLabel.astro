@@ -1,0 +1,67 @@
+---
+interface Props {
+	num: string;
+	label: string;
+	/** Adds the right-aligned [Scroll] hint used on pinned scroll sections. */
+	scroll?: boolean;
+	class?: string;
+}
+
+const { num, label, scroll = false, class: className } = Astro.props;
+---
+
+<div class:list={['toros-section__label', scroll && 'toros-section__label--scroll', className]}>
+	{
+		scroll ? (
+			<>
+				<span>
+					<span class="toros-section__num">{num}&nbsp;/&nbsp;</span>
+					<span class="toros-section__label-name">{label}</span>
+				</span>
+				<span class="toros-section__scroll" aria-hidden="true">[Scroll]</span>
+			</>
+		) : (
+			<>
+				<span class="toros-section__num">{num}&nbsp;/&nbsp;</span>
+				<span class="toros-section__label-name">{label}</span>
+			</>
+		)
+	}
+</div>
+
+<style>
+	.toros-section__label,
+	.toros-section__num,
+	.toros-section__label-name,
+	.toros-section__scroll {
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+		line-height: 1.4;
+		text-transform: uppercase;
+	}
+
+	.toros-section__label {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.35);
+	}
+
+	.toros-section__label--scroll {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.toros-section__num {
+		color: inherit;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.12em;
+	}
+
+	.toros-section__label-name,
+	.toros-section__scroll {
+		color: #ffffff;
+	}
+</style>

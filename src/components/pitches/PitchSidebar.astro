@@ -1,0 +1,165 @@
+---
+export interface PitchNavItem {
+	id: string;
+	num: string;
+	label: string;
+}
+
+interface Props {
+	items: PitchNavItem[];
+	ariaLabel?: string;
+	mobileAriaLabel?: string;
+}
+
+const {
+	items,
+	ariaLabel = 'Secciones de la propuesta',
+	mobileAriaLabel = 'Secciones de la propuesta (móvil)',
+} = Astro.props;
+const first = items[0];
+---
+
+<aside
+	class="toros-sidebar relative hidden self-stretch pl-[var(--pitch-gutter)] pr-6 lg:block"
+	data-toros-sidebar
+>
+	<div class="w-full sticky top-[calc(var(--pitch-nav-offset,6.5rem)+3.5rem)]">
+		<nav class="toros-sidebar__nav" aria-label={ariaLabel}>
+			{
+				items.map((item, idx) => (
+					<a
+						href={`#${item.id}`}
+						class:list={['toros-sidebar__link', idx === 0 && 'is-active']}
+						data-toros-section-target={item.id}
+					>
+						<span class="toros-sidebar__index">{item.num}&nbsp;/&nbsp;</span>
+						<span class="toros-sidebar__name">{item.label}</span>
+					</a>
+				))
+			}
+		</nav>
+	</div>
+</aside>
+
+<div
+	class="toros-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-0 bg-[#0d0e0f]/95 px-[var(--pitch-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden"
+	data-toros-sidebar-mobile
+>
+	<div
+		id="pitch-mobile-dropdown"
+		class="toros-sidebar-mobile__dropdown grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in"
+	>
+		<div class="overflow-hidden">
+			<nav class="flex max-h-[60vh] flex-col gap-[18px] overflow-y-auto pb-5 pt-4" aria-label={mobileAriaLabel}>
+				{
+					items.map((item, idx) => (
+						<a
+							href={`#${item.id}`}
+							class:list={['toros-sidebar__link', idx === 0 && 'is-active']}
+							data-toros-section-target={item.id}
+						>
+							<span class="toros-sidebar__index">{item.num}&nbsp;/&nbsp;</span>
+							<span class="toros-sidebar__name">{item.label}</span>
+						</a>
+					))
+				}
+			</nav>
+		</div>
+	</div>
+	<button
+		type="button"
+		class="flex w-full items-center justify-between py-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] text-left uppercase"
+		aria-expanded="false"
+		aria-controls="pitch-mobile-dropdown"
+		data-toros-mobile-nav-trigger
+	>
+		<span class="toros-sidebar-mobile__current">
+			<span class="toros-sidebar__index" data-toros-mobile-current-num>{first?.num}&nbsp;/&nbsp;</span>
+			<span class="toros-sidebar__name is-active" data-toros-mobile-current-label>{first?.label}</span>
+		</span>
+		<svg
+			width="14"
+			height="14"
+			viewBox="0 0 14 14"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+			class="toros-sidebar-mobile__chevron shrink-0"
+			aria-hidden="true"
+		>
+			<path d="M1 3.5L7 9.5L13 3.5" stroke="currentColor" stroke-width="2"></path>
+		</svg>
+	</button>
+</div>
+
+<style>
+	.toros-sidebar__nav {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	.toros-sidebar__link {
+		display: block;
+		width: 100%;
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+		line-height: 1.4;
+		text-decoration: none;
+		text-transform: uppercase;
+		white-space: nowrap;
+		color: rgba(255, 255, 255, 0.35);
+		transition: color 180ms ease;
+	}
+
+	.toros-sidebar__index {
+		color: inherit;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.12em;
+	}
+
+	.toros-sidebar__name {
+		color: inherit;
+	}
+
+	.toros-sidebar__link:hover {
+		color: rgba(255, 255, 255, 0.7);
+	}
+
+	.toros-sidebar__link.is-active .toros-sidebar__index {
+		color: rgba(255, 255, 255, 0.55);
+	}
+
+	.toros-sidebar__link.is-active .toros-sidebar__name {
+		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile__current {
+		font-family: var(--pitch-font-display);
+		font-size: 14px;
+		font-weight: 300;
+		letter-spacing: 0.22em;
+	}
+
+	.toros-sidebar-mobile__current .toros-sidebar__index {
+		color: rgba(255, 255, 255, 0.55);
+	}
+
+	.toros-sidebar-mobile__current .toros-sidebar__name {
+		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile__chevron {
+		transform: rotate(180deg);
+		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile.is-open .toros-sidebar-mobile__chevron {
+		transform: rotate(0deg);
+	}
+
+	.toros-sidebar-mobile.is-open .toros-sidebar-mobile__dropdown {
+		grid-template-rows: 1fr;
+	}
+</style>
