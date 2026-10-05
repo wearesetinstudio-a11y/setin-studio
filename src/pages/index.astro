@@ -173,10 +173,12 @@ const { projectCount, articleCount } = await getSiteCounts();
 					heroStackHidden = true;
 					stack.classList.add('is-hidden');
 					document.documentElement.classList.remove('hero-cinema-active');
+					stack.querySelector<HTMLVideoElement>('video')?.pause();
 				} else if (heroStackHidden && heroBottom > 0) {
 					heroStackHidden = false;
 					stack.classList.remove('is-hidden');
 					document.documentElement.classList.add('hero-cinema-active');
+					ensureHeroBackgroundVideo();
 				}
 			}
 
@@ -190,7 +192,7 @@ const { projectCount, articleCount } = await getSiteCounts();
 
 			function ensureHeroBackgroundVideo() {
 				const video = document.querySelector<HTMLVideoElement>('#hero-background-stack video');
-				if (!video) return;
+				if (!video || heroStackHidden) return;
 				video.muted = true;
 				void video.play().catch(() => {});
 			}
@@ -233,9 +235,10 @@ const { projectCount, articleCount } = await getSiteCounts();
 					baseOpacity: 0.11,
 				});
 				document.documentElement.classList.add('hero-cinema-active');
+				heroStackHidden = false;
 				lockedHeroBgHeight = 0;
 				lockHeroBackgroundViewport(true);
-				scheduleHeroBackgroundSync();
+				syncHeroBackgroundStack();
 				ensureHeroBackgroundVideo();
 			});
 			window.addEventListener('setin:language-change', () => {

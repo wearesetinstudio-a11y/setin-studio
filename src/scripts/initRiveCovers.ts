@@ -103,7 +103,7 @@ export function initRiveCovers() {
 
 			canvas.width = nextW;
 			canvas.height = nextH;
-			rive?.resizeDrawingSurfaceToCanvas();
+			rive?.resizeDrawingSurfaceToCanvas(pixelRatio);
 		};
 
 		rive = new Rive({
