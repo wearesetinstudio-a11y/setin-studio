@@ -14,30 +14,40 @@ const { projectCount, articleCount } = await getSiteCounts();
 
 const teamMembers = [
 	{
-		name: 'Chris',
-		role: 'Designer & Strategist',
+		name: 'Krzysztof Bartosik',
+		role: 'Creative & Strategy Director',
 		roleKey: 'aboutPage.chrisRole',
 		bioKey: 'aboutPage.chrisBio',
-		bio: "I have spent the last 5 years working with brands from different corners of the world, like Panama, Spain, and Poland. My experience ranges from designing visual identities for banks to building modern apps for tech startups. I believe that design is not just about colors; it's about making your business trustworthy and easy for your customers to understand.",
-		imageSrc: '/chris.webp',
-		imageAlt: 'Chris, Designer and Strategist at Setin Studio',
+		bio: 'Directing strategy and creative vision at Setin Studio. I bridge deep market research with core business objectives to build high-impact brands and digital products. I establish design workflows that eliminate guesswork, delivering scalable, battle-tested solutions that drive measurable growth.',
+		imageSrc: '/images/chris.webp',
+		imageAlt: 'Krzysztof Bartosik, Creative & Strategy Director at Setin Studio',
 		links: [
 			{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/krzysztof-bartosik-a98855226' },
 			{ label: 'Instagram', href: 'https://www.instagram.com/bartosik_k?igsh=emRqd2VqZGNzZWFp' },
 		],
 	},
 	{
-		name: 'Kuba',
-		role: 'Lead Developer',
+		name: 'Jakub Bartosik',
+		role: 'Tech Director',
 		roleKey: 'aboutPage.kubaRole',
 		bioKey: 'aboutPage.kubaBio',
-		bio: 'With over 10 years in software development, I have seen the web change many times. I\'ve worked with international companies and individual clients from the US and Europe. My job is to make sure that the "engine" of your website is perfect. I focus on clean code and performance, so your site stays fast and reliable, no matter how much your business grows.',
-		imageSrc: '/jacob.webp',
-		imageAlt: 'Kuba, Lead Developer at Setin Studio',
+		bio: "Head of technical architecture and engineering at Setin Studio. I ensure the digital infrastructure behind our clients' products operates with absolute precision. I prioritize clean code, raw performance, and modern web standards—keeping platforms fast and resilient as businesses scale.",
+		imageSrc: '/images/jacob.webp',
+		imageAlt: 'Jakub Bartosik, Tech Director at Setin Studio',
 		links: [
 			{ label: 'Instagram', href: 'https://www.instagram.com/tosini13?igsh=MXVxMjhtY3BwaGpkMQ%3D%3D' },
 			{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/jakub-bartosik-developer' },
 		],
+	},
+	{
+		name: 'Tymoteusz Gunzer',
+		role: 'Brand & Graphic Designer',
+		roleKey: 'aboutPage.tymonRole',
+		bioKey: 'aboutPage.tymonBio',
+		bio: 'Crafting and expanding visual identities for brands built to stand out. My work is anchored in sharp strategy and purposeful execution, enabling Setin Studio to build comprehensive visual systems that forge market position rather than just decoration.',
+		imageSrc: '/images/tibo.webp',
+		imageAlt: 'Tymoteusz Gunzer, Brand & Graphic Designer at Setin Studio',
+		links: [{ label: 'Instagram', href: 'https://www.instagram.com/gnzr_art/' }],
 	},
 ];
 ---
@@ -65,7 +75,7 @@ const teamMembers = [
 							imageSrc={member.imageSrc}
 							imageAlt={member.imageAlt}
 							links={member.links}
-							align={index === 0 ? 'start' : 'end'}
+							align={index % 2 === 0 ? 'start' : 'end'}
 						/>
 					))
 				}
