@@ -3,13 +3,16 @@
  * Independent shell for hidden pitch / proposal pages.
  * Pitch content uses its own type stack; Header + Footer match the main site 1:1.
  */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import '../styles/global.css';
 import '../styles/page-transition.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { isLocale, type Locale } from '../i18n/dictionaries.ts';
-import { htmlLang } from '../i18n/seo.ts';
+import { SITE_URL, htmlLang } from '../i18n/seo.ts';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
+import { withPublicAssetVersion } from '../utils/withPublicAssetVersion.ts';
 
 interface Props {
 	title: string;
@@ -53,6 +56,20 @@ const pageTitle = title.includes('Setin') ? title : `${title} — Setin Studio`;
 const themeStyle = Object.entries(themeVars)
 	.map(([key, value]) => `${key}: ${value}`)
 	.join('; ');
+
+/** `public/pitches/<slug>/og.jpg` — 1200×630. Missing file falls back to no social image. */
+const pitchSlug =
+	Astro.url.pathname
+		.replace(/\/$/, '')
+		.split('/')
+		.filter(Boolean)
+		.pop() ?? '';
+const ogPublicPath = `/pitches/${pitchSlug}/og.jpg`;
+const hasOgImage =
+	/^[a-z0-9-]+$/i.test(pitchSlug) &&
+	existsSync(join(process.cwd(), 'public', 'pitches', pitchSlug, 'og.jpg'));
+const ogImage = hasOgImage ? `${SITE_URL}${withPublicAssetVersion(ogPublicPath)}` : '';
+const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 ---
 
 <!doctype html>
@@ -64,6 +81,27 @@ const themeStyle = Object.entries(themeVars)
 		<meta name="robots" content="noindex, nofollow" />
 		<meta name="googlebot" content="noindex, nofollow" />
 		<meta name="description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Setin Studio" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={ogUrl} />
+		{
+			ogImage ? (
+				<>
+					<meta property="og:image" content={ogImage} />
+					<meta property="og:image:secure_url" content={ogImage} />
+					<meta property="og:image:type" content="image/jpeg" />
+					<meta property="og:image:width" content="1200" />
+					<meta property="og:image:height" content="630" />
+					<meta property="og:image:alt" content={pageTitle} />
+					<meta name="twitter:card" content="summary_large_image" />
+					<meta name="twitter:title" content={pageTitle} />
+					<meta name="twitter:description" content={description} />
+					<meta name="twitter:image" content={ogImage} />
+				</>
+			) : null
+		}
 		<link rel="icon" type="image/svg+xml" href="/favicons/favicon-dark-mode.svg" />
 		<link
 			rel="icon"
