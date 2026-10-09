@@ -4,6 +4,7 @@ import '../styles/page-transition.css';
 import CookieBanner from '../components/CookieBanner.astro';
 import { ClientRouter } from 'astro:transitions';
 import {
+	SITE_URL,
 	absoluteUrl,
 	buildLocalePath,
 	getHreflangLinks,
@@ -13,15 +14,21 @@ import {
 	htmlLang,
 	stripLocalePrefix,
 } from '../i18n/seo.ts';
+import { withPublicAssetVersion } from '../utils/withPublicAssetVersion.ts';
 
 interface Props {
 	title?: string;
 	description?: string;
+	/** Public path to a 1200×630 JPEG. Defaults to the studio image. */
+	image?: string;
+	imageAlt?: string;
 }
 
 const {
 	title = 'Setin Studio',
 	description = 'Multidisciplinary studio forging distinct identities, seamless interfaces, and high-performance builds.',
+	image = '/images/og.jpg',
+	imageAlt = 'Setin Studio',
 } = Astro.props;
 
 const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`;
@@ -40,6 +47,7 @@ const panamaServiceJsonLd = getPanamaProfessionalServiceJsonLd();
 const isSpanish = pageLocale === 'es';
 const esOgTitle = 'Setin Studio | Estudio de Diseño Web y Branding en Panamá';
 const ogTitle = isSpanish && barePath === '/' ? esOgTitle : pageTitle;
+const ogImage = `${SITE_URL}${withPublicAssetVersion(image)}`;
 const organizationJsonLdJson = JSON.stringify(organizationJsonLd);
 const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 ---
@@ -89,6 +97,20 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 				<meta property="og:title" content={pageTitle} />
 			)
 		}
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalHref} />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Setin Studio" />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:secure_url" content={ogImage} />
+		<meta property="og:image:type" content="image/jpeg" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={imageAlt} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={ogTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
 		<link rel="icon" type="image/svg+xml" href="/favicons/favicon-dark-mode.svg" />
 		<link
 			rel="icon"

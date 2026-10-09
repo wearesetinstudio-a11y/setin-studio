@@ -1,4 +1,6 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
@@ -68,6 +70,10 @@ const industry = data.industry ?? '';
 const market = data.market ?? '';
 const liveUrl = data.liveUrl ?? '';
 const folderName = resolveProjectFolderName(project);
+const projectOgPath = `/portfolio/${folderName}/og.jpg`;
+const projectOgImage = existsSync(join(process.cwd(), 'public', 'portfolio', folderName, 'og.jpg'))
+	? projectOgPath
+	: undefined;
 const coverFilename = getCoverFilename(data.thumbnail);
 const galleryLayout = buildGalleryLayout(folderName, coverFilename);
 const overviewLabel = data.overviewLabel || 'Overview';
@@ -186,7 +192,12 @@ const projectCopy = buildProjectCopyBundle(data);
 const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
 ---
 
-<Layout title={title} description={pageDescription}>
+<Layout
+	title={title}
+	description={pageDescription}
+	image={projectOgImage}
+	imageAlt={projectOgImage ? title : undefined}
+>
 	<Header projectCount={projectCount} articleCount={articleCount} />
 
 	<main id="project-page" class="project-page relative z-20 flex-1">
