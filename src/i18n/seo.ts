@@ -1,7 +1,10 @@
 import { defaultLocale, isLocale, type Locale } from './dictionaries.ts';
 
-/** Canonical site origin for SEO (no trailing slash). */
-export const SITE_URL = 'https://wearesetin.com';
+/**
+ * Canonical site origin (no trailing slash).
+ * The apex host 308-redirects here. Social crawlers often drop og:image when that URL redirects.
+ */
+export const SITE_URL = 'https://www.wearesetin.com';
 
 const LOCALE_PREFIXES = ['pl', 'es'] as const;
 

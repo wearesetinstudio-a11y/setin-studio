@@ -1,4 +1,29 @@
+# Pitch pages stay out of search results, but link-preview bots may read them.
+User-agent: facebookexternalhit
+Allow: /pitches/
+
+User-agent: Facebot
+Allow: /pitches/
+
+User-agent: Twitterbot
+Allow: /pitches/
+
+User-agent: LinkedInBot
+Allow: /pitches/
+
+User-agent: Slackbot
+Allow: /pitches/
+
+User-agent: WhatsApp
+Allow: /pitches/
+
+User-agent: TelegramBot
+Allow: /pitches/
+
+User-agent: Applebot
+Allow: /pitches/
+
 User-agent: *
 Disallow: /pitches/
 
-Sitemap: https://wearesetin.com/sitemap-index.xml
+Sitemap: https://www.wearesetin.com/sitemap-index.xml
