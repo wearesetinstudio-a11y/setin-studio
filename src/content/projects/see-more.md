@@ -16,7 +16,7 @@ service: 'Brand Strategy, Visual Identity, Webflow Development'
 industry: 'Industrial Logistics'
 market: 'Panama'
 year: 2026
-liveUrl: 'seemorelogistics.com'
+liveUrl: 'https://see-more-wine.vercel.app/'
 logo: '/logos/see-more.svg'
 challengesAfterGroup: 2
 strategyAfterGroup: 8
