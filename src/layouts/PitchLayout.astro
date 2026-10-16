@@ -50,7 +50,7 @@ const {
 
 const locale: Locale = localeProp ?? (isLocale(lang) ? lang : 'es');
 const documentLang = htmlLang(locale);
-const { projectCount, articleCount } = await getSiteCounts();
+const { projectCount } = await getSiteCounts();
 
 const pageTitle = title.includes('Setin') ? title : `${title} — Setin Studio`;
 const themeStyle = Object.entries(themeVars)
@@ -180,7 +180,6 @@ const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 		</div>
 		<Header
 			projectCount={projectCount}
-			articleCount={articleCount}
 			logoSrc={navLogoSrc ?? '/logo-setin.svg'}
 			logoAlt={navLogoSrc ? navLogoAlt : ''}
 			logoWidth={navLogoSrc ? navLogoWidth : 111}

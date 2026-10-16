@@ -7,7 +7,6 @@ import { isActiveNavHref, normalizeNavPath } from '../utils/isActiveNavHref.ts';
 
 interface Props {
 	projectCount?: number;
-	articleCount?: number;
 	waitForIntro?: boolean;
 	theme?: 'default' | 'light-bg';
 	/** Optional lockup (e.g. Setin × client) for pitch/proposal pages. */
@@ -19,7 +18,6 @@ interface Props {
 
 const {
 	projectCount = 0,
-	articleCount = 0,
 	waitForIntro = false,
 	theme = 'default',
 	logoSrc = '/logo-setin.svg',
@@ -39,8 +37,6 @@ const hasLocalContact =
 	barePath === '/about' ||
 	barePath === '/services' ||
 	barePath === '/projects' ||
-	barePath === '/articles' ||
-	barePath.startsWith('/articles/') ||
 	barePath.startsWith('/pitches/') ||
 	/^\/projects\/[^/]+$/.test(barePath);
 
@@ -52,7 +48,6 @@ const nav = [
 	{ href: '/projects', label: 'Projects', count: projectCount, i18nKey: 'nav.projects' },
 	{ href: '/services', label: 'Services', i18nKey: 'nav.services' },
 	{ href: '/about', label: 'About us', i18nKey: 'nav.about' },
-	{ href: '/articles', label: 'Articles', count: articleCount, i18nKey: 'nav.articles' },
 ];
 
 const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';

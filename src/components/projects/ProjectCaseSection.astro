@@ -3,7 +3,6 @@ import type { GalleryMediaItem } from '../../utils/getProjectGallery';
 import type { ProjectCaseBlock } from '../../utils/buildProjectCase';
 import ProjectGalleryMedia from './ProjectGalleryMedia.astro';
 import ProjectInfoRow from './ProjectInfoRow.astro';
-import ProjectRelatedArticles from './ProjectRelatedArticles.astro';
 
 interface Props {
 	index: number;
@@ -11,7 +10,6 @@ interface Props {
 	blocks: ProjectCaseBlock[];
 	media: GalleryMediaItem[];
 	rows?: { label: string; value: string; isLink?: boolean }[];
-	relatedArticles?: { slug: string; title: string }[];
 	youtubeSrc?: string | null;
 	youtubeTitle?: string;
 	projectTitle: string;
@@ -24,7 +22,6 @@ const {
 	blocks,
 	media,
 	rows = [],
-	relatedArticles = [],
 	youtubeSrc = null,
 	youtubeTitle = '',
 	projectTitle,
@@ -33,7 +30,7 @@ const {
 
 const indexLabel = String(index).padStart(2, '0');
 const sectionId = index === 1 ? 'project-overview' : `project-section-${index}`;
-const hasMeta = rows.length > 0 || relatedArticles.length > 0;
+const hasMeta = rows.length > 0;
 const mediaCount = media.length + (youtubeSrc ? 1 : 0);
 const hasCopy = blocks.length > 0 || hasMeta;
 ---
@@ -96,9 +93,8 @@ const hasCopy = blocks.length > 0 || hasMeta;
 					{hasMeta ? (
 						<div
 							class:list={[
-								'project-case-section__meta overflow-hidden border-t border-black/10',
+								'project-case-section__meta overflow-hidden border-y border-black/10',
 								blocks.length > 0 && 'project-case-section__meta--spaced',
-								relatedArticles.length === 0 && 'border-b border-black/10',
 							]}
 						>
 							<dl class="m-0">
@@ -107,11 +103,10 @@ const hasCopy = blocks.length > 0 || hasMeta;
 										label={row.label}
 										value={row.value}
 										isLink={row.isLink}
-										isLast={rowIndex === rows.length - 1 && relatedArticles.length === 0}
+										isLast={rowIndex === rows.length - 1}
 										theme="light"
 									/>
 								))}
-								<ProjectRelatedArticles articles={relatedArticles} />
 							</dl>
 						</div>
 					) : null}

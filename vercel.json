@@ -20,11 +20,6 @@
 		{ "source": "/es/projects", "destination": "/projects" },
 		{ "source": "/es/projects/", "destination": "/projects" },
 
-		{ "source": "/pl/articles", "destination": "/articles" },
-		{ "source": "/pl/articles/", "destination": "/articles" },
-		{ "source": "/es/articles", "destination": "/articles" },
-		{ "source": "/es/articles/", "destination": "/articles" },
-
 		{ "source": "/projects/nrv-web", "destination": "/projects/nrv" },
 		{ "source": "/projects/nrv-web/", "destination": "/projects/nrv" },
 		{ "source": "/pl/projects/nrv-web", "destination": "/projects/nrv" },
@@ -36,11 +31,6 @@
 		{ "source": "/pl/projects/:slug", "destination": "/projects/:slug" },
 		{ "source": "/es/projects/:slug/", "destination": "/projects/:slug" },
 		{ "source": "/es/projects/:slug", "destination": "/projects/:slug" },
-
-		{ "source": "/pl/articles/:slug/", "destination": "/articles/:slug" },
-		{ "source": "/pl/articles/:slug", "destination": "/articles/:slug" },
-		{ "source": "/es/articles/:slug/", "destination": "/articles/:slug" },
-		{ "source": "/es/articles/:slug", "destination": "/articles/:slug" },
 
 		{ "source": "/pl/:path*/", "destination": "/:path*" },
 		{ "source": "/pl/:path*", "destination": "/:path*" },

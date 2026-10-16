@@ -22,42 +22,25 @@ import {
 	resolveProjectSections,
 } from '../../utils/getProjectSections';
 import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion';
-import { getSiteCounts } from '../../utils/getSiteCounts.ts';
 import { getYouTubeEmbedUrl } from '../../utils/youtube.ts';
 import { buildProjectCopyBundle } from '../../utils/getProjectCopy.ts';
 import { normalizeProjectCategories } from '../../utils/projectCategories.ts';
 
 export async function getStaticPaths() {
-	const [projects, articles] = await Promise.all([
-		getCollection('projects'),
-		getCollection('articles'),
-	]);
-	const { articleCount } = await getSiteCounts();
+	const projects = await getCollection('projects');
 
 	return projects
 		.filter((project) => !project.data.comingSoon)
-		.map((project) => {
-		const relatedArticles = articles
-			.filter((article) => article.data.relatedProject === project.id)
-			.sort((a, b) => a.data.order - b.data.order)
-			.map((article) => ({
-				slug: article.id,
-				title: article.data.title,
-			}));
-
-		return {
+		.map((project) => ({
 			params: { slug: project.id },
 			props: {
 				project,
 				projectCount: projects.length,
-				articleCount,
-				relatedArticles,
 			},
-		};
-	});
+		}));
 }
 
-const { project, projectCount, articleCount, relatedArticles } = Astro.props;
+const { project, projectCount } = Astro.props;
 const data = project.data;
 
 const title = data.title ?? 'Project';
@@ -216,7 +199,7 @@ const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
 	image={projectOgImage}
 	imageAlt={projectOgImage ? title : undefined}
 >
-	<Header projectCount={projectCount} articleCount={articleCount} />
+	<Header projectCount={projectCount} />
 
 	<main id="project-page" class="project-page relative z-20 flex-1">
 		<template id="project-copy-data" data-project-copy="true" set:html={projectCopyJson} />
@@ -244,7 +227,6 @@ const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
 									graphicType={overviewGraphicType}
 									graphicAlt={client}
 									rows={infoRows}
-									relatedArticles={relatedArticles}
 								/>
 							) : null
 						}

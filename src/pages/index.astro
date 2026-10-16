@@ -6,14 +6,13 @@ import ProjectsSection from '../components/ProjectsSection.astro';
 import ClientsSection from '../components/ClientsSection.astro';
 import AboutSection from '../components/AboutSection.astro';
 import TestimonialsSection from '../components/TestimonialsSection.astro';
-import ArticlesSection from '../components/ArticlesSection.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { sortProjects } from '../utils/sortProjects.ts';
 
 const allProjects = await getCollection('projects');
 const projects = sortProjects(allProjects);
-const { projectCount, articleCount } = await getSiteCounts();
+const { projectCount } = await getSiteCounts();
 ---
 
 <Layout>
@@ -38,7 +37,7 @@ const { projectCount, articleCount } = await getSiteCounts();
 		></canvas>
 	</div>
 
-	<Header projectCount={projectCount} articleCount={articleCount} waitForIntro={true} />
+	<Header projectCount={projectCount} waitForIntro={true} />
 
 	<main class="relative z-20 flex-1">
 		<section id="hero-section" class="hero-section relative pb-16 md:pb-[140px]">
@@ -255,8 +254,6 @@ const { projectCount, articleCount } = await getSiteCounts();
 		<AboutSection />
 
 		<TestimonialsSection />
-
-		<ArticlesSection />
 
 	</main>
 

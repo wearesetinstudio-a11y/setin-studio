@@ -88,21 +88,4 @@ const projects = defineCollection({
 	}),
 });
 
-const articles = defineCollection({
-	loader: glob({ base: './src/content/articles', pattern: '**/*.md' }),
-	schema: z.object({
-		title: z.string(),
-		deck: z.string(),
-		category: z.string(),
-		relatedProject: z.string().optional().default(''),
-		categoryHref: z.string().optional().default(''),
-		author: z.string().default('Chris Bartosik'),
-		publishedAt: z.coerce.date(),
-		coverImage: z.string(),
-		sideMedia: z.string().optional().default(''),
-		order: z.number(),
-		description: z.string().optional().default(''),
-	}),
-});
-
-export const collections = { projects, articles };
+export const collections = { projects };

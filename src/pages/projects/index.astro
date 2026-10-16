@@ -8,11 +8,11 @@ import { getSiteCounts } from '../../utils/getSiteCounts.ts';
 import { sortProjects } from '../../utils/sortProjects.ts';
 
 const projects = sortProjects(await getCollection('projects'));
-const { projectCount, articleCount } = await getSiteCounts();
+const { projectCount } = await getSiteCounts();
 ---
 
 <Layout title="Our Work" description="Portfolio projects by Setin Studio.">
-	<Header theme="light-bg" projectCount={projectCount} articleCount={articleCount} />
+	<Header theme="light-bg" projectCount={projectCount} />
 
 	<main class="flex-1">
 		<ProjectsSection projects={projects} standalone />

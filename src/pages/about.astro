@@ -10,7 +10,7 @@ import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const { projectCount, articleCount } = await getSiteCounts();
+const { projectCount } = await getSiteCounts();
 
 const teamMembers = [
 	{
@@ -56,7 +56,7 @@ const teamMembers = [
 	title="About Us"
 	description="Meet the brothers behind Setin Studio — a digital product studio built on vision and execution."
 >
-	<Header projectCount={projectCount} articleCount={articleCount} />
+	<Header projectCount={projectCount} />
 
 	<main class="relative z-20 flex-1">
 		<AboutHero />

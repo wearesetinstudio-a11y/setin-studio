@@ -10,7 +10,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'nav.projects': 'Projects',
 		'nav.services': 'Services',
 		'nav.about': 'About us',
-		'nav.articles': 'Articles',
 		'nav.workWithUs': 'Work with us',
 		'nav.homeAria': 'Setin Studio — home',
 		'nav.mainAria': 'Main',
@@ -64,14 +63,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'testimonials.heading2': 'about the setin',
 		'testimonials.description':
 			'Every digital landmark we create is a result of deep trust and precise execution.',
-
-		'articles.heading1': 'Inside',
-		'articles.heading2': 'the process',
-		'articles.description':
-			"We're opening our internal documentation to showcase the systems, technical shifts, and strategic decisions that drive our studio.",
-		'articles.viewMore': 'View more articles',
-		'articles.writtenBy': 'Written by',
-		'articles.published': 'Published:',
 
 		'contact.heading': 'Start your legacy',
 		'contact.description':
@@ -171,7 +162,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'nav.projects': 'Projekty',
 		'nav.services': 'Usługi',
 		'nav.about': 'O nas',
-		'nav.articles': 'Artykuły',
 		'nav.workWithUs': 'Napisz do nas',
 		'nav.homeAria': 'Setin Studio — strona główna',
 		'nav.mainAria': 'Główne',
@@ -225,14 +215,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'testimonials.heading2': 'o setin',
 		'testimonials.description':
 			'Każdy cyfrowy punkt orientacyjny, który tworzymy, jest wynikiem głębokiego zaufania i precyzyjnej realizacji.',
-
-		'articles.heading1': 'Wewnątrz',
-		'articles.heading2': 'procesu',
-		'articles.description':
-			'Otwieramy naszą wewnętrzną dokumentację, by pokazać systemy, zmiany techniczne i decyzje strategiczne, które napędzają studio.',
-		'articles.viewMore': 'Więcej artykułów',
-		'articles.writtenBy': 'Autor:',
-		'articles.published': 'Opublikowano:',
 
 		'contact.heading': 'Zacznij dziedzictwo',
 		'contact.description':
@@ -332,7 +314,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'nav.projects': 'Proyectos',
 		'nav.services': 'Servicios',
 		'nav.about': 'Nosotros',
-		'nav.articles': 'Artículos',
 		'nav.workWithUs': 'Contáctanos',
 		'nav.homeAria': 'Setin Studio — inicio',
 		'nav.mainAria': 'Principal',
@@ -386,14 +367,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'testimonials.heading2': 'sobre setin',
 		'testimonials.description':
 			'Cada hito digital que creamos es resultado de una confianza profunda y una ejecución precisa.',
-
-		'articles.heading1': 'Dentro',
-		'articles.heading2': 'del proceso',
-		'articles.description':
-			'Abrimos nuestra documentación interna para mostrar los sistemas, cambios técnicos y decisiones estratégicas que impulsan el estudio.',
-		'articles.viewMore': 'Ver más artículos',
-		'articles.writtenBy': 'Escrito por',
-		'articles.published': 'Publicado:',
 
 		'contact.heading': 'Empieza tu legado',
 		'contact.description':

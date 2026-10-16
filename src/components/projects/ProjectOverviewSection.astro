@@ -1,6 +1,5 @@
 ---
 import ProjectInfoRow from './ProjectInfoRow.astro';
-import ProjectRelatedArticles from './ProjectRelatedArticles.astro';
 
 interface Props {
 	id?: string;
@@ -19,7 +18,6 @@ interface Props {
 		labelKey?: string;
 		fieldKey?: string;
 	}[];
-	relatedArticles?: { slug: string; title: string }[];
 }
 
 const {
@@ -32,13 +30,12 @@ const {
 	graphicType = 'image',
 	graphicAlt = '',
 	rows,
-	relatedArticles = [],
 } = Astro.props;
 
 const titleChars = title.split('');
 const paragraphs = text.split(/\n\n+/).map((part) => part.trim()).filter(Boolean);
 const hasGraphic = Boolean(graphicSrc);
-const hasMeta = rows.length > 0 || relatedArticles.length > 0;
+const hasMeta = rows.length > 0;
 ---
 
 <section id={id} class="project-overview relative z-10 bg-white">
@@ -79,12 +76,7 @@ const hasMeta = rows.length > 0 || relatedArticles.length > 0;
 
 		{
 			hasMeta ? (
-				<div
-					class:list={[
-						'mt-12 overflow-hidden border-t border-black/10 md:mt-16',
-						relatedArticles.length === 0 && 'border-b border-black/10',
-					]}
-				>
+				<div class="mt-12 overflow-hidden border-y border-black/10 md:mt-16">
 					<dl class="m-0">
 						{rows.map((row, index) => (
 							<ProjectInfoRow
@@ -94,11 +86,10 @@ const hasMeta = rows.length > 0 || relatedArticles.length > 0;
 								isLink={row.isLink}
 								labelKey={row.labelKey}
 								fieldKey={row.fieldKey}
-								isLast={index === rows.length - 1 && relatedArticles.length === 0}
+								isLast={index === rows.length - 1}
 								theme="light"
 							/>
 						))}
-						<ProjectRelatedArticles articles={relatedArticles} />
 					</dl>
 				</div>
 			) : null

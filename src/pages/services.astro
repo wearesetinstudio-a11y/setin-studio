@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { dictionaries, t } from '../i18n/dictionaries.ts';
 
-const { projectCount, articleCount } = await getSiteCounts();
+const { projectCount } = await getSiteCounts();
 
 const serviceIds = ['branding', 'product', 'development', 'cloud', 'data', 'automation'];
 
@@ -34,7 +34,7 @@ const services = serviceIds.map((id, index) => {
 	title="Services"
 	description="Brand identity, digital product design, and high-performance builds from Setin Studio."
 >
-	<Header projectCount={projectCount} articleCount={articleCount} />
+	<Header projectCount={projectCount} />
 
 	<main class="relative z-20 flex-1">
 		<section class="services-page bg-[#131415] px-[var(--page-gutter)] pb-[var(--section-padding-y)] pt-[calc(var(--section-padding-y)+5.5rem)]">
