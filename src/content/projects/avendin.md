@@ -1,7 +1,7 @@
 ---
 title: Avendin Branding
 client: Avendin
-tags: ['Strategy', 'Brand Identity', 'Branding']
+tags: ['Brand Design', 'Motion']
 thumbnail: '/portfolio/avendin/Cover.webm'
 folderName: 'avendin'
 order: 2

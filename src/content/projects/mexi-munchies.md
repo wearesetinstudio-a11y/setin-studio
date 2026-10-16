@@ -1,7 +1,7 @@
 ---
 title: MexiMunchies Rebranding
 client: MexiMunchies
-tags: ['Branding', 'Visual Identity', 'Rebranding']
+tags: ['Brand Design', 'Motion']
 thumbnail: '/portfolio/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'
 order: 10

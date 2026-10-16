@@ -1,7 +1,7 @@
 ---
 title: "See More Logistics Landing Page"
 client: "See More Logistics"
-tags: ['UX/UI Design', 'Development', 'Motion']
+tags: ['Motion', 'Websites', 'Engineering', 'Product Design']
 thumbnail: '/portfolio/see-more-web/Cover.webm'
 folderName: 'see-more-web'
 order: 1

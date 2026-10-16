@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { normalizeProjectCategories } from '../utils/projectCategories';
 import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
 
 interface Props {
@@ -7,13 +8,14 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, thumbnail, video, comingSoon = false } = project.data;
+const { title, thumbnail, video, tags = [], comingSoon = false } = project.data;
 const titles = {
 	en: title,
 	pl: project.data.i18n?.pl?.title || title,
 	es: project.data.i18n?.es?.title || title,
 };
 const label = title.toUpperCase();
+const categoryTags = normalizeProjectCategories(tags);
 const thumbnailSrc = withPublicAssetVersion(thumbnail);
 const videoSrc = video ? withPublicAssetVersion(video) : '';
 const isRiveCover = thumbnail.toLowerCase().endsWith('.riv');
@@ -62,20 +64,29 @@ const titlesJson = JSON.stringify(titles);
 				<span class="project-card__soon-label" data-i18n="projects.comingSoon">Coming soon</span>
 			</div>
 
-			<div class="project-card__meta mt-5 flex items-start justify-between gap-4">
-				<h3 class="project-card__title min-w-0 flex-1 text-[1.2rem] font-semibold uppercase tracking-[0.02em] md:text-[1.4rem]">
-					<span class="project-card__title-mask">
-						<span class="project-card__title-copy" data-project-title-text>{label}</span>
-						<span class="project-card__title-copy" data-project-title-text aria-hidden="true">{label}</span>
-					</span>
-				</h3>
+			<div class="project-card__meta mt-5 flex items-end justify-between gap-4">
+				<div class="project-card__info min-w-0 flex-1">
+					<h3 class="project-card__title font-semibold uppercase tracking-[0.02em]">
+						<span class="project-card__title-mask">
+							<span class="project-card__title-copy" data-project-title-text>{label}</span>
+							<span class="project-card__title-copy" data-project-title-text aria-hidden="true">{label}</span>
+						</span>
+					</h3>
+					{categoryTags.length > 0 && (
+						<ul class="project-card__tags" aria-label="Categories">
+							{categoryTags.map((tag) => (
+								<li class="project-card__tag">{tag.toUpperCase()}</li>
+							))}
+						</ul>
+					)}
+				</div>
 
 				<img
 					src="/icons/arrow-muted.svg"
 					alt=""
 					width="20"
 					height="16"
-					class="project-card__arrow mt-[0.15em] w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+					class="project-card__arrow mb-[0.2em] w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
 					aria-hidden="true"
 				/>
 			</div>
@@ -117,20 +128,29 @@ const titlesJson = JSON.stringify(titles);
 				)}
 			</div>
 
-			<div class="project-card__meta mt-5 flex items-start justify-between gap-4">
-				<h3 class="project-card__title min-w-0 flex-1 text-[1.2rem] font-semibold uppercase tracking-[0.02em] text-black md:text-[1.4rem]">
-					<span class="project-card__title-mask">
-						<span class="project-card__title-copy" data-project-title-text>{label}</span>
-						<span class="project-card__title-copy" data-project-title-text aria-hidden="true">{label}</span>
-					</span>
-				</h3>
+			<div class="project-card__meta mt-5 flex items-end justify-between gap-4">
+				<div class="project-card__info min-w-0 flex-1">
+					<h3 class="project-card__title font-semibold uppercase tracking-[0.02em] text-black">
+						<span class="project-card__title-mask">
+							<span class="project-card__title-copy" data-project-title-text>{label}</span>
+							<span class="project-card__title-copy" data-project-title-text aria-hidden="true">{label}</span>
+						</span>
+					</h3>
+					{categoryTags.length > 0 && (
+						<ul class="project-card__tags" aria-label="Categories">
+							{categoryTags.map((tag) => (
+								<li class="project-card__tag">{tag.toUpperCase()}</li>
+							))}
+						</ul>
+					)}
+				</div>
 
 				<img
 					src="/icons/arrow.svg"
 					alt=""
 					width="20"
 					height="16"
-					class="project-card__arrow mt-[0.15em] w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+					class="project-card__arrow mb-[0.2em] w-[20px] shrink-0 transition-transform duration-300 group-hover:translate-x-1"
 					aria-hidden="true"
 				/>
 			</div>
@@ -141,14 +161,14 @@ const titlesJson = JSON.stringify(titles);
 <style is:global>
 	.project-card__title {
 		overflow: hidden;
-		font-size: 1.2rem;
+		font-size: 1rem;
 		font-weight: 600;
 		line-height: 1.15;
 	}
 
 	@media (min-width: 768px) {
 		.project-card__title {
-			font-size: 1.4rem;
+			font-size: 1.15rem;
 		}
 	}
 
@@ -189,6 +209,32 @@ const titlesJson = JSON.stringify(titles);
 	}
 
 	.project-card[data-coming-soon='true'] .project-card__title {
+		color: #626873;
+	}
+
+	.project-card__tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-top: 0.75rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.project-card__tag {
+		padding: 0.28rem 0.55rem;
+		background: #efefef;
+		color: #000000;
+		font-size: 0.7rem;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.project-card[data-coming-soon='true'] .project-card__tag {
+		background: #ececec;
 		color: #626873;
 	}
 

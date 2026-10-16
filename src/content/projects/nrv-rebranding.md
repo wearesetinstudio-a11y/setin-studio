@@ -1,7 +1,7 @@
 ---
 title: "Rebranding NRV Control Systems"
 client: "NRV Control Systems"
-tags: ['Branding', 'Visual Identity', 'Rebranding']
+tags: ['Brand Design', 'Motion', 'Product Design']
 thumbnail: '/portfolio/nrv/nrv-cover.webp'
 video: '/portfolio/nrv/cover.webm'
 folderName: 'nrv'

@@ -1,7 +1,7 @@
 ---
 title: Warszewicz
 client: "Internal Project"
-tags: ['Video Production', 'Motion Design', 'AI Art Direction']
+tags: ['AI Direction', 'Motion']
 thumbnail: '/portfolio/warszewicz/cover.mp4'
 folderName: 'warszewicz'
 order: 7

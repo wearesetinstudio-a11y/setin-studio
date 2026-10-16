@@ -1,7 +1,7 @@
 ---
 title: See More Logistics
 client: See More Logistics
-tags: ['Branding', 'Visual Identity', 'Webflow']
+tags: ['Brand Design', 'Motion', 'AI Direction']
 thumbnail: '/portfolio/see-more/cover.riv'
 folderName: 'see-more'
 order: 3

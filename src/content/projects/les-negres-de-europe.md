@@ -1,7 +1,7 @@
 ---
 title: Les Negres de Europe
 client: Les Negres de Europe
-tags: ['Coming Soon']
+tags: ['AI Direction', 'Motion']
 thumbnail: '/portfolio/les-negres-de-europe/cover.mp4'
 folderName: 'les-negres-de-europe'
 order: 11

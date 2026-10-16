@@ -1,7 +1,7 @@
 ---
 title: Web Platform for Control System Provider
 client: "NRV Systems"
-tags: ['UX/UI Design', 'SEO', 'Webflow']
+tags: ['Motion', 'Websites', 'Engineering', 'Product Design']
 thumbnail: '/portfolio/nrv-web/cover.opt.webp'
 video: '/portfolio/nrv-web/cover.webm'
 folderName: 'nrv-web'

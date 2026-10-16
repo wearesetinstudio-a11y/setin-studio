@@ -1,7 +1,7 @@
 ---
 title: Snacks Lovers Rebranding
 client: Snacks Lovers
-tags: ['Branding', 'Visual Identity', 'Rebranding']
+tags: ['Brand Design', 'Motion']
 thumbnail: '/portfolio/snacks-lovers/snacks-lovers-cover.webp'
 folderName: 'snacks-lovers'
 order: 8

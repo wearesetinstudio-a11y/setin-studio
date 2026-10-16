@@ -25,6 +25,7 @@ import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion';
 import { getSiteCounts } from '../../utils/getSiteCounts.ts';
 import { getYouTubeEmbedUrl } from '../../utils/youtube.ts';
 import { buildProjectCopyBundle } from '../../utils/getProjectCopy.ts';
+import { normalizeProjectCategories } from '../../utils/projectCategories.ts';
 
 export async function getStaticPaths() {
 	const [projects, articles] = await Promise.all([
@@ -65,7 +66,8 @@ const heroBackground = data.heroBackground ?? '';
 const client = data.client ?? title;
 const heroImage = withPublicAssetVersion(data.heroImage || heroBackground);
 const year = data.year;
-const service = data.service ?? '';
+const categories = normalizeProjectCategories(data.tags ?? []);
+const service = categories.length > 0 ? categories.join(', ') : (data.service ?? '');
 const industry = data.industry ?? '';
 const market = data.market ?? '';
 const liveUrl = data.liveUrl ?? '';
@@ -200,6 +202,11 @@ const navItems: SidebarNavItem[] = [
 ];
 
 const projectCopy = buildProjectCopyBundle(data);
+if (service) {
+	projectCopy.en.service = service;
+	projectCopy.pl.service = service;
+	projectCopy.es.service = service;
+}
 const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
 ---
 

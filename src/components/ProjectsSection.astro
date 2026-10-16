@@ -2,6 +2,10 @@
 import type { CollectionEntry } from 'astro:content';
 import ProjectCard from './ProjectCard.astro';
 import SeeAllProjectsCard from './SeeAllProjectsCard.astro';
+import {
+	PROJECT_CATEGORIES,
+	normalizeProjectCategories,
+} from '../utils/projectCategories';
 
 interface Props {
 	projects: CollectionEntry<'projects'>[];
@@ -28,33 +32,91 @@ if (standalone) {
 function listOrder(project: CollectionEntry<'projects'>) {
 	return displayedProjects.findIndex((entry) => entry.id === project.id) + 1;
 }
+
+function projectCategories(project: CollectionEntry<'projects'>) {
+	return normalizeProjectCategories(project.data.tags);
+}
+
+const filterCategories = standalone
+	? PROJECT_CATEGORIES.map((category) => ({
+			category,
+			count: projects.filter((project) => projectCategories(project).includes(category)).length,
+		})).filter((entry) => entry.count > 0)
+	: [];
 ---
 
 <section
 	id="work"
 	class:list={[
 		'relative z-20 px-[var(--page-gutter)] py-[var(--section-padding-y)]',
-		standalone ? 'bg-white pt-[calc(var(--section-padding-y)+5.5rem)]' : 'bg-[#F5F5F5]',
+		standalone ? 'bg-white pt-[calc(5.5rem+4rem)] md:pt-[calc(5.5rem+5.5rem)]' : 'bg-[#F5F5F5]',
 	]}
+	data-projects-standalone={standalone ? 'true' : undefined}
 >
+	{
+		standalone && (
+			<div class="projects-intro projects-intro--standalone mb-10 flex flex-col gap-6 md:mb-14 md:grid md:items-start">
+				<div class="projects-intro__copy flex max-w-md flex-col gap-6 md:gap-8">
+					<h2 id="projects-heading" class="projects-heading uppercase leading-[1.15]">
+						<span data-i18n="projects.heading">Our finest work</span>
+					</h2>
+					<p
+						class="body-txt-1 projects-description leading-relaxed text-black/55"
+						data-i18n="projects.description"
+					>
+						We don't follow trends, we set the tone. These are the collaborations that redefined the
+						standard for our partners.
+					</p>
+				</div>
+				{filterCategories.length > 0 && (
+					<div
+						class="projects-filters"
+						role="group"
+						aria-label="Filter projects by category"
+						data-projects-filters
+					>
+						{filterCategories.map(({ category, count }) => (
+							<button
+								type="button"
+								class="projects-filter-chip"
+								data-filter-category={category}
+								aria-pressed="false"
+							>
+								{category.toUpperCase()} [{count}]
+							</button>
+						))}
+					</div>
+				)}
+			</div>
+		)
+	}
+
 	<div class="projects-layout flex flex-col md:grid md:items-stretch">
 		<div class="projects-layout__col projects-layout__col--left contents md:flex md:h-full md:flex-col">
-			<div class="projects-intro order-0 flex flex-col gap-6 md:order-none md:gap-8">
-				<h2 id="projects-heading" class="projects-heading max-w-md uppercase leading-[1.15]">
-					<span data-reveal-line data-i18n="projects.heading">Our finest work</span>
-				</h2>
-				<p
-					class="body-txt-1 projects-description max-w-md leading-relaxed text-black/55"
-					data-i18n="projects.description"
-				>
-					We don't follow trends, we set the tone. These are the collaborations that redefined the
-					standard for our partners.
-				</p>
-			</div>
+			{
+				!standalone && (
+					<div class="projects-intro order-0 flex flex-col gap-6 md:order-none md:gap-8">
+						<h2 id="projects-heading" class="projects-heading max-w-md uppercase leading-[1.15]">
+							<span data-reveal-line data-i18n="projects.heading">Our finest work</span>
+						</h2>
+						<p
+							class="body-txt-1 projects-description max-w-md leading-relaxed text-black/55"
+							data-i18n="projects.description"
+						>
+							We don't follow trends, we set the tone. These are the collaborations that redefined
+							the standard for our partners.
+						</p>
+					</div>
+				)
+			}
 
 			{
 				leftProjects.map((project) => (
-					<div class="projects-layout__item" style={`--mobile-order: ${listOrder(project)}`}>
+					<div
+						class="projects-layout__item"
+						style={`--mobile-order: ${listOrder(project)}`}
+						data-project-categories={projectCategories(project).join('|')}
+					>
 						<ProjectCard project={project} />
 					</div>
 				))
@@ -71,7 +133,11 @@ function listOrder(project: CollectionEntry<'projects'>) {
 		<div class="projects-layout__col projects-layout__col--right contents md:flex md:h-full md:flex-col">
 			{
 				rightProjects.map((project) => (
-					<div class="projects-layout__item" style={`--mobile-order: ${listOrder(project)}`}>
+					<div
+						class="projects-layout__item"
+						style={`--mobile-order: ${listOrder(project)}`}
+						data-project-categories={projectCategories(project).join('|')}
+					>
 						<ProjectCard project={project} />
 					</div>
 				))
@@ -90,6 +156,60 @@ function listOrder(project: CollectionEntry<'projects'>) {
 <style is:global>
 	.projects-heading {
 		color: #000000;
+	}
+
+	.projects-filters {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		gap: 0.5rem;
+		width: 100%;
+	}
+
+	@media (min-width: 768px) {
+		.projects-intro--standalone {
+			grid-template-columns: minmax(0, 0.88fr) minmax(0, 1fr);
+			column-gap: var(--projects-gap, 3.25rem);
+		}
+
+		.projects-filters {
+			min-width: 0;
+		}
+	}
+
+	.projects-filter-chip {
+		padding: 0.4rem 0.7rem;
+		border: 0;
+		background: #efefef;
+		color: #000000;
+		font-family: inherit;
+		font-size: 0.8rem;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		cursor: pointer;
+		transition:
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.projects-filter-chip:hover {
+		background: #e2e2e2;
+	}
+
+	.projects-filter-chip[aria-pressed='true'] {
+		background: #000000;
+		color: #ffffff;
+	}
+
+	.projects-filter-chip[aria-pressed='true']:hover {
+		background: #18191b;
+	}
+
+	.projects-layout__item.is-filtered-out {
+		display: none;
 	}
 
 	.projects-layout {
@@ -141,6 +261,11 @@ function listOrder(project: CollectionEntry<'projects'>) {
 
 	#projects-heading .reveal-char.active {
 		color: rgba(0, 0, 0, 1);
+	}
+
+	#work[data-projects-standalone='true'] #projects-heading,
+	#work[data-projects-standalone='true'] #projects-heading .reveal-char {
+		color: #000000;
 	}
 
 	.project-cursor {
@@ -401,6 +526,10 @@ function listOrder(project: CollectionEntry<'projects'>) {
 
 		heading.dataset.revealInit = 'true';
 
+		const standalone = document.getElementById('work')?.dataset.projectsStandalone === 'true';
+		// Projects page: title should already be solid black (no scroll-in gray).
+		if (standalone) return;
+
 		heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
 			wrapLetters(line as HTMLElement);
 		});
@@ -415,9 +544,87 @@ function listOrder(project: CollectionEntry<'projects'>) {
 		window.addEventListener('resize', updateProjectsHeadingReveal, { passive: true });
 	}
 
+	function initProjectsFilters() {
+		const workSection = document.getElementById('work');
+		const filters = workSection?.querySelector<HTMLElement>('[data-projects-filters]');
+		const leftCol = workSection?.querySelector<HTMLElement>('.projects-layout__col--left');
+		const rightCol = workSection?.querySelector<HTMLElement>('.projects-layout__col--right');
+		if (!workSection || !filters || !leftCol || !rightCol || filters.dataset.filterInit === 'true') {
+			return;
+		}
+
+		filters.dataset.filterInit = 'true';
+		const chips = Array.from(filters.querySelectorAll<HTMLButtonElement>('[data-filter-category]'));
+		const items = Array.from(
+			workSection.querySelectorAll<HTMLElement>('.projects-layout__item[data-project-categories]'),
+		);
+
+		items.forEach((item) => {
+			item.dataset.homeCol = item.closest('.projects-layout__col--left') ? 'left' : 'right';
+		});
+
+		const listOrderOf = (item: HTMLElement) =>
+			Number.parseInt(item.style.getPropertyValue('--mobile-order') || '0', 10) || 0;
+
+		const restoreHomeColumns = () => {
+			const leftItems = items
+				.filter((item) => item.dataset.homeCol === 'left')
+				.sort((a, b) => listOrderOf(a) - listOrderOf(b));
+			const rightItems = items
+				.filter((item) => item.dataset.homeCol === 'right')
+				.sort((a, b) => listOrderOf(a) - listOrderOf(b));
+			leftItems.forEach((item) => leftCol.appendChild(item));
+			rightItems.forEach((item) => rightCol.appendChild(item));
+		};
+
+		const applyFilter = (active: string | null) => {
+			chips.forEach((chip) => {
+				const selected = chip.dataset.filterCategory === active;
+				chip.setAttribute('aria-pressed', selected ? 'true' : 'false');
+			});
+
+			const visible: HTMLElement[] = [];
+			const hidden: HTMLElement[] = [];
+
+			items.forEach((item) => {
+				const categories = (item.dataset.projectCategories || '')
+					.split('|')
+					.map((tag) => tag.trim().toLowerCase())
+					.filter(Boolean);
+				const match = !active || categories.includes(active.toLowerCase());
+				item.classList.toggle('is-filtered-out', !match);
+				(match ? visible : hidden).push(item);
+			});
+
+			if (!active) {
+				restoreHomeColumns();
+				return;
+			}
+
+			// Filtered results fill left → right so a single card always starts on the left.
+			visible
+				.sort((a, b) => listOrderOf(a) - listOrderOf(b))
+				.forEach((item, index) => {
+					(index % 2 === 0 ? leftCol : rightCol).appendChild(item);
+				});
+			hidden.forEach((item) => {
+				(item.dataset.homeCol === 'left' ? leftCol : rightCol).appendChild(item);
+			});
+		};
+
+		chips.forEach((chip) => {
+			chip.addEventListener('click', () => {
+				const category = chip.dataset.filterCategory || '';
+				const alreadyActive = chip.getAttribute('aria-pressed') === 'true';
+				applyFilter(alreadyActive ? null : category);
+			});
+		});
+	}
+
 	function initProjectsSection() {
 		initProjectCursor();
 		initProjectsHeadingReveal();
+		initProjectsFilters();
 	}
 
 	document.addEventListener('astro:page-load', initProjectsSection);

@@ -1,7 +1,7 @@
 ---
 title: Agencia Panamá Pacífico Rebranding
 client: Agencia Panamá Pacífico
-tags: ['Branding', 'Visual Identity', 'Rebranding']
+tags: ['Brand Design', 'Motion']
 thumbnail: '/portfolio/app/Cover.webm'
 folderName: 'app'
 order: 0

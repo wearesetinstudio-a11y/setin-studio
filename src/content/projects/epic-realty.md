@@ -1,7 +1,7 @@
 ---
 title: Epic Realty
 client: Epic Realty
-tags: ['Branding', 'Web Design']
+tags: ['Brand Design', 'Motion', 'Websites', 'Engineering', 'Product Design']
 thumbnail: '/portfolio/epic-realty/cover.riv'
 folderName: 'epic-realty'
 order: 6
