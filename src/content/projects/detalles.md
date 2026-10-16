@@ -4,7 +4,7 @@ client: Detalles
 tags: ['Coming Soon']
 thumbnail: '/portfolio/detalles/cover.webp'
 folderName: 'detalles'
-order: 8
+order: 9
 comingSoon: true
 heroImage: '/portfolio/detalles/bg.webp'
 heroSubtitle: 'An editorial identity for a studio that treats every detail as the whole story'

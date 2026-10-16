@@ -19,7 +19,7 @@ function getObserver(): IntersectionObserver {
 				}
 			}
 		},
-		{ rootMargin: '80px 0px', threshold: 0.05 },
+		{ rootMargin: '40% 0px 100% 0px', threshold: 0.01 },
 	);
 
 	return mediaWindow.__setinProjectMediaObserver;
@@ -31,9 +31,10 @@ export function initProjectMediaVisibility() {
 	document.querySelectorAll<HTMLVideoElement>('.project-card__media video').forEach((video) => {
 		observer.observe(video);
 		const rect = video.getBoundingClientRect();
+		const ahead = window.innerHeight;
 		const inView =
-			rect.bottom > 0 &&
-			rect.top < window.innerHeight &&
+			rect.bottom > -ahead &&
+			rect.top < window.innerHeight + ahead &&
 			rect.right > 0 &&
 			rect.left < window.innerWidth;
 		if (!inView) video.pause();

@@ -52,6 +52,8 @@ const projects = defineCollection({
 		industry: z.string().optional().default(''),
 		market: z.string().optional().default(''),
 		liveUrl: z.string().optional().default(''),
+		/** Optional display text for Live link (href still uses liveUrl). */
+		liveLabel: z.string().optional().default(''),
 		logo: z.string().optional().default(''),
 		heroImage: z.string().optional().default(''),
 		heroBackground: z.string().optional().default(''),

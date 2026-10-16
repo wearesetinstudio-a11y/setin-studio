@@ -2,6 +2,8 @@
 interface Props {
 	label: string;
 	value: string;
+	/** Visible link text when different from the href value. */
+	linkText?: string;
 	isLink?: boolean;
 	isLast?: boolean;
 	theme?: 'dark' | 'light';
@@ -12,6 +14,7 @@ interface Props {
 const {
 	label,
 	value,
+	linkText,
 	isLink = false,
 	isLast = false,
 	theme = 'dark',
@@ -52,7 +55,7 @@ const valueClass =
 					rel="noreferrer"
 					data-project-field={fieldKey}
 				>
-					{value.replace(/^https?:\/\//, '')}
+					{(linkText || value).replace(/^https?:\/\//, '').replace(/\/$/, '')}
 				</a>
 			) : (
 				<span data-project-field={fieldKey}>{value}</span>

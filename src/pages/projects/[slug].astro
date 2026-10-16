@@ -69,6 +69,7 @@ const service = data.service ?? '';
 const industry = data.industry ?? '';
 const market = data.market ?? '';
 const liveUrl = data.liveUrl ?? '';
+const liveLabel = data.liveLabel ?? '';
 const folderName = resolveProjectFolderName(project);
 const projectOgPath = `/portfolio/${folderName}/og.jpg`;
 const projectOgImage = existsSync(join(process.cwd(), 'public', 'portfolio', folderName, 'og.jpg'))
@@ -115,13 +116,23 @@ const infoRows = [
 		: null,
 	market ? { label: 'Market', value: market, labelKey: 'project.meta.market', fieldKey: 'market' } : null,
 	year ? { label: 'Year', value: String(year), labelKey: 'project.meta.year' } : null,
-	liveUrl ? { label: 'Live', value: liveUrl, isLink: true, labelKey: 'project.meta.live', fieldKey: 'liveUrl' } : null,
+	liveUrl
+		? {
+				label: 'Live',
+				value: liveUrl,
+				linkText: liveLabel || undefined,
+				isLink: true,
+				labelKey: 'project.meta.live',
+				fieldKey: 'liveUrl',
+			}
+		: null,
 ].filter(
 	(
 		row,
 	): row is {
 		label: string;
 		value: string;
+		linkText?: string;
 		isLink?: boolean;
 		labelKey?: string;
 		fieldKey?: string;

@@ -11,7 +11,14 @@ interface Props {
 	graphicSrc?: string;
 	graphicType?: 'image' | 'video' | 'youtube';
 	graphicAlt?: string;
-	rows: { label: string; value: string; isLink?: boolean; labelKey?: string; fieldKey?: string }[];
+	rows: {
+		label: string;
+		value: string;
+		linkText?: string;
+		isLink?: boolean;
+		labelKey?: string;
+		fieldKey?: string;
+	}[];
 	relatedArticles?: { slug: string; title: string }[];
 }
 
@@ -83,6 +90,7 @@ const hasMeta = rows.length > 0 || relatedArticles.length > 0;
 							<ProjectInfoRow
 								label={row.label}
 								value={row.value}
+								linkText={row.linkText}
 								isLink={row.isLink}
 								labelKey={row.labelKey}
 								fieldKey={row.fieldKey}

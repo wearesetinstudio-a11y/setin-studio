@@ -8,8 +8,22 @@ const clients = [
 	{ name: 'Andrea Vega', src: '/logos/andrea-vega.svg', height: 48 },
 	{ name: 'NRV Control Systems', src: '/logos/nrv.svg', height: 38 },
 	{ name: 'Mexi Munchies', src: '/logos/meximunchies.svg', height: 48 },
-	{ name: 'TRG Abogada', src: '/logos/trg.svg', height: 48 },
+	{ name: 'TRG Abogada', src: '/logos/trg.svg', height: 56 },
+	{ name: 'Fiesta House', src: '/logos/fiesta-house.svg', height: 56 },
+	{ name: 'Znicz Pruszków', src: '/logos/znicz-pruszkow.svg', height: 68 },
+	{ name: 'Agencia Panamá Pacífico', src: '/logos/agencia-panama-pacifico.svg', height: 40 },
+	{ name: 'WCR Kraków', src: '/logos/wcr-krk.svg', height: 48 },
+	{ name: 'Visioneer', src: '/logos/visioneer.svg', height: 36 },
+	{ name: 'ACLA', src: '/logos/acla.svg', height: 40 },
+	{ name: 'Nesta', src: '/logos/nesta.svg', height: 48 },
+	{ name: 'Pioneer Polska', src: '/logos/pioneer-polska.svg', height: 44 },
+	{ name: 'Hokofast', src: '/logos/hokofast.svg', height: 42 },
+	{ name: 'Med Tracker IO', src: '/logos/med-tracker-io.svg', height: 34 },
 ];
+
+const mid = Math.ceil(clients.length / 2);
+const rowTop = clients.slice(0, mid);
+const rowBottom = clients.slice(mid);
 ---
 
 <section id="clients-section" class="relative z-20 bg-[#131415] px-[var(--page-gutter)] py-[var(--section-padding-y)]">
@@ -25,25 +39,56 @@ const clients = [
 		</p>
 	</div>
 
-	<div
-		id="clients-logos"
-		class="clients-logos mt-10 grid grid-cols-3 gap-x-6 gap-y-10 sm:grid-cols-3 md:mt-20 lg:grid-cols-5 lg:gap-x-14 lg:gap-y-14"
-	>
-		{
-			clients.map((client) => (
-				<div class="client-logo-item flex min-h-[48px] items-center justify-center">
-					<img
-						src={client.src}
-						alt={client.name}
-						width="200"
-						height={client.height}
-						style={`max-height: ${client.height}px`}
-						class="mx-auto h-auto w-auto max-w-full object-contain object-center brightness-0 invert"
-						loading="lazy"
-					/>
-				</div>
-			))
-		}
+	<div id="clients-logos" class="clients-marquees mt-10 md:mt-20" aria-label="Client logos">
+		<div class="clients-marquee clients-marquee--ltr" data-direction="ltr">
+			<div class="clients-marquee__track">
+				{
+					[0, 1].map((copy) => (
+						<ul class="clients-marquee__group" aria-hidden={copy === 1 ? 'true' : undefined}>
+							{rowTop.map((client) => (
+								<li class="client-logo-item">
+									<img
+										src={client.src}
+										alt={copy === 0 ? client.name : ''}
+										width="200"
+										height={client.height}
+										style={`max-height: ${client.height}px`}
+										class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
+										loading="lazy"
+										decoding="async"
+									/>
+								</li>
+							))}
+						</ul>
+					))
+				}
+			</div>
+		</div>
+
+		<div class="clients-marquee clients-marquee--rtl" data-direction="rtl">
+			<div class="clients-marquee__track">
+				{
+					[0, 1].map((copy) => (
+						<ul class="clients-marquee__group" aria-hidden={copy === 1 ? 'true' : undefined}>
+							{rowBottom.map((client) => (
+								<li class="client-logo-item">
+									<img
+										src={client.src}
+										alt={copy === 0 ? client.name : ''}
+										width="200"
+										height={client.height}
+										style={`max-height: ${client.height}px`}
+										class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
+										loading="lazy"
+										decoding="async"
+									/>
+								</li>
+							))}
+						</ul>
+					))
+				}
+			</div>
+		</div>
 	</div>
 </section>
 
@@ -65,11 +110,65 @@ const clients = [
 		color: rgba(255, 255, 255, 1);
 	}
 
-	.clients-logos,
-	.client-logo-item,
-	.client-logo-item img {
+	.clients-marquees {
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+		margin-inline: calc(var(--page-gutter) * -1);
+		opacity: 0;
+		transform: translateY(8px);
+		transition:
+			opacity 0.8s ease,
+			transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+		-webkit-mask-image: linear-gradient(
+			to right,
+			transparent,
+			#000 8%,
+			#000 92%,
+			transparent
+		);
+		mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 		-webkit-user-select: none;
 		user-select: none;
+	}
+
+	.clients-marquees.is-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.clients-marquee {
+		overflow: hidden;
+		width: 100%;
+	}
+
+	.clients-marquee__track {
+		display: flex;
+		width: max-content;
+		will-change: transform;
+	}
+
+	.clients-marquee__group {
+		display: flex;
+		align-items: center;
+		gap: clamp(2.5rem, 5vw, 5rem);
+		padding-inline: clamp(1.25rem, 2.5vw, 2.5rem);
+		list-style: none;
+		margin: 0;
+	}
+
+	.client-logo-item {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		min-height: 68px;
+		opacity: 0.6;
+		transition: opacity 0.35s ease;
+	}
+
+	.client-logo-item:hover {
+		opacity: 1;
 	}
 
 	.client-logo-item img {
@@ -77,31 +176,17 @@ const clients = [
 		pointer-events: none;
 	}
 
-	.client-logo-item {
-		opacity: 0;
-		transform: translateY(8px);
-		transition:
-			opacity 0.7s ease,
-			transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
-	}
-
-	.client-logo-item.is-visible {
-		opacity: 0.6;
-		transform: translateY(0);
-	}
-
-	.client-logo-item.is-visible.is-highlight,
-	.client-logo-item.is-visible:hover {
-		opacity: 1;
-	}
-
 	@media (prefers-reduced-motion: reduce) {
-		.client-logo-item.is-visible.is-highlight {
-			opacity: 0.6;
+		.clients-marquee__track {
+			width: 100%;
+			justify-content: center;
+			flex-wrap: wrap;
+			row-gap: 1.5rem;
+			transform: none !important;
 		}
 
-		.client-logo-item.is-visible:hover {
-			opacity: 1;
+		.clients-marquee__group[aria-hidden='true'] {
+			display: none;
 		}
 	}
 </style>
@@ -140,104 +225,18 @@ const clients = [
 	}
 
 	function revealClientLogos() {
-		const grid = document.getElementById('clients-logos');
-		if (!grid || grid.dataset.revealed === 'true') return;
+		const logos = document.getElementById('clients-logos');
+		if (!logos || logos.dataset.revealed === 'true') return;
 
-		grid.dataset.revealed = 'true';
-
-		const items = grid.querySelectorAll('.client-logo-item');
-		items.forEach((item, index) => {
-			window.setTimeout(() => {
-				item.classList.add('is-visible');
-			}, index * 70);
-		});
-
-		const staggerDone = items.length * 70 + 500;
-		window.setTimeout(() => initLogoHighlight(), staggerDone);
-	}
-
-	let logoHighlightTimer = 0;
-	let logoHighlightPaused = false;
-
-	function clearLogoHighlights() {
-		document.querySelectorAll('.client-logo-item.is-highlight').forEach((item) => {
-			item.classList.remove('is-highlight');
-		});
-	}
-
-	function stopLogoHighlight() {
-		window.clearTimeout(logoHighlightTimer);
-		logoHighlightTimer = 0;
-		clearLogoHighlights();
-	}
-
-	function initLogoHighlight() {
-		const grid = document.getElementById('clients-logos');
-		if (!grid || grid.dataset.highlightInit === 'true') return;
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-		grid.dataset.highlightInit = 'true';
-
-		const items = Array.from(grid.querySelectorAll<HTMLElement>('.client-logo-item'));
-		if (!items.length) return;
-
-		let index = 0;
-		const HOLD_MS = 1600;
-		const GAP_MS = 400;
-
-		const schedule = (fn: () => void, ms: number) => {
-			window.clearTimeout(logoHighlightTimer);
-			logoHighlightTimer = window.setTimeout(fn, ms);
-		};
-
-		const step = () => {
-			if (!document.getElementById('clients-logos')) {
-				stopLogoHighlight();
-				return;
-			}
-
-			if (logoHighlightPaused) {
-				schedule(step, HOLD_MS);
-				return;
-			}
-
-			clearLogoHighlights();
-			const current = items[index % items.length];
-			index = (index + 1) % items.length;
-
-			if (!current?.classList.contains('is-visible')) {
-				schedule(step, GAP_MS);
-				return;
-			}
-
-			current.classList.add('is-highlight');
-			schedule(() => {
-				current.classList.remove('is-highlight');
-				schedule(step, GAP_MS);
-			}, HOLD_MS);
-		};
-
-		items.forEach((item) => {
-			item.addEventListener('mouseenter', () => {
-				logoHighlightPaused = true;
-				clearLogoHighlights();
-			});
-			item.addEventListener('mouseleave', () => {
-				logoHighlightPaused = false;
-			});
-		});
-
-		schedule(step, 0);
+		logos.dataset.revealed = 'true';
+		logos.classList.add('is-visible');
 	}
 
 	function initLogosReveal() {
-		const grid = document.getElementById('clients-logos');
-		if (!grid) return;
+		const logos = document.getElementById('clients-logos');
+		if (!logos) return;
 
-		if (grid.dataset.revealed === 'true') {
-			initLogoHighlight();
-			return;
-		}
+		if (logos.dataset.revealed === 'true') return;
 
 		const observer = new IntersectionObserver(
 			(entries) => {
@@ -248,17 +247,121 @@ const clients = [
 					}
 				}
 			},
-			{ threshold: 0.2, rootMargin: '0px 0px -5% 0px' },
+			{ threshold: 0.15, rootMargin: '0px 0px -5% 0px' },
 		);
 
-		observer.observe(grid);
+		observer.observe(logos);
 
-		// Fallback if grid is already in view when the script runs.
-		const rect = grid.getBoundingClientRect();
+		const rect = logos.getBoundingClientRect();
 		if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
 			revealClientLogos();
 			observer.disconnect();
 		}
+	}
+
+	type MarqueeState = {
+		root: HTMLElement;
+		track: HTMLElement;
+		direction: 1 | -1;
+		offset: number;
+		velocity: number;
+		targetSpeed: number;
+		loopWidth: number;
+		paused: boolean;
+		raf: number;
+	};
+
+	const SPEED_PX_PER_SEC = 42;
+	const VELOCITY_LERP = 0.06;
+
+	function initClientMarquees() {
+		const root = document.getElementById('clients-logos');
+		if (!root || root.dataset.marqueeInit === 'true') return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		root.dataset.marqueeInit = 'true';
+
+		const rows = Array.from(root.querySelectorAll<HTMLElement>('.clients-marquee'));
+		const states: MarqueeState[] = [];
+
+		rows.forEach((row) => {
+			const track = row.querySelector<HTMLElement>('.clients-marquee__track');
+			if (!track) return;
+
+			const direction: 1 | -1 = row.dataset.direction === 'ltr' ? 1 : -1;
+			const state: MarqueeState = {
+				root: row,
+				track,
+				direction,
+				offset: direction === 1 ? 0 : 0,
+				velocity: SPEED_PX_PER_SEC * direction,
+				targetSpeed: SPEED_PX_PER_SEC,
+				loopWidth: 0,
+				paused: false,
+				raf: 0,
+			};
+
+			const measure = () => {
+				const group = track.querySelector<HTMLElement>('.clients-marquee__group');
+				state.loopWidth = group?.offsetWidth ?? track.scrollWidth / 2;
+				if (direction === 1 && state.offset === 0) {
+					state.offset = -state.loopWidth;
+				}
+				track.style.transform = `translate3d(${state.offset}px, 0, 0)`;
+			};
+
+			measure();
+			states.push(state);
+
+			row.addEventListener('mouseenter', () => {
+				state.paused = true;
+			});
+			row.addEventListener('mouseleave', () => {
+				state.paused = false;
+			});
+		});
+
+		let lastTime = performance.now();
+
+		const tick = (now: number) => {
+			const dt = Math.min((now - lastTime) / 1000, 0.064);
+			lastTime = now;
+
+			for (const state of states) {
+				if (!state.loopWidth) continue;
+
+				const desired = state.paused ? 0 : state.targetSpeed * state.direction;
+				state.velocity += (desired - state.velocity) * VELOCITY_LERP;
+
+				if (Math.abs(state.velocity) < 0.05 && state.paused) {
+					state.velocity = 0;
+				}
+
+				state.offset += state.velocity * dt;
+
+				if (state.direction === -1) {
+					if (state.offset <= -state.loopWidth) {
+						state.offset += state.loopWidth;
+					}
+				} else if (state.offset >= 0) {
+					state.offset -= state.loopWidth;
+				}
+
+				state.track.style.transform = `translate3d(${state.offset}px, 0, 0)`;
+			}
+
+			requestAnimationFrame(tick);
+		};
+
+		const onResize = () => {
+			for (const state of states) {
+				const group = state.track.querySelector<HTMLElement>('.clients-marquee__group');
+				state.loopWidth = group?.offsetWidth ?? state.track.scrollWidth / 2;
+			}
+		};
+
+		window.addEventListener('resize', onResize, { passive: true });
+		requestAnimationFrame(tick);
 	}
 
 	function initClientsSection() {
@@ -276,6 +379,7 @@ const clients = [
 		}
 
 		initLogosReveal();
+		initClientMarquees();
 	}
 
 	let ticking = false;

@@ -4,7 +4,7 @@ client: MexiMunchies
 tags: ['Branding', 'Visual Identity', 'Rebranding']
 thumbnail: '/portfolio/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'
-order: 9
+order: 10
 heroImage: '/portfolio/mexi-munchies/bg.webp'
 heroSubtitle: 'Showing the world what MexiMunchies is all about'
 overviewLabel: 'Context'

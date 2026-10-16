@@ -27,7 +27,7 @@ function getObserver(): IntersectionObserver {
 				else state.pause();
 			}
 		},
-		{ rootMargin: '120px 0px', threshold: 0.05 },
+		{ rootMargin: '40% 0px 100% 0px', threshold: 0.01 },
 	);
 
 	return coverWindow.__setinRiveCoverObserver;
@@ -127,9 +127,10 @@ export function initRiveCovers() {
 				});
 				observer.observe(canvas);
 				const rect = canvas.getBoundingClientRect();
+				const ahead = window.innerHeight;
 				const inView =
-					rect.bottom > 0 &&
-					rect.top < window.innerHeight &&
+					rect.bottom > -ahead &&
+					rect.top < window.innerHeight + ahead &&
 					rect.right > 0 &&
 					rect.left < window.innerWidth;
 				if (inView) play();

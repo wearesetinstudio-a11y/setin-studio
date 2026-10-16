@@ -4,7 +4,7 @@ client: Avendin
 tags: ['Strategy', 'Brand Identity', 'Branding']
 thumbnail: '/portfolio/avendin/Cover.webm'
 folderName: 'avendin'
-order: 1
+order: 2
 video: '/portfolio/avendin/Cover.webm'
 heroImage: '/portfolio/avendin/bg.webp'
 heroSubtitle: 'High-Tech Brand Identity for Panama’s Smart Vending Provider'
