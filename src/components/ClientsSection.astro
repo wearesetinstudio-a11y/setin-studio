@@ -1,5 +1,7 @@
 ---
-const clients = [
+import { getClientLogoAlts } from '../utils/projectImageAlt';
+
+const clientEntries = [
 	{ name: 'Epic Realty', src: '/logos/epic-realty.svg', height: 34 },
 	{ name: 'See More Logistics', src: '/logos/see-more.svg', height: 42 },
 	{ name: 'Snacks Lovers', src: '/logos/snacks-lovers.svg', height: 48 },
@@ -19,11 +21,15 @@ const clients = [
 	{ name: 'Pioneer Polska', src: '/logos/pioneer-polska.svg', height: 44 },
 	{ name: 'Hokofast', src: '/logos/hokofast.svg', height: 42 },
 	{ name: 'Med Tracker IO', src: '/logos/med-tracker-io.svg', height: 34 },
-];
+].map((client) => ({
+	...client,
+	alts: getClientLogoAlts(client.name),
+	altsJson: JSON.stringify(getClientLogoAlts(client.name)),
+}));
 
-const mid = Math.ceil(clients.length / 2);
-const rowTop = clients.slice(0, mid);
-const rowBottom = clients.slice(mid);
+const mid = Math.ceil(clientEntries.length / 2);
+const rowTop = clientEntries.slice(0, mid);
+const rowBottom = clientEntries.slice(mid);
 ---
 
 <section id="clients-section" class="relative z-20 bg-[#131415] px-[var(--page-gutter)] py-[var(--section-padding-y)]">
@@ -49,13 +55,15 @@ const rowBottom = clients.slice(mid);
 								<li class="client-logo-item">
 									<img
 										src={client.src}
-										alt={copy === 0 ? client.name : ''}
+										alt={copy === 0 ? client.alts.en : ''}
 										width="200"
 										height={client.height}
 										style={`max-height: ${client.height}px`}
 										class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
 										loading="lazy"
 										decoding="async"
+										data-alts={copy === 0 ? client.altsJson : undefined}
+										aria-hidden={copy === 1 ? 'true' : undefined}
 									/>
 								</li>
 							))}
@@ -74,13 +82,15 @@ const rowBottom = clients.slice(mid);
 								<li class="client-logo-item">
 									<img
 										src={client.src}
-										alt={copy === 0 ? client.name : ''}
+										alt={copy === 0 ? client.alts.en : ''}
 										width="200"
 										height={client.height}
 										style={`max-height: ${client.height}px`}
 										class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
 										loading="lazy"
 										decoding="async"
+										data-alts={copy === 0 ? client.altsJson : undefined}
+										aria-hidden={copy === 1 ? 'true' : undefined}
 									/>
 								</li>
 							))}

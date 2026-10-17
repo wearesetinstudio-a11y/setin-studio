@@ -4,6 +4,7 @@ import WorkWithUsButton from './WorkWithUsButton.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import { stripLocalePrefix } from '../i18n/seo.ts';
 import { isActiveNavHref, normalizeNavPath } from '../utils/isActiveNavHref.ts';
+import { STUDIO_LOGO_ALTS } from '../utils/projectImageAlt.ts';
 
 interface Props {
 	projectCount?: number;
@@ -21,7 +22,7 @@ const {
 	waitForIntro = false,
 	theme = 'default',
 	logoSrc = '/logo-setin.svg',
-	logoAlt = '',
+	logoAlt = STUDIO_LOGO_ALTS.en,
 	logoWidth = 111,
 	logoHeight = 42,
 } = Astro.props;
@@ -79,6 +80,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 					'site-header__logo-setin w-auto',
 					isLockupLogo ? 'h-8 md:h-12' : 'h-[32px]',
 				]}
+				data-alts={isLockupLogo ? undefined : JSON.stringify(STUDIO_LOGO_ALTS)}
 				aria-hidden={logoAlt ? undefined : 'true'}
 			/>
 		</a>

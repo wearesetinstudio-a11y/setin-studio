@@ -1,14 +1,18 @@
 ---
 import type { GalleryMediaItem } from '../../utils/getProjectGallery';
+import type { LocalizedAlt } from '../../utils/projectImageAlt';
 
 interface Props {
 	item: GalleryMediaItem;
-	title: string;
+	/** @deprecated Prefer `alts` for SEO-localized descriptions */
+	title?: string;
 	index: number;
+	alts: LocalizedAlt;
 }
 
-const { item, title, index } = Astro.props;
-const label = `${title} — ${index + 1}`;
+const { item, index, alts } = Astro.props;
+const label = alts.en;
+const altsJson = JSON.stringify(alts);
 ---
 
 {
@@ -23,6 +27,7 @@ const label = `${title} — ${index + 1}`;
 				loading={index < 1 ? 'eager' : 'lazy'}
 				decoding="async"
 				sizes="(min-width: 1024px) 70vw, 100vw"
+				data-alts={altsJson}
 			/>
 		</figure>
 	) : item.type === 'rive' ? (
@@ -31,6 +36,7 @@ const label = `${title} — ${index + 1}`;
 				class="project-gallery__rive block h-auto w-full bg-white"
 				data-rive-cover={item.src}
 				data-rive-fit="contain"
+				data-alts={altsJson}
 				aria-label={label}
 			></canvas>
 		</figure>
@@ -44,6 +50,7 @@ const label = `${title} — ${index + 1}`;
 				loop
 				playsinline
 				preload="metadata"
+				data-alts={altsJson}
 				aria-label={label}
 			/>
 		</figure>

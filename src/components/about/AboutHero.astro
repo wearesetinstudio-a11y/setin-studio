@@ -1,19 +1,23 @@
+---
+import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
+---
+
 <section id="about-hero" class="about-hero relative min-h-[68vh] overflow-hidden md:min-h-[96vh]">
 	<div
 		id="about-hero-visual"
 		class="about-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 w-full overflow-hidden bg-[#131415]"
-		aria-hidden="true"
 	>
 		<picture class="absolute inset-0">
 			<source srcset="/images/brothers-intro.webp" type="image/webp" />
 			<img
 				src="/images/brothers-intro.webp"
-				alt="The two founders of Setin Studio"
+				alt={FOUNDERS_PHOTO_ALTS.en}
 				width="4320"
 				height="1896"
 				class="about-hero-photo h-full w-full grayscale"
 				loading="eager"
 				decoding="async"
+				data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
 			/>
 		</picture>
 

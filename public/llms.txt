@@ -1,28 +1,35 @@
-# Setin Studio — Estudio de Diseño Digital y Branding en Panamá
+# Setin Studio
 
-> Boutique digital studio based in Panama, specializing in premium web development, branding, and digital products for Latin American and global markets.
+> Independent creative studio specializing in branding, UI/UX design, and high-performance B2B digital platforms for founders and institutions in Panama, Latin America, and Europe.
 
-## Core Expertise
-- Web Design & Custom Development (Next.js, React, Vercel, No-code, AI-Code, Webflow, Framer)
-- Brand Identity, Visual Systems & Logo Design
-- UI/UX Design & Digital Product Strategy
-- E-commerce & High-Converting Websites
+Setin Studio helps ambitious brands turn ideas into sharp visual identities, friction-free interfaces, and production-ready code. We work directly with clients through focused Brand Sprints, product design, and pragmatic engineering.
 
-## Primary Market Focus: Panama (PA)
-Setin Studio is a leading digital boutique studio operating in Panama City (Ciudad de Panamá), serving top-tier local businesses, startups, real estate projects, and international clients seeking premium digital presence in LATAM.
+## Services
 
-## Target Keywords & Services in Panama
-- Estudio de diseño web en Panamá
-- Agencia de branding y diseño gráfico Ciudad de Panamá
-- Desarrollo de páginas web boutique en Panamá
-- UI/UX y diseño de productos digitales Panamá
+- [Brand Design](https://wearesetin.com/services/): Visual identities, brand systems, and rebranding engineered for measurable market impact
+- [Product UX/UI Design](https://wearesetin.com/services/): Friction-free digital interfaces, information architecture, and conversion-focused product design
+- [Web Engineering](https://wearesetin.com/services/): Production-ready builds with Webflow, Astro, React, headless CMS, and AI-augmented development
+- [Cloud Services](https://wearesetin.com/services/): GCP and AWS environments, deployment pipelines, and cost-optimized hosting
+- [Product Optimization](https://wearesetin.com/services/): Analytics, telemetry, and iterative UX refinement for conversion and retention
+- [AI Automations](https://wearesetin.com/services/): Custom brand agents, asset pipelines, and operational AI multipliers
 
-## Languages & Regional Portals
-- Primary (Panama & LATAM - Spanish): https://wearesetin.com/es/
-- Global (English): https://wearesetin.com/
-- Europe (Polish): https://wearesetin.com/pl/
+## Case Studies
 
-## Contact Information
-- Website: https://wearesetin.com
-- Location: Panama City, Panama (Ciudad de Panamá)
-- Email: wearesetin@gmail.com
+- [Agencia Panamá Pacífico Rebranding](https://wearesetin.com/projects/app): Contemporary government branding and visual identity for Panama’s premier special economic zone authority
+- [See More Logistics Landing Page](https://wearesetin.com/projects/see-more-web): B2B UX/UI design, motion, and Astro development for a Panamanian transport and logistics MVP
+- [Avendin Branding](https://wearesetin.com/projects/avendin): B2B brand identity for a high-tech smart vending infrastructure provider in Panama
+- [See More Logistics Branding](https://wearesetin.com/projects/see-more): Industrial logistics brand system built for fleet, documentation, and institutional trust
+- [NRV B2B Platform](https://wearesetin.com/projects/nrv): Complete B2B product taxonomy, architecture, and Webflow integration for a high-tech security company in Panama
+- [NRV Control Systems Rebranding](https://wearesetin.com/projects/nrv-rebranding): High-tech branding and visual identity for Panama’s access control and security infrastructure provider
+- [Epic Realty](https://wearesetin.com/projects/epic-realty): Luxury real estate branding, UI/UX design, and Webflow CMS platform for a boutique agency in Panama
+- [Warszewicz](https://wearesetin.com/projects/warszewicz): AI-directed motion film connecting Polish botanical history with Panama’s natural identity
+- [Snacks Lovers Rebranding](https://wearesetin.com/projects/snacks-lovers): Playful FMCG brand identity and guidelines for an American snacks e-commerce leader in Panama
+- [Znicz Pruszków Rebranding](https://wearesetin.com/projects/znicz-pruszkow): Sports branding concept, crest redesign, and kit identity for a Polish First League football club
+- [Mexi Munchies Rebranding](https://wearesetin.com/projects/mexi-munchies): Energetic FMCG snack branding for authentic Mexican e-commerce in Panama
+
+## Optional
+
+- [Full project briefs](https://wearesetin.com/llms-full.txt): Expanded case study details, business challenges, and technology stacks
+- [Projects index](https://wearesetin.com/projects/): Complete portfolio listing
+- [About Setin Studio](https://wearesetin.com/about/): Studio story, team, and working model
+- [Contact](https://wearesetin.com/#contact): Start a project — wearesetinstudio@gmail.com

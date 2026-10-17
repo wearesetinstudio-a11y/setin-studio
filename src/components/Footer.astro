@@ -3,6 +3,7 @@ import RollingLink from './RollingLink.astro';
 import { t, type Locale } from '../i18n/dictionaries.ts';
 import { buildLocalePath, stripLocalePrefix } from '../i18n/seo.ts';
 import { isActiveNavHref, normalizeNavPath } from '../utils/isActiveNavHref.ts';
+import { STUDIO_LOGO_ALTS } from '../utils/projectImageAlt.ts';
 
 interface Props {
 	/** When set, render chrome copy + links in this locale (pitch pages). */
@@ -163,6 +164,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 								width="20"
 								height="16"
 								class="contact-email-cta__arrow w-[20px] shrink-0"
+								aria-hidden="true"
 							/>
 						</span>
 					</a>
@@ -194,6 +196,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 										width="22"
 										height="18"
 										class="contact-social__arrow h-4 w-auto"
+										aria-hidden="true"
 									/>
 								</span>
 							</a>
@@ -267,10 +270,11 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 
 				<img
 					src="/logo-setin.svg"
-					alt="Setin"
+					alt={STUDIO_LOGO_ALTS.en}
 					width="111"
 					height="42"
 					class="site-footer__wordmark"
+					data-alts={JSON.stringify(STUDIO_LOGO_ALTS)}
 				/>
 
 				<div class="footer-locations">
