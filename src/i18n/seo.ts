@@ -76,8 +76,12 @@ export function getOrganizationJsonLd() {
 	return {
 		'@context': 'https://schema.org',
 		'@type': ['Organization', 'ProfessionalService'],
+		'@id': `${SITE_URL}/#organization`,
 		name: 'Setin Studio',
 		url: SITE_URL,
+		logo: `${SITE_URL}/logo-setin.svg`,
+		description:
+			'Boutique digital studio specializing in branding, UI/UX design, and B2B digital platforms for Panama, Latin America, and Europe.',
 		knowsLanguage: ['English', 'Polish', 'Spanish'],
 		areaServed: [
 			{
@@ -94,6 +98,91 @@ export function getOrganizationJsonLd() {
 	};
 }
 
+export type ProjectPortfolioJsonLdInput = {
+	slug: string;
+	name: string;
+	description: string;
+	client: string;
+	industry?: string;
+	service?: string;
+	year?: number;
+	image?: string;
+	keywords?: string[];
+};
+
+/** Agency + portfolio CreativeWork schema for individual case study pages. */
+export function getProjectPortfolioJsonLd(input: ProjectPortfolioJsonLdInput) {
+	const pageUrl = absoluteUrl(`/projects/${input.slug}`);
+	const orgId = `${SITE_URL}/#organization`;
+	const caseStudyId = `${pageUrl}#case-study`;
+	const imageUrl = input.image
+		? input.image.startsWith('http')
+			? input.image
+			: `${SITE_URL}${input.image.startsWith('/') ? input.image : `/${input.image}`}`
+		: undefined;
+
+	const organization = {
+		'@type': ['Organization', 'ProfessionalService'],
+		'@id': orgId,
+		name: 'Setin Studio',
+		url: SITE_URL,
+		logo: `${SITE_URL}/logo-setin.svg`,
+		description:
+			'Boutique digital studio specializing in branding, UI/UX design, and B2B digital platforms.',
+	};
+
+	const creativeWork: Record<string, unknown> = {
+		'@type': 'CreativeWork',
+		'@id': caseStudyId,
+		name: input.name,
+		headline: input.name,
+		description: input.description,
+		url: pageUrl,
+		inLanguage: 'en',
+		creator: { '@id': orgId },
+		provider: { '@id': orgId },
+		publisher: { '@id': orgId },
+		author: { '@id': orgId },
+		about: {
+			'@type': 'Thing',
+			name: input.client,
+			description: input.industry || undefined,
+		},
+	};
+
+	if (imageUrl) creativeWork.image = imageUrl;
+	if (input.year) {
+		creativeWork.dateCreated = String(input.year);
+		creativeWork.copyrightYear = input.year;
+	}
+	if (input.service) creativeWork.genre = input.service;
+	if (input.keywords?.length) creativeWork.keywords = input.keywords.join(', ');
+
+	const webPage: Record<string, unknown> = {
+		'@type': 'WebPage',
+		'@id': pageUrl,
+		url: pageUrl,
+		name: `${input.name} — Setin Studio`,
+		description: input.description,
+		isPartOf: {
+			'@type': 'WebSite',
+			name: 'Setin Studio',
+			url: SITE_URL,
+		},
+		about: { '@id': caseStudyId },
+		mainEntity: { '@id': caseStudyId },
+		publisher: { '@id': orgId },
+		inLanguage: 'en',
+	};
+
+	if (imageUrl) webPage.primaryImageOfPage = imageUrl;
+
+	return {
+		'@context': 'https://schema.org',
+		'@graph': [organization, creativeWork, webPage],
+	};
+}
+
 /** Panama / Spanish ProfessionalService schema for /es/ SEO. */
 export function getPanamaProfessionalServiceJsonLd() {
 	return {
@@ -101,7 +190,7 @@ export function getPanamaProfessionalServiceJsonLd() {
 		'@type': 'ProfessionalService',
 		name: 'Setin Studio',
 		url: `${SITE_URL}/es/`,
-		logo: `${SITE_URL}/logo.png`,
+		logo: `${SITE_URL}/logo-setin.svg`,
 		description:
 			'Estudio boutique de diseño web, branding y productos digitales en Ciudad de Panamá.',
 		address: {

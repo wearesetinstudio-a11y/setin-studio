@@ -2,10 +2,10 @@
 title: Znicz Pruszków Rebranding
 client: Znicz Pruszków
 tags: ['AI Direction', 'Brand Design', 'Motion']
-thumbnail: '/portfolio/znicz-pruszkow/Cover-Image.webm'
+thumbnail: '/portfolio/znicz-pruszkow/cover.webm'
 folderName: 'znicz-pruszkow'
 order: 9
-video: '/portfolio/znicz-pruszkow/Cover-Image.webm'
+video: '/portfolio/znicz-pruszkow/cover.webm'
 heroImage: '/portfolio/znicz-pruszkow/bg.webp'
 heroSubtitle: 'A flame that unites. A modern vision of tradition.'
 overviewLabel: Context

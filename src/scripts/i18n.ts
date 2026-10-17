@@ -191,15 +191,41 @@ export function applyTranslations(
 			node.textContent = display;
 		});
 
-		const mediaLabel = card.querySelector<HTMLElement>('img[alt], canvas[aria-label]');
-		if (mediaLabel) {
-			if (mediaLabel instanceof HTMLImageElement) mediaLabel.alt = next;
-			else mediaLabel.setAttribute('aria-label', next);
+		let alts: Partial<Record<Locale, string>> = {};
+		try {
+			alts = JSON.parse(card.dataset.projectAlts || '{}') as Partial<Record<Locale, string>>;
+		} catch {
+			alts = {};
 		}
+		const mediaAlt = (alts[locale] || alts.en || next).trim();
+
+		card.querySelectorAll<HTMLElement>('[data-project-media-alt]').forEach((mediaLabel) => {
+			if (mediaLabel instanceof HTMLImageElement) mediaLabel.alt = mediaAlt;
+			else mediaLabel.setAttribute('aria-label', mediaAlt);
+		});
 
 		if (card.dataset.comingSoon === 'true') {
 			card.setAttribute('aria-label', `${next} — ${t(locale, 'projects.soon')}`);
 		}
+	});
+
+	document.querySelectorAll<HTMLElement>('[data-alts]').forEach((element) => {
+		let alts: Partial<Record<Locale, string>> = {};
+		try {
+			alts = JSON.parse(element.dataset.alts || '{}') as Partial<Record<Locale, string>>;
+		} catch {
+			return;
+		}
+
+		const next = (alts[locale] || alts.en || '').trim();
+		if (!next) return;
+
+		if (element instanceof HTMLImageElement) {
+			element.alt = next;
+			return;
+		}
+
+		element.setAttribute('aria-label', next);
 	});
 
 	document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((element) => {

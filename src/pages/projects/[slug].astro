@@ -25,6 +25,8 @@ import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion';
 import { getYouTubeEmbedUrl } from '../../utils/youtube.ts';
 import { buildProjectCopyBundle } from '../../utils/getProjectCopy.ts';
 import { normalizeProjectCategories } from '../../utils/projectCategories.ts';
+import { resolveProjectImageAlt } from '../../utils/projectImageAlt.ts';
+import { getProjectPortfolioJsonLd } from '../../i18n/seo.ts';
 
 export async function getStaticPaths() {
 	const projects = await getCollection('projects');
@@ -193,13 +195,39 @@ if (service) {
 	projectCopy.es.service = service;
 }
 const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
+
+const portfolioJsonLdDescription =
+	(overviewText || heroSubtitle || pageDescription)
+		.replace(/\s+/g, ' ')
+		.trim()
+		.slice(0, 500) || title;
+
+const portfolioJsonLd = getProjectPortfolioJsonLd({
+	slug: project.id,
+	name: title,
+	description: portfolioJsonLdDescription,
+	client,
+	industry: industry || undefined,
+	service: service || undefined,
+	year: typeof year === 'number' ? year : undefined,
+	image: projectOgImage || data.heroImage || undefined,
+	keywords: [
+		...categories,
+		...(industry ? industry.split(',').map((part) => part.trim()) : []),
+		'UI/UX design',
+		'branding',
+		'B2B platform',
+		'Setin Studio',
+	].filter(Boolean),
+});
 ---
 
 <Layout
 	title={title}
 	description={pageDescription}
 	image={projectOgImage}
-	imageAlt={projectOgImage ? title : undefined}
+	imageAlt={projectOgImage ? resolveProjectImageAlt(project) : undefined}
+	jsonLd={portfolioJsonLd}
 >
 	<Header projectCount={projectCount} />
 
@@ -227,7 +255,7 @@ const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
 									text={overviewText}
 									graphicSrc={overviewGraphicSrc}
 									graphicType={overviewGraphicType}
-									graphicAlt={client}
+									graphicAlt={resolveProjectImageAlt(project)}
 									rows={infoRows}
 								/>
 							) : null
@@ -245,7 +273,7 @@ const projectCopyJson = JSON.stringify(projectCopy).replace(/</g, '\\u003c');
 									return (
 										<ProjectGallerySection
 											blocks={segment.blocks}
-											title={title}
+											project={project}
 											startIndex={startIndex}
 										/>
 									);

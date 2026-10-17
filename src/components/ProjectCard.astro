@@ -1,6 +1,9 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { resolveProjectFolderName } from '../utils/getProjectGallery';
+import { getProjectImageAlts } from '../utils/projectImageAlt';
 import { normalizeProjectCategories } from '../utils/projectCategories';
+import { resolveCoverPoster } from '../utils/resolveCoverPoster';
 import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
 
 interface Props {
@@ -14,13 +17,17 @@ const titles = {
 	pl: project.data.i18n?.pl?.title || title,
 	es: project.data.i18n?.es?.title || title,
 };
+const imageAlts = getProjectImageAlts(project);
+const coverAlt = imageAlts.en;
 const label = title.toUpperCase();
 const categoryTags = normalizeProjectCategories(tags);
 const thumbnailSrc = withPublicAssetVersion(thumbnail);
 const videoSrc = video ? withPublicAssetVersion(video) : '';
+const posterSrc = resolveCoverPoster(resolveProjectFolderName(project));
 const isRiveCover = thumbnail.toLowerCase().endsWith('.riv');
 const cardClass = 'project-card project-card__cursor-target group flex h-full flex-col';
 const titlesJson = JSON.stringify(titles);
+const imageAltsJson = JSON.stringify(imageAlts);
 ---
 
 {
@@ -30,34 +37,53 @@ const titlesJson = JSON.stringify(titles);
 			data-coming-soon="true"
 			data-cursor-i18n="projects.soon"
 			data-project-titles={titlesJson}
+			data-project-alts={imageAltsJson}
 			role="group"
 			aria-label={`${title} — coming soon`}
 		>
 			<div class="project-card__media relative overflow-hidden bg-[#E8E8E8]">
 				{isRiveCover ? (
-					<canvas
-						class="project-card__rive block h-auto w-full"
-						data-rive-cover={thumbnailSrc}
-						aria-label={title}
-					></canvas>
+					<>
+						{posterSrc && (
+							<img
+								src={posterSrc}
+								alt=""
+								width="960"
+								height="600"
+								class="project-card__poster"
+								decoding="async"
+								loading="lazy"
+								aria-hidden="true"
+							/>
+						)}
+						<canvas
+							class="project-card__rive relative z-[1] block h-auto w-full"
+							data-rive-cover={thumbnailSrc}
+							data-project-media-alt
+							aria-label={coverAlt}
+						></canvas>
+					</>
 				) : video ? (
 					<video
 						src={videoSrc}
+						poster={posterSrc || undefined}
 						class="block h-auto w-full object-contain"
 						muted
 						loop
 						playsinline
 						preload="none"
-						aria-hidden="true"
+						data-project-media-alt
+						aria-label={coverAlt}
 					/>
 				) : (
 					<img
 						src={thumbnailSrc}
-						alt={title}
+						alt={coverAlt}
 						width="960"
 						height="600"
 						class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 						loading="lazy"
+						data-project-media-alt
 					/>
 				)}
 				<span class="project-card__soon-label" data-i18n="projects.comingSoon">Coming soon</span>
@@ -96,32 +122,51 @@ const titlesJson = JSON.stringify(titles);
 			class={cardClass}
 			data-cursor-i18n="projects.view"
 			data-project-titles={titlesJson}
+			data-project-alts={imageAltsJson}
 		>
-			<div class="project-card__media overflow-hidden bg-[#E8E8E8]">
+			<div class="project-card__media relative overflow-hidden bg-[#E8E8E8]">
 				{isRiveCover ? (
-					<canvas
-						class="project-card__rive block h-auto w-full"
-						data-rive-cover={thumbnailSrc}
-						aria-label={title}
-					></canvas>
+					<>
+						{posterSrc && (
+							<img
+								src={posterSrc}
+								alt=""
+								width="960"
+								height="600"
+								class="project-card__poster"
+								decoding="async"
+								loading="lazy"
+								aria-hidden="true"
+							/>
+						)}
+						<canvas
+							class="project-card__rive relative z-[1] block h-auto w-full"
+							data-rive-cover={thumbnailSrc}
+							data-project-media-alt
+							aria-label={coverAlt}
+						></canvas>
+					</>
 				) : video ? (
 					<video
 						src={videoSrc}
+						poster={posterSrc || undefined}
 						class="block h-auto w-full object-contain"
 						muted
 						loop
 						playsinline
 						preload="none"
-						aria-hidden="true"
+						data-project-media-alt
+						aria-label={coverAlt}
 					/>
 				) : (
 					<img
 						src={thumbnailSrc}
-						alt={title}
+						alt={coverAlt}
 						width="960"
 						height="600"
 						class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 						loading="lazy"
+						data-project-media-alt
 					/>
 				)}
 			</div>
@@ -254,6 +299,18 @@ const titlesJson = JSON.stringify(titles);
 	.project-card__rive {
 		aspect-ratio: 4 / 3;
 		width: 100%;
+	}
+
+	.project-card__poster {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		object-position: center;
+		pointer-events: none;
 	}
 </style>
 

@@ -1,4 +1,6 @@
 ---
+import { getClientLogoAlts } from '../utils/projectImageAlt';
+
 const testimonials = [
 	{
 		quote:
@@ -7,6 +9,7 @@ const testimonials = [
 		role: 'CEO of NRV',
 		logo: '/logos/nrv.svg',
 		logoHeight: 38,
+		logoName: 'NRV Control Systems',
 	},
 	{
 		quote:
@@ -15,6 +18,7 @@ const testimonials = [
 		role: 'CEO of See More Logistics',
 		logo: '/logos/see-more.svg',
 		logoHeight: 42,
+		logoName: 'See More Logistics',
 	},
 	{
 		quote:
@@ -23,6 +27,7 @@ const testimonials = [
 		role: 'Owner of TRG',
 		logo: '/logos/trg.svg',
 		logoHeight: 48,
+		logoName: 'TRG Abogada',
 	},
 	{
 		quote:
@@ -31,6 +36,7 @@ const testimonials = [
 		role: 'Founder of Mexi Munchies',
 		logo: '/logos/meximunchies.svg',
 		logoHeight: 48,
+		logoName: 'Mexi Munchies',
 	},
 	{
 		quote:
@@ -39,8 +45,12 @@ const testimonials = [
 		role: 'Founder of Snacks Lovers PTY',
 		logo: '/logos/snacks-lovers.svg',
 		logoHeight: 48,
+		logoName: 'Snacks Lovers',
 	},
-];
+].map((item) => {
+	const alts = getClientLogoAlts(item.logoName);
+	return { ...item, logoAlts: alts, logoAltsJson: JSON.stringify(alts) };
+});
 
 const loopTestimonials = [...testimonials, ...testimonials];
 ---
@@ -72,11 +82,13 @@ const loopTestimonials = [...testimonials, ...testimonials];
 								<div class="testimonial-card__footer mt-auto pt-10">
 									<img
 										src={testimonial.logo}
-										alt=""
+										alt={index < testimonials.length ? testimonial.logoAlts.en : ''}
 										width="205"
 										height={testimonial.logoHeight}
 										style={`max-height: ${testimonial.logoHeight}px`}
 										class="testimonial-card__logo h-auto w-auto max-w-[9.5rem] shrink-0 object-contain object-left"
+										data-alts={index < testimonials.length ? testimonial.logoAltsJson : undefined}
+										aria-hidden={index >= testimonials.length ? 'true' : undefined}
 									/>
 									<span
 										class="testimonial-card__divider h-10 w-px shrink-0 bg-black/10"

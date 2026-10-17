@@ -1,14 +1,18 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import type { GalleryLayoutBlock } from '../../utils/getProjectGallery';
+import { getGalleryImageAlts } from '../../utils/projectImageAlt';
 import ProjectGalleryMedia from './ProjectGalleryMedia.astro';
 
 interface Props {
 	blocks: GalleryLayoutBlock[];
-	title: string;
+	project: CollectionEntry<'projects'>;
+	/** @deprecated Prefer `project` — kept for call-site compatibility during migration */
+	title?: string;
 	startIndex?: number;
 }
 
-const { blocks, title, startIndex = 0 } = Astro.props;
+const { blocks, project, startIndex = 0 } = Astro.props;
 
 let mediaIndex = startIndex;
 ---
@@ -23,7 +27,11 @@ let mediaIndex = startIndex;
 
 					return (
 						<div class="project-gallery__row project-gallery__row--full">
-							<ProjectGalleryMedia item={block.item} title={title} index={currentIndex} />
+							<ProjectGalleryMedia
+								item={block.item}
+								index={currentIndex}
+								alts={getGalleryImageAlts(project, currentIndex)}
+							/>
 						</div>
 					);
 				}
@@ -46,7 +54,11 @@ let mediaIndex = startIndex;
 						]}
 					>
 						{gridItems.map(({ item, index }) => (
-							<ProjectGalleryMedia item={item} title={title} index={index} />
+							<ProjectGalleryMedia
+								item={item}
+								index={index}
+								alts={getGalleryImageAlts(project, index)}
+							/>
 						))}
 					</div>
 				);

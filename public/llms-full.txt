@@ -1,0 +1,231 @@
+# Setin Studio — Full Project Briefs
+
+> Expanded portfolio documentation for AI systems and research tools. Each entry summarizes the business challenge, solution, and stack behind published case studies at https://wearesetin.com.
+
+Studio focus: branding, UI/UX design, B2B digital platforms, motion, and production engineering for Panama, LATAM, and Europe.
+
+For a concise index, see https://wearesetin.com/llms.txt
+
+---
+
+## Agencia Panamá Pacífico Rebranding
+URL: https://wearesetin.com/projects/app
+Client: Agencia Panamá Pacífico
+Industry: Government, special economic zones, public administration
+Market: Panama
+Year: 2025
+Services: Rebranding, brand design, motion
+
+### Business challenge
+The state authority managing the Panama Pacífico Special Economic Area operated with a twenty-year-old identity that felt bureaucratic rather than investment-ready. Low contrast, weak standardization, and outdated digital layouts reinforced investor friction instead of positioning the zone as a modern trade and logistics hub for global companies.
+
+### What we delivered
+A contemporary corporate-grade visual identity that balances institutional authority with business efficiency. Deliverables included a new symbol referencing Panama’s geography and roundtable governance, Ubuntu Sans typography, a dual-green accessibility-focused palette, the motto “Todos somos Panamá Pacífico”, social templates, and a complete brandbook.
+
+### Stack & tools
+Brand strategy, Brand Sprint workshops, Figma identity systems, motion design, brand guidelines production
+
+---
+
+## See More Logistics Landing Page
+URL: https://wearesetin.com/projects/see-more-web
+Client: See More Logistics
+Industry: Logistics and transportation
+Market: Panama
+Year: 2026
+Services: UX/UI design, AI-assisted development, motion, engineering
+Live: https://see-more-wine.vercel.app/
+
+### Business challenge
+After completing their brand identity, See More Logistics had no web presence. The logistics market is dominated by impersonal global operators with rigid portals. The company needed a fast MVP landing page that would establish boutique B2B credibility, capture leads, and ground the brand in Panama.
+
+### What we delivered
+A conversion-oriented B2B landing page with clear service storytelling, social proof for government and corporate partners, a Design System/UI Kit, and rich motion. Information architecture guides visitors from brand definition through services to contact. Built for rapid launch and future module expansion.
+
+### Stack & tools
+Figma Design System, Astro, Cursor AI-assisted frontend, Rive hero animation, Lottie service loops, custom geometric motion, Google Analytics, Vercel deployment
+
+---
+
+## Avendin Branding
+URL: https://wearesetin.com/projects/avendin
+Client: Avendin
+Industry: Vending and smart retail
+Market: Panama
+Year: 2026
+Services: Strategy, identity, branding, motion
+
+### Business challenge
+Avendin imports high-tech vending hardware for commercial buildings, malls, and public institutions. End consumers use the machines, but buyers are facility managers and procurement stakeholders. The brand needed restrained B2B credibility—not loud snack-category graphics—to win lease negotiations.
+
+### What we delivered
+A technical brand system centered on operational facts ($0 upfront investment, maintenance coverage, TCN hardware). Custom AVENDIN wordmark with industrial lettercuts, Instrument Sans, high-contrast Deep Nebula / Signal Violet palette, and proposal-ready layouts that shortened corporate sales cycles.
+
+### Stack & tools
+Brand Sprint, stakeholder interviews, Figma identity system, motion design, brand application mockups
+
+---
+
+## See More Logistics Branding
+URL: https://wearesetin.com/projects/see-more
+Client: See More Logistics
+Industry: Industrial logistics
+Market: Panama
+Year: 2026
+Services: Brand strategy, visual identity, motion, AI direction
+
+### Business challenge
+Local logistics brands often rely on generic, literal truck imagery that fails to inspire corporate or government trust. See More needed an identity that scales from employee badges to highway-facing fleet wraps while signaling modern operational reliability.
+
+### What we delivered
+A functional grid-based brand system with industrial navy and electric blue, a logotype integrating a global/Panama hub metaphor, and applications for manifests, access cards, and vehicle wraps. The system positions the company as an institutional logistics authority.
+
+### Stack & tools
+Brand strategy, mathematical brand grids, Figma, Rive motion, physical application design (fleet, ID, documentation)
+
+---
+
+## NRV B2B Platform
+URL: https://wearesetin.com/projects/nrv
+Client: NRV Systems / NRV Control Systems
+Industry: Security and control technology
+Market: Panama
+Year: 2026
+Services: UX/UI design, SEO optimization, Webflow development & CMS
+Live: https://nrvsystems.com
+
+### Business challenge
+After rebranding, NRV’s legacy website remained a document repository disconnected from the new identity. Hundreds of products were listed under factory model codes, navigation was fragmented, inquiry CTAs disappeared under dense specs, and toxic international backlinks damaged local SEO. Enterprise buyers evaluate hardware on desktop during business hours—not on mobile-first brochure sites.
+
+### What we delivered
+Complete B2B product taxonomy, architecture, and Webflow integration for a high-tech security company in Panama. Card-sorting-informed category structure, desktop-first split-screen product pages with persistent inquiry CTAs, localized SEO and link disavow, engineering blog foundation, and llms.txt-ready product infrastructure for AI discovery. Result: stronger Panama traffic quality and increased qualified B2B quote requests.
+
+### Stack & tools
+UX audit, GA4 analysis, card sorting, Figma UX/UI, Webflow CMS, SEO / disavow workflows, structured content for AI crawlers, desktop-first IA
+
+---
+
+## NRV Control Systems Rebranding
+URL: https://wearesetin.com/projects/nrv-rebranding
+Client: NRV Control Systems
+Industry: Security and control systems
+Market: Panama
+Year: 2026
+Services: Strategy, identity, rebranding, product design, motion
+Live: https://nrvsystems.com
+
+### Business challenge
+For twenty years NRV supplied Panama’s commercial sector with access control and security infrastructure, but its visuals lagged behind its technical capability. Cluttered legacy branding and channel inconsistency weakened trust during high-stakes procurement.
+
+### What we delivered
+A high-tech typographic identity avoiding shield/padlock clichés, Archivo-based type system, technical blue palette, Brand Book, Canva templates for internal teams, Figma sources, and Rive motion assets. The system supports proposals, fleet, apparel, and digital presence.
+
+### Stack & tools
+Brand Sprint, Figma, Brand Book production, Canva operational templates, Rive motion, vector/raster export packages
+
+---
+
+## Epic Realty
+URL: https://wearesetin.com/projects/epic-realty
+Client: Epic Realty
+Industry: Luxury real estate, investments
+Market: Panama
+Year: 2024
+Services: Brand identity, web design, Webflow development, CMS, motion, product design
+
+### Business challenge
+Panama’s luxury real estate market is crowded with template-driven agencies. Epic’s legacy WordPress site and fragile logo undermined a quality-over-quantity boutique positioning focused on high-end residences and discretion.
+
+### What we delivered
+A full brand ecosystem (Barlow Condensed + Lato, Woodland Green / Panama Night palette) plus a Webflow CMS platform for properties and market insights. Listing UX balances editorial storytelling with technical specs, includes “Valor EPIC en la zona” price benchmarking, WhatsApp-first conversion paths, and scalable CMS architecture.
+
+### Stack & tools
+Brand Sprint, competitive audit, Figma, Webflow CMS, property collections, analytics-ready conversion architecture, Rive/motion cover assets
+
+---
+
+## Warszewicz
+URL: https://wearesetin.com/projects/warszewicz
+Client: Internal project
+Industry: Culture, history, education
+Market: Poland / Panama
+Year: 2026
+Services: Video production, motion design, AI art direction
+
+### Business challenge
+Tell the story of Józef Warszewicz—the Polish botanist linked to Panama’s natural heritage—in a short digital format. Historical archives lacked cinematic imagery, and social audiences abandon slow documentary intros.
+
+### What we delivered
+A short-form cinematic piece using generative art direction to recreate 19th-century expeditions and Panamanian jungle atmosphere, paired with a universal narrative of curiosity and perseverance. Designed for immediate scroll-stopping impact across cultural audiences.
+
+### Stack & tools
+Archival research, generative AI art direction, motion design, cinematic editing, YouTube distribution
+
+---
+
+## Snacks Lovers Rebranding
+URL: https://wearesetin.com/projects/snacks-lovers
+Client: Snacks Lovers
+Industry: FMCG, e-commerce
+Market: Panama
+Year: 2026
+Services: Brand strategy, visual identity, rebranding, motion
+
+### Business challenge
+As a leading supplier of American snacks in Panama, Snacks Lovers needed a logo and system that capture craving and sweetness while remaining adaptable across packaging-adjacent social content and retail-facing digital touchpoints.
+
+### What we delivered
+A playful wordmark where the “o” becomes a lollipop, flexible color anchored by trust-building blue, Rubik typography, Instagram visual guidelines, and brand rules that keep the identity consistent as the catalog expands.
+
+### Stack & tools
+Brand strategy, logo system, Figma guidelines, social content frameworks, motion
+
+---
+
+## Znicz Pruszków Rebranding
+URL: https://wearesetin.com/projects/znicz-pruszkow
+Client: Znicz Pruszków
+Industry: Sports and entertainment
+Market: Poland
+Year: 2026
+Services: AI direction, brand design, motion
+
+### Business challenge
+A traditional First League club with strong talent pipelines was held back by an outdated crest: poor digital scalability, color inconsistency, and obsolete typography limited commercial and community potential.
+
+### What we delivered
+An unofficial rebranding concept with a geometric flame crest, refined burgundy/fire palette, Pirata One / Farro / Lato typography, production-ready kit concepts (home and away), and a scalable sports brand architecture for digital and broadcast use.
+
+### Stack & tools
+Sports brand strategy, geometric mark design, AI-assisted textile/kit rendering, motion, brand system documentation
+
+---
+
+## Mexi Munchies Rebranding
+URL: https://wearesetin.com/projects/mexi-munchies
+Client: Mexi Munchies
+Industry: FMCG, e-commerce
+Market: Panama
+Year: 2026
+Services: Brand strategy, visual identity, rebranding, motion
+
+### Business challenge
+A Panamanian boutique Mexican snacks store competed in a category full of loud, disposable visuals. The brand needed energy for shelf and social while remaining credible for retail partnerships and long-term growth.
+
+### What we delivered
+A mariachi-inspired lollipop symbol, bold logotype, flexible color system, and social-ready brand rules that stay expressive without losing structure across product drops and campaigns.
+
+### Stack & tools
+Brand strategy, logo and symbol design, Figma brand system, social asset frameworks, motion
+
+---
+
+## About Setin Studio
+
+- Website: https://wearesetin.com
+- Services: https://wearesetin.com/services/
+- Portfolio: https://wearesetin.com/projects/
+- About: https://wearesetin.com/about/
+- Contact: wearesetinstudio@gmail.com
+- Languages: English, Spanish (Panama), Polish
+- Primary markets: Panama City (LATAM), Poland (Europe)

@@ -11,8 +11,8 @@ const sygnetClass = size === 'intro' ? 'h-9 w-auto md:h-12' : 'h-6 w-auto';
 const gapClass = size === 'intro' ? 'gap-3 md:gap-4' : 'gap-2';
 ---
 
-<div class={`flex items-center ${gapClass}`}>
-	<img src="/logo-setin.svg" alt="" width="111" height="42" class={textClass} />
+<div class={`flex items-center ${gapClass}`} role="img" aria-label="Setin Studio">
+	<img src="/logo-setin.svg" alt="" width="111" height="42" class={textClass} aria-hidden="true" />
 	{
 		showSygnet && (
 			<img
@@ -21,8 +21,9 @@ const gapClass = size === 'intro' ? 'gap-3 md:gap-4' : 'gap-2';
 				width="51"
 				height="48"
 				class={sygnetClass}
+				aria-hidden="true"
 			/>
 		)
 	}
-	<img src="/logo-studio.svg" alt="" width="143" height="42" class={textClass} />
+	<img src="/logo-studio.svg" alt="" width="143" height="42" class={textClass} aria-hidden="true" />
 </div>
