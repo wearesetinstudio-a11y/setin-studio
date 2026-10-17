@@ -1,7 +1,7 @@
 ---
 title: Znicz Pruszków Rebranding
 client: Znicz Pruszków
-tags: ['AI Direction', 'Brand Design', 'Motion', 'Websites']
+tags: ['AI Direction', 'Brand Design', 'Motion']
 thumbnail: '/portfolio/znicz-pruszkow/Cover-Image.webm'
 folderName: 'znicz-pruszkow'
 order: 9
@@ -12,7 +12,7 @@ overviewLabel: Context
 overviewTitle: 'Rebranding Znicz Pruszków to resolve visual inefficiencies in domestic football'
 overviewText: |-
   Znicz Pruszków carries a long tradition of developing football talent that eventually reached the highest international levels. However, the club’s sporting standard in the Polish First League was held back by an outdated visual identity. The previous crest suffered from color inconsistencies, poor digital scalability, and obsolete typography. Consequently, the club underutilized its commercial and community potential. We initiated an unofficial rebranding concept to demonstrate how a traditional football club can transition into a modern sports brand.
-service: 'AI Direction, Brand Design, Motion, Websites'
+service: 'AI Direction, Brand Design, Motion'
 industry: Sports & Entertainment
 market: Poland
 year: 2026
@@ -43,7 +43,7 @@ i18n:
     title: Znicz Pruszków Rebranding
     client: Znicz Pruszków
     heroSubtitle: 'Znicz, który jednoczy. Nowoczesna wizja tradycji.'
-    service: 'AI Direction, Brand Design, Motion, Websites'
+    service: 'AI Direction, Brand Design, Motion'
     industry: Sport i Rozrywka
     market: Polska
     overviewLabel: Kontekst
@@ -75,7 +75,7 @@ i18n:
     title: Znicz Pruszków Rebranding
     client: Znicz Pruszków
     heroSubtitle: 'El fuego que une. Una visión contemporánea de la tradición.'
-    service: 'AI Direction, Brand Design, Motion, Websites'
+    service: 'AI Direction, Brand Design, Motion'
     industry: Deportes y Entretenimiento
     market: Polonia
     overviewLabel: Contexto

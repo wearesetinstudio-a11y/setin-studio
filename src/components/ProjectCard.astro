@@ -44,11 +44,10 @@ const titlesJson = JSON.stringify(titles);
 					<video
 						src={videoSrc}
 						class="block h-auto w-full object-contain"
-						autoplay
 						muted
 						loop
 						playsinline
-						preload="auto"
+						preload="none"
 						aria-hidden="true"
 					/>
 				) : (
@@ -58,7 +57,7 @@ const titlesJson = JSON.stringify(titles);
 						width="960"
 						height="600"
 						class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-						loading="eager"
+						loading="lazy"
 					/>
 				)}
 				<span class="project-card__soon-label" data-i18n="projects.comingSoon">Coming soon</span>
@@ -109,11 +108,10 @@ const titlesJson = JSON.stringify(titles);
 					<video
 						src={videoSrc}
 						class="block h-auto w-full object-contain"
-						autoplay
 						muted
 						loop
 						playsinline
-						preload="auto"
+						preload="none"
 						aria-hidden="true"
 					/>
 				) : (
@@ -123,7 +121,7 @@ const titlesJson = JSON.stringify(titles);
 						width="960"
 						height="600"
 						class="block h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-						loading="eager"
+						loading="lazy"
 					/>
 				)}
 			</div>
