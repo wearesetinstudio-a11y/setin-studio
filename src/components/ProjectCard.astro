@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, thumbnail, video, tags = [], comingSoon = false } = project.data;
+const { title, thumbnail, video, tags = [], comingSoon = false, isNew = false } = project.data;
 const titles = {
 	en: title,
 	pl: project.data.i18n?.pl?.title || title,
@@ -168,6 +168,9 @@ const imageAltsJson = JSON.stringify(imageAlts);
 						loading="lazy"
 						data-project-media-alt
 					/>
+				)}
+				{isNew && (
+					<span class="project-card__soon-label" data-i18n="projects.new">New</span>
 				)}
 			</div>
 

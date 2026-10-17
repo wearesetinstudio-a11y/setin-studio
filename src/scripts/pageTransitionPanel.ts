@@ -19,15 +19,57 @@ function getBars(overlay: HTMLElement): HTMLElement[] {
 	return Array.from(overlay.querySelectorAll<HTMLElement>('.page-transition-bar'));
 }
 
+let motionGeneration = 0;
+
+function beginOverlayMotion(): number {
+	motionGeneration += 1;
+	return motionGeneration;
+}
+
+function isCurrentOverlayMotion(token: number): boolean {
+	return token === motionGeneration;
+}
+
+/** Drop an in-flight cover or reveal so it cannot reset the overlay later. */
+export function invalidateOverlayMotion(): void {
+	motionGeneration += 1;
+}
+
+function lockBarsClosed(overlay: HTMLElement) {
+	for (const bar of getBars(overlay)) {
+		bar.style.animation = 'none';
+		bar.style.transform = 'translateY(0)';
+	}
+}
+
+function releaseBarStyles(overlay: HTMLElement) {
+	for (const bar of getBars(overlay)) {
+		bar.style.animation = '';
+		bar.style.transform = '';
+	}
+}
+
 function clearBarAnimations(overlay: HTMLElement) {
 	const bars = getBars(overlay);
 	for (const bar of bars) {
 		bar.style.animation = 'none';
+		bar.style.transform = '';
 	}
 	void overlay.offsetWidth;
 	for (const bar of bars) {
 		bar.style.animation = '';
 	}
+}
+
+/**
+ * Pin the bars fully shut. Inline transform survives the view-transition
+ * snapshot, so the panel cannot jump when scroll is restored on the way home.
+ */
+export function holdOverlayCover(overlay: HTMLElement) {
+	overlay.classList.remove('is-covering', 'is-revealing');
+	overlay.classList.add('is-active', 'is-covered');
+	overlay.style.pointerEvents = 'auto';
+	lockBarsClosed(overlay);
 }
 
 async function waitForBars(
@@ -51,16 +93,20 @@ async function waitForBars(
 export function resetPageTransitionOverlay(overlay: HTMLElement) {
 	overlay.classList.remove('is-covering', 'is-revealing', 'is-covered', 'is-active');
 	overlay.style.pointerEvents = 'none';
-	clearBarAnimations(overlay);
+	releaseBarStyles(overlay);
+	void overlay.offsetWidth;
 
 	const sygnet = findSygnetFlip(overlay);
 	if (sygnet) resetSygnetFlip(sygnet);
 }
 
 export async function slidePanelIn(overlay: HTMLElement): Promise<void> {
+	const token = beginOverlayMotion();
+
 	if (prefersReducedMotion()) {
 		overlay.classList.add('is-active', 'is-covered');
 		overlay.style.pointerEvents = 'auto';
+		lockBarsClosed(overlay);
 		await wait(120);
 		return;
 	}
@@ -76,21 +122,33 @@ export async function slidePanelIn(overlay: HTMLElement): Promise<void> {
 	void overlay.offsetWidth;
 	overlay.classList.add('is-covering');
 	await waitForBars(overlay, 'preloader-bar-cover', PANEL_SLIDE_MS);
+	if (!isCurrentOverlayMotion(token)) return;
 	overlay.classList.remove('is-covering');
 	overlay.classList.add('is-covered');
+	lockBarsClosed(overlay);
 }
 
 export async function slidePanelOut(overlay: HTMLElement): Promise<void> {
+	const token = beginOverlayMotion();
+
 	if (prefersReducedMotion()) {
+		if (!isCurrentOverlayMotion(token)) return;
 		resetPageTransitionOverlay(overlay);
 		return;
 	}
 
+	// Keep the covered transform until the exit animation is actually applied,
+	// otherwise the bars snap to translateY(-100%) and the panel jumps.
 	overlay.classList.remove('is-covering');
-	clearBarAnimations(overlay);
+	overlay.classList.add('is-active', 'is-covered');
+	lockBarsClosed(overlay);
 	void overlay.offsetWidth;
+	if (!isCurrentOverlayMotion(token)) return;
+
+	releaseBarStyles(overlay);
 	overlay.classList.add('is-revealing');
 	await waitForBars(overlay, 'preloader-bar-reveal', PANEL_SLIDE_MS);
+	if (!isCurrentOverlayMotion(token)) return;
 	resetPageTransitionOverlay(overlay);
 }
 
@@ -103,13 +161,15 @@ export async function showOverlayCover(overlay: HTMLElement): Promise<void> {
 }
 
 export function applyOverlayCover(overlay: HTMLElement): void {
+	beginOverlayMotion();
+
 	const sygnet = findSygnetFlip(overlay);
 	if (sygnet) resetSygnetFlip(sygnet);
 
 	overlay.classList.remove('is-covering', 'is-revealing');
 	overlay.classList.add('is-active', 'is-covered');
 	overlay.style.pointerEvents = 'auto';
-	clearBarAnimations(overlay);
+	lockBarsClosed(overlay);
 }
 
 async function playOverlaySygnetFlip(overlay: HTMLElement): Promise<void> {

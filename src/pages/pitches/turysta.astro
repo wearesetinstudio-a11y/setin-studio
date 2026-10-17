@@ -1,0 +1,521 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import PitchLayout from '../../layouts/PitchLayout.astro';
+import PitchSectionLabel from '../../components/pitches/PitchSectionLabel.astro';
+import PitchSidebar from '../../components/pitches/PitchSidebar.astro';
+import PitchSimbolo from '../../components/pitches/PitchSimbolo.astro';
+
+const asset = (file: string) => `/pitches/turysta/${encodeURI(file)}`;
+/** Media removed from the folder is skipped instead of rendering a broken slot. */
+const hasAsset = (file: string) => existsSync(join(process.cwd(), 'public/pitches/turysta', file));
+
+const simboloSteps = [
+	{
+		title: 'Primary Logo',
+		text: 'Opracowaliśmy spójny, funkcjonalny system znaków graficznych, który odwołuje się do dawnego rzemiosła szyldowego, odpowiadając na współczesne wymagania nośników fizycznych i cyfrowych. Główny znak marki oparty jest na charakterystycznej ramie owalu, w którą wpisaliśmy autorski, skryptowy napis „Turysta”. Odchodzimy od dotychczasowego podziału typograficznego, stawiając na pełną ekspozycję nazwy własnej — to ona niesie najwyższy kapitał emocjonalny. Forma emblematu doskonale sprawdza się w aplikacjach tekstylnych, haftach oraz detalach użytkowych.',
+		visual: 'Logo_1.svg',
+	},
+	{
+		title: 'Logotyp Skryptowy',
+		text: 'Czysta, oszczędna forma odręcznego napisu „Turysta”. Dedykowana do zastosowań minimalistycznych, w których krój pisma broni się samodzielnie.',
+		visual: 'Logo_2.svg',
+	},
+	{
+		title: 'Logotyp z Datą Powstania',
+		text: 'Wariant wzbogacony o historyczną datę założenia lokalu. Pełni istotną funkcję wizerunkowo-marketingową — odległy rok buduje natychmiastowe poczucie stabilności, wiarygodności oraz zaufania do wieloletniej tradycji kulinarnej.',
+		visual: 'Logo_3.svg',
+	},
+	{
+		title: 'Pieczęć Miejska',
+		text: 'Złożona kompozycja zawierająca łukowy napis bezszeryfowy „BAR MLECZNY”, centralne skryptowe „Turysta”, rozdzieloną datę „19 – 64” po bokach oraz jednoznaczne wskazanie lokalizacji „SZCZECIN” u dołu. Znak zaprojektowany z myślą o witrynach, drzwiach i szyldach, pozwalający przekazać kompletny komunikat w zamkniętej, estetycznej formie.',
+		visual: 'Logo_4.svg',
+	},
+].map(({ visual, ...step }) => ({ ...step, src: asset(visual) }));
+
+const simboloMedia = [
+	{ file: '3_1.webm', alt: 'Konstrukcja systemu znaków Turysta' },
+	{ file: '3_2.webp', alt: 'System znaków Turysta', width: 2400, height: 1600 },
+].filter((item) => hasAsset(item.file));
+
+const textSectionsData = [
+	{
+		id: 'jezyk',
+		label: 'Język',
+		title: 'Minimalistyczna paleta, kultowe detale i jakość bez przesady',
+		media: ['4_1.webp', '4_2.webp', '4_3.webp', '4_4.webp', '4_5.webp', '4_6.webp', '4_7.webp'],
+		paragraphs: [
+			'System wizualny opiera się na ikonicznym połączeniu głębokiego niebieskiego i czystej bieli. Unikamy zbędnych ozdobników — prostota operowania barwą i typografią nadaje marce szlachetny, profesjonalny szlif, który zamiast sprawiać wrażenie przestarzałego, buduje poczucie higieny, jakości i kultywowania pamięci.',
+		],
+	},
+	{
+		id: 'personel',
+		label: 'Personel',
+		title: 'Serce lokalu, to ludzie, którzy go tworzą',
+		media: ['5_1.webp', '5_2.webp', '5_3.webp'],
+		paragraphs: [
+			'O klimacie Baru Turysta w równej mierze co jedzenie decyduje czynnik ludzki. Zauważyliśmy, że ubiór pań gotujących wymagał spójnego powiązania z tożsamością marki. Zaprojektowaliśmy dedykowaną odzież roboczą, która oddaje szacunek ich codziennej pracy i czyni z personelu dumnego ambasadora lokalu.',
+		],
+	},
+	{
+		id: 'przestrzen',
+		label: 'Przestrzeń',
+		title: 'Przejrzysta architektura informacji',
+		media: ['6_1.webp', '6_2.webp', '6_3.webp', '6_4.webp'],
+		paragraphs: [
+			'Dotychczasowa elewacja lokalu nie wykorzystywała w pełni swojego potencjału i bywała nieczytelna dla przechodniów. Nowy projekt zewnętrzny porządkuje komunikację fasadową i czyni z lokalu jasny punkt na mapie ulicy.',
+			'Kontrastowy podział na czytelny, bezszeryfowy kaseton „BAR MLECZNY” oraz doświetlony moduł główny „Turysta od 1964”. Całość dopełnia prostopadły, owalny kaseton (semafor) widoczny z daleka dla pieszych.',
+			'Uporządkowane oznakowanie drzwi wejściowych zawierające godziny otwarcia, logotyp oraz estetyczny kod QR prowadzący bezpośrednio do cyfrowego menu i strony www. Szyby boczne otrzymały biały nadruk pełnej pieczęci miejskiej.',
+			'Wyznaczona przestrzeń na szybie przeznaczona na tradycyjne, ręczne kaligrafowanie aktualnego menu dnia zmywalnym pisakiem. To celowy zabieg utrwalający klimat autentyczności, swojskości i codziennej świeżości dań.',
+		],
+	},
+	{
+		id: 'social',
+		label: 'Social',
+		title: 'Dialog z młodym pokoleniem bez utraty tożsamości',
+		media: ['7_1.webp', '7_2.webp'],
+		paragraphs: [
+			'Bar Turysta musi zaistnieć w przestrzeni cyfrowej, by nie ulec zapomnieniu i stać się naturalnym wyborem dla młodego pokolenia oraz turystów szukających autentycznych doświadczeń w Szczecinie. Chcemy, aby w rekomendacjach obok kultowych pasztecików zawsze wymieniano obiad w Turyście.',
+			'Komunikację marki opieramy na wyrazistym, lekkim i zdystansowanym języku nawiązującym do stylistyki ogłoszeń z czasów PRL-u oraz kultowych polskich komedii. Zwroty takie jak „Obywatelu!”, „Na kuchennym froncie codziennej pracy”, „Komunikat!” czy „Wykonujemy 200% normy pierogowej!” intrygują, bawią i budują unikalną tożsamość w mediach społecznościowych.',
+			'Posty i relacje projektowane są w formie stylizowanych, ilustrowanych afiszy (np. „Kotlet Schabowy – Ziemniaki, Moc i Praca”, „Zupa pomidorowa z makaronem wzmacnia kości i odżywia organizm”), łączonych z czystymi, oficjalnymi komunikatami dyrekcji zakładowej.',
+		],
+	},
+	{
+		id: 'podsumowanie',
+		label: 'Podsumowanie',
+		title: 'Dziękujemy!',
+		paragraphs: [
+			'Jako szczecińskie studio projektowe Setin Studio, a prywatnie wychowani w Szczecinie stali klienci Baru Turysta, przygotowaliśmy autorski, kierunkowy koncept nowej identyfikacji wizualnej dla Państwa lokalu.',
+			'Bar Turysta to dla nas nie tylko kultowa jadłodajnia, ale przede wszystkim żywy pomnik historii Szczecina i miejsce, do którego wracamy od dzieciństwa z ogromnym sentymentem.',
+			'Przygotowane materiały to wstępny koncept pokazujący, jak Bar Turysta może wyglądać na szyldach, witrynach, ceramice, ubiorze personelu oraz w komunikacji w mediach społecznościowych. Jesteśmy w pełni otwarci na współpracę i dostosowanie projektu do Państwa realnych potrzeb.',
+		],
+	},
+];
+
+const textSections = textSectionsData.map((section, index) => {
+	const media = section.media?.filter(hasAsset);
+	return {
+		...section,
+		media: media?.length ? media : undefined,
+		num: String(index + 4).padStart(2, '0'),
+	};
+});
+
+const pitchNav = [
+	{ id: 'inicjatywa', num: '01', label: 'Inicjatywa' },
+	{ id: 'strategia', num: '02', label: 'Strategia' },
+	{ id: 'simbolo', num: '03', label: 'Symbol' },
+	...textSections.map(({ id, num, label }) => ({ id, num, label })),
+];
+---
+
+<PitchLayout
+	title="Turysta — Identyfikacja wizualna"
+	description="Propozycja prywatna identyfikacji wizualnej dla Baru Mlecznego Turysta w Szczecinie — Setin Studio."
+	lang="pl"
+	locale="pl"
+	bodyClass="turysta-pitch"
+	navLogoSrc="/pitches/turysta/lockupxsetin.svg"
+	navLogoAlt="setin × Turysta"
+	navLogoWidth={286}
+	navLogoHeight={46}
+	themeVars={{
+		'--pitch-bg': '#0C133E',
+		'--pitch-surface': '#000731',
+		'--pitch-fg': '#ffffff',
+		'--pitch-accent': '#ffffff',
+		'--pitch-font-display': "'Shrikhand', ui-serif, Georgia, serif",
+		'--pitch-font-body': "'Overpass', ui-sans-serif, system-ui, sans-serif",
+		'--pitch-font-nav': "'Overpass', ui-sans-serif, system-ui, sans-serif",
+	}}
+>
+	{/* —— Hero —— */}
+	<section id="turysta-hero" class="turysta-hero relative min-h-[100svh] overflow-hidden" aria-label="Hero" data-pitch-hero>
+		<div class="turysta-hero__stage" aria-hidden="true" data-pitch-hero-stage>
+			<div class="turysta-hero__bg-shift" data-pitch-hero-shift>
+				<img
+					src={asset('bg.webp')}
+					alt=""
+					class="turysta-hero__bg-image"
+					width="2400"
+					height="1600"
+				/>
+			</div>
+			<span class="turysta-hero__shade"></span>
+		</div>
+
+		<div
+			class="turysta-hero__content relative z-10 flex min-h-[100svh] flex-col px-[var(--pitch-gutter)] pt-24 md:pt-0"
+		>
+			<div
+				class="mx-auto flex w-full max-w-[920px] flex-1 flex-col items-center justify-center gap-3 text-center text-white md:gap-4"
+			>
+				<p class="pitch-label">Identyfikacja wizualna</p>
+				<h1
+					class="pitch-display w-full text-[clamp(1.85rem,4.8vw,2.875rem)] font-normal leading-[1.25]"
+					data-pitch-reveal
+					data-pitch-lines="Żywa ikona Szczecina|od 1964 roku"
+					data-pitch-lines-desktop="Żywa ikona Szczecina od 1964 roku"
+				>
+					Żywa ikona Szczecina od 1964 roku
+				</h1>
+				<p class="pitch-body-copy turysta-hero__subtitle max-w-[42rem] text-white">
+					Miejsce, które jest czymś więcej niż miejscem posiłków. Bar Turysta stanowi tradycję, kulturę i istotę naszego miasta, jego ludzi i tysięcy codziennych historii.
+				</p>
+			</div>
+
+			<div
+				class="turysta-hero__scroll pointer-events-none flex shrink-0 flex-col items-center pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] md:absolute md:inset-x-0 md:bottom-10 md:pb-0"
+				aria-hidden="true"
+			>
+				<span class="block h-7 w-px shrink-0 bg-white/80"></span>
+				<img
+					src={asset('lockup.svg')}
+					alt=""
+					width="144"
+					height="70"
+					class="block h-[44px] w-auto shrink-0"
+				/>
+				<svg width="12" height="8" viewBox="0 0 12 8" fill="none" class="block h-2 w-3 shrink-0">
+					<path d="M1 1.5L6 6.5L11 1.5" stroke="white" stroke-width="1.5"></path>
+				</svg>
+			</div>
+		</div>
+	</section>
+
+	{/* —— Body (sidebar + content) —— */}
+	<div class="toros-body relative z-[2]">
+		<div class="mx-auto w-full pt-16 pb-20 md:pt-24 md:pb-28 lg:pt-32 lg:pb-32">
+			<div class="grid grid-cols-1 gap-12 lg:grid-cols-[320px_minmax(0,1fr)] lg:gap-0">
+				<PitchSidebar
+					items={pitchNav}
+					ariaLabel="Sekcje propozycji"
+					mobileAriaLabel="Sekcje propozycji (mobile)"
+				/>
+
+				<div class="toros-body__content flex min-w-0 flex-col gap-0">
+					{/* —— 01 / Inicjatywa —— */}
+					<section id="inicjatywa" class="toros-section scroll-mt-32 text-white" aria-label="Inicjatywa">
+						<div class="toros-section__pad">
+							<PitchSectionLabel num="01" label="Inicjatywa" />
+							<h2
+								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.25]"
+								data-pitch-reveal
+							>
+								Miejsce, które kształtuje tożsamość naszego miasta i jego mieszkańców
+							</h2>
+							<div class="pitch-body-copy mt-6 flex w-full flex-col gap-5 text-white/85 md:mt-8">
+								<p>
+									Dla nas, jako projektantów ze Szczecina, Bar Turysta to coś znacznie więcej niż lokal gastronomiczny czy kolejny punkt na mapie miejskiej tradycji. To absolutna ikona Szczecina, działająca nieprzerwanie od 1964 roku i stanowiąca nienaruszalny element tożsamości naszego miasta. Pamiętamy to miejsce od podszewki — z czasów dzieciństwa, kiedy odwiedzaliśmy tę jadłodajnię z rodzicami po szkole na piątkowe obiady czy domowe koktajle. Słowa rodziców „Tylko nie idź do fast fooda, idź do Baru Turysta” zapadły nam w pamięć nie jako zakaz, ale jako pierwsza lekcja autentyczności i szacunku do prawdziwego, uczciwego jedzenia.
+								</p>
+								<p>
+									Język mieszkańców Szczecina wyraża tę więź najlepiej: nikt w naszym mieście nie mówi, że idzie do „baru mlecznego”. Mówimy po prostu: „Chodźmy do Turysty” albo „Spotkajmy się pod Turystą”.
+								</p>
+								<p>
+									Ta koncepcja rebrandingu powstała z potrzeby serca, dumy i wdzięczności szczecińskiego studia dla miejsca, które ukształtowało fragment naszej wrażliwości. Przy każdej decyzji projektowej stawialiśmy sobie bezkompromisowe pytanie: „Czy to rozwiązanie faktycznie oddaje ducha peerelowskiej estetyki, czy sztucznie ulega zachodniej, przesterowanej stylizacji retro?”. Zależało nam na uchwyceniu sedna Turysty — miejsca nieszablonowego, prostego, niedoskonałego, ale autentycznego, szczerego i budowanego z serca dla zwykłych ludzi.
+								</p>
+							</div>
+						</div>
+						{
+							['1_1.webp', '1_2.webp'].filter(hasAsset).length > 0 && (
+								<div class="turysta-media-stack mt-12 md:mt-16">
+									{['1_1.webp', '1_2.webp'].filter(hasAsset).map((file) => (
+										<figure class="w-full overflow-hidden">
+											<img
+												src={asset(file)}
+												alt="Inicjatywa — Bar Turysta"
+												width="2400"
+												height="1600"
+												class="block h-auto w-full"
+												loading="lazy"
+												decoding="async"
+											/>
+										</figure>
+									))}
+								</div>
+							)
+						}
+					</section>
+
+					{/* —— 02 / Strategia —— */}
+					<section id="strategia" class="toros-section scroll-mt-32 text-white" aria-label="Strategia">
+						<div class="toros-section__pad pt-[var(--pitch-section-y)]">
+							<PitchSectionLabel num="02" label="Strategia" />
+							<h2
+								class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.25]"
+								data-pitch-reveal
+							>
+								Ewolucja, a nie rewolucja
+							</h2>
+							<div class="pitch-body-copy mt-6 flex w-full flex-col gap-5 text-white/85 md:mt-8">
+								<p>
+									Fundamentem naszej strategii jest ewolucja, a nie rewolucja. Największą wartością Baru Turysta w sercach mieszkańców nie jest silenie się na bycie „cool”, nowoczesność na siłę czy przekształcanie się w kolejny wyeurozowany, komercyjny lokal. Siłą Turysty jest jego bezpretensjonalna prawdziwość. W naszej wizji strategicznej kluczowym punktem odniesienia pozostaje postać pracownika szczecińskiej stoczni z czasów PRL-u, który po ciężkim dniu pracy przychodził zjeść pożywny, pyszny i przystępny cenowo posiłek w otoczeniu ludzi o podobnym etosie.
+								</p>
+								<p>
+									Dlatego projektujemy z myślą o wierności tradycji, pochodzeniu i historii, ale nie zamykamy się w muzeum. Chcemy wykorzystać ten potencjał, by powalczyć o młode pokolenie. Choć jako zespół Setin Studio urodziliśmy się już w wolnej Polsce, po obaleniu komunizmu, doskonale rozumiemy i szanujemy tę wartość z opowieści naszych rodziców i dziadków. Pragniemy, aby młodzież w Szczecinie dostrzegła, że zjedzenie tradycyjnego, polskiego obiadu przy wspólnym stole ma niezrównanie większą wartość kulturową i społeczną niż szybki burger zjedzony w biegu z papierowej torby.
+								</p>
+							</div>
+						</div>
+						{
+							hasAsset('2_1.webp') && (
+								<figure class="mt-12 w-full overflow-hidden md:mt-16">
+									<img
+										src={asset('2_1.webp')}
+										alt="Strategia marki Turysta"
+										width="2400"
+										height="1600"
+										class="block h-auto w-full"
+										loading="lazy"
+										decoding="async"
+									/>
+								</figure>
+							)
+						}
+					</section>
+
+					{/* —— 03 / Symbol —— */}
+					<PitchSimbolo
+						num="03"
+						label="Symbol"
+						steps={simboloSteps}
+						visualWidth={220}
+						visualHeight={220}
+						stageWidth={260}
+						stageMobileWidth="min(200px, 55vw)"
+						surface="#000731"
+						class="pt-[var(--pitch-section-y)]"
+					>
+						{
+							simboloMedia.map((item) => (
+								<figure class="w-full overflow-hidden">
+									{item.file.endsWith('.webm') ? (
+										<video
+											class="block h-auto w-full"
+											data-toros-video
+											muted
+											loop
+											playsinline
+											webkit-playsinline
+											preload="none"
+											aria-label={item.alt}
+										>
+											<source src={asset(item.file)} type="video/webm" />
+										</video>
+									) : (
+										<img
+											src={asset(item.file)}
+											alt={item.alt}
+											width={item.width}
+											height={item.height}
+											class="block h-auto w-full"
+											loading="lazy"
+										/>
+									)}
+								</figure>
+							))
+						}
+					</PitchSimbolo>
+
+					{/* —— 04–08 —— */}
+					{
+						textSections.map((section) => (
+							<section
+								id={section.id}
+								class="toros-section scroll-mt-32 text-white"
+								aria-label={section.label}
+							>
+								<div class="toros-section__pad pt-[var(--pitch-section-y)]">
+									<PitchSectionLabel num={section.num} label={section.label} />
+									<h2
+										class="pitch-display mt-7 w-full text-[clamp(1.5rem,3.4vw,2.25rem)] font-normal leading-[1.25]"
+										data-pitch-reveal
+									>
+										{section.title}
+									</h2>
+									<div class="pitch-body-copy mt-6 flex w-full flex-col gap-5 text-white/85 md:mt-8">
+										{section.paragraphs.map((paragraph) => (
+											<p>{paragraph}</p>
+										))}
+									</div>
+								</div>
+								{section.media && (
+									<div class="turysta-media-stack mt-12 md:mt-16">
+										{section.media.map((file) => (
+											<figure class="w-full overflow-hidden">
+												{file.endsWith('.webp') || file.endsWith('.jpg') || file.endsWith('.png') ? (
+													<img
+														src={asset(file)}
+														alt={section.label}
+														width="2400"
+														height="1600"
+														class="block h-auto w-full"
+														loading="lazy"
+														decoding="async"
+													/>
+												) : (
+													<video
+														class="block h-auto w-full"
+														data-toros-video
+														muted
+														loop
+														playsinline
+														webkit-playsinline
+														preload="none"
+														aria-label={section.label}
+													>
+														<source src={asset(file)} type="video/webm" />
+													</video>
+												)}
+											</figure>
+										))}
+									</div>
+								)}
+							</section>
+						))
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		import { initTorosNav } from '../../scripts/initTorosNav.ts';
+		import { initTorosVideos } from '../../scripts/initTorosVideos.ts';
+		import { initPitchBlurReveal } from '../../scripts/initPitchBlurReveal.ts';
+		import { initTorosSidebar } from '../../scripts/initTorosSidebar.ts';
+		import { initSimboloSwap } from '../../scripts/initSimboloSwap.ts';
+		import { initPitchHeroParallax } from '../../scripts/initPitchHeroParallax.ts';
+
+		initTorosNav();
+		initTorosVideos();
+		initPitchBlurReveal();
+		initSimboloSwap();
+		initTorosSidebar();
+		initPitchHeroParallax();
+	</script>
+</PitchLayout>
+
+<style>
+	:global(.turysta-pitch .pitch-root) {
+		--pitch-gutter: 20px;
+	}
+
+	@media (width >= 768px) {
+		:global(.turysta-pitch .pitch-root) {
+			--pitch-gutter: 60px;
+		}
+	}
+
+	/* Shrikhand is a display script — keep natural case, not forced uppercase. */
+	:global(.turysta-pitch .pitch-display) {
+		text-transform: none;
+		letter-spacing: 0.01em;
+		/* Pretty wrap fills the content width and avoids orphan words (e.g. „bez”). */
+		text-wrap: pretty;
+	}
+
+	:global(.turysta-pitch .toros-section .pitch-display) {
+		max-width: none;
+	}
+
+	/* Section / sidebar / hero labels stay in Overpass (Shrikhand + tracking reads poorly at 14px). */
+	:global(.turysta-pitch .toros-section__label),
+	:global(.turysta-pitch .toros-section__num),
+	:global(.turysta-pitch .toros-section__label-name),
+	:global(.turysta-pitch .toros-section__scroll),
+	:global(.turysta-pitch .toros-sidebar__link),
+	:global(.turysta-pitch .toros-sidebar-mobile__current),
+	:global(.turysta-pitch .pitch-root .pitch-label),
+	:global(.turysta-pitch .pitch-root .pitch-main p.pitch-label) {
+		font-family: var(--pitch-font-nav);
+		font-style: normal;
+		font-weight: 500;
+		letter-spacing: 0.18em;
+	}
+
+	/* —— Hero —— */
+	.turysta-hero {
+		z-index: 0;
+	}
+
+	.turysta-hero__stage {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100svh;
+		background: #0c133e;
+		pointer-events: none;
+		overflow: hidden;
+	}
+
+	.turysta-hero__stage.is-hidden {
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.turysta-hero__bg-shift {
+		position: absolute;
+		inset: 0;
+		will-change: transform;
+	}
+
+	.turysta-hero__bg-image {
+		position: absolute;
+		inset: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.turysta-hero__shade {
+		position: absolute;
+		inset: 0;
+		background: rgba(12, 19, 62, 0.35);
+	}
+
+	:global(.turysta-pitch .pitch-body-copy),
+	:global(.turysta-pitch .pitch-body-copy p) {
+		font-size: 0.9375rem;
+		line-height: 1.7;
+	}
+
+	.turysta-hero__subtitle {
+		font-size: clamp(1rem, 1.6vw, 1.125rem);
+		line-height: 1.65;
+	}
+
+	.turysta-hero__scroll {
+		gap: 1.5rem;
+	}
+
+	/* —— Body / sidebar —— */
+	.toros-body {
+		background: #000731;
+	}
+
+	@media (min-width: 1024px) {
+		.toros-body {
+			background: linear-gradient(to right, #0c133e 320px, #000731 320px);
+		}
+	}
+
+	.toros-body__content {
+		background: #000731;
+		min-width: 0;
+	}
+
+	.toros-section__pad {
+		padding-inline: var(--pitch-gutter);
+	}
+
+	.turysta-media-stack {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+</style>

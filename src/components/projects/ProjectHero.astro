@@ -18,16 +18,18 @@ const heroRawText = heroLines.join('\n').trim();
 				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100vh] w-full overflow-hidden bg-[#131415]"
 				aria-hidden="true"
 			>
-				<img
-					src={heroImage}
-					alt=""
-					width="1920"
-					height="1080"
-					class="project-hero-background pointer-events-none absolute inset-0 h-full w-full object-cover object-[center_42%]"
-					loading="eager"
-					decoding="async"
-					aria-hidden="true"
-				/>
+				<div class="project-hero-photo-shift">
+					<img
+						src={heroImage}
+						alt=""
+						width="1920"
+						height="1080"
+						class="project-hero-background pointer-events-none absolute inset-0 h-full w-full object-cover object-[center_42%]"
+						loading="eager"
+						decoding="async"
+						aria-hidden="true"
+					/>
+				</div>
 
 				<div class="pointer-events-none absolute inset-0 z-[1] bg-black/10"></div>
 
@@ -74,6 +76,12 @@ const heroRawText = heroLines.join('\n').trim();
 	.project-hero-visual.is-hidden {
 		opacity: 0;
 		visibility: hidden;
+	}
+
+	.project-hero-photo-shift {
+		position: absolute;
+		inset: 0;
+		will-change: transform;
 	}
 
 	.project-hero-background {
@@ -318,9 +326,17 @@ const heroRawText = heroLines.join('\n').trim();
 
 		initCinemaPureNoise('project-hero-noise-filter', { observeElementId: 'project-hero' });
 
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const shift = visual.querySelector<HTMLElement>('.project-hero-photo-shift');
+		// Same rate as the About page hero: the picture travels at a third of the page speed.
+		const SPEED = 0.32;
+
 		const syncHeroVisual = () => {
-			const heroBottom = hero.getBoundingClientRect().bottom;
-			visual.classList.toggle('is-hidden', heroBottom <= 0);
+			const rect = hero.getBoundingClientRect();
+			visual.classList.toggle('is-hidden', rect.bottom <= 0);
+			if (!shift || reduceMotion) return;
+			const offset = SPEED * Math.min(0, rect.top);
+			shift.style.transform = `translate3d(0, ${offset}px, 0)`;
 		};
 
 		syncHeroVisual();

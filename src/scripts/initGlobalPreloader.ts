@@ -1,3 +1,4 @@
+import { isPageTransitionActive } from './initPageTransitionOverlay.ts';
 import {
 	clearIntroPending,
 	dispatchIntroComplete,
@@ -64,6 +65,20 @@ export function initGlobalPreloader() {
 	if (hasCompletedIntro()) {
 		clearIntroPending();
 		dispatchIntroComplete();
+		return;
+	}
+
+	// Navigating onto the homepage: the page transition already owns the overlay.
+	// Re-running the intro here snaps the bars shut mid-exit.
+	if (isPageTransitionActive()) {
+		clearIntroPending();
+		const finishSkippedIntro = () => {
+			if (hasCompletedIntro()) return;
+			markIntroComplete();
+			dispatchIntroComplete();
+		};
+		window.addEventListener('page-transition-reveal-complete', finishSkippedIntro, { once: true });
+		window.setTimeout(finishSkippedIntro, 2600);
 		return;
 	}
 

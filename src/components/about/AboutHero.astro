@@ -7,19 +7,21 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 		id="about-hero-visual"
 		class="about-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 w-full overflow-hidden bg-[#131415]"
 	>
-		<picture class="absolute inset-0">
-			<source srcset="/images/brothers-intro.webp" type="image/webp" />
-			<img
-				src="/images/brothers-intro.webp"
-				alt={FOUNDERS_PHOTO_ALTS.en}
-				width="4320"
-				height="1896"
-				class="about-hero-photo h-full w-full grayscale"
-				loading="eager"
-				decoding="async"
-				data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
-			/>
-		</picture>
+		<div class="about-hero-photo-shift">
+			<picture class="absolute inset-0">
+				<source srcset="/images/brothers-intro.webp" type="image/webp" />
+				<img
+					src="/images/brothers-intro.webp"
+					alt={FOUNDERS_PHOTO_ALTS.en}
+					width="4320"
+					height="1896"
+					class="about-hero-photo h-full w-full grayscale"
+					loading="eager"
+					decoding="async"
+					data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
+				/>
+			</picture>
+		</div>
 
 		<canvas
 			id="about-hero-noise-filter"
@@ -56,10 +58,17 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 		height: 100svh;
 	}
 
+	.about-hero-photo-shift {
+		position: absolute;
+		inset: 0;
+		will-change: transform;
+	}
+
 	.about-hero-photo {
-		transform: none;
 		object-fit: cover;
 		object-position: center 22%;
+		transform: scale(1.4);
+		transform-origin: center 12%;
 	}
 
 	.about-hero__title {
@@ -143,8 +152,17 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 
 		hero.dataset.heroVisualInit = 'true';
 
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const shift = visual.querySelector<HTMLElement>('.about-hero-photo-shift');
+		// Same rate as the homepage About photo: the picture travels at a third of the page speed.
+		const SPEED = 0.32;
+
 		const syncHeroVisual = () => {
-			visual.classList.toggle('is-hidden', hero.getBoundingClientRect().bottom <= 0);
+			const rect = hero.getBoundingClientRect();
+			visual.classList.toggle('is-hidden', rect.bottom <= 0);
+			if (!shift || reduceMotion) return;
+			const offset = SPEED * Math.min(0, rect.top);
+			shift.style.transform = `translate3d(0, ${offset}px, 0)`;
 		};
 
 		syncHeroVisual();

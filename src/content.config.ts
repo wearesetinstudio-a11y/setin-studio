@@ -47,6 +47,8 @@ const projects = defineCollection({
 		order: z.number(),
 		/** Listed in projects grid, but not clickable / no case page yet. */
 		comingSoon: z.boolean().optional().default(false),
+		/** Show a NEW badge on the card and pin toward the front of the list. */
+		isNew: z.boolean().optional().default(false),
 		heroSubtitle: z.string().optional().default(''),
 		service: z.string().optional().default(''),
 		industry: z.string().optional().default(''),

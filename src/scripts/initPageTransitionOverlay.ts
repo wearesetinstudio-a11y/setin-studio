@@ -3,8 +3,11 @@ import {
 	animatePageTransitionCover,
 	animatePageTransitionReveal,
 	getPageTransitionOverlay,
+	holdOverlayCover,
+	invalidateOverlayMotion,
 	resetPageTransitionOverlay,
 } from './pageTransitionPanel.ts';
+import { wait } from './sygnetFlipAnimation.ts';
 
 type TransitionPhase = 'idle' | 'covering' | 'covered' | 'revealing';
 
@@ -29,6 +32,61 @@ function cleanupIntroState() {
 	document.body.classList.remove('intro-active');
 }
 
+export function isPageTransitionActive(): boolean {
+	const phase = getPhase();
+	return phase === 'covering' || phase === 'covered' || phase === 'revealing';
+}
+
+let revealGeneration = 0;
+
+/**
+ * The persisted overlay is snapshotted by the view transition. Starting the
+ * bar exit inside that snapshot makes the panel jump or get stuck when the
+ * snapshot is removed — most visibly when scroll is restored on the homepage.
+ *
+ * Prefer a short timeout over rAF: background tabs throttle/pause rAF and can
+ * leave the overlay locked forever.
+ */
+async function waitForViewTransitionRelease(): Promise<void> {
+	const root = document.documentElement;
+	if (!root.hasAttribute('data-astro-transition')) {
+		await wait(32);
+		return;
+	}
+
+	await Promise.race([
+		wait(800),
+		new Promise<void>((resolve) => {
+			const finish = () => {
+				observer.disconnect();
+				resolve();
+			};
+			const observer = new MutationObserver(() => {
+				if (!root.hasAttribute('data-astro-transition')) finish();
+			});
+			observer.observe(root, {
+				attributes: true,
+				attributeFilter: ['data-astro-transition'],
+			});
+			if (!root.hasAttribute('data-astro-transition')) finish();
+		}),
+	]);
+
+	await wait(32);
+}
+
+async function finishReveal(navToken: number): Promise<void> {
+	if (navToken !== revealGeneration) return;
+
+	try {
+		await animatePageTransitionReveal();
+	} finally {
+		if (navToken !== revealGeneration) return;
+		setPhase('idle');
+		window.dispatchEvent(new CustomEvent('page-transition-reveal-complete'));
+	}
+}
+
 export function initPageTransitionOverlay() {
 	if (transitionWindow.__setinPageTransitionsReady) return;
 	transitionWindow.__setinPageTransitionsReady = true;
@@ -39,18 +97,24 @@ export function initPageTransitionOverlay() {
 
 		cleanupIntroState();
 
-		if (getPhase() !== 'idle' || isIntroSequenceRunning()) {
+		const phase = getPhase();
+		if (isIntroSequenceRunning() || phase === 'covering' || phase === 'covered') {
 			event.loader = defaultLoader;
 			return;
 		}
 
+		const navToken = ++revealGeneration;
+		invalidateOverlayMotion();
+		setPhase('covering');
+
 		event.loader = async () => {
 			try {
-				setPhase('covering');
 				await animatePageTransitionCover();
+				if (navToken !== revealGeneration) return;
 				setPhase('covered');
 				await defaultLoader();
 			} catch (error) {
+				if (navToken !== revealGeneration) throw error;
 				const overlay = getPageTransitionOverlay();
 				if (overlay) resetPageTransitionOverlay(overlay);
 				setPhase('idle');
@@ -64,10 +128,15 @@ export function initPageTransitionOverlay() {
 
 		if (getPhase() !== 'covered') return;
 
+		const navToken = revealGeneration;
+		const overlay = getPageTransitionOverlay();
+		if (overlay) holdOverlayCover(overlay);
 		setPhase('revealing');
-		void animatePageTransitionReveal().finally(() => {
-			setPhase('idle');
-			window.dispatchEvent(new CustomEvent('page-transition-reveal-complete'));
-		});
+
+		void (async () => {
+			await waitForViewTransitionRelease();
+			if (navToken !== revealGeneration) return;
+			await finishReveal(navToken);
+		})();
 	});
 }

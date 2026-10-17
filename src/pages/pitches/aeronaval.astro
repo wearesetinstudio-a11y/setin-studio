@@ -182,20 +182,22 @@ const pitchNav = [
 	}}
 >
 	{/* —— Hero —— */}
-	<section id="aero-hero" class="aero-hero relative min-h-[100svh] overflow-hidden" aria-label="Hero">
-		<div class="aero-hero__stage" aria-hidden="true">
-			<video
-				class="aero-hero__bg-video"
-				data-toros-video
-				autoplay
-				muted
-				loop
-				playsinline
-				webkit-playsinline
-				preload="auto"
-			>
-				<source src={asset('hero_bg.webm')} type="video/webm" />
-			</video>
+	<section id="aero-hero" class="aero-hero relative min-h-[100svh] overflow-hidden" aria-label="Hero" data-pitch-hero>
+		<div class="aero-hero__stage" aria-hidden="true" data-pitch-hero-stage>
+			<div class="aero-hero__bg-shift" data-pitch-hero-shift>
+				<video
+					class="aero-hero__bg-video"
+					data-toros-video
+					autoplay
+					muted
+					loop
+					playsinline
+					webkit-playsinline
+					preload="auto"
+				>
+					<source src={asset('hero_bg.webm')} type="video/webm" />
+				</video>
+			</div>
 			<span class="aero-hero__shade"></span>
 		</div>
 
@@ -484,6 +486,7 @@ const pitchNav = [
 		import { initTorosSidebar } from '../../scripts/initTorosSidebar.ts';
 		import { initPitchPlayVideo } from '../../scripts/initPitchPlayVideo.ts';
 		import { initSimboloSwap } from '../../scripts/initSimboloSwap.ts';
+		import { initPitchHeroParallax } from '../../scripts/initPitchHeroParallax.ts';
 
 		initTorosNav();
 		initTorosVideos();
@@ -491,6 +494,7 @@ const pitchNav = [
 		initSimboloSwap();
 		initTorosSidebar();
 		initPitchPlayVideo();
+		initPitchHeroParallax();
 	</script>
 </PitchLayout>
 
@@ -519,6 +523,17 @@ const pitchNav = [
 		background: #0d0e0f;
 		pointer-events: none;
 		overflow: hidden;
+	}
+
+	.aero-hero__stage.is-hidden {
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.aero-hero__bg-shift {
+		position: absolute;
+		inset: 0;
+		will-change: transform;
 	}
 
 	.aero-hero__bg-video {

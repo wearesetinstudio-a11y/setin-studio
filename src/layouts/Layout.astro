@@ -173,7 +173,7 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 				pointer-events: auto;
 			}
 
-			html.intro-pending:not(.intro-revealing) .page-transition-bar {
+			html.intro-pending:not(.intro-revealing) .page-transition-overlay:not(.is-revealing) .page-transition-bar {
 				transform: translateY(0);
 			}
 
@@ -266,6 +266,7 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 			id="page-transition-overlay"
 			class="page-transition-overlay pointer-events-none fixed inset-0 z-[9999] overflow-hidden"
 			transition:persist="page-transition"
+			transition:animate="none"
 			aria-hidden="true"
 		>
 			<div class="page-transition-bars">

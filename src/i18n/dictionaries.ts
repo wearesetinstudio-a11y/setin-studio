@@ -47,6 +47,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'projects.view': 'view',
 		'projects.soon': 'soon',
 		'projects.comingSoon': 'Coming soon',
+		'projects.new': 'New',
 
 		'about.eyebrow': 'Our story',
 		'about.intro':
@@ -199,6 +200,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'projects.view': 'zobacz',
 		'projects.soon': 'wkrótce',
 		'projects.comingSoon': 'Wkrótce',
+		'projects.new': 'Nowość',
 
 		'about.eyebrow': 'Nasza historia',
 		'about.intro':
@@ -351,6 +353,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
 		'projects.view': 'ver',
 		'projects.soon': 'pronto',
 		'projects.comingSoon': 'Viene pronto',
+		'projects.new': 'Nuevo',
 
 		'about.eyebrow': 'Nuestra historia',
 		'about.intro':

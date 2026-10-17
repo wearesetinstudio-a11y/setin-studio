@@ -26,21 +26,16 @@ const { name, role, bio, roleKey, bioKey, imageSrc, imageAlt, links, align = 'st
 		)
 	}
 
-	<div
-		class="about-team-member__photo-wrap relative w-full overflow-hidden md:h-[400px] md:w-[320px] md:shrink-0"
-		data-team-photo-wrap
-	>
-		<div class="about-team-member__parallax-layer pointer-events-none absolute inset-x-0">
-			<img
-				src={imageSrc}
-				alt={imageAlt}
-				width="320"
-				height="400"
-				class="about-team-member__photo h-full w-full object-cover grayscale"
-				loading="lazy"
-				decoding="async"
-			/>
-		</div>
+	<div class="about-team-member__photo-wrap relative w-full overflow-hidden md:h-[400px] md:w-[320px] md:shrink-0">
+		<img
+			src={imageSrc}
+			alt={imageAlt}
+			width="320"
+			height="400"
+			class="about-team-member__photo absolute inset-0 h-full w-full object-cover grayscale"
+			loading="lazy"
+			decoding="async"
+		/>
 	</div>
 
 	<div class="about-team-member__content min-w-0 md:max-w-[540px] md:shrink-0 md:pt-1">
@@ -79,12 +74,6 @@ const { name, role, bio, roleKey, bioKey, imageSrc, imageAlt, links, align = 'st
 		aspect-ratio: 4 / 5;
 	}
 
-	.about-team-member__parallax-layer {
-		top: -4%;
-		height: 108%;
-		will-change: transform;
-	}
-
 	.about-team-member__heading {
 		font-size: 1.2rem;
 		line-height: 1.3;
@@ -100,54 +89,3 @@ const { name, role, bio, roleKey, bioKey, imageSrc, imageAlt, links, align = 'st
 		}
 	}
 </style>
-
-<script>
-	function initAboutTeamMemberParallax() {
-		const wraps = document.querySelectorAll('[data-team-photo-wrap]');
-
-		wraps.forEach((wrap) => {
-			if (wrap.dataset.parallaxInit === 'true') return;
-
-			const layer = wrap.querySelector('.about-team-member__parallax-layer');
-			if (!layer) return;
-
-			wrap.dataset.parallaxInit = 'true';
-
-			const PARALLAX_SPEED = 0.14;
-			const MAX_SHIFT_RATIO = 0.04;
-
-			function updateParallax() {
-				const containerHeight = wrap.offsetHeight;
-				const maxShift = containerHeight * MAX_SHIFT_RATIO;
-				const scrollOffset = -wrap.getBoundingClientRect().top;
-				const rawOffset = scrollOffset * PARALLAX_SPEED;
-				const offset = Math.max(-maxShift * 0.2, Math.min(maxShift * 0.55, rawOffset));
-
-				layer.style.transform = `translate3d(0, ${offset}px, 0)`;
-			}
-
-			let ticking = false;
-
-			function onScroll() {
-				if (ticking) return;
-				ticking = true;
-				requestAnimationFrame(() => {
-					updateParallax();
-					ticking = false;
-				});
-			}
-
-			updateParallax();
-			window.addEventListener('scroll', onScroll, { passive: true });
-			window.addEventListener('resize', updateParallax, { passive: true });
-		});
-	}
-
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initAboutTeamMemberParallax, { once: true });
-	} else {
-		initAboutTeamMemberParallax();
-	}
-
-	document.addEventListener('astro:page-load', initAboutTeamMemberParallax);
-</script>

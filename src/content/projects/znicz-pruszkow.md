@@ -4,7 +4,8 @@ client: Znicz Pruszków
 tags: ['AI Direction', 'Brand Design', 'Motion']
 thumbnail: '/portfolio/znicz-pruszkow/cover.webm'
 folderName: 'znicz-pruszkow'
-order: 9
+order: 0
+isNew: true
 video: '/portfolio/znicz-pruszkow/cover.webm'
 heroImage: '/portfolio/znicz-pruszkow/bg.webp'
 heroSubtitle: 'A flame that unites. A modern vision of tradition.'
