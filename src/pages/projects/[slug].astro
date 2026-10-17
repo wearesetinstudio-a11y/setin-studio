@@ -56,9 +56,11 @@ const market = data.market ?? '';
 const liveUrl = data.liveUrl ?? '';
 const liveLabel = data.liveLabel ?? '';
 const folderName = resolveProjectFolderName(project);
-const projectOgPath = `/portfolio/${folderName}/og.jpg`;
-const projectOgImage = existsSync(join(process.cwd(), 'public', 'portfolio', folderName, 'og.jpg'))
-	? projectOgPath
+const projectOgFilename = (['og.jpg', 'og.png', 'og.webp'] as const).find((name) =>
+	existsSync(join(process.cwd(), 'public', 'portfolio', folderName, name)),
+);
+const projectOgImage = projectOgFilename
+	? `/portfolio/${folderName}/${projectOgFilename}`
 	: undefined;
 const coverFilename = getCoverFilename(data.thumbnail);
 const galleryLayout = buildGalleryLayout(folderName, coverFilename);
