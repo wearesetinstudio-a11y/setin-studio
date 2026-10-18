@@ -96,23 +96,6 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		transform: translateZ(0);
 	}
 
-	.about-parallax__layer.is-hidden {
-		opacity: 0;
-		visibility: hidden;
-	}
-
-	/* Mobile fixed stage: full viewport, clipped to the about-visual window. */
-	.about-parallax__layer.is-fixed {
-		position: fixed;
-		inset: auto;
-		top: 0;
-		left: 0;
-		z-index: 0;
-		width: 100%;
-		height: 100%;
-		height: 100svh;
-	}
-
 	.about-parallax__shift {
 		position: absolute;
 		inset: 0;
@@ -121,6 +104,7 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		overflow: hidden;
 		transform: translate3d(0, 0, 0);
 		backface-visibility: hidden;
+		will-change: transform;
 	}
 
 	.about-parallax__image {
@@ -128,37 +112,19 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		width: 100%;
 		object-fit: cover;
 		object-position: center 42%;
+		transform: scale(1.24) translateZ(0);
+		transform-origin: center 42%;
 		backface-visibility: hidden;
-	}
-
-	/* Desktop: parallax lag. Mobile: fixed bg, no motion. */
-	@media (min-width: 768px) {
-		.about-parallax__shift {
-			will-change: transform;
-		}
-
-		.about-parallax__image {
-			transform: scale(1.24) translateZ(0);
-			transform-origin: center 42%;
-		}
 	}
 
 	@media (max-width: 767px) {
 		.about-parallax__image {
 			object-position: center 36%;
-			transform: none;
+			transform-origin: center 36%;
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.about-parallax__layer.is-fixed {
-			position: absolute;
-			inset: 0;
-			width: auto;
-			height: auto;
-			clip-path: none;
-		}
-
 		.about-parallax__shift {
 			transform: translate3d(0, 0, 0) !important;
 			will-change: auto;
@@ -166,12 +132,6 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 
 		.about-parallax__image {
 			transform: scale(1.05) translateZ(0);
-		}
-
-		@media (max-width: 767px) {
-			.about-parallax__image {
-				transform: none;
-			}
 		}
 	}
 
@@ -227,44 +187,15 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		visual.dataset.parallaxInit = 'true';
 
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const mobileQuery = window.matchMedia('(max-width: 767px)');
 		const shift = layer.querySelector<HTMLElement>('.about-parallax__shift');
-		if (!shift) return;
+		if (!shift || reduceMotion) return;
 
 		const TRAVEL = 0.12;
-		const LERP = 0.22;
+		const LERP = window.matchMedia('(max-width: 767px)').matches ? 0.14 : 0.22;
 
 		let target = 0;
 		let current = 0;
 		let rafId = 0;
-		let parallaxRunning = false;
-
-		const clearFixedStage = () => {
-			layer.classList.remove('is-fixed', 'is-hidden');
-			layer.style.clipPath = '';
-			shift.style.transform = 'translate3d(0, 0, 0)';
-		};
-
-		const syncFixedStage = () => {
-			const rect = visual.getBoundingClientRect();
-			const vh = window.innerHeight;
-			const vw = window.innerWidth;
-			const visible = rect.bottom > 0 && rect.top < vh;
-
-			if (!visible) {
-				layer.classList.add('is-hidden');
-				layer.classList.remove('is-fixed');
-				layer.style.clipPath = '';
-				return;
-			}
-
-			layer.classList.add('is-fixed');
-			layer.classList.remove('is-hidden');
-			const top = Math.max(0, rect.top);
-			const bottom = Math.min(vh, rect.bottom);
-			layer.style.clipPath = `inset(${top}px ${Math.max(0, vw - rect.right)}px ${Math.max(0, vh - bottom)}px ${Math.max(0, rect.left)}px)`;
-			shift.style.transform = 'translate3d(0, 0, 0)';
-		};
 
 		const readTarget = () => {
 			const rect = visual.getBoundingClientRect();
@@ -279,60 +210,35 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		};
 
 		const tick = () => {
-			if (!parallaxRunning) return;
 			current += (target - current) * LERP;
 			if (Math.abs(target - current) < 0.05) current = target;
 			shift.style.transform = `translate3d(0, ${current}px, 0)`;
 			rafId = requestAnimationFrame(tick);
 		};
 
-		const stopParallax = () => {
-			parallaxRunning = false;
-			cancelAnimationFrame(rafId);
-			rafId = 0;
-		};
-
-		const startParallax = () => {
-			if (reduceMotion || parallaxRunning) return;
-			parallaxRunning = true;
-			readTarget();
-			current = target;
-			rafId = requestAnimationFrame(tick);
-		};
+		readTarget();
+		current = target;
+		rafId = requestAnimationFrame(tick);
 
 		const onScroll = () => {
-			if (mobileQuery.matches) {
-				if (!reduceMotion) syncFixedStage();
-				return;
-			}
 			readTarget();
 		};
 
-		const applyMode = () => {
-			stopParallax();
-			if (mobileQuery.matches) {
-				if (reduceMotion) {
-					clearFixedStage();
-				} else {
-					syncFixedStage();
-				}
-				return;
-			}
-			clearFixedStage();
-			startParallax();
-		};
-
-		applyMode();
 		window.addEventListener('scroll', onScroll, { passive: true });
 		getLenis()?.on('scroll', onScroll);
-		mobileQuery.addEventListener('change', applyMode);
-		window.addEventListener('resize', applyMode, { passive: true });
+		window.addEventListener(
+			'resize',
+			() => {
+				readTarget();
+				current = target;
+			},
+			{ passive: true },
+		);
 
 		document.addEventListener(
 			'astro:before-preparation',
 			() => {
-				stopParallax();
-				clearFixedStage();
+				cancelAnimationFrame(rafId);
 			},
 			{ once: true },
 		);

@@ -26,6 +26,8 @@ interface Props {
 	imageAlt?: string;
 	/** Leading chrome color (navbar / footer / preloader). */
 	themeColor?: string;
+	/** LCP / hero image to preload (project & about backgrounds). */
+	preloadImage?: string;
 	/** Extra Schema.org objects rendered as JSON-LD script tags. */
 	jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
@@ -36,6 +38,7 @@ const {
 	image = '/images/og.jpg',
 	imageAlt = 'Setin Studio — branding, UI/UX design and B2B digital platforms',
 	themeColor: themeColorProp = '',
+	preloadImage = '',
 	jsonLd,
 } = Astro.props;
 
@@ -152,6 +155,11 @@ const themeColorMapJson = JSON.stringify(themeColorMap).replace(/</g, '\\u003c')
 			href="https://fonts.googleapis.com/css2?family=Fustat:wght@400;500;600;700;800&display=swap"
 			rel="stylesheet"
 		/>
+		{
+			preloadImage ? (
+				<link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
+			) : null
+		}
 		<title>{pageTitle}</title>
 		<script
 			type="application/ld+json"
