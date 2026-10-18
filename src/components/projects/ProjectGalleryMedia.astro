@@ -45,11 +45,11 @@ const altsJson = JSON.stringify(alts);
 			<video
 				src={item.src}
 				class="block h-auto w-full"
-				autoplay
 				muted
 				loop
 				playsinline
-				preload="metadata"
+				preload="none"
+				data-buffered-autoplay
 				data-alts={altsJson}
 				aria-label={label}
 			/>
@@ -66,7 +66,13 @@ const altsJson = JSON.stringify(alts);
 
 <script>
 	import { initRiveCovers } from '../../scripts/initRiveCovers';
+	import { initBufferedAutoplayVideos } from '../../scripts/initBufferedAutoplayVideos';
 
-	initRiveCovers();
-	document.addEventListener('astro:page-load', initRiveCovers);
+	const boot = () => {
+		initRiveCovers();
+		initBufferedAutoplayVideos();
+	};
+
+	boot();
+	document.addEventListener('astro:page-load', boot);
 </script>

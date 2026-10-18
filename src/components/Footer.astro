@@ -366,10 +366,17 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 	.site-footer__list {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
-		margin: 0;
+		/* Former gap → link padding; negative margin keeps first/last text in place */
+		gap: 0;
+		margin: -0.625rem 0;
 		padding: 0;
 		list-style: none;
+	}
+
+	.site-footer__list .site-footer__link {
+		padding-block: 0.625rem;
+		padding-inline: 0.5rem;
+		margin-inline: -0.5rem;
 	}
 
 	.site-footer__link {
@@ -378,6 +385,14 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 		color: #f5f5f5;
 		text-decoration: none;
 		padding-bottom: 0.2em;
+	}
+
+	/* Standalone contact links (email / WhatsApp) — expand hit area only */
+	.site-footer__contact-block .site-footer__link::before {
+		content: '';
+		position: absolute;
+		inset-block: -0.55rem;
+		inset-inline: -0.5rem;
 	}
 
 	.site-footer__link--underlined {
@@ -673,7 +688,13 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 		}
 
 		.site-footer__list {
-			gap: 1.35rem;
+			margin-block: -0.675rem;
+		}
+
+		.site-footer__list .site-footer__link {
+			padding-block: 0.675rem;
+			padding-inline: 0.55rem;
+			margin-inline: -0.55rem;
 		}
 
 		.site-footer__col-label {

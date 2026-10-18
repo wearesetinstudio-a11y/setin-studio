@@ -31,3 +31,8 @@ public/pitches/**/_video-ref/
 public/pitches/**/_preview/
 public/_footer-ref/
 .env*
+
+# local media re-encode backups / scratch
+public/**/*.preopt
+public/_reencode-tmp/
+public/images/brothers-intro.source.webp

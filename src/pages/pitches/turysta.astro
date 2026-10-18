@@ -133,13 +133,13 @@ const pitchNav = [
 	}}
 >
 	{/* —— Hero —— */}
-	<section id="turysta-hero" class="turysta-hero relative min-h-[100svh] overflow-hidden" aria-label="Hero" data-pitch-hero>
-		<div class="turysta-hero__stage" aria-hidden="true" data-pitch-hero-stage>
-			<div class="turysta-hero__bg-shift" data-pitch-hero-shift>
+	<section id="turysta-hero" class="turysta-hero relative min-h-[100svh] overflow-hidden md:min-h-[100dvh]" aria-label="Hero" data-pitch-hero>
+		<div class="turysta-hero__stage bg-parallax bg-parallax--hero" aria-hidden="true" data-pitch-hero-stage>
+			<div class="turysta-hero__bg-shift bg-parallax__shift" data-pitch-hero-shift>
 				<img
 					src={asset('bg.webp')}
 					alt=""
-					class="turysta-hero__bg-image"
+					class="turysta-hero__bg-image bg-parallax__media"
 					width="2400"
 					height="1485"
 					loading="eager"
@@ -151,7 +151,7 @@ const pitchNav = [
 		</div>
 
 		<div
-			class="turysta-hero__content relative z-10 flex min-h-[100svh] flex-col px-[var(--pitch-gutter)] pt-24 md:pt-0"
+			class="turysta-hero__content relative z-10 flex min-h-[100svh] flex-col px-[var(--pitch-gutter)] pt-24 md:min-h-[100dvh] md:pt-0"
 		>
 			<div
 				class="mx-auto flex w-full max-w-[920px] flex-1 flex-col items-center justify-center gap-3 text-center text-white md:gap-4"
@@ -444,62 +444,25 @@ const pitchNav = [
 		z-index: 0;
 	}
 
-	.turysta-hero__stage {
-		position: fixed;
-		inset: 0;
-		z-index: 0;
-		width: 100%;
-		height: 100svh;
-		background: #0c133e;
-		pointer-events: none;
+	.turysta-hero {
+		position: relative;
 		overflow: hidden;
-	}
-
-	.turysta-hero__stage.is-hidden {
-		opacity: 0;
-		visibility: hidden;
-	}
-
-	.turysta-hero__bg-shift {
-		position: absolute;
-		inset: 0;
-		overflow: hidden;
-		transform: translate3d(0, 0, 0);
-		backface-visibility: hidden;
 		will-change: transform;
 	}
 
-	.turysta-hero__bg-image {
+	.turysta-hero__stage {
 		position: absolute;
 		inset: 0;
-		display: block;
+		z-index: 0;
 		width: 100%;
-		min-width: 100%;
 		height: 100%;
-		min-height: 100%;
-		object-fit: cover;
-		object-position: center center;
-		backface-visibility: hidden;
+		background: #0c133e;
 		pointer-events: none;
+	}
+
+	.turysta-hero__bg-image {
+		object-position: center center;
 		user-select: none;
-	}
-
-	@media (min-width: 768px) {
-		.turysta-hero__stage.is-parallax-active .turysta-hero__bg-image {
-			transform: scale(1.24) translateZ(0);
-			transform-origin: center center;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.turysta-hero__bg-shift {
-			transform: translate3d(0, 0, 0) !important;
-			will-change: auto;
-		}
-
-		.turysta-hero__stage.is-parallax-active .turysta-hero__bg-image {
-			transform: scale(1.05) translateZ(0);
-		}
 	}
 
 	.turysta-hero__shade {

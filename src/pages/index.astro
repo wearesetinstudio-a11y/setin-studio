@@ -19,6 +19,7 @@ const { projectCount } = await getSiteCounts();
 	<div id="hero-background-stack" class="hero-background-stack pointer-events-none" aria-hidden="true">
 		<video
 			src="/hero-background.mp4"
+			poster="/hero-background-poster.webp"
 			class="hero-background-video absolute inset-0 h-full w-full object-cover object-center brightness-[0.85] contrast-[1.15] grayscale"
 			autoplay
 			muted
@@ -193,7 +194,11 @@ const { projectCount } = await getSiteCounts();
 				const video = document.querySelector<HTMLVideoElement>('#hero-background-stack video');
 				if (!video || heroStackHidden) return;
 				video.muted = true;
-				void video.play().catch(() => {});
+				const play = () => {
+					void video.play().catch(() => {});
+				};
+				if (video.readyState >= 3) play();
+				else video.addEventListener('canplay', play, { once: true });
 			}
 
 			initCinemaPureNoise('cinema-pure-noise-filter', {

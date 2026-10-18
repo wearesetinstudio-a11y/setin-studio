@@ -1,42 +1,50 @@
 ---
 import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
+import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion.ts';
+
+const foundersSrc = withPublicAssetVersion('/images/brothers-intro.webp');
+const foundersSrc1280 = withPublicAssetVersion('/images/brothers-intro-1280.webp');
 ---
 
-<section id="about-hero" class="about-hero relative min-h-[95svh] overflow-hidden md:min-h-[96vh]">
+<section
+	id="about-hero"
+	class="about-hero relative min-h-[95svh] overflow-hidden md:min-h-[96dvh]"
+>
 	<div
 		id="about-hero-visual"
-		class="about-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 w-full overflow-hidden bg-[#131415]"
+		class="about-hero-visual bg-parallax bg-parallax--hero pointer-events-none absolute inset-0 isolate z-0 overflow-hidden bg-[#131415]"
 	>
-		<div class="about-hero-photo-shift">
-			<picture class="absolute inset-0">
-				<source srcset="/images/brothers-intro.webp" type="image/webp" />
-				<img
-					src="/images/brothers-intro.webp"
-					alt={FOUNDERS_PHOTO_ALTS.en}
-					width="2400"
-					height="1604"
-					class="about-hero-photo h-full w-full grayscale"
-					loading="eager"
-					decoding="async"
-					fetchpriority="high"
-					data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
-				/>
-			</picture>
+		<div class="about-hero-photo-shift bg-parallax__shift">
+			<img
+				src={foundersSrc}
+				srcset={`${foundersSrc1280} 1280w, ${foundersSrc} 1920w`}
+				sizes="100vw"
+				alt={FOUNDERS_PHOTO_ALTS.en}
+				width="1920"
+				height="1284"
+				class="about-hero-photo bg-parallax__media grayscale"
+				loading="eager"
+				decoding="async"
+				fetchpriority="high"
+				data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
+			/>
 		</div>
+
+		<div
+			class="about-hero__overlay pointer-events-none absolute inset-0 z-[1] bg-[#131415]/10"
+			aria-hidden="true"
+		></div>
 
 		<canvas
 			id="about-hero-noise-filter"
 			class="pointer-events-none absolute inset-0 z-[2] block h-full w-full bg-transparent"
 			aria-hidden="true"
 		></canvas>
-
-		<div
-			class="about-hero__overlay pointer-events-none absolute inset-0 z-[1] bg-[#131415]/10"
-			aria-hidden="true"
-		></div>
 	</div>
 
-	<div class="about-hero__copy relative z-10 flex min-h-[95svh] items-end px-[var(--page-gutter)] pb-14 pt-28 md:min-h-[96vh] md:pb-16">
+	<div
+		class="about-hero__copy relative z-10 flex min-h-[95svh] items-end px-[var(--page-gutter)] pb-14 pt-28 md:min-h-[96dvh] md:pb-16"
+	>
 		<h1
 			id="hero-headline"
 			class="about-hero__title about-hero-headline max-w-4xl uppercase text-setin-fg"
@@ -49,31 +57,46 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 </section>
 
 <style is:global>
-	.about-hero-visual.is-hidden {
-		opacity: 0;
-		visibility: hidden;
-	}
-
-	.about-hero-visual {
-		height: 100vh;
-		height: 100svh;
-	}
-
-	.about-hero-photo-shift {
-		position: absolute;
-		inset: 0;
+	.about-hero {
+		position: relative;
+		overflow: hidden;
 		will-change: transform;
 	}
 
+	.about-hero-picture {
+		position: absolute;
+		inset: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
 	.about-hero-photo {
-		object-fit: cover;
 		object-position: center 22%;
 	}
 
 	@media (min-width: 768px) {
-		.about-hero-photo {
-			transform: scale(1.4);
+		.about-hero-photo.bg-parallax__media {
+			/* Face crop — CSS only, never toggled by JS. */
+			transform: scale(1.4) translateZ(0);
 			transform-origin: center 12%;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.about-hero-photo {
+			object-position: center 15%;
+		}
+	}
+
+	@media (max-width: 767px) and (orientation: landscape) {
+		.about-hero,
+		.about-hero__copy {
+			min-height: 100svh;
+		}
+
+		.about-hero-photo {
+			object-position: center center;
 		}
 	}
 
@@ -84,51 +107,6 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 	@media (min-width: 768px) {
 		.about-hero__title {
 			font-size: 3rem;
-		}
-	}
-
-	@media (max-width: 767px) {
-		.about-hero {
-			min-height: 95svh;
-		}
-
-		/* Mobile: fixed bg, no parallax — image stays in place while scrolling. */
-		.about-hero-visual {
-			height: 95svh;
-			min-height: 95svh;
-		}
-
-		.about-hero__copy {
-			height: 95svh;
-			min-height: 95svh;
-		}
-
-		.about-hero-photo-shift {
-			inset: 0;
-			height: 100%;
-			will-change: auto;
-		}
-
-		.about-hero-photo {
-			object-fit: cover;
-			object-position: center 15%;
-			transform: none;
-		}
-	}
-
-	@media (max-width: 767px) and (orientation: landscape) {
-		.about-hero {
-			min-height: 100svh;
-		}
-
-		.about-hero-visual,
-		.about-hero__copy {
-			height: 100svh;
-			min-height: 100svh;
-		}
-
-		.about-hero-photo {
-			object-position: center center;
 		}
 	}
 
@@ -159,38 +137,22 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 </style>
 
 <script>
+	import { initBgParallax } from '../../scripts/initBgParallax.ts';
 	import { initCinemaPureNoise } from '../../scripts/initCinemaPureNoise.ts';
-	import {
-		fixedStageOffset,
-		getParallaxSpeed,
-		isParallaxMobile,
-		onParallaxScroll,
-	} from '../../scripts/initSlowBgParallax.ts';
 	import { splitIntoRevealLines, waitForPageReveal } from '../../scripts/lineSlideUpReveal.ts';
 
 	function initAboutHeroVisual() {
 		const hero = document.getElementById('about-hero');
 		const visual = document.getElementById('about-hero-visual');
+		const shift = visual?.querySelector<HTMLElement>('.about-hero-photo-shift');
 		if (!hero || !visual || hero.dataset.heroVisualInit === 'true') return;
 
 		hero.dataset.heroVisualInit = 'true';
+		initCinemaPureNoise('about-hero-noise-filter', { observeElementId: 'about-hero' });
 
-		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const shift = visual.querySelector<HTMLElement>('.about-hero-photo-shift');
-
-		const syncHeroVisual = () => {
-			const rect = hero.getBoundingClientRect();
-			visual.classList.toggle('is-hidden', rect.bottom <= 0);
-			// Mobile: fixed only — no parallax motion.
-			if (!shift || reduceMotion || isParallaxMobile()) {
-				if (shift) shift.style.transform = 'translate3d(0, 0, 0)';
-				return;
-			}
-			const speed = getParallaxSpeed();
-			shift.style.transform = `translate3d(0, ${fixedStageOffset(rect.top, speed)}px, 0)`;
-		};
-
-		onParallaxScroll(syncHeroVisual)();
+		if (shift) {
+			initBgParallax({ root: hero, visual, shift });
+		}
 	}
 
 	function prepareAboutHeroCopy() {
@@ -236,9 +198,9 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 		if (!document.getElementById('about-hero')) return;
 		initAboutHeroVisual();
 		initAboutHeroReveal();
-		initCinemaPureNoise('about-hero-noise-filter', { observeElementId: 'about-hero' });
 	}
 
+	initAboutHero();
 	document.addEventListener('astro:page-load', initAboutHero);
 	window.addEventListener('setin:language-change', () => {
 		const headline = document.querySelector<HTMLElement>('[data-about-hero-headline]');

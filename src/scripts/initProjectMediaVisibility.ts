@@ -6,6 +6,25 @@ type MediaWindow = Window &
 /** Play only when the cover is actually in / near the viewport. */
 const PLAY_MARGIN = '8% 0px';
 
+function tryPlayWhenReady(video: HTMLVideoElement) {
+	video.muted = true;
+	const play = () => {
+		void video.play().catch(() => {});
+	};
+
+	/* Wait for a buffered start so covers do not hitch on first frames. */
+	if (video.readyState >= 3) {
+		play();
+		return;
+	}
+
+	const onCanPlay = () => {
+		video.removeEventListener('canplay', onCanPlay);
+		play();
+	};
+	video.addEventListener('canplay', onCanPlay);
+}
+
 function getObserver(): IntersectionObserver {
 	const mediaWindow = window as MediaWindow;
 	if (mediaWindow.__setinProjectMediaObserver) return mediaWindow.__setinProjectMediaObserver;
@@ -21,7 +40,7 @@ function getObserver(): IntersectionObserver {
 						video.preload = 'auto';
 						if (video.readyState < 2) video.load();
 					}
-					void video.play().catch(() => {});
+					tryPlayWhenReady(video);
 				} else if (!video.paused) {
 					video.pause();
 				}

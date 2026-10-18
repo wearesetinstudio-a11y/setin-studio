@@ -183,11 +183,11 @@ const pitchNav = [
 	}}
 >
 	{/* —— Hero —— */}
-	<section id="aero-hero" class="aero-hero relative min-h-[100svh] overflow-hidden" aria-label="Hero" data-pitch-hero>
-		<div class="aero-hero__stage" aria-hidden="true" data-pitch-hero-stage>
-			<div class="aero-hero__bg-shift" data-pitch-hero-shift>
+	<section id="aero-hero" class="aero-hero relative min-h-[100svh] overflow-hidden md:min-h-[100dvh]" aria-label="Hero" data-pitch-hero>
+		<div class="aero-hero__stage bg-parallax bg-parallax--hero" aria-hidden="true" data-pitch-hero-stage>
+			<div class="aero-hero__bg-shift bg-parallax__shift" data-pitch-hero-shift>
 				<video
-					class="aero-hero__bg-video"
+					class="aero-hero__bg-video bg-parallax__media"
 					data-toros-video
 					autoplay
 					muted
@@ -203,7 +203,7 @@ const pitchNav = [
 		</div>
 
 		<div
-			class="aero-hero__content relative z-10 flex min-h-[100svh] flex-col px-[var(--pitch-gutter)] pt-24 md:pt-0"
+			class="aero-hero__content relative z-10 flex min-h-[100svh] flex-col px-[var(--pitch-gutter)] pt-24 md:min-h-[100dvh] md:pt-0"
 		>
 			<div
 				class="mx-auto flex w-full max-w-[1100px] flex-1 flex-col items-center justify-center gap-3 text-center text-white md:gap-4"
@@ -515,61 +515,24 @@ const pitchNav = [
 		z-index: 0;
 	}
 
-	.aero-hero__stage {
-		position: fixed;
-		inset: 0;
-		z-index: 0;
-		width: 100%;
-		height: 100svh;
-		background: #0d0e0f;
-		pointer-events: none;
+	.aero-hero {
+		position: relative;
 		overflow: hidden;
-	}
-
-	.aero-hero__stage.is-hidden {
-		opacity: 0;
-		visibility: hidden;
-	}
-
-	.aero-hero__bg-shift {
-		position: absolute;
-		inset: 0;
-		overflow: hidden;
-		transform: translate3d(0, 0, 0);
-		backface-visibility: hidden;
 		will-change: transform;
 	}
 
-	.aero-hero__bg-video {
+	.aero-hero__stage {
 		position: absolute;
 		inset: 0;
-		display: block;
+		z-index: 0;
 		width: 100%;
-		min-width: 100%;
 		height: 100%;
-		min-height: 100%;
-		object-fit: cover;
-		object-position: center center;
-		backface-visibility: hidden;
+		background: #0d0e0f;
 		pointer-events: none;
 	}
 
-	@media (min-width: 768px) {
-		.aero-hero__stage.is-parallax-active .aero-hero__bg-video {
-			transform: scale(1.24) translateZ(0);
-			transform-origin: center center;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.aero-hero__bg-shift {
-			transform: translate3d(0, 0, 0) !important;
-			will-change: auto;
-		}
-
-		.aero-hero__stage.is-parallax-active .aero-hero__bg-video {
-			transform: scale(1.05) translateZ(0);
-		}
+	.aero-hero__bg-video {
+		object-position: center center;
 	}
 
 	.aero-hero__shade {

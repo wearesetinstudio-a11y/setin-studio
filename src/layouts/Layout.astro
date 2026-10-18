@@ -160,6 +160,25 @@ const themeColorMapJson = JSON.stringify(themeColorMap).replace(/</g, '\\u003c')
 				<link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
 			) : null
 		}
+		{
+			/* Homepage “Our story” — separate preloads so mobile does not miss the 1280 asset. */
+			barePath === '/' ? (
+				<>
+					<link
+						rel="preload"
+						as="image"
+						href={withPublicAssetVersion('/images/brothers-intro-1280.webp')}
+						media="(max-width: 767px)"
+					/>
+					<link
+						rel="preload"
+						as="image"
+						href={withPublicAssetVersion('/images/brothers-intro.webp')}
+						media="(min-width: 768px)"
+					/>
+				</>
+			) : null
+		}
 		<title>{pageTitle}</title>
 		<script
 			type="application/ld+json"

@@ -8,6 +8,7 @@ import AboutTeamMember from '../components/about/AboutTeamMember.astro';
 import TestimonialsSection from '../components/TestimonialsSection.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
+import { withPublicAssetVersion } from '../utils/withPublicAssetVersion.ts';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const { projectCount } = await getSiteCounts();
@@ -58,6 +59,7 @@ const teamMembers = [
 <Layout
 	title="About Us"
 	description="Meet the brothers behind Setin Studio — a digital product studio built on vision and execution."
+	preloadImage={withPublicAssetVersion('/images/brothers-intro.webp')}
 >
 	<Header projectCount={projectCount} />
 

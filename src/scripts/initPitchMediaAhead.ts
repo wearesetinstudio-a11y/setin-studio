@@ -4,11 +4,11 @@ import { pitchReady } from './pitchReady.ts';
  * Prefetch pitch media ahead of the viewport so images/videos are warm when the
  * section appears. Starts after the preloader (hero keeps bandwidth first).
  *
- * Concurrency is capped so a full-bleed stack of WebPs / WebMs does not saturate
- * the connection the way naive `loading="eager"` on everything in a tall rootMargin would.
+ * Keep the ahead window and concurrency modest so on-screen video can buffer
+ * without fighting a stack of upcoming WebPs / WebMs for bandwidth.
  */
-const ROOT_MARGIN = '120% 0px 280% 0px';
-const MAX_CONCURRENT = 3;
+const ROOT_MARGIN = '40% 0px 90% 0px';
+const MAX_CONCURRENT = 1;
 
 export function initPitchMediaAhead() {
 	const targets = Array.from(

@@ -7,7 +7,7 @@ export function normalizeNavPath(pathname: string): string {
 
 /**
  * Whether a nav/footer href matches the current bare path.
- * `/projects` is active for `/projects` and `/projects/slug`.
+ * Exact match only — `/projects` is active on `/projects`, not `/projects/slug`.
  */
 export function isActiveNavHref(href: string, barePath: string): boolean {
 	if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http')) {
@@ -17,6 +17,5 @@ export function isActiveNavHref(href: string, barePath: string): boolean {
 	const path = normalizeNavPath(barePath);
 	const target = normalizeNavPath(href);
 
-	if (target === '/') return path === '/';
-	return path === target || path.startsWith(`${target}/`);
+	return path === target;
 }

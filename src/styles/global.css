@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 /* Desktop: true hover. Touch: only while pressing. */
 @custom-variant hover {
@@ -73,7 +73,7 @@ body {
 	@apply text-setin-fg antialiased;
 }
 
-/* Body txt 1 — default body copy across the site */
+/* Body txt 1 â€” default body copy across the site */
 .body-txt-1,
 p,
 li,
@@ -125,7 +125,7 @@ label,
 	font-weight: 600;
 }
 
-/* H1 — home hero */
+/* H1 â€” home hero */
 .text-h1,
 .hero-headline {
 	font-weight: 600;
@@ -144,7 +144,7 @@ label,
 	}
 }
 
-/* H3 — project hero headline */
+/* H3 â€” project hero headline */
 .text-h3,
 .project-hero__title {
 	font-weight: 600;
@@ -160,7 +160,7 @@ label,
 	}
 }
 
-/* Subtitle 1 — e.g. “Our story” */
+/* Subtitle 1 â€” e.g. â€śOur storyâ€ť */
 .text-subtitle-1,
 .about-visual__eyebrow {
 	font-weight: 600;
@@ -177,7 +177,7 @@ label,
 	}
 }
 
-/* Subtitle 2 — section headings (home + project sections) */
+/* Subtitle 2 â€” section headings (home + project sections) */
 .text-subtitle-2,
 .clients-heading,
 .projects-heading,
@@ -303,5 +303,79 @@ body.intro-active {
 @media (prefers-reduced-motion: reduce) {
 	.sygnet-flip-x {
 		animation: none !important;
+	}
+}
+
+/* —— Shared bg parallax (JS-driven translate3d; CSS only sizes) —— */
+.bg-parallax {
+	overflow: hidden;
+	will-change: transform;
+}
+
+.bg-parallax__shift {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	transform: translate3d(0, 0, 0);
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+	will-change: transform;
+}
+
+/* Media fills the shift layer — size is CSS-only, never mutated by JS. */
+.bg-parallax__media {
+	position: absolute;
+	inset: 0;
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transform: translateZ(0);
+	backface-visibility: hidden;
+	pointer-events: none;
+}
+
+@media (min-width: 768px) {
+	.bg-parallax__shift {
+		inset: 0;
+		height: 100%;
+	}
+
+	.bg-parallax__media {
+		transform: scale(1.24) translateZ(0);
+		transform-origin: center center;
+	}
+}
+
+@media (max-width: 767px) {
+	/*
+	 * Fixed bleed buffer from first paint — height/top never change via JS.
+	 * Keeps cover full-bleed while translate3d moves within the buffer.
+	 */
+	.bg-parallax__shift {
+		top: -10%;
+		height: 125%;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bg-parallax__shift {
+		transform: translate3d(0, 0, 0) !important;
+		will-change: auto;
+	}
+
+	.bg-parallax__media {
+		transform: translateZ(0) !important;
+	}
+
+	@media (max-width: 767px) {
+		.bg-parallax__shift {
+			top: 0;
+			height: 100%;
+		}
 	}
 }

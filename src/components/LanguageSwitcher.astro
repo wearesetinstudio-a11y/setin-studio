@@ -52,6 +52,7 @@ const languages = [
 	}
 
 	.language-switcher__btn {
+		position: relative;
 		font-size: 1.05rem;
 		font-weight: 600;
 		line-height: 1;
@@ -64,6 +65,14 @@ const languages = [
 		border: 0;
 		padding: 0.15rem 0;
 		cursor: pointer;
+	}
+
+	/* Expand hit area into surrounding gap without moving the label */
+	.language-switcher__btn::before {
+		content: '';
+		position: absolute;
+		inset-block: -0.7rem;
+		inset-inline: -0.45rem;
 	}
 
 	.language-switcher__btn[aria-pressed='true'] {

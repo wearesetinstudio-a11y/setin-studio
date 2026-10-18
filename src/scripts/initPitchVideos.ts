@@ -9,12 +9,16 @@ export function initPitchVideos() {
 
 	const tryPlay = (video: HTMLVideoElement) => {
 		video.muted = true;
-		const play = video.play();
-		if (play && typeof play.catch === 'function') {
-			play.catch(() => {
-				/* Autoplay can still be blocked — poster remains */
-			});
-		}
+		const play = () => {
+			const result = video.play();
+			if (result && typeof result.catch === 'function') {
+				result.catch(() => {
+					/* Autoplay can still be blocked — poster remains */
+				});
+			}
+		};
+		if (video.readyState >= 3) play();
+		else video.addEventListener('canplay', play, { once: true });
 	};
 
 	const io = new IntersectionObserver(

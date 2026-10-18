@@ -323,9 +323,10 @@ const services = serviceIds.map((id, index) => {
 		display: flex;
 		max-height: 60vh;
 		flex-direction: column;
-		gap: 18px;
+		gap: 0;
 		overflow-y: auto;
-		padding: 1rem 0 1.25rem;
+		/* Keep first/last text where they were when gap was 18px */
+		padding: calc(1rem - 9px) 0 calc(1.25rem - 9px);
 	}
 
 	.services-mobile-nav__link,
@@ -342,6 +343,10 @@ const services = serviceIds.map((id, index) => {
 
 	.services-mobile-nav__link {
 		display: block;
+		/* Former 18px gap → padding so hit area fills the space */
+		padding-block: 9px;
+		padding-inline: 0.5rem;
+		margin-inline: -0.5rem;
 		white-space: nowrap;
 		color: rgb(255 255 255 / 0.4);
 		transition: color 180ms ease;

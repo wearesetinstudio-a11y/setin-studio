@@ -49,7 +49,7 @@ const underlineColor = inverted ? 'bg-black' : 'bg-white';
 		isCurrent && 'rolling-link--current',
 		isFooter
 			? ['site-footer__link', underlined && 'site-footer__link--underlined']
-			: ['-mx-1 -my-2 px-1 py-2', inverted ? 'text-black' : 'text-setin-fg'],
+			: ['rolling-link--nav', inverted ? 'text-black' : 'text-setin-fg'],
 	]}
 	aria-current={isCurrent ? 'page' : undefined}
 	data-nav-href={markCurrent ? href : undefined}
@@ -95,6 +95,12 @@ const underlineColor = inverted ? 'bg-black' : 'bg-white';
 </a>
 
 <style is:global>
+	/* Enlarge hit area without shifting text (margin cancels padding) */
+	.rolling-link--nav {
+		margin: -0.85rem -0.75rem;
+		padding: 0.85rem 0.75rem;
+	}
+
 	.rolling-link__mask {
 		display: block;
 		height: 1.5em;

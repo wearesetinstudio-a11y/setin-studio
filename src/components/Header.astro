@@ -156,7 +156,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 
 	<div class="mobile-nav-panel__content absolute inset-0 z-[1] flex h-full flex-col justify-center px-[var(--page-gutter)]">
 		<div class="mobile-nav-panel__inner flex w-full flex-col gap-10">
-			<nav class="flex flex-col gap-8" aria-label="Mobile" data-i18n-aria="nav.mobileAria">
+			<nav class="mobile-nav-links flex flex-col" aria-label="Mobile" data-i18n-aria="nav.mobileAria">
 				{
 					nav.map((item, index) => {
 						const current = isActiveNavHref(item.href, barePath);
@@ -835,6 +835,20 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 	.mobile-nav-link--current {
 		color: rgba(255, 255, 255, 0.5) !important;
 		opacity: 1;
+	}
+
+	/* Former gap-8 (2rem) → link padding; negative margin keeps outer spacing */
+	.mobile-nav-links {
+		gap: 0;
+		margin-block: -1rem;
+	}
+
+	.mobile-nav-link {
+		display: inline-flex;
+		align-self: flex-start;
+		padding-block: 1rem;
+		padding-inline: 0.5rem;
+		margin-inline: -0.5rem;
 	}
 
 	.mobile-nav-panel {

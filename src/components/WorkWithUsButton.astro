@@ -27,8 +27,8 @@ const displayLabel = count !== undefined ? `${label} [${count}]` : label;
 const useCount = count !== undefined;
 ---
 
-<div class:list={['work-with-us-button group relative inline-block', size !== 'large' && '-mx-1']}>
-	<a href={href} class={`relative -my-2 block px-1 py-2 ${textColor}`}>
+<div class:list={['work-with-us-button group relative inline-block', size !== 'large' && 'work-with-us-button--padded']}>
+	<a href={href} class={`work-with-us-button__link relative block ${textColor}`}>
 		{
 			isStatic ? (
 				<span
@@ -71,3 +71,12 @@ const useCount = count !== undefined;
 		aria-hidden="true"
 	></div>
 </div>
+
+<style>
+	/* Expand hit area without moving the underline under the label */
+	.work-with-us-button--padded .work-with-us-button__link::before {
+		content: '';
+		position: absolute;
+		inset: -0.85rem -0.75rem;
+	}
+</style>

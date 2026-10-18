@@ -81,53 +81,10 @@ export function initCinemaPureNoise(
 	/** Spread phases with wider gaps (~1/3 screen apart) */
 	const tearPhaseOffsets = Array.from({ length: TEAR_LINE_COUNT }, (_, i) => i / TEAR_LINE_COUNT);
 	let tearFadeNextAt = performance.now() + 800;
-	let cachedMedia: HTMLVideoElement | HTMLImageElement | null | undefined;
-	let cachedCrop: { sx: number; sy: number; sw: number; sh: number } | null = null;
-	let cachedCropKey = '';
 
 	canvas.style.contain = 'strict';
 	canvas.style.maxWidth = '100%';
 	canvas.style.pointerEvents = 'none';
-
-	function getSourceMedia(): HTMLVideoElement | HTMLImageElement | null {
-		if (cachedMedia !== undefined) {
-			const media = cachedMedia;
-			if (media instanceof HTMLVideoElement && media.readyState >= 2) return media;
-			if (media instanceof HTMLImageElement && media.complete && media.naturalWidth > 0) {
-				return media;
-			}
-		}
-
-		const video = container.querySelector('video');
-		if (video && video.readyState >= 2) {
-			cachedMedia = video;
-			return video;
-		}
-		const img = container.querySelector('img');
-		if (img && img.complete && img.naturalWidth > 0) {
-			cachedMedia = img;
-			return img;
-		}
-		cachedMedia = video ?? img ?? null;
-		return cachedMedia;
-	}
-
-	function getCoverCrop(
-		mediaW: number,
-		mediaH: number,
-		destW: number,
-		destH: number,
-	) {
-		const scale = Math.max(destW / mediaW, destH / mediaH);
-		const sw = destW / scale;
-		const sh = destH / scale;
-		return {
-			sx: (mediaW - sw) * 0.5,
-			sy: (mediaH - sh) * 0.5,
-			sw,
-			sh,
-		};
-	}
 
 	function getNoiseDimensions(w: number, h: number) {
 		const scale = Math.min(1, MAX_NOISE_WIDTH / w, MAX_NOISE_HEIGHT / h);
@@ -302,7 +259,10 @@ export function initCinemaPureNoise(
 		}
 	}
 
-	/** Single tear strip at y — skew + horizontal offset of underlying media */
+	/**
+	 * Tear strip as a lightweight overlay only — never copies the live video/image
+	 * into the canvas (that was forcing a second decode path every grain frame).
+	 */
 	function drawTearStrip(
 		y: number,
 		bandH: number,
@@ -310,13 +270,10 @@ export function initCinemaPureNoise(
 		offset: number,
 		invert: boolean,
 		opacity: number,
-		media: HTMLVideoElement | HTMLImageElement | null,
-		crop: { sx: number; sy: number; sw: number; sh: number } | null,
 	) {
 		if (opacity < 0.02) return;
 
 		const w = canvas.width;
-		const h = canvas.height;
 
 		ctx.save();
 		ctx.globalAlpha = opacity * 0.55;
@@ -328,41 +285,12 @@ export function initCinemaPureNoise(
 		ctx.closePath();
 		ctx.clip();
 
-		const toneFilter = invert
-			? 'invert(0.06) contrast(1.18) brightness(1.1)'
-			: 'contrast(1.12) brightness(1.06)';
-
-		if (media && crop) {
-			const mediaW =
-				media instanceof HTMLVideoElement ? media.videoWidth : media.naturalWidth;
-			const mediaH =
-				media instanceof HTMLVideoElement ? media.videoHeight : media.naturalHeight;
-
-			if (mediaW > 0 && mediaH > 0) {
-				const srcY = crop.sy + (y / h) * crop.sh;
-				const srcH = Math.max(1, (bandH / h) * crop.sh);
-				const mediaFilter = media.classList.contains('grayscale')
-					? `grayscale(1) brightness(0.85) contrast(1.15) ${toneFilter}`
-					: toneFilter;
-
-				ctx.filter = mediaFilter;
-				ctx.drawImage(media, crop.sx, srcY, crop.sw, srcH, offset, y, w, bandH);
-				ctx.globalAlpha = opacity * 0.15;
-				ctx.drawImage(
-					media,
-					crop.sx,
-					srcY,
-					crop.sw,
-					srcH,
-					-offset * 0.4,
-					y + skew * 0.15,
-					w,
-					bandH,
-				);
-				ctx.globalAlpha = opacity * 0.55;
-				ctx.filter = 'none';
-			}
-		}
+		/* Soft ghost shift without sampling the underlying media */
+		ctx.globalCompositeOperation = 'source-over';
+		ctx.fillStyle = invert
+			? `rgba(255, 255, 255, ${0.035 + opacity * 0.04})`
+			: `rgba(255, 255, 255, ${0.02 + opacity * 0.03})`;
+		ctx.fillRect(offset * 0.15, y, w, bandH + Math.abs(skew));
 
 		ctx.globalCompositeOperation = 'difference';
 		ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
@@ -429,33 +357,13 @@ export function initCinemaPureNoise(
 	function drawTearLines(now: number) {
 		if (prefersReducedMotion) return;
 
-		const w = canvas.width;
 		const h = canvas.height;
-		if (h < 2 || w < 2) return;
+		if (h < 2 || canvas.width < 2) return;
 
 		updateTearFades(now);
 
 		const bandH = Math.max(1, h * TEAR_BAND_HEIGHT);
 		const t = (now % TEAR_CYCLE_MS) / TEAR_CYCLE_MS;
-		const media = getSourceMedia();
-		let crop: { sx: number; sy: number; sw: number; sh: number } | null = null;
-
-		if (media) {
-			const mediaW =
-				media instanceof HTMLVideoElement ? media.videoWidth : media.naturalWidth;
-			const mediaH =
-				media instanceof HTMLVideoElement ? media.videoHeight : media.naturalHeight;
-			if (mediaW > 0 && mediaH > 0) {
-				const key = `${mediaW}x${mediaH}:${w}x${h}`;
-				if (cachedCrop && cachedCropKey === key) {
-					crop = cachedCrop;
-				} else {
-					crop = getCoverCrop(mediaW, mediaH, w, h);
-					cachedCrop = crop;
-					cachedCropKey = key;
-				}
-			}
-		}
 
 		if (Math.random() < 0.03) {
 			const idx = Math.floor(Math.random() * TEAR_LINE_COUNT);
@@ -474,8 +382,6 @@ export function initCinemaPureNoise(
 				tearOffsets[i] ?? 0,
 				tearInverts[i] ?? false,
 				tearOpacities[i] ?? 0,
-				media,
-				crop,
 			);
 		}
 	}

@@ -1,23 +1,39 @@
 ---
 import WorkWithUsButton from './WorkWithUsButton.astro';
 import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
+import { withPublicAssetVersion } from '../utils/withPublicAssetVersion.ts';
+
+const foundersSrc = withPublicAssetVersion('/images/brothers-intro.webp');
+const foundersSrc1280 = withPublicAssetVersion('/images/brothers-intro-1280.webp');
 ---
 
 <section id="about" class="about-section relative z-20 bg-[#131415]">
-	<div id="about-visual" class="about-visual relative overflow-hidden">
+	<div id="about-visual" class="about-visual bg-parallax relative overflow-hidden bg-[#131415]">
 		<div id="about-parallax-layer" class="about-parallax__layer pointer-events-none">
-			<div class="about-parallax__shift">
-				<img
-					src="/images/brothers-intro.webp"
-					alt={FOUNDERS_PHOTO_ALTS.en}
-					width="2400"
-					height="1604"
-					class="about-parallax__image h-full w-full object-cover grayscale"
-					loading="lazy"
-					decoding="async"
-					fetchpriority="low"
-					data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
-				/>
+			{/*
+			  Mobile Safari often defers off-screen <img> decode. CSS background on the
+			  shift layer starts fetching at parse time and avoids the black pop-in.
+			*/}
+			<div
+				class="about-parallax__shift bg-parallax__shift about-parallax__shift--photo"
+				style={`--founders-photo-mobile: url('${foundersSrc1280}'); --founders-photo-desktop: url('${foundersSrc}');`}
+				data-founders-bg
+			>
+				<picture>
+					<source media="(min-width: 768px)" srcset={foundersSrc} width="1920" height="1284" />
+					<img
+						src={foundersSrc1280}
+						alt={FOUNDERS_PHOTO_ALTS.en}
+						width="1280"
+						height="856"
+						class="about-parallax__image bg-parallax__media"
+						loading="eager"
+						decoding="async"
+						fetchpriority="auto"
+						data-founders-photo
+						data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
+					/>
+				</picture>
 			</div>
 		</div>
 
@@ -96,42 +112,70 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		transform: translateZ(0);
 	}
 
-	.about-parallax__shift {
-		position: absolute;
-		inset: 0;
+	.about-parallax__shift--photo {
+		background-color: #131415;
+		background-repeat: no-repeat;
+		background-size: cover;
+		filter: grayscale(1);
+	}
+
+	.about-parallax__shift--photo picture,
+	.about-parallax__image {
+		display: block;
 		height: 100%;
 		width: 100%;
-		overflow: hidden;
-		transform: translate3d(0, 0, 0);
-		backface-visibility: hidden;
-		will-change: transform;
 	}
 
 	.about-parallax__image {
-		height: 100%;
-		width: 100%;
 		object-fit: cover;
 		object-position: center 42%;
-		transform: scale(1.24) translateZ(0);
-		transform-origin: center 42%;
 		backface-visibility: hidden;
+		transform: translateZ(0);
 	}
 
+	/* Mobile: paint via CSS background (preloaded 1280). Keep <img> for alt text only. */
 	@media (max-width: 767px) {
+		.about-parallax__shift--photo {
+			background-image: var(--founders-photo-mobile);
+			background-position: center 36%;
+		}
+
 		.about-parallax__image {
+			opacity: 0;
 			object-position: center 36%;
-			transform-origin: center 36%;
+		}
+	}
+
+	/* Desktop: scale bleed; crop toward faces. */
+	@media (min-width: 768px) {
+		.about-parallax__shift--photo {
+			background-image: var(--founders-photo-desktop);
+			background-position: center 28%;
+			background-size: 124%;
+		}
+
+		.about-parallax__image {
+			object-position: center 28%;
+			transform: scale(1.24) translateZ(0);
+			transform-origin: center 28%;
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.about-parallax__shift {
-			transform: translate3d(0, 0, 0) !important;
-			will-change: auto;
-		}
-
 		.about-parallax__image {
 			transform: scale(1.05) translateZ(0);
+		}
+
+		@media (max-width: 767px) {
+			.about-parallax__image {
+				transform: translateZ(0);
+			}
+		}
+
+		@media (min-width: 768px) {
+			.about-parallax__shift--photo {
+				background-size: cover;
+			}
 		}
 	}
 
@@ -175,80 +219,57 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 </style>
 
 <script>
+	import { initBgParallax } from '../scripts/initBgParallax.ts';
 	import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
-	import { getLenis } from '../scripts/initSmoothScroll.ts';
 	import { initScrollLetterReveal } from '../scripts/initScrollLetterReveal.ts';
+
+	function foundersPhotoUrl(): string {
+		const img = document.querySelector<HTMLImageElement>('[data-founders-photo]');
+		const shift = document.querySelector<HTMLElement>('[data-founders-bg]');
+		const mobile = window.matchMedia('(max-width: 767px)').matches;
+		if (mobile) {
+			const fromCss = shift
+				? getComputedStyle(shift).getPropertyValue('--founders-photo-mobile')
+				: '';
+			const match = fromCss.match(/url\(['"]?(.+?)['"]?\)/);
+			if (match?.[1]) return match[1];
+		}
+		return img?.currentSrc || img?.src || '';
+	}
+
+	/** Force-decode the exact mobile/desktop URL before the section is reached. */
+	function warmFoundersPhoto() {
+		const url = foundersPhotoUrl();
+		if (!url) return;
+
+		const probe = new Image();
+		probe.decoding = 'async';
+		probe.src = url;
+		const finish = () => {
+			if (typeof probe.decode === 'function') {
+				void probe.decode().catch(() => undefined);
+			}
+		};
+		if (probe.complete) finish();
+		else probe.addEventListener('load', finish, { once: true });
+	}
 
 	function initAboutParallax() {
 		const visual = document.getElementById('about-visual');
-		const layer = document.getElementById('about-parallax-layer');
-		if (!visual || !layer || visual.dataset.parallaxInit === 'true') return;
+		const shift = visual?.querySelector<HTMLElement>('.about-parallax__shift');
+		if (!visual || !shift) return;
 
-		visual.dataset.parallaxInit = 'true';
-
-		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const shift = layer.querySelector<HTMLElement>('.about-parallax__shift');
-		if (!shift || reduceMotion) return;
-
-		const TRAVEL = 0.12;
-		const LERP = window.matchMedia('(max-width: 767px)').matches ? 0.14 : 0.22;
-
-		let target = 0;
-		let current = 0;
-		let rafId = 0;
-
-		const readTarget = () => {
-			const rect = visual.getBoundingClientRect();
-			const vh = window.innerHeight;
-			const start = vh;
-			const end = -rect.height;
-			const range = start - end;
-			const progress =
-				range === 0 ? 0 : Math.min(1, Math.max(0, (start - rect.top) / range));
-			const max = rect.height * TRAVEL;
-			target = -max + progress * (2 * max);
-		};
-
-		const tick = () => {
-			current += (target - current) * LERP;
-			if (Math.abs(target - current) < 0.05) current = target;
-			shift.style.transform = `translate3d(0, ${current}px, 0)`;
-			rafId = requestAnimationFrame(tick);
-		};
-
-		readTarget();
-		current = target;
-		rafId = requestAnimationFrame(tick);
-
-		const onScroll = () => {
-			readTarget();
-		};
-
-		window.addEventListener('scroll', onScroll, { passive: true });
-		getLenis()?.on('scroll', onScroll);
-		window.addEventListener(
-			'resize',
-			() => {
-				readTarget();
-				current = target;
-			},
-			{ passive: true },
-		);
-
-		document.addEventListener(
-			'astro:before-preparation',
-			() => {
-				cancelAnimationFrame(rafId);
-			},
-			{ once: true },
-		);
+		initBgParallax({ root: visual, visual, shift });
 	}
 
 	function initAboutSection() {
+		warmFoundersPhoto();
 		initScrollLetterReveal('about-heading');
 		initAboutParallax();
 		initCinemaPureNoise('about-noise-filter', { observeElementId: 'about-visual' });
 	}
 
+	initAboutSection();
+	window.addEventListener('intro-complete', warmFoundersPhoto, { once: true });
 	document.addEventListener('astro:page-load', initAboutSection);
 </script>

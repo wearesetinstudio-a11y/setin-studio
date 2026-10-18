@@ -13,12 +13,16 @@ export function initTorosVideos() {
 		video.defaultMuted = true;
 		video.playsInline = true;
 		video.loop = true;
-		const play = video.play();
-		if (play && typeof play.catch === 'function') {
-			play.catch(() => {
-				/* autoplay may still be blocked — ignore */
-			});
-		}
+		const play = () => {
+			const result = video.play();
+			if (result && typeof result.catch === 'function') {
+				result.catch(() => {
+					/* autoplay may still be blocked — ignore */
+				});
+			}
+		};
+		if (video.readyState >= 3) play();
+		else video.addEventListener('canplay', play, { once: true });
 	};
 
 	const visible = new Set<HTMLVideoElement>();

@@ -115,11 +115,11 @@ const hasMeta = rows.length > 0;
 							<video
 								src={graphicSrc}
 								class="block h-auto w-full"
-								autoplay
 								muted
 								loop
 								playsinline
-								preload="metadata"
+								preload="none"
+								data-buffered-autoplay
 								aria-label={graphicAlt}
 							/>
 						) : (
@@ -207,3 +207,10 @@ const hasMeta = rows.length > 0;
 		line-height: 1.625;
 	}
 </style>
+
+<script>
+	import { initBufferedAutoplayVideos } from '../../scripts/initBufferedAutoplayVideos';
+
+	initBufferedAutoplayVideos();
+	document.addEventListener('astro:page-load', () => initBufferedAutoplayVideos());
+</script>
