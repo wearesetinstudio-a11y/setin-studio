@@ -116,7 +116,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 }
 ---
 
-<footer id="contact" class="site-footer relative z-20 bg-[#0f1011]">
+<footer id="contact" class="site-footer relative z-20">
 	<div class="site-footer__inner relative z-[1] px-[var(--page-gutter)] pt-[var(--band-padding-y)] pb-8 md:pb-10">
 		<div class="site-footer__grid">
 			{/* —— Col 1: CTA + socials —— */}
@@ -319,7 +319,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 
 <style is:global>
 	.site-footer {
-		background-color: #0f1011;
+		background-color: var(--theme-color, #0f1011);
 	}
 
 	.site-footer__grid {
@@ -484,7 +484,7 @@ function formatLocationTime(timeZone: string, date = new Date()) {
 	}
 
 	.contact-email-cta {
-		background-color: #252628;
+		background-color: rgba(255, 255, 255, 0.1);
 		max-width: 100%;
 		transition:
 			transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),

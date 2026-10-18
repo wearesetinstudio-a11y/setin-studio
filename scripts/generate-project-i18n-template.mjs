@@ -32,6 +32,11 @@ header.height = 22;
 /** @type {{ block: string; field: string; notes: string }[]} */
 const rows = [
 	{ block: 'Project', field: 'Project name', notes: 'Wewnętrzna nazwa projektu / folder' },
+	{
+		block: 'Project',
+		field: 'Theme color',
+		notes: 'Hex e.g. #131415 — navbar (after scroll), footer, page-transition preloader. Empty = Setin default.',
+	},
 	{ block: 'Hero', field: 'Hero Title', notes: 'Nagłówek w hero (może mieć łamania linii)' },
 	{ block: 'Hero', field: 'Klient / Client / Cliente', notes: '' },
 	{ block: 'Meta', field: 'Zakres / Services / Servicios', notes: '' },
@@ -97,7 +102,8 @@ info.addRow(['How to fill']).font = { bold: true };
 	'4. Title = section heading. Description = body copy.',
 	'5. Hero Title = project hero headline.',
 	'6. Meta: Services, Industry, Market, Year, Live (adres strony, ten sam we wszystkich językach).',
-	'7. One sheet = one project. Duplicate "Project translations" for more projects.',
+	'7. Theme color (Project block): one hex for navbar / footer / preloader. Same in all languages.',
+	'8. One sheet = one project. Duplicate "Project translations" for more projects.',
 ].forEach((text) => info.addRow([text]));
 
 await workbook.xlsx.writeFile(outPath);

@@ -227,6 +227,7 @@ const portfolioJsonLd = getProjectPortfolioJsonLd({
 	description={pageDescription}
 	image={projectOgImage}
 	imageAlt={projectOgImage ? resolveProjectImageAlt(project) : undefined}
+	themeColor={data.themeColor || undefined}
 	jsonLd={portfolioJsonLd}
 >
 	<Header projectCount={projectCount} />

@@ -15,7 +15,7 @@ const heroRawText = heroLines.join('\n').trim();
 		heroImage ? (
 			<div
 				id="project-hero-visual"
-				class="project-hero-visual pointer-events-none fixed inset-x-0 top-0 isolate z-0 h-[100vh] w-full overflow-hidden bg-[#131415]"
+				class="project-hero-visual pointer-events-none absolute inset-0 isolate z-0 overflow-hidden bg-[#131415]"
 				aria-hidden="true"
 			>
 				<div class="project-hero-photo-shift">
@@ -24,7 +24,7 @@ const heroRawText = heroLines.join('\n').trim();
 						alt=""
 						width="1920"
 						height="1080"
-						class="project-hero-background pointer-events-none absolute inset-0 h-full w-full object-cover object-[center_42%]"
+						class="project-hero-background pointer-events-none absolute inset-0"
 						loading="eager"
 						decoding="async"
 						aria-hidden="true"
@@ -73,46 +73,49 @@ const heroRawText = heroLines.join('\n').trim();
 </section>
 
 <style is:global>
-	.project-hero-visual.is-hidden {
-		opacity: 0;
-		visibility: hidden;
+	.project-hero-visual {
+		overflow: hidden;
+		transform: translateZ(0);
 	}
 
 	.project-hero-photo-shift {
 		position: absolute;
 		inset: 0;
+		height: 100%;
+		width: 100%;
+		overflow: hidden;
+		transform: translate3d(0, 0, 0);
+		backface-visibility: hidden;
 		will-change: transform;
 	}
 
+	/*
+	 * Always fill the frame (min 100% width + height) — no empty side bars.
+	 * Light scale only for parallax travel; center crop keeps as much height as possible.
+	 */
 	.project-hero-background {
-		transform: scale(1.12);
-		transform-origin: center 42%;
+		top: 0;
+		left: 0;
+		width: 100%;
+		min-width: 100%;
+		height: 100%;
+		min-height: 100%;
+		object-fit: cover;
+		object-position: center center;
+		/* Match About section — enough zoom for a clear speed difference while scrolling. */
+		transform: scale(1.24) translateZ(0);
+		transform-origin: center center;
+		backface-visibility: hidden;
 	}
 
-	@media (max-width: 767px) {
-		/* Absolute (not fixed): readable lag on iOS during touch scroll. */
-		.project-hero-visual {
-			position: absolute !important;
-			inset: 0 !important;
-			width: 100%;
-			height: 100%;
-		}
-
-		.project-hero-visual.is-hidden {
-			opacity: 1;
-			visibility: visible;
-		}
-
+	@media (prefers-reduced-motion: reduce) {
 		.project-hero-photo-shift {
-			top: -28%;
-			right: 0;
-			bottom: auto;
-			left: 0;
-			height: 156%;
+			transform: translate3d(0, 0, 0) !important;
+			will-change: auto;
 		}
 
 		.project-hero-background {
-			transform: none;
+			transform: scale(1.05) translateZ(0);
 		}
 	}
 
@@ -183,13 +186,7 @@ const heroRawText = heroLines.join('\n').trim();
 
 <script>
 	import { initCinemaPureNoise } from '../../scripts/initCinemaPureNoise.ts';
-	import {
-		absoluteStageOffset,
-		fixedStageOffset,
-		getParallaxSpeed,
-		isParallaxMobile,
-		onParallaxScroll,
-	} from '../../scripts/initSlowBgParallax.ts';
+	import { getLenis } from '../../scripts/initSmoothScroll.ts';
 	import { PAGE_TRANSITION_OVERLAY_ID } from '../../scripts/pageTransitionPanel.ts';
 
 	type TransitionPhase = 'idle' | 'covering' | 'covered' | 'revealing';
@@ -354,32 +351,69 @@ const heroRawText = heroLines.join('\n').trim();
 	function initProjectHeroVisual() {
 		const hero = document.getElementById('project-hero');
 		const visual = document.getElementById('project-hero-visual');
-		if (!hero || !visual) return;
-		if (hero.dataset.heroVisualInit === 'true') return;
+		if (!hero || hero.dataset.heroVisualInit === 'true') return;
 		hero.dataset.heroVisualInit = 'true';
 
 		initCinemaPureNoise('project-hero-noise-filter', { observeElementId: 'project-hero' });
 
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const shift = visual.querySelector<HTMLElement>('.project-hero-photo-shift');
+		const shift = visual?.querySelector<HTMLElement>('.project-hero-photo-shift');
+		if (!shift || reduceMotion) return;
 
-		const syncHeroVisual = () => {
+		const isMobile = window.matchMedia('(max-width: 767px)').matches;
+		// Same travel as the homepage About section — clear lag vs page scroll.
+		const TRAVEL = 0.12;
+		const LERP = isMobile ? 0.14 : 0.22;
+
+		let target = 0;
+		let current = 0;
+		let rafId = 0;
+
+		const readTarget = () => {
 			const rect = hero.getBoundingClientRect();
-			const mobile = isParallaxMobile();
-			if (!mobile) {
-				visual.classList.toggle('is-hidden', rect.bottom <= 0);
-			} else {
-				visual.classList.remove('is-hidden');
-			}
-			if (!shift || reduceMotion) return;
-			const speed = getParallaxSpeed();
-			const offset = mobile
-				? absoluteStageOffset(rect.top, speed)
-				: fixedStageOffset(rect.top, speed);
-			shift.style.transform = `translate3d(0, ${offset}px, 0)`;
+			const vh = window.innerHeight;
+			const start = vh;
+			const end = -rect.height;
+			const range = start - end;
+			const progress =
+				range === 0 ? 0 : Math.min(1, Math.max(0, (start - rect.top) / range));
+			const max = rect.height * TRAVEL;
+			target = -max + progress * (2 * max);
 		};
 
-		onParallaxScroll(syncHeroVisual)();
+		const tick = () => {
+			current += (target - current) * LERP;
+			if (Math.abs(target - current) < 0.05) current = target;
+			shift.style.transform = `translate3d(0, ${current}px, 0)`;
+			rafId = requestAnimationFrame(tick);
+		};
+
+		readTarget();
+		current = target;
+		rafId = requestAnimationFrame(tick);
+
+		const onScroll = () => {
+			readTarget();
+		};
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		getLenis()?.on('scroll', onScroll);
+		window.addEventListener(
+			'resize',
+			() => {
+				readTarget();
+				current = target;
+			},
+			{ passive: true },
+		);
+
+		document.addEventListener(
+			'astro:before-preparation',
+			() => {
+				cancelAnimationFrame(rafId);
+			},
+			{ once: true },
+		);
 	}
 
 	function initProjectHeroReveal() {

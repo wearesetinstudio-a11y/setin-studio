@@ -172,6 +172,7 @@ const pitchNav = [
 	navLogoAlt="setin × Aeronaval"
 	navLogoWidth={235}
 	navLogoHeight={59}
+	themeColor="#0d0e0f"
 	themeVars={{
 		'--pitch-bg': '#0d0e0f',
 		'--pitch-fg': '#ffffff',
@@ -387,7 +388,7 @@ const pitchNav = [
 						visualHeight={165}
 						stageWidth={300}
 						stageMobileWidth="min(224px, 60vw)"
-						surface="#17181c"
+						surface="#ffffff"
 						class="pt-[var(--pitch-section-y)]"
 					>
 						{
@@ -533,28 +534,23 @@ const pitchNav = [
 	.aero-hero__bg-shift {
 		position: absolute;
 		inset: 0;
+		overflow: hidden;
+		transform: translate3d(0, 0, 0);
+		backface-visibility: hidden;
 		will-change: transform;
 	}
 
 	@media (max-width: 767px) {
-		.aero-hero__stage.is-mobile-parallax {
+		.aero-hero__stage.is-parallax-active {
 			position: absolute;
 			inset: 0;
 			width: 100%;
 			height: 100%;
 		}
 
-		.aero-hero__stage.is-mobile-parallax.is-hidden {
+		.aero-hero__stage.is-parallax-active.is-hidden {
 			opacity: 1;
 			visibility: visible;
-		}
-
-		.aero-hero__stage.is-mobile-parallax .aero-hero__bg-shift {
-			top: -28%;
-			right: 0;
-			bottom: auto;
-			left: 0;
-			height: 156%;
 		}
 	}
 
@@ -563,10 +559,26 @@ const pitchNav = [
 		inset: 0;
 		display: block;
 		width: 100%;
+		min-width: 100%;
 		height: 100%;
+		min-height: 100%;
 		object-fit: cover;
-		object-position: center;
+		object-position: center center;
+		transform: scale(1.24) translateZ(0);
+		transform-origin: center center;
+		backface-visibility: hidden;
 		pointer-events: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.aero-hero__bg-shift {
+			transform: translate3d(0, 0, 0) !important;
+			will-change: auto;
+		}
+
+		.aero-hero__bg-video {
+			transform: scale(1.05) translateZ(0);
+		}
 	}
 
 	.aero-hero__shade {
@@ -630,19 +642,8 @@ const pitchNav = [
 		}
 	}
 
-	/* —— Body / sidebar —— */
-	.toros-body {
-		background: #17181c;
-	}
-
-	@media (min-width: 1024px) {
-		.toros-body {
-			background: linear-gradient(to right, #0d0e0f 320px, #17181c 320px);
-		}
-	}
-
+	/* —— Body / sidebar (white plane — matches portfolio) —— */
 	.toros-body__content {
-		background: #17181c;
 		min-width: 0;
 	}
 

@@ -29,7 +29,8 @@
 	min-width: 0;
 	height: 100%;
 	margin-right: -1px;
-	background-color: #131415;
+	/* Destination page sets --page-transition-bg / --theme-color before cover. */
+	background-color: var(--page-transition-bg, var(--theme-color, #131415));
 	transform: translateY(-100%);
 }
 

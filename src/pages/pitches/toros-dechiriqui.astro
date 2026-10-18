@@ -92,6 +92,7 @@ const pitchNav = [
 	navLogoAlt="setin × TOROS"
 	navLogoWidth={297}
 	navLogoHeight={59}
+	themeColor="#0b140f"
 	themeVars={{
 		'--pitch-bg': '#0b140f',
 		'--pitch-fg': '#ffffff',
@@ -317,7 +318,7 @@ const pitchNav = [
 						stageWidth={260}
 						stageMobileWidth="min(195px, 47.5vw)"
 						stageMobileMaxHeight="min(210px, 32svh)"
-						surface="#111a15"
+						surface="#ffffff"
 					>
 						<figure class="toros-section__visual w-full overflow-hidden">
 							<img
@@ -922,28 +923,23 @@ const pitchNav = [
 	.toros-hero__bg-shift {
 		position: absolute;
 		inset: 0;
+		overflow: hidden;
+		transform: translate3d(0, 0, 0);
+		backface-visibility: hidden;
 		will-change: transform;
 	}
 
 	@media (max-width: 767px) {
-		.toros-hero__stage.is-mobile-parallax {
+		.toros-hero__stage.is-parallax-active {
 			position: absolute;
 			inset: 0;
 			width: 100%;
 			height: 100%;
 		}
 
-		.toros-hero__stage.is-mobile-parallax.is-hidden {
+		.toros-hero__stage.is-parallax-active.is-hidden {
 			opacity: 1;
 			visibility: visible;
-		}
-
-		.toros-hero__stage.is-mobile-parallax .toros-hero__bg-shift {
-			top: -28%;
-			right: 0;
-			bottom: auto;
-			left: 0;
-			height: 156%;
 		}
 	}
 
@@ -953,9 +949,14 @@ const pitchNav = [
 		z-index: 0;
 		display: block;
 		width: 100%;
+		min-width: 100%;
 		height: 100%;
+		min-height: 100%;
 		object-fit: cover;
 		object-position: 28% center;
+		transform: scale(1.24) translateZ(0);
+		transform-origin: center center;
+		backface-visibility: hidden;
 		pointer-events: none;
 		user-select: none;
 	}
@@ -971,19 +972,19 @@ const pitchNav = [
 		}
 	}
 
-	/* —— Project-analog body / sidebar —— */
-	.toros-body {
-		background: #111a15;
-	}
+	@media (prefers-reduced-motion: reduce) {
+		.toros-hero__bg-shift {
+			transform: translate3d(0, 0, 0) !important;
+			will-change: auto;
+		}
 
-	@media (min-width: 1024px) {
-		.toros-body {
-			background: linear-gradient(to right, #0d0e0f 320px, #111a15 320px);
+		.toros-hero__bg-image {
+			transform: scale(1.05) translateZ(0);
 		}
 	}
 
+	/* —— Project-analog body / sidebar (white plane — matches portfolio) —— */
 	.toros-body__content {
-		background: #111a15;
 		min-width: 0;
 	}
 

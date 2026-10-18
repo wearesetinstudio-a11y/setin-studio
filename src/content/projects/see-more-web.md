@@ -5,6 +5,7 @@ tags: ['Motion', 'Websites', 'Engineering', 'Product Design']
 thumbnail: '/portfolio/see-more-web/Cover.webm'
 folderName: 'see-more-web'
 order: 1
+themeColor: '#001C33'
 video: '/portfolio/see-more-web/Cover.webm'
 heroImage: '/portfolio/see-more-web/bg.webp'
 heroSubtitle: "B2B Landing Page for a Panamanian Transport & Logistics Company"

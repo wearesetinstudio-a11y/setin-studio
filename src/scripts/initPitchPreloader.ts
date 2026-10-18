@@ -12,6 +12,7 @@ import {
 	resetPageTransitionOverlay,
 } from './pageTransitionPanel.ts';
 import { findSygnetFlip, playSygnetFlip, wait } from './sygnetFlipAnimation.ts';
+import { applyDocumentThemeColor, lookupThemeColor } from './themeColor.ts';
 
 const MAX_WAIT_MS = 10000;
 /** Setin intro flips once when the page is ready; keep flipping if media is still loading after this. */
@@ -30,6 +31,10 @@ export function initPitchPreloader() {
 	}
 
 	setIntroPending();
+	/* Destination pitch defines the preloader color (this page). */
+	applyDocumentThemeColor(
+		document.body.dataset.themeColor || lookupThemeColor(window.location.pathname),
+	);
 	applyOverlayCover(overlay);
 	if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 	window.scrollTo(0, 0);

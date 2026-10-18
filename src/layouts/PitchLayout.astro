@@ -13,6 +13,8 @@ import { isLocale, type Locale } from '../i18n/dictionaries.ts';
 import { SITE_URL, htmlLang } from '../i18n/seo.ts';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { withPublicAssetVersion } from '../utils/withPublicAssetVersion.ts';
+import { pitchThemes, DEFAULT_THEME_COLOR, type PitchSlug } from '../data/pitchThemes.ts';
+import { buildThemeColorMap } from '../utils/buildThemeColorMap.ts';
 
 interface Props {
 	title: string;
@@ -28,6 +30,11 @@ interface Props {
 	bodyClass?: string;
 	/** Inline CSS variables applied to `.pitch-root` for per-page theming. */
 	themeVars?: Record<string, string>;
+	/**
+	 * Leading chrome color (navbar / footer / preloader).
+	 * Defaults from `pitchThemes` for the pitch slug.
+	 */
+	themeColor?: string;
 	/** Navbar lockup: Setin × client (replaces default Setin wordmark). */
 	navLogoSrc?: string;
 	navLogoAlt?: string;
@@ -42,6 +49,7 @@ const {
 	locale: localeProp,
 	bodyClass = '',
 	themeVars = {},
+	themeColor: themeColorProp,
 	navLogoSrc,
 	navLogoAlt = 'Setin × client',
 	navLogoWidth = 297,
@@ -53,9 +61,6 @@ const documentLang = htmlLang(locale);
 const { projectCount } = await getSiteCounts();
 
 const pageTitle = title.includes('Setin') ? title : `${title} — Setin Studio`;
-const themeStyle = Object.entries(themeVars)
-	.map(([key, value]) => `${key}: ${value}`)
-	.join('; ');
 
 /** `public/pitches/<slug>/og.jpg` — 1200×630. Missing file falls back to no social image. */
 const pitchSlug =
@@ -64,6 +69,16 @@ const pitchSlug =
 		.split('/')
 		.filter(Boolean)
 		.pop() ?? '';
+const themeColor =
+	themeColorProp?.trim() ||
+	(pitchSlug in pitchThemes ? pitchThemes[pitchSlug as PitchSlug] : DEFAULT_THEME_COLOR);
+const themeStyle = [
+	`--theme-color: ${themeColor}`,
+	`--page-transition-bg: ${themeColor}`,
+	...Object.entries(themeVars).map(([key, value]) => `${key}: ${value}`),
+].join('; ');
+const themeColorMap = await buildThemeColorMap();
+const themeColorMapJson = JSON.stringify(themeColorMap).replace(/</g, '\\u003c');
 const ogPublicPath = `/pitches/${pitchSlug}/og.jpg`;
 const hasOgImage =
 	/^[a-z0-9-]+$/i.test(pitchSlug) &&
@@ -73,7 +88,7 @@ const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 ---
 
 <!doctype html>
-<html lang={documentLang} style="background-color: var(--pitch-bg, #0b140f);">
+<html lang={documentLang} style={`background-color: ${themeColor}; ${themeStyle}`}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -151,8 +166,10 @@ const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 			bodyClass,
 		]}
 		data-pitch-locale={locale}
+		data-theme-color={themeColor}
 		style={themeStyle || undefined}
 	>
+		<script is:inline set:html={`window.__setinThemeColors = ${themeColorMapJson};`} />
 		<div
 			id="page-transition-overlay"
 			class="page-transition-overlay pointer-events-none fixed inset-0 z-[9999] overflow-hidden"
@@ -232,25 +249,24 @@ const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 	}
 
 	/*
-	 * Pitch chrome:
-	 * - Navbar (after scroll) + footer → left/content surface (--pitch-surface)
-	 * - Email CTA default → sidebar (--pitch-bg); hover stays white
+	 * Pitch chrome — one leading --theme-color for navbar, footer, preloader.
+	 * Content body (sidebar + right column) mirrors portfolio: white surface.
 	 */
 	.pitch-body .site-header.header-solid {
-		background-color: var(--pitch-surface, var(--pitch-bg, #131415));
+		background-color: var(--theme-color, #131415);
 	}
 
 	.pitch-body .mobile-nav-bar {
-		background-color: var(--pitch-surface, var(--pitch-bg, #131415));
+		background-color: var(--theme-color, #131415);
 	}
 
 	.pitch-body .pitch-site-end,
 	.pitch-body .pitch-site-end .site-footer {
-		background-color: var(--pitch-surface, var(--pitch-bg, #0f1011));
+		background-color: var(--theme-color, #0f1011);
 	}
 
 	.pitch-body .pitch-site-end .contact-email-cta {
-		background-color: var(--pitch-bg, #252628);
+		background-color: rgba(255, 255, 255, 0.1);
 	}
 
 	.pitch-body .pitch-site-end .contact-email-cta:focus-visible,
@@ -265,7 +281,77 @@ const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 		}
 	}
 
+	/* Portfolio-like content plane under the hero */
+	.pitch-body .toros-body {
+		background: #ffffff !important;
+		color: #131415;
+	}
+
+	.pitch-body .toros-body__content {
+		background: #ffffff !important;
+		color: #131415;
+	}
+
+	.pitch-body .toros-section,
+	.pitch-body .toros-section.text-white,
+	.pitch-body .toros-body .text-white {
+		color: #131415 !important;
+	}
+
+	.pitch-body .toros-body .pitch-body-copy,
+	.pitch-body .toros-body .pitch-body-copy p,
+	.pitch-body .toros-body .text-white\/85 {
+		color: rgba(19, 20, 21, 0.85) !important;
+	}
+
+	.pitch-body .toros-body .pitch-display {
+		color: #131415 !important;
+	}
+
+	.pitch-body .toros-sidebar__link {
+		color: rgba(19, 20, 21, 0.35);
+	}
+
+	.pitch-body .toros-sidebar__link:hover {
+		color: rgba(19, 20, 21, 0.7);
+	}
+
+	.pitch-body .toros-sidebar__link.is-active .toros-sidebar__index {
+		color: rgba(19, 20, 21, 0.55);
+	}
+
+	.pitch-body .toros-sidebar__link.is-active .toros-sidebar__name {
+		color: #131415;
+	}
+
+	.pitch-body .toros-section__label {
+		color: rgba(19, 20, 21, 0.35);
+	}
+
+	.pitch-body .toros-section__label-name,
+	.pitch-body .toros-section__scroll {
+		color: #131415;
+	}
+
+	.pitch-body .toros-sidebar-mobile {
+		background: rgba(255, 255, 255, 0.95) !important;
+		color: #131415;
+	}
+
+	.pitch-body .toros-sidebar-mobile__current .toros-sidebar__index {
+		color: rgba(19, 20, 21, 0.55);
+	}
+
+	.pitch-body .toros-sidebar-mobile__current .toros-sidebar__name {
+		color: #131415;
+	}
+
+	.pitch-body .toros-simbolo {
+		color: #131415;
+	}
+
 	.pitch-root {
+		--theme-color: #131415;
 		--pitch-bg: #0b140f;
 		--pitch-fg: #ffffff;
 		--pitch-muted: rgba(255, 255, 255, 0.6);

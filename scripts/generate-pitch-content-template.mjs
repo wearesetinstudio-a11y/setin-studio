@@ -53,10 +53,20 @@ const rows = [
 	{ block: 'Pitch', field: 'Meta description', example: 'Propuesta privada de extensión de identidad visual para el Servicio Nacional Aeronaval por Setin Studio.', notes: 'Shown when the link is shared. Pitches are always noindex.' },
 	{ block: 'Pitch', field: 'Language', example: 'es', notes: 'Header + Footer stay in Spanish.' },
 
-	{ block: 'Theme', field: 'Page background', example: '#0d0e0f', notes: 'Behind the hero and sidebar column.' },
-	{ block: 'Theme', field: 'Content surface', example: '#17181c', notes: 'Background of the content column (Toros: #111a15).' },
+	{
+		block: 'Theme',
+		field: 'Theme color (leading)',
+		example: '#0d0e0f',
+		notes: 'ONE color for navbar (after scroll), footer, and preloader. Preloader uses the destination page color.',
+	},
+	{
+		block: 'Theme',
+		field: 'Hero / page background',
+		example: '#0d0e0f',
+		notes: 'Behind the fixed hero only. Sidebar + content column are white (like portfolio).',
+	},
 	{ block: 'Theme', field: 'Accent color', example: '#ffffff', notes: 'Toros: #a4ff00.' },
-	{ block: 'Theme', field: 'Display font (headings)', example: 'Saira', notes: 'Google Font name. Headings are always uppercase.' },
+	{ block: 'Theme', field: 'Display font (headings)', example: 'Saira', notes: 'Google Font name.' },
 	{ block: 'Theme', field: 'Body font', example: 'Public Sans', notes: 'Google Font name. Also used for nav labels.' },
 
 	{ block: 'Navbar', field: 'Lockup (setin × client)', example: 'nav-lockup.svg', notes: 'SVG, white. Height ~59px.' },

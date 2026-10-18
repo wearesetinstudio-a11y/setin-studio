@@ -2,11 +2,8 @@ import { getLenis } from './initSmoothScroll.ts';
 
 /** Desktop: subtle drift inside a fixed frame. */
 export const PARALLAX_SPEED_DESKTOP = 0.32;
-/**
- * Mobile: stronger lag. Fixed layers often look frozen on iOS during scroll,
- * so mobile uses absolute-in-section motion with a clearer rate.
- */
-export const PARALLAX_SPEED_MOBILE = 0.55;
+/** Mobile absolute-in-section lag (JS fallback only). */
+export const PARALLAX_SPEED_MOBILE = 0.45;
 
 export function isParallaxMobile() {
 	return window.matchMedia('(max-width: 767px)').matches;
@@ -26,7 +23,14 @@ export function absoluteStageOffset(heroTop: number, speed: number) {
 	return (speed - 1) * Math.min(0, heroTop);
 }
 
-/** Scroll + touch + Lenis, coalesced to one rAF. */
+export function supportsViewTimeline(): boolean {
+	return typeof CSS !== 'undefined' && CSS.supports?.('animation-timeline: view()') === true;
+}
+
+/**
+ * Coalesced scroll sync for JS parallax fallbacks.
+ * No touchmove — pairing touchmove + scroll causes mobile jitter.
+ */
 export function onParallaxScroll(handler: () => void) {
 	let ticking = false;
 
@@ -40,8 +44,6 @@ export function onParallaxScroll(handler: () => void) {
 	};
 
 	window.addEventListener('scroll', run, { passive: true });
-	window.addEventListener('touchmove', run, { passive: true });
-	window.addEventListener('resize', run, { passive: true });
 	getLenis()?.on('scroll', run);
 
 	return run;

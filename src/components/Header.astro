@@ -250,7 +250,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 	}
 
 	.site-header.header-solid {
-		background-color: #131415;
+		background-color: var(--theme-color, #131415);
 	}
 
 	.site-header--light-bg:not(.header-solid) .site-header__logo-setin {
@@ -266,9 +266,21 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 		color: #000000 !important;
 	}
 
+	.site-header--light-bg:not(.header-solid) .rolling-link--current,
+	.site-header--light-bg:not(.header-solid) .rolling-link--current .rolling-link__line,
+	.site-header--light-bg:not(.header-solid) .rolling-link--current span {
+		color: rgba(0, 0, 0, 0.5) !important;
+	}
+
 	.site-header--light-bg.header-solid .rolling-link,
 	.site-header--light-bg.header-solid .rolling-link span {
 		color: #f5f5f5 !important;
+	}
+
+	.site-header--light-bg.header-solid .rolling-link--current,
+	.site-header--light-bg.header-solid .rolling-link--current .rolling-link__line,
+	.site-header--light-bg.header-solid .rolling-link--current span {
+		color: rgba(255, 255, 255, 0.5) !important;
 	}
 
 	.site-header--light-bg:not(.header-solid) .work-with-us-button,
@@ -821,7 +833,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 	}
 
 	.mobile-nav-link--current {
-		color: #6a6a6a !important;
+		color: rgba(255, 255, 255, 0.5) !important;
 		opacity: 1;
 	}
 
@@ -843,7 +855,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 		min-width: 0;
 		height: 100%;
 		margin-right: -1px;
-		background-color: #131415;
+		background-color: var(--theme-color, #131415);
 		transform: translateY(-100%);
 	}
 

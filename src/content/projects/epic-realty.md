@@ -5,6 +5,7 @@ tags: ['Brand Design', 'Motion', 'Websites', 'Engineering', 'Product Design']
 thumbnail: '/portfolio/epic-realty/cover.riv'
 folderName: 'epic-realty'
 order: 6
+themeColor: '#052300'
 video: '/portfolio/epic-realty/cover.mp4'
 heroImage: '/portfolio/epic-realty/bg.webp'
 heroSubtitle: 'Elevating Panama''s premier boutique real estate agency through brand identity and digital design.'

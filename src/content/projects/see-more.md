@@ -5,6 +5,7 @@ tags: ['Brand Design', 'Motion', 'AI Direction']
 thumbnail: '/portfolio/see-more/cover.riv'
 folderName: 'see-more'
 order: 3
+themeColor: '#001C33'
 heroImage: '/portfolio/see-more/bg.webp'
 heroSubtitle: |-
   A brand that shapes the Panama's

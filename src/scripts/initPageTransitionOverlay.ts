@@ -8,6 +8,7 @@ import {
 	resetPageTransitionOverlay,
 } from './pageTransitionPanel.ts';
 import { wait } from './sygnetFlipAnimation.ts';
+import { applyDocumentThemeColor, applyTransitionThemeColor, lookupThemeColor } from './themeColor.ts';
 
 type TransitionPhase = 'idle' | 'covering' | 'covered' | 'revealing';
 
@@ -97,6 +98,10 @@ export function initPageTransitionOverlay() {
 
 		cleanupIntroState();
 
+		/* Preloader color = page we navigate TO, not the page we leave. */
+		const dest = (event as Event & { to?: URL }).to;
+		if (dest?.pathname) applyTransitionThemeColor(lookupThemeColor(dest.pathname));
+
 		const phase = getPhase();
 		if (isIntroSequenceRunning() || phase === 'covering' || phase === 'covered') {
 			event.loader = defaultLoader;
@@ -125,6 +130,7 @@ export function initPageTransitionOverlay() {
 
 	document.addEventListener('astro:after-swap', () => {
 		cleanupIntroState();
+		applyDocumentThemeColor(lookupThemeColor(window.location.pathname));
 
 		if (getPhase() !== 'covered') return;
 
@@ -138,5 +144,9 @@ export function initPageTransitionOverlay() {
 			if (navToken !== revealGeneration) return;
 			await finishReveal(navToken);
 		})();
+	});
+
+	document.addEventListener('astro:page-load', () => {
+		applyDocumentThemeColor(lookupThemeColor(window.location.pathname));
 	});
 }

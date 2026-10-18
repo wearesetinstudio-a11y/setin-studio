@@ -6,6 +6,7 @@ thumbnail: '/portfolio/nrv/nrv-cover.webp'
 video: '/portfolio/nrv/cover.webm'
 folderName: 'nrv'
 order: 5
+themeColor: '#000733'
 heroImage: '/portfolio/nrv/bg.webp'
 heroSubtitle: "High-Tech Brand Identity for Panama’s Access Control Provider"
 overviewLabel: "Context"

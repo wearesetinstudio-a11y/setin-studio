@@ -13,11 +13,12 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 				<img
 					src="/images/brothers-intro.webp"
 					alt={FOUNDERS_PHOTO_ALTS.en}
-					width="4320"
-					height="1896"
+					width="2400"
+					height="1604"
 					class="about-hero-photo h-full w-full grayscale"
 					loading="eager"
 					decoding="async"
+					fetchpriority="high"
 					data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
 				/>
 			</picture>

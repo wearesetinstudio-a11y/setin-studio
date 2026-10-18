@@ -5,8 +5,10 @@ import PitchLayout from '../../layouts/PitchLayout.astro';
 import PitchSectionLabel from '../../components/pitches/PitchSectionLabel.astro';
 import PitchSidebar from '../../components/pitches/PitchSidebar.astro';
 import PitchSimbolo from '../../components/pitches/PitchSimbolo.astro';
+import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion.ts';
 
-const asset = (file: string) => `/pitches/turysta/${encodeURI(file)}`;
+const asset = (file: string) =>
+	withPublicAssetVersion(`/pitches/turysta/${encodeURI(file)}`);
 /** Media removed from the folder is skipped instead of rendering a broken slot. */
 const hasAsset = (file: string) => existsSync(join(process.cwd(), 'public/pitches/turysta', file));
 
@@ -119,9 +121,9 @@ const pitchNav = [
 	navLogoAlt="setin × Turysta"
 	navLogoWidth={286}
 	navLogoHeight={46}
+	themeColor="#000731"
 	themeVars={{
 		'--pitch-bg': '#0C133E',
-		'--pitch-surface': '#000731',
 		'--pitch-fg': '#ffffff',
 		'--pitch-accent': '#ffffff',
 		'--pitch-font-display': "'Shrikhand', ui-serif, Georgia, serif",
@@ -138,7 +140,10 @@ const pitchNav = [
 					alt=""
 					class="turysta-hero__bg-image"
 					width="2400"
-					height="1600"
+					height="1485"
+					loading="eager"
+					fetchpriority="high"
+					decoding="async"
 				/>
 			</div>
 			<span class="turysta-hero__shade"></span>
@@ -282,7 +287,7 @@ const pitchNav = [
 						visualHeight={220}
 						stageWidth={260}
 						stageMobileWidth="min(200px, 55vw)"
-						surface="#000731"
+						surface="#ffffff"
 						class="pt-[var(--pitch-section-y)]"
 					>
 						{
@@ -457,28 +462,23 @@ const pitchNav = [
 	.turysta-hero__bg-shift {
 		position: absolute;
 		inset: 0;
+		overflow: hidden;
+		transform: translate3d(0, 0, 0);
+		backface-visibility: hidden;
 		will-change: transform;
 	}
 
 	@media (max-width: 767px) {
-		.turysta-hero__stage.is-mobile-parallax {
+		.turysta-hero__stage.is-parallax-active {
 			position: absolute;
 			inset: 0;
 			width: 100%;
 			height: 100%;
 		}
 
-		.turysta-hero__stage.is-mobile-parallax.is-hidden {
+		.turysta-hero__stage.is-parallax-active.is-hidden {
 			opacity: 1;
 			visibility: visible;
-		}
-
-		.turysta-hero__stage.is-mobile-parallax .turysta-hero__bg-shift {
-			top: -28%;
-			right: 0;
-			bottom: auto;
-			left: 0;
-			height: 156%;
 		}
 	}
 
@@ -487,11 +487,27 @@ const pitchNav = [
 		inset: 0;
 		display: block;
 		width: 100%;
+		min-width: 100%;
 		height: 100%;
+		min-height: 100%;
 		object-fit: cover;
-		object-position: center;
+		object-position: center center;
+		transform: scale(1.24) translateZ(0);
+		transform-origin: center center;
+		backface-visibility: hidden;
 		pointer-events: none;
 		user-select: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.turysta-hero__bg-shift {
+			transform: translate3d(0, 0, 0) !important;
+			will-change: auto;
+		}
+
+		.turysta-hero__bg-image {
+			transform: scale(1.05) translateZ(0);
+		}
 	}
 
 	.turysta-hero__shade {
@@ -515,19 +531,8 @@ const pitchNav = [
 		gap: 1.5rem;
 	}
 
-	/* —— Body / sidebar —— */
-	.toros-body {
-		background: #000731;
-	}
-
-	@media (min-width: 1024px) {
-		.toros-body {
-			background: linear-gradient(to right, #0c133e 320px, #000731 320px);
-		}
-	}
-
+	/* —— Body / sidebar (white plane — matches portfolio; chrome uses --theme-color) —— */
 	.toros-body__content {
-		background: #000731;
 		min-width: 0;
 	}
 

@@ -5,6 +5,7 @@ tags: ['Brand Design', 'Motion']
 thumbnail: '/portfolio/snacks-lovers/snacks-lovers-cover.webp'
 folderName: 'snacks-lovers'
 order: 8
+themeColor: '#000733'
 heroImage: '/portfolio/snacks-lovers/bg.webp'
 heroSubtitle: 'Turning playful energy into a scalable brand system'
 overviewLabel: 'Context'

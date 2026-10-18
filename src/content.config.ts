@@ -65,6 +65,11 @@ const projects = defineCollection({
 		overviewGraphic: z.string().optional().default(''),
 		overviewYoutube: z.string().optional().default(''),
 		year: z.number().optional(),
+		/**
+		 * Leading chrome color (navbar solid / footer / page-transition preloader).
+		 * Hex, e.g. `#0C133E`. Defaults to Setin charcoal when empty.
+		 */
+		themeColor: z.string().optional().default(''),
 		/** Flexible content sections under overview (max 10). */
 		sections: z.array(projectSectionSchema).max(10).optional().default([]),
 		/** Localized overrides keyed by locale (pl / es). EN is the base frontmatter. */
