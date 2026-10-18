@@ -388,7 +388,7 @@ const pitchNav = [
 						visualHeight={165}
 						stageWidth={300}
 						stageMobileWidth="min(224px, 60vw)"
-						surface="#ffffff"
+						surface="#17181c"
 						class="pt-[var(--pitch-section-y)]"
 					>
 						{
@@ -633,8 +633,19 @@ const pitchNav = [
 		}
 	}
 
-	/* —— Body / sidebar (white plane — matches portfolio) —— */
+	/* —— Body / sidebar —— */
+	.toros-body {
+		background: #17181c;
+	}
+
+	@media (min-width: 1024px) {
+		.toros-body {
+			background: linear-gradient(to right, #0d0e0f 320px, #17181c 320px);
+		}
+	}
+
 	.toros-body__content {
+		background: #17181c;
 		min-width: 0;
 	}
 

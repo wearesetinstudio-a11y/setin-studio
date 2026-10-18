@@ -37,89 +37,10 @@
 </style>
 
 <script>
-	function wrapLetters(element: HTMLElement) {
-		if (element.querySelector('.reveal-char')) return;
-
-		const text = element.textContent ?? '';
-		element.textContent = '';
-
-		for (const char of text) {
-			const span = document.createElement('span');
-			span.className = 'reveal-char';
-			span.textContent = char === ' ' ? ' ' : char;
-			element.appendChild(span);
-		}
-	}
-
-	function updateAboutStudioHeadingReveal() {
-		const heading = document.getElementById('about-studio-heading');
-		if (!heading) return;
-
-		const chars = heading.querySelectorAll('.reveal-char');
-		if (!chars.length) return;
-
-		const rect = heading.getBoundingClientRect();
-		const viewportHeight = window.innerHeight;
-		const startLine = viewportHeight * 0.88;
-		const endLine = viewportHeight * 0.45;
-		const range = startLine - endLine;
-		const progress = Math.min(1, Math.max(0, (startLine - rect.top) / range));
-		const activeCount = Math.ceil(progress * chars.length);
-
-		chars.forEach((char, index) => {
-			char.classList.toggle('active', index < activeCount);
-		});
-	}
-
-	let scrollTicking = false;
-
-	function onAboutStudioScroll() {
-		if (scrollTicking) return;
-		scrollTicking = true;
-		requestAnimationFrame(() => {
-			updateAboutStudioHeadingReveal();
-			scrollTicking = false;
-		});
-	}
+	import { initScrollLetterReveal } from '../../scripts/initScrollLetterReveal.ts';
 
 	function initAboutStudioIntro() {
-		const heading = document.getElementById('about-studio-heading');
-		const section = document.getElementById('about-studio-intro');
-
-		if (heading) {
-			heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
-				wrapLetters(line as HTMLElement);
-			});
-
-			if (heading.dataset.scrollReady !== 'true') {
-				heading.dataset.scrollReady = 'true';
-				window.addEventListener('scroll', onAboutStudioScroll, { passive: true });
-				window.addEventListener('resize', updateAboutStudioHeadingReveal, { passive: true });
-			}
-		}
-
-		updateAboutStudioHeadingReveal();
-
-		if (!section || section.dataset.revealObserved === 'true') return;
-
-		section.dataset.revealObserved = 'true';
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (entry.isIntersecting) updateAboutStudioHeadingReveal();
-				}
-			},
-			{ threshold: [0, 0.25, 0.5, 0.75, 1] },
-		);
-
-		observer.observe(section);
-	}
-
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initAboutStudioIntro, { once: true });
-	} else {
-		initAboutStudioIntro();
+		initScrollLetterReveal('about-studio-heading');
 	}
 
 	document.addEventListener('astro:page-load', initAboutStudioIntro);

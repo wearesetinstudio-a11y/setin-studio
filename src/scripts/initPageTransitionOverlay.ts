@@ -9,7 +9,6 @@ import {
 } from './pageTransitionPanel.ts';
 import { wait } from './sygnetFlipAnimation.ts';
 import { applyDocumentThemeColor, applyTransitionThemeColor, lookupThemeColor } from './themeColor.ts';
-import { waitForCriticalPageMedia } from './waitForCriticalPageMedia.ts';
 
 type TransitionPhase = 'idle' | 'covering' | 'covered' | 'revealing';
 
@@ -142,8 +141,6 @@ export function initPageTransitionOverlay() {
 
 		void (async () => {
 			await waitForViewTransitionRelease();
-			if (navToken !== revealGeneration) return;
-			await waitForCriticalPageMedia();
 			if (navToken !== revealGeneration) return;
 			await finishReveal(navToken);
 		})();

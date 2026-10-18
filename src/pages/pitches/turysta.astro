@@ -14,8 +14,8 @@ const hasAsset = (file: string) => existsSync(join(process.cwd(), 'public/pitche
 
 const simboloSteps = [
 	{
-		title: 'Primary Logo',
-		text: 'Opracowaliśmy spójny, funkcjonalny system znaków graficznych, który odwołuje się do dawnego rzemiosła szyldowego, odpowiadając na współczesne wymagania nośników fizycznych i cyfrowych. Główny znak marki oparty jest na charakterystycznej ramie owalu, w którą wpisaliśmy autorski, skryptowy napis „Turysta”. Odchodzimy od dotychczasowego podziału typograficznego, stawiając na pełną ekspozycję nazwy własnej — to ona niesie najwyższy kapitał emocjonalny. Forma emblematu doskonale sprawdza się w aplikacjach tekstylnych, haftach oraz detalach użytkowych.',
+		title: 'Primary logo',
+		text: 'Opracowaliśmy spójny, funkcjonalny system znaków graficznych, który odwołuje się do dawnego rzemiosła szyldowego, odpowiadając na współczesne wymagania nośników fizycznych i cyfrowych.',
 		visual: 'Logo_1.svg',
 	},
 	{
@@ -24,13 +24,13 @@ const simboloSteps = [
 		visual: 'Logo_2.svg',
 	},
 	{
-		title: 'Logotyp z Datą Powstania',
-		text: 'Wariant wzbogacony o historyczną datę założenia lokalu. Pełni istotną funkcję wizerunkowo-marketingową — odległy rok buduje natychmiastowe poczucie stabilności, wiarygodności oraz zaufania do wieloletniej tradycji kulinarnej.',
+		title: 'Logotyp z datą powstania',
+		text: 'Wariant wzbogacony o historyczną datę założenia lokalu. Pełni istotną funkcję wizerunkowo-marketingową — odległy rok buduje natychmiastowe poczucie stabilności, wiarygodności oraz zaufania.',
 		visual: 'Logo_3.svg',
 	},
 	{
-		title: 'Pieczęć Miejska',
-		text: 'Złożona kompozycja zawierająca łukowy napis bezszeryfowy „BAR MLECZNY”, centralne skryptowe „Turysta”, rozdzieloną datę „19 – 64” po bokach oraz jednoznaczne wskazanie lokalizacji „SZCZECIN” u dołu. Znak zaprojektowany z myślą o witrynach, drzwiach i szyldach, pozwalający przekazać kompletny komunikat w zamkniętej, estetycznej formie.',
+		title: 'Pieczęć miejska',
+		text: 'Znak zaprojektowany z myślą o witrynach, drzwiach i szyldach, pozwalający przekazać kompletny komunikat w zamkniętej, estetycznej formie.',
 		visual: 'Logo_4.svg',
 	},
 ].map(({ visual, ...step }) => ({ ...step, src: asset(visual) }));
@@ -124,6 +124,7 @@ const pitchNav = [
 	themeColor="#000731"
 	themeVars={{
 		'--pitch-bg': '#0C133E',
+		'--pitch-surface': '#000731',
 		'--pitch-fg': '#ffffff',
 		'--pitch-accent': '#ffffff',
 		'--pitch-font-display': "'Shrikhand', ui-serif, Georgia, serif",
@@ -287,7 +288,7 @@ const pitchNav = [
 						visualHeight={220}
 						stageWidth={260}
 						stageMobileWidth="min(200px, 55vw)"
-						surface="#ffffff"
+						surface="#000731"
 						class="pt-[var(--pitch-section-y)]"
 					>
 						{
@@ -522,8 +523,19 @@ const pitchNav = [
 		gap: 1.5rem;
 	}
 
-	/* —— Body / sidebar (white plane — matches portfolio; chrome uses --theme-color) —— */
+	/* —— Body / sidebar —— */
+	.toros-body {
+		background: #000731;
+	}
+
+	@media (min-width: 1024px) {
+		.toros-body {
+			background: linear-gradient(to right, #0c133e 320px, #000731 320px);
+		}
+	}
+
 	.toros-body__content {
+		background: #000731;
 		min-width: 0;
 	}
 

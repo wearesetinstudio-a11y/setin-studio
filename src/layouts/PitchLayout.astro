@@ -249,8 +249,8 @@ const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 	}
 
 	/*
-	 * Pitch chrome — one leading --theme-color for navbar, footer, preloader.
-	 * Content body (sidebar + right column) mirrors portfolio: white surface.
+	 * Pitch chrome — one leading --theme-color for navbar, footer, preloader,
+	 * and the mobile section list. Content body keeps each pitch’s own dark surfaces.
 	 */
 	.pitch-body .site-header.header-solid {
 		background-color: var(--theme-color, #131415);
@@ -281,94 +281,8 @@ const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 		}
 	}
 
-	/* Portfolio-like content plane under the hero */
-	.pitch-body .toros-body {
-		background: #ffffff !important;
-		color: #131415;
-	}
-
-	.pitch-body .toros-body__content {
-		background: #ffffff !important;
-		color: #131415;
-	}
-
-	.pitch-body .toros-section,
-	.pitch-body .toros-section.text-white,
-	.pitch-body .toros-body .text-white {
-		color: #131415 !important;
-	}
-
-	.pitch-body .toros-body .pitch-body-copy,
-	.pitch-body .toros-body .pitch-body-copy p,
-	.pitch-body .toros-body .text-white\/85 {
-		color: rgba(19, 20, 21, 0.85) !important;
-	}
-
-	.pitch-body .toros-body .pitch-display {
-		color: #131415 !important;
-	}
-
-	.pitch-body .toros-sidebar__link {
-		color: rgba(19, 20, 21, 0.35);
-	}
-
-	.pitch-body .toros-sidebar__link:hover {
-		color: rgba(19, 20, 21, 0.7);
-	}
-
-	.pitch-body .toros-sidebar__link.is-active .toros-sidebar__index {
-		color: rgba(19, 20, 21, 0.55);
-	}
-
-	.pitch-body .toros-sidebar__link.is-active .toros-sidebar__name {
-		color: #131415;
-	}
-
-	.pitch-body .toros-section__label {
-		color: rgba(19, 20, 21, 0.35);
-	}
-
-	.pitch-body .toros-section__label-name,
-	.pitch-body .toros-section__scroll {
-		color: #131415;
-	}
-
-	/* Mobile section list = chrome (theme color), not the white content plane */
 	.pitch-body .toros-sidebar-mobile {
 		background-color: color-mix(in srgb, var(--theme-color, #131415) 95%, transparent) !important;
-		color: #ffffff;
-	}
-
-	.pitch-body .toros-sidebar-mobile__current .toros-sidebar__index {
-		color: rgba(255, 255, 255, 0.55);
-	}
-
-	.pitch-body .toros-sidebar-mobile__current .toros-sidebar__name {
-		color: #ffffff;
-	}
-
-	.pitch-body .toros-sidebar-mobile .toros-sidebar__link {
-		color: rgba(255, 255, 255, 0.35);
-	}
-
-	.pitch-body .toros-sidebar-mobile .toros-sidebar__link:hover {
-		color: rgba(255, 255, 255, 0.7);
-	}
-
-	.pitch-body .toros-sidebar-mobile .toros-sidebar__link.is-active .toros-sidebar__index {
-		color: rgba(255, 255, 255, 0.55);
-	}
-
-	.pitch-body .toros-sidebar-mobile .toros-sidebar__link.is-active .toros-sidebar__name {
-		color: #ffffff;
-	}
-
-	.pitch-body .toros-sidebar-mobile__chevron {
-		color: #ffffff;
-	}
-
-	.pitch-body .toros-simbolo {
-		color: #131415;
 	}
 
 	.pitch-root {

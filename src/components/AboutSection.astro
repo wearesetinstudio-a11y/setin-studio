@@ -1,26 +1,21 @@
 ---
 import WorkWithUsButton from './WorkWithUsButton.astro';
 import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
-import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
-
-const brothersIntroSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 ---
-
-<link rel="preload" as="image" href={brothersIntroSrc} type="image/webp" fetchpriority="high" />
 
 <section id="about" class="about-section relative z-20 bg-[#131415]">
 	<div id="about-visual" class="about-visual relative overflow-hidden">
 		<div id="about-parallax-layer" class="about-parallax__layer pointer-events-none">
 			<div class="about-parallax__shift">
 				<img
-					src={brothersIntroSrc}
+					src="/images/brothers-intro.webp"
 					alt={FOUNDERS_PHOTO_ALTS.en}
 					width="2400"
 					height="1604"
 					class="about-parallax__image h-full w-full object-cover grayscale"
-					loading="eager"
+					loading="lazy"
 					decoding="async"
-					fetchpriority="high"
+					fetchpriority="low"
 					data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
 				/>
 			</div>
@@ -101,6 +96,23 @@ const brothersIntroSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 		transform: translateZ(0);
 	}
 
+	.about-parallax__layer.is-hidden {
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	/* Mobile fixed stage: full viewport, clipped to the about-visual window. */
+	.about-parallax__layer.is-fixed {
+		position: fixed;
+		inset: auto;
+		top: 0;
+		left: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		height: 100svh;
+	}
+
 	.about-parallax__shift {
 		position: absolute;
 		inset: 0;
@@ -119,7 +131,7 @@ const brothersIntroSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 		backface-visibility: hidden;
 	}
 
-	/* Desktop only: parallax lag. Mobile stays static in the section. */
+	/* Desktop: parallax lag. Mobile: fixed bg, no motion. */
 	@media (min-width: 768px) {
 		.about-parallax__shift {
 			will-change: transform;
@@ -139,6 +151,14 @@ const brothersIntroSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		.about-parallax__layer.is-fixed {
+			position: absolute;
+			inset: 0;
+			width: auto;
+			height: auto;
+			clip-path: none;
+		}
+
 		.about-parallax__shift {
 			transform: translate3d(0, 0, 0) !important;
 			will-change: auto;
@@ -197,40 +217,7 @@ const brothersIntroSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 <script>
 	import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
 	import { getLenis } from '../scripts/initSmoothScroll.ts';
-
-	function wrapLetters(element: HTMLElement) {
-		if (element.querySelector('.reveal-char')) return;
-
-		const text = element.textContent ?? '';
-		element.textContent = '';
-
-		for (const char of text) {
-			const span = document.createElement('span');
-			span.className = 'reveal-char';
-			span.textContent = char === ' ' ? ' ' : char;
-			element.appendChild(span);
-		}
-	}
-
-	function updateAboutHeadingReveal() {
-		const heading = document.getElementById('about-heading');
-		if (!heading) return;
-
-		const chars = heading.querySelectorAll('.reveal-char');
-		if (!chars.length) return;
-
-		const rect = heading.getBoundingClientRect();
-		const viewportHeight = window.innerHeight;
-		const startLine = viewportHeight * 0.88;
-		const endLine = viewportHeight * 0.45;
-		const range = startLine - endLine;
-		const progress = Math.min(1, Math.max(0, (startLine - rect.top) / range));
-		const activeCount = Math.ceil(progress * chars.length);
-
-		chars.forEach((char, index) => {
-			char.classList.toggle('active', index < activeCount);
-		});
-	}
+	import { initScrollLetterReveal } from '../scripts/initScrollLetterReveal.ts';
 
 	function initAboutParallax() {
 		const visual = document.getElementById('about-visual');
@@ -240,10 +227,9 @@ const brothersIntroSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 		visual.dataset.parallaxInit = 'true';
 
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const isMobile = window.matchMedia('(max-width: 767px)').matches;
+		const mobileQuery = window.matchMedia('(max-width: 767px)');
 		const shift = layer.querySelector<HTMLElement>('.about-parallax__shift');
-		// Mobile: no parallax — image stays put in the section.
-		if (!shift || reduceMotion || isMobile) return;
+		if (!shift) return;
 
 		const TRAVEL = 0.12;
 		const LERP = 0.22;
@@ -251,7 +237,34 @@ const brothersIntroSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 		let target = 0;
 		let current = 0;
 		let rafId = 0;
-		let headingTick = 0;
+		let parallaxRunning = false;
+
+		const clearFixedStage = () => {
+			layer.classList.remove('is-fixed', 'is-hidden');
+			layer.style.clipPath = '';
+			shift.style.transform = 'translate3d(0, 0, 0)';
+		};
+
+		const syncFixedStage = () => {
+			const rect = visual.getBoundingClientRect();
+			const vh = window.innerHeight;
+			const vw = window.innerWidth;
+			const visible = rect.bottom > 0 && rect.top < vh;
+
+			if (!visible) {
+				layer.classList.add('is-hidden');
+				layer.classList.remove('is-fixed');
+				layer.style.clipPath = '';
+				return;
+			}
+
+			layer.classList.add('is-fixed');
+			layer.classList.remove('is-hidden');
+			const top = Math.max(0, rect.top);
+			const bottom = Math.min(vh, rect.bottom);
+			layer.style.clipPath = `inset(${top}px ${Math.max(0, vw - rect.right)}px ${Math.max(0, vh - bottom)}px ${Math.max(0, rect.left)}px)`;
+			shift.style.transform = 'translate3d(0, 0, 0)';
+		};
 
 		const readTarget = () => {
 			const rect = visual.getBoundingClientRect();
@@ -266,56 +279,68 @@ const brothersIntroSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 		};
 
 		const tick = () => {
+			if (!parallaxRunning) return;
 			current += (target - current) * LERP;
 			if (Math.abs(target - current) < 0.05) current = target;
 			shift.style.transform = `translate3d(0, ${current}px, 0)`;
-
-			headingTick += 1;
-			if (headingTick % 2 === 0) updateAboutHeadingReveal();
-
 			rafId = requestAnimationFrame(tick);
 		};
 
-		readTarget();
-		current = target;
-		rafId = requestAnimationFrame(tick);
+		const stopParallax = () => {
+			parallaxRunning = false;
+			cancelAnimationFrame(rafId);
+			rafId = 0;
+		};
+
+		const startParallax = () => {
+			if (reduceMotion || parallaxRunning) return;
+			parallaxRunning = true;
+			readTarget();
+			current = target;
+			rafId = requestAnimationFrame(tick);
+		};
 
 		const onScroll = () => {
+			if (mobileQuery.matches) {
+				if (!reduceMotion) syncFixedStage();
+				return;
+			}
 			readTarget();
 		};
 
+		const applyMode = () => {
+			stopParallax();
+			if (mobileQuery.matches) {
+				if (reduceMotion) {
+					clearFixedStage();
+				} else {
+					syncFixedStage();
+				}
+				return;
+			}
+			clearFixedStage();
+			startParallax();
+		};
+
+		applyMode();
 		window.addEventListener('scroll', onScroll, { passive: true });
 		getLenis()?.on('scroll', onScroll);
-		window.addEventListener(
-			'resize',
-			() => {
-				readTarget();
-				current = target;
-				updateAboutHeadingReveal();
-			},
-			{ passive: true },
-		);
+		mobileQuery.addEventListener('change', applyMode);
+		window.addEventListener('resize', applyMode, { passive: true });
 
 		document.addEventListener(
 			'astro:before-preparation',
 			() => {
-				cancelAnimationFrame(rafId);
+				stopParallax();
+				clearFixedStage();
 			},
 			{ once: true },
 		);
 	}
 
 	function initAboutSection() {
-		const heading = document.getElementById('about-heading');
-
-		if (heading) {
-			heading.querySelectorAll('[data-reveal-line]').forEach((line) => {
-				wrapLetters(line as HTMLElement);
-			});
-		}
-
+		initScrollLetterReveal('about-heading');
 		initAboutParallax();
-		updateAboutHeadingReveal();
 		initCinemaPureNoise('about-noise-filter', { observeElementId: 'about-visual' });
 	}
 
