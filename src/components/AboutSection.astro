@@ -124,10 +124,23 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 	}
 
 	@media (max-width: 767px) {
+		/* No fixed + clip-path on mobile — iOS often skips updates during scroll. */
+		.about-parallax__layer,
+		.about-parallax__layer.is-fixed {
+			position: absolute;
+			inset: auto;
+			top: -35%;
+			right: 0;
+			left: 0;
+			width: 100%;
+			height: 170%;
+			clip-path: none !important;
+			visibility: visible !important;
+		}
+
 		.about-parallax__image {
 			object-position: center 36%;
-			transform: translateY(10%) scale(1.12);
-			transform-origin: center 16%;
+			transform: none;
 		}
 	}
 
@@ -182,6 +195,12 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 
 <script>
 	import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
+	import {
+		getParallaxSpeed,
+		isParallaxMobile,
+		onParallaxScroll,
+		PARALLAX_SPEED_DESKTOP,
+	} from '../scripts/initSlowBgParallax.ts';
 
 	function wrapLetters(element: HTMLElement) {
 		if (element.querySelector('.reveal-char')) return;
@@ -230,22 +249,34 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		const shift = layer.querySelector<HTMLElement>('.about-parallax__shift');
 		if (!shift) return;
 
-		layer.classList.add('is-fixed');
-
-		// 1 = moves with the page, 0 = locked. Photo travels at a third of the page speed.
-		const SPEED = 0.32;
-
 		function updateParallax() {
 			const rect = visual.getBoundingClientRect();
 			const vh = window.innerHeight;
 			const vw = window.innerWidth;
-			const onScreen = rect.bottom > 0 && rect.top < vh;
+			const mobile = isParallaxMobile();
+			const speed = getParallaxSpeed();
 
+			if (mobile) {
+				layer.classList.remove('is-fixed');
+				layer.style.clipPath = '';
+				layer.style.visibility = '';
+				const centeredTop = (vh - rect.height) / 2;
+				const fromCenter = rect.top - centeredTop;
+				const bleed = Math.max(0, (layer.offsetHeight - visual.offsetHeight) / 2);
+				const travel = (vh + rect.height) / 2;
+				const raw = travel === 0 ? 0 : ((speed - 1) * fromCenter);
+				const offset = Math.max(-bleed, Math.min(bleed, raw));
+				shift.style.transform = `translate3d(0, ${offset}px, 0)`;
+				return;
+			}
+
+			layer.classList.add('is-fixed');
+			const onScreen = rect.bottom > 0 && rect.top < vh;
 			layer.style.visibility = onScreen ? 'visible' : 'hidden';
 			if (!onScreen) return;
 
 			const centeredTop = (vh - rect.height) / 2;
-			const offset = SPEED * (rect.top - centeredTop);
+			const offset = PARALLAX_SPEED_DESKTOP * (rect.top - centeredTop);
 			const visibleTop = Math.max(rect.top, 0);
 			const visibleBottom = Math.min(rect.bottom, vh);
 
@@ -263,22 +294,11 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		section.dataset.scrollInit = 'true';
 
 		const updateParallax = initAboutParallax();
-		let ticking = false;
 
-		function onScroll() {
-			if (ticking) return;
-			ticking = true;
-			requestAnimationFrame(() => {
-				updateParallax?.();
-				updateAboutHeadingReveal();
-				ticking = false;
-			});
-		}
-
-		updateParallax?.();
-		updateAboutHeadingReveal();
-		window.addEventListener('scroll', onScroll, { passive: true });
-		window.addEventListener('resize', onScroll, { passive: true });
+		onParallaxScroll(() => {
+			updateParallax?.();
+			updateAboutHeadingReveal();
+		})();
 	}
 
 	function initAboutSection() {

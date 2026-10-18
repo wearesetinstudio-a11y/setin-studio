@@ -192,6 +192,12 @@ const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
 				var bare = path.replace(/^\/(pl|es)(?=\/|$)/, '') || '/';
 				if (bare === '/' || bare.endsWith('/index.html')) {
 					document.documentElement.classList.add('intro-pending');
+					// Pull-to-refresh / hard reload must open on the hero. Browser
+					// scroll restoration otherwise lands between hero and clients.
+					if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+					if (!window.location.hash) {
+						window.scrollTo(0, 0);
+					}
 				}
 
 				var pathLocale = null;

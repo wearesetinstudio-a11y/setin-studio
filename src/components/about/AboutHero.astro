@@ -86,15 +86,37 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 			min-height: 52svh;
 		}
 
-		.about-hero-visual,
+		/* Absolute (not fixed): iOS often freezes transforms on fixed layers during scroll. */
+		.about-hero-visual {
+			position: absolute !important;
+			inset: 0 !important;
+			width: 100%;
+			height: 52svh;
+			min-height: 52svh;
+		}
+
+		.about-hero-visual.is-hidden {
+			opacity: 1;
+			visibility: visible;
+		}
+
 		.about-hero__copy {
 			height: 52svh;
 			min-height: 52svh;
 		}
 
+		.about-hero-photo-shift {
+			top: -28%;
+			right: 0;
+			bottom: auto;
+			left: 0;
+			height: 156%;
+		}
+
 		.about-hero-photo {
 			object-fit: cover;
 			object-position: center 15%;
+			transform: none;
 		}
 	}
 
@@ -142,7 +164,13 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 
 <script>
 	import { initCinemaPureNoise } from '../../scripts/initCinemaPureNoise.ts';
-	import { getLenis } from '../../scripts/initSmoothScroll.ts';
+	import {
+		absoluteStageOffset,
+		fixedStageOffset,
+		getParallaxSpeed,
+		isParallaxMobile,
+		onParallaxScroll,
+	} from '../../scripts/initSlowBgParallax.ts';
 	import { splitIntoRevealLines, waitForPageReveal } from '../../scripts/lineSlideUpReveal.ts';
 
 	function initAboutHeroVisual() {
@@ -154,20 +182,24 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const shift = visual.querySelector<HTMLElement>('.about-hero-photo-shift');
-		// Same rate as the homepage About photo: the picture travels at a third of the page speed.
-		const SPEED = 0.32;
 
 		const syncHeroVisual = () => {
 			const rect = hero.getBoundingClientRect();
-			visual.classList.toggle('is-hidden', rect.bottom <= 0);
+			const mobile = isParallaxMobile();
+			if (!mobile) {
+				visual.classList.toggle('is-hidden', rect.bottom <= 0);
+			} else {
+				visual.classList.remove('is-hidden');
+			}
 			if (!shift || reduceMotion) return;
-			const offset = SPEED * Math.min(0, rect.top);
+			const speed = getParallaxSpeed();
+			const offset = mobile
+				? absoluteStageOffset(rect.top, speed)
+				: fixedStageOffset(rect.top, speed);
 			shift.style.transform = `translate3d(0, ${offset}px, 0)`;
 		};
 
-		syncHeroVisual();
-		window.addEventListener('scroll', syncHeroVisual, { passive: true });
-		getLenis()?.on('scroll', syncHeroVisual);
+		onParallaxScroll(syncHeroVisual)();
 	}
 
 	function prepareAboutHeroCopy() {

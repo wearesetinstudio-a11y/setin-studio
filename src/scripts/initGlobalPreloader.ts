@@ -17,10 +17,17 @@ import {
 	resetPageTransitionOverlay,
 } from './pageTransitionPanel.ts';
 
+function pinHomepageToTop() {
+	if (window.location.hash) return;
+	if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+	window.scrollTo(0, 0);
+}
+
 function lockIntroCover(): HTMLElement | null {
 	const overlay = getPageTransitionOverlay();
 	setIntroPending();
 	document.body.classList.add('intro-active');
+	pinHomepageToTop();
 
 	if (overlay) {
 		applyOverlayCover(overlay);
@@ -35,6 +42,7 @@ async function runIntroSequence() {
 		markIntroComplete();
 		clearIntroPending();
 		document.body.classList.remove('intro-active');
+		pinHomepageToTop();
 		dispatchIntroComplete();
 		return;
 	}
@@ -43,6 +51,7 @@ async function runIntroSequence() {
 		await animateIntroCover();
 		markIntroComplete();
 		setIntroRevealing();
+		pinHomepageToTop();
 		await animatePageTransitionReveal();
 	} catch {
 		clearIntroPending();
@@ -52,6 +61,7 @@ async function runIntroSequence() {
 		clearIntroPending();
 		document.body.classList.remove('intro-active');
 		setIntroSequenceRunning(false);
+		pinHomepageToTop();
 		dispatchIntroComplete();
 	}
 }

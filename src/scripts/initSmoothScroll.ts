@@ -228,6 +228,11 @@ export function initSmoothScroll() {
 		window.addEventListener(
 			'intro-complete',
 			() => {
+				// Intro unlocks overflow; re-assert top so mobile refresh/restore
+				// cannot leave Lenis mid-page between hero and the next section.
+				if (!window.location.hash) {
+					scrollToImmediate(0);
+				}
 				lenis?.start();
 			},
 			{ once: true },

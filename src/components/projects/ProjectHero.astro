@@ -89,6 +89,33 @@ const heroRawText = heroLines.join('\n').trim();
 		transform-origin: center 42%;
 	}
 
+	@media (max-width: 767px) {
+		/* Absolute (not fixed): readable lag on iOS during touch scroll. */
+		.project-hero-visual {
+			position: absolute !important;
+			inset: 0 !important;
+			width: 100%;
+			height: 100%;
+		}
+
+		.project-hero-visual.is-hidden {
+			opacity: 1;
+			visibility: visible;
+		}
+
+		.project-hero-photo-shift {
+			top: -28%;
+			right: 0;
+			bottom: auto;
+			left: 0;
+			height: 156%;
+		}
+
+		.project-hero-background {
+			transform: none;
+		}
+	}
+
 	.project-hero__client-name {
 		font-size: 1.2rem;
 	}
@@ -156,6 +183,13 @@ const heroRawText = heroLines.join('\n').trim();
 
 <script>
 	import { initCinemaPureNoise } from '../../scripts/initCinemaPureNoise.ts';
+	import {
+		absoluteStageOffset,
+		fixedStageOffset,
+		getParallaxSpeed,
+		isParallaxMobile,
+		onParallaxScroll,
+	} from '../../scripts/initSlowBgParallax.ts';
 	import { PAGE_TRANSITION_OVERLAY_ID } from '../../scripts/pageTransitionPanel.ts';
 
 	type TransitionPhase = 'idle' | 'covering' | 'covered' | 'revealing';
@@ -328,19 +362,24 @@ const heroRawText = heroLines.join('\n').trim();
 
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const shift = visual.querySelector<HTMLElement>('.project-hero-photo-shift');
-		// Same rate as the About page hero: the picture travels at a third of the page speed.
-		const SPEED = 0.32;
 
 		const syncHeroVisual = () => {
 			const rect = hero.getBoundingClientRect();
-			visual.classList.toggle('is-hidden', rect.bottom <= 0);
+			const mobile = isParallaxMobile();
+			if (!mobile) {
+				visual.classList.toggle('is-hidden', rect.bottom <= 0);
+			} else {
+				visual.classList.remove('is-hidden');
+			}
 			if (!shift || reduceMotion) return;
-			const offset = SPEED * Math.min(0, rect.top);
+			const speed = getParallaxSpeed();
+			const offset = mobile
+				? absoluteStageOffset(rect.top, speed)
+				: fixedStageOffset(rect.top, speed);
 			shift.style.transform = `translate3d(0, ${offset}px, 0)`;
 		};
 
-		syncHeroVisual();
-		window.addEventListener('scroll', syncHeroVisual, { passive: true });
+		onParallaxScroll(syncHeroVisual)();
 	}
 
 	function initProjectHeroReveal() {
