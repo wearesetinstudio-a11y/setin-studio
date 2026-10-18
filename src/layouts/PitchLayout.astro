@@ -333,17 +333,38 @@ const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 		color: #131415;
 	}
 
+	/* Mobile section list = chrome (theme color), not the white content plane */
 	.pitch-body .toros-sidebar-mobile {
-		background: rgba(255, 255, 255, 0.95) !important;
-		color: #131415;
+		background-color: color-mix(in srgb, var(--theme-color, #131415) 95%, transparent) !important;
+		color: #ffffff;
 	}
 
 	.pitch-body .toros-sidebar-mobile__current .toros-sidebar__index {
-		color: rgba(19, 20, 21, 0.55);
+		color: rgba(255, 255, 255, 0.55);
 	}
 
 	.pitch-body .toros-sidebar-mobile__current .toros-sidebar__name {
-		color: #131415;
+		color: #ffffff;
+	}
+
+	.pitch-body .toros-sidebar-mobile .toros-sidebar__link {
+		color: rgba(255, 255, 255, 0.35);
+	}
+
+	.pitch-body .toros-sidebar-mobile .toros-sidebar__link:hover {
+		color: rgba(255, 255, 255, 0.7);
+	}
+
+	.pitch-body .toros-sidebar-mobile .toros-sidebar__link.is-active .toros-sidebar__index {
+		color: rgba(255, 255, 255, 0.55);
+	}
+
+	.pitch-body .toros-sidebar-mobile .toros-sidebar__link.is-active .toros-sidebar__name {
+		color: #ffffff;
+	}
+
+	.pitch-body .toros-sidebar-mobile__chevron {
+		color: #ffffff;
 	}
 
 	.pitch-body .toros-simbolo {

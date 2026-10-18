@@ -1,7 +1,10 @@
 import { getLenis } from './initSmoothScroll.ts';
 
 /**
- * Slow-scroll parallax for pitch hero stages — same strength as About / project heroes.
+ * Pitch hero backgrounds:
+ * - Desktop: slow parallax (same strength as About / projects)
+ * - Mobile: fixed in place, no parallax motion
+ *
  * Expects: `[data-pitch-hero]` → `[data-pitch-hero-stage]` → `[data-pitch-hero-shift]`.
  */
 export function initPitchHeroParallax() {
@@ -12,16 +15,19 @@ export function initPitchHeroParallax() {
 	hero.dataset.pitchHeroParallaxInit = 'true';
 
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const mobileQuery = window.matchMedia('(max-width: 767px)');
 	const shift = stage.querySelector<HTMLElement>('[data-pitch-hero-shift]');
-	if (!shift || reduceMotion) return;
-
-	const isMobile = window.matchMedia('(max-width: 767px)').matches;
-	const TRAVEL = 0.12;
-	const LERP = isMobile ? 0.14 : 0.22;
 
 	let target = 0;
 	let current = 0;
 	let rafId = 0;
+	let parallaxRunning = false;
+	const TRAVEL = 0.12;
+	const LERP = 0.22;
+
+	const syncVisibility = () => {
+		stage.classList.toggle('is-hidden', hero.getBoundingClientRect().bottom <= 0);
+	};
 
 	const readTarget = () => {
 		const rect = hero.getBoundingClientRect();
@@ -36,37 +42,59 @@ export function initPitchHeroParallax() {
 	};
 
 	const tick = () => {
+		if (!parallaxRunning || !shift) return;
 		current += (target - current) * LERP;
 		if (Math.abs(target - current) < 0.05) current = target;
 		shift.style.transform = `translate3d(0, ${current}px, 0)`;
 		rafId = requestAnimationFrame(tick);
 	};
 
-	stage.classList.add('is-parallax-active');
-	readTarget();
-	current = target;
-	rafId = requestAnimationFrame(tick);
-
-	const onScroll = () => {
-		readTarget();
-		stage.classList.toggle('is-hidden', hero.getBoundingClientRect().bottom <= 0 && !isMobile);
+	const stopParallax = () => {
+		parallaxRunning = false;
+		cancelAnimationFrame(rafId);
+		rafId = 0;
+		stage.classList.remove('is-parallax-active');
+		if (shift) shift.style.transform = 'translate3d(0, 0, 0)';
 	};
 
+	const startParallax = () => {
+		if (!shift || reduceMotion || parallaxRunning) return;
+		parallaxRunning = true;
+		stage.classList.add('is-parallax-active');
+		readTarget();
+		current = target;
+		rafId = requestAnimationFrame(tick);
+	};
+
+	const onScroll = () => {
+		if (mobileQuery.matches) {
+			syncVisibility();
+			return;
+		}
+		readTarget();
+		syncVisibility();
+	};
+
+	const applyMode = () => {
+		if (mobileQuery.matches) {
+			stopParallax();
+			syncVisibility();
+			return;
+		}
+		stage.classList.remove('is-hidden');
+		startParallax();
+	};
+
+	applyMode();
 	window.addEventListener('scroll', onScroll, { passive: true });
 	getLenis()?.on('scroll', onScroll);
-	window.addEventListener(
-		'resize',
-		() => {
-			readTarget();
-			current = target;
-		},
-		{ passive: true },
-	);
+	mobileQuery.addEventListener('change', applyMode);
+	window.addEventListener('resize', applyMode, { passive: true });
 
 	document.addEventListener(
 		'astro:before-preparation',
 		() => {
-			cancelAnimationFrame(rafId);
+			stopParallax();
 		},
 		{ once: true },
 	);

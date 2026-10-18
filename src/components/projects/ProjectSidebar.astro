@@ -50,7 +50,7 @@ function displayLabel(label: string): string {
 </aside>
 
 <div
-	class="project-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-0 bg-[#131415]/95 px-[var(--page-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden"
+	class="project-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-0 px-[var(--page-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden"
 	data-project-sidebar-mobile
 >
 	<div
@@ -152,6 +152,10 @@ function displayLabel(label: string): string {
 
 	.project-sidebar__link--mobile {
 		font-size: 1rem;
+	}
+
+	.project-sidebar-mobile {
+		background-color: color-mix(in srgb, var(--theme-color, #131415) 95%, transparent);
 	}
 
 	.project-sidebar-mobile__current {

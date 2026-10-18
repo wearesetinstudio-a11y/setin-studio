@@ -68,8 +68,13 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 	.about-hero-photo {
 		object-fit: cover;
 		object-position: center 22%;
-		transform: scale(1.4);
-		transform-origin: center 12%;
+	}
+
+	@media (min-width: 768px) {
+		.about-hero-photo {
+			transform: scale(1.4);
+			transform-origin: center 12%;
+		}
 	}
 
 	.about-hero__title {
@@ -87,18 +92,10 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 			min-height: 52svh;
 		}
 
-		/* Absolute (not fixed): iOS often freezes transforms on fixed layers during scroll. */
+		/* Mobile: fixed bg, no parallax — image stays in place while scrolling. */
 		.about-hero-visual {
-			position: absolute !important;
-			inset: 0 !important;
-			width: 100%;
 			height: 52svh;
 			min-height: 52svh;
-		}
-
-		.about-hero-visual.is-hidden {
-			opacity: 1;
-			visibility: visible;
 		}
 
 		.about-hero__copy {
@@ -107,11 +104,9 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 		}
 
 		.about-hero-photo-shift {
-			top: -28%;
-			right: 0;
-			bottom: auto;
-			left: 0;
-			height: 156%;
+			inset: 0;
+			height: 100%;
+			will-change: auto;
 		}
 
 		.about-hero-photo {
@@ -166,7 +161,6 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 <script>
 	import { initCinemaPureNoise } from '../../scripts/initCinemaPureNoise.ts';
 	import {
-		absoluteStageOffset,
 		fixedStageOffset,
 		getParallaxSpeed,
 		isParallaxMobile,
@@ -186,18 +180,14 @@ import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 
 		const syncHeroVisual = () => {
 			const rect = hero.getBoundingClientRect();
-			const mobile = isParallaxMobile();
-			if (!mobile) {
-				visual.classList.toggle('is-hidden', rect.bottom <= 0);
-			} else {
-				visual.classList.remove('is-hidden');
+			visual.classList.toggle('is-hidden', rect.bottom <= 0);
+			// Mobile: fixed only — no parallax motion.
+			if (!shift || reduceMotion || isParallaxMobile()) {
+				if (shift) shift.style.transform = 'translate3d(0, 0, 0)';
+				return;
 			}
-			if (!shift || reduceMotion) return;
 			const speed = getParallaxSpeed();
-			const offset = mobile
-				? absoluteStageOffset(rect.top, speed)
-				: fixedStageOffset(rect.top, speed);
-			shift.style.transform = `translate3d(0, ${offset}px, 0)`;
+			shift.style.transform = `translate3d(0, ${fixedStageOffset(rect.top, speed)}px, 0)`;
 		};
 
 		onParallaxScroll(syncHeroVisual)();

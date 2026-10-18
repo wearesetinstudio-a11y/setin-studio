@@ -540,20 +540,6 @@ const pitchNav = [
 		will-change: transform;
 	}
 
-	@media (max-width: 767px) {
-		.aero-hero__stage.is-parallax-active {
-			position: absolute;
-			inset: 0;
-			width: 100%;
-			height: 100%;
-		}
-
-		.aero-hero__stage.is-parallax-active.is-hidden {
-			opacity: 1;
-			visibility: visible;
-		}
-	}
-
 	.aero-hero__bg-video {
 		position: absolute;
 		inset: 0;
@@ -564,10 +550,15 @@ const pitchNav = [
 		min-height: 100%;
 		object-fit: cover;
 		object-position: center center;
-		transform: scale(1.24) translateZ(0);
-		transform-origin: center center;
 		backface-visibility: hidden;
 		pointer-events: none;
+	}
+
+	@media (min-width: 768px) {
+		.aero-hero__stage.is-parallax-active .aero-hero__bg-video {
+			transform: scale(1.24) translateZ(0);
+			transform-origin: center center;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -576,7 +567,7 @@ const pitchNav = [
 			will-change: auto;
 		}
 
-		.aero-hero__bg-video {
+		.aero-hero__stage.is-parallax-active .aero-hero__bg-video {
 			transform: scale(1.05) translateZ(0);
 		}
 	}

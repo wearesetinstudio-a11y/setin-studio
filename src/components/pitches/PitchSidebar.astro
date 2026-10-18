@@ -42,7 +42,7 @@ const first = items[0];
 </aside>
 
 <div
-	class="toros-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-0 bg-[#0d0e0f]/95 px-[var(--pitch-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden"
+	class="toros-sidebar-mobile fixed inset-x-0 bottom-0 z-40 border-0 px-[var(--pitch-gutter)] backdrop-blur-md transition-all duration-500 lg:hidden"
 	data-toros-sidebar-mobile
 >
 	<div
@@ -133,6 +133,10 @@ const first = items[0];
 
 	.toros-sidebar__link.is-active .toros-sidebar__name {
 		color: #ffffff;
+	}
+
+	.toros-sidebar-mobile {
+		background-color: color-mix(in srgb, var(--theme-color, #131415) 95%, transparent);
 	}
 
 	.toros-sidebar-mobile__current {

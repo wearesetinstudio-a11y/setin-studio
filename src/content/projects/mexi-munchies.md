@@ -5,7 +5,7 @@ tags: ['Brand Design', 'Motion']
 thumbnail: '/portfolio/mexi-munchies/cover.webp'
 folderName: 'mexi-munchies'
 order: 10
-themeColor: '#310000'
+themeColor: '#1F0000'
 heroImage: '/portfolio/mexi-munchies/bg.webp'
 heroSubtitle: 'Showing the world what MexiMunchies is all about'
 overviewLabel: 'Context'

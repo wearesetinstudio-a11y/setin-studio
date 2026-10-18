@@ -6,7 +6,7 @@ thumbnail: '/portfolio/nrv-web/cover.opt.webp'
 video: '/portfolio/nrv-web/cover.webm'
 folderName: 'nrv-web'
 order: 4
-themeColor: '#000733'
+themeColor: '#00031A'
 heroImage: '/portfolio/nrv-web/bg.webp'
 heroSubtitle: "Web Platform for Control System Provider"
 overviewLabel: "Overview"

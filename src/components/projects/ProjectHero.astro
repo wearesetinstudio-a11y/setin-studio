@@ -10,6 +10,12 @@ const clientLabel = client.toUpperCase();
 const heroRawText = heroLines.join('\n').trim();
 ---
 
+{
+	heroImage ? (
+		<link rel="preload" as="image" href={heroImage} fetchpriority="high" />
+	) : null
+}
+
 <section id="project-hero" class="project-hero relative h-[100vh] overflow-hidden">
 	{
 		heroImage ? (
@@ -27,6 +33,7 @@ const heroRawText = heroLines.join('\n').trim();
 						class="project-hero-background pointer-events-none absolute inset-0"
 						loading="eager"
 						decoding="async"
+						fetchpriority="high"
 						aria-hidden="true"
 					/>
 				</div>
@@ -78,6 +85,11 @@ const heroRawText = heroLines.join('\n').trim();
 		transform: translateZ(0);
 	}
 
+	.project-hero-visual.is-hidden {
+		opacity: 0;
+		visibility: hidden;
+	}
+
 	.project-hero-photo-shift {
 		position: absolute;
 		inset: 0;
@@ -86,13 +98,8 @@ const heroRawText = heroLines.join('\n').trim();
 		overflow: hidden;
 		transform: translate3d(0, 0, 0);
 		backface-visibility: hidden;
-		will-change: transform;
 	}
 
-	/*
-	 * Always fill the frame (min 100% width + height) — no empty side bars.
-	 * Light scale only for parallax travel; center crop keeps as much height as possible.
-	 */
 	.project-hero-background {
 		top: 0;
 		left: 0;
@@ -102,10 +109,33 @@ const heroRawText = heroLines.join('\n').trim();
 		min-height: 100%;
 		object-fit: cover;
 		object-position: center center;
-		/* Match About section — enough zoom for a clear speed difference while scrolling. */
-		transform: scale(1.24) translateZ(0);
-		transform-origin: center center;
 		backface-visibility: hidden;
+	}
+
+	/* Desktop: parallax lag. Mobile: fixed bg, no motion. */
+	@media (min-width: 768px) {
+		.project-hero-photo-shift {
+			will-change: transform;
+		}
+
+		.project-hero-background {
+			transform: scale(1.24) translateZ(0);
+			transform-origin: center center;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.project-hero-visual {
+			position: fixed !important;
+			inset: 0 !important;
+			width: 100%;
+			height: 100%;
+			height: 100svh;
+		}
+
+		.project-hero-background {
+			transform: none;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -116,6 +146,12 @@ const heroRawText = heroLines.join('\n').trim();
 
 		.project-hero-background {
 			transform: scale(1.05) translateZ(0);
+		}
+
+		@media (max-width: 767px) {
+			.project-hero-background {
+				transform: none;
+			}
 		}
 	}
 
@@ -351,23 +387,25 @@ const heroRawText = heroLines.join('\n').trim();
 	function initProjectHeroVisual() {
 		const hero = document.getElementById('project-hero');
 		const visual = document.getElementById('project-hero-visual');
-		if (!hero || hero.dataset.heroVisualInit === 'true') return;
+		if (!hero || !visual || hero.dataset.heroVisualInit === 'true') return;
 		hero.dataset.heroVisualInit = 'true';
 
 		initCinemaPureNoise('project-hero-noise-filter', { observeElementId: 'project-hero' });
 
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const shift = visual?.querySelector<HTMLElement>('.project-hero-photo-shift');
-		if (!shift || reduceMotion) return;
-
-		const isMobile = window.matchMedia('(max-width: 767px)').matches;
-		// Same travel as the homepage About section — clear lag vs page scroll.
-		const TRAVEL = 0.12;
-		const LERP = isMobile ? 0.14 : 0.22;
+		const mobileQuery = window.matchMedia('(max-width: 767px)');
+		const shift = visual.querySelector<HTMLElement>('.project-hero-photo-shift');
 
 		let target = 0;
 		let current = 0;
 		let rafId = 0;
+		let parallaxRunning = false;
+		const TRAVEL = 0.12;
+		const LERP = 0.22;
+
+		const syncFixedVisibility = () => {
+			visual.classList.toggle('is-hidden', hero.getBoundingClientRect().bottom <= 0);
+		};
 
 		const readTarget = () => {
 			const rect = hero.getBoundingClientRect();
@@ -382,35 +420,56 @@ const heroRawText = heroLines.join('\n').trim();
 		};
 
 		const tick = () => {
+			if (!parallaxRunning || !shift) return;
 			current += (target - current) * LERP;
 			if (Math.abs(target - current) < 0.05) current = target;
 			shift.style.transform = `translate3d(0, ${current}px, 0)`;
 			rafId = requestAnimationFrame(tick);
 		};
 
-		readTarget();
-		current = target;
-		rafId = requestAnimationFrame(tick);
+		const stopParallax = () => {
+			parallaxRunning = false;
+			cancelAnimationFrame(rafId);
+			rafId = 0;
+			if (shift) shift.style.transform = 'translate3d(0, 0, 0)';
+		};
+
+		const startParallax = () => {
+			if (!shift || reduceMotion || parallaxRunning) return;
+			parallaxRunning = true;
+			readTarget();
+			current = target;
+			rafId = requestAnimationFrame(tick);
+		};
 
 		const onScroll = () => {
+			if (mobileQuery.matches) {
+				syncFixedVisibility();
+				return;
+			}
 			readTarget();
 		};
 
+		const applyMode = () => {
+			if (mobileQuery.matches) {
+				stopParallax();
+				syncFixedVisibility();
+				return;
+			}
+			visual.classList.remove('is-hidden');
+			startParallax();
+		};
+
+		applyMode();
 		window.addEventListener('scroll', onScroll, { passive: true });
 		getLenis()?.on('scroll', onScroll);
-		window.addEventListener(
-			'resize',
-			() => {
-				readTarget();
-				current = target;
-			},
-			{ passive: true },
-		);
+		mobileQuery.addEventListener('change', applyMode);
+		window.addEventListener('resize', applyMode, { passive: true });
 
 		document.addEventListener(
 			'astro:before-preparation',
 			() => {
-				cancelAnimationFrame(rafId);
+				stopParallax();
 			},
 			{ once: true },
 		);

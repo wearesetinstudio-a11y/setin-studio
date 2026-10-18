@@ -5,7 +5,7 @@ tags: ['Brand Design', 'Motion']
 thumbnail: '/portfolio/app/Cover.webm'
 folderName: 'app'
 order: 0
-themeColor: '#052300'
+themeColor: '#041A00'
 video: '/portfolio/app/Cover.webm'
 heroImage: '/portfolio/app/bg.webp'
 heroSubtitle: 'A New Visual Identity for Panama’s Premier Free Trade Zone Authority'

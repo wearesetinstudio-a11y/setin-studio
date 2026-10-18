@@ -1,21 +1,26 @@
 ---
 import WorkWithUsButton from './WorkWithUsButton.astro';
 import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
+import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
+
+const brothersIntroSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 ---
+
+<link rel="preload" as="image" href={brothersIntroSrc} type="image/webp" fetchpriority="high" />
 
 <section id="about" class="about-section relative z-20 bg-[#131415]">
 	<div id="about-visual" class="about-visual relative overflow-hidden">
 		<div id="about-parallax-layer" class="about-parallax__layer pointer-events-none">
 			<div class="about-parallax__shift">
 				<img
-					src="/images/brothers-intro.webp"
+					src={brothersIntroSrc}
 					alt={FOUNDERS_PHOTO_ALTS.en}
 					width="2400"
 					height="1604"
 					class="about-parallax__image h-full w-full object-cover grayscale"
-					loading="lazy"
+					loading="eager"
 					decoding="async"
-					fetchpriority="low"
+					fetchpriority="high"
 					data-alts={JSON.stringify(FOUNDERS_PHOTO_ALTS)}
 				/>
 			</div>
@@ -104,24 +109,32 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		overflow: hidden;
 		transform: translate3d(0, 0, 0);
 		backface-visibility: hidden;
-		will-change: transform;
 	}
 
-	/* Scale gives parallax travel room; faces stay framed lower in the crop. */
 	.about-parallax__image {
 		height: 100%;
 		width: 100%;
 		object-fit: cover;
 		object-position: center 42%;
-		transform: scale(1.24) translateZ(0);
-		transform-origin: center 42%;
 		backface-visibility: hidden;
+	}
+
+	/* Desktop only: parallax lag. Mobile stays static in the section. */
+	@media (min-width: 768px) {
+		.about-parallax__shift {
+			will-change: transform;
+		}
+
+		.about-parallax__image {
+			transform: scale(1.24) translateZ(0);
+			transform-origin: center 42%;
+		}
 	}
 
 	@media (max-width: 767px) {
 		.about-parallax__image {
 			object-position: center 36%;
-			transform-origin: center 36%;
+			transform: none;
 		}
 	}
 
@@ -133,6 +146,12 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 
 		.about-parallax__image {
 			transform: scale(1.05) translateZ(0);
+		}
+
+		@media (max-width: 767px) {
+			.about-parallax__image {
+				transform: none;
+			}
 		}
 	}
 
@@ -221,11 +240,13 @@ import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 		visual.dataset.parallaxInit = 'true';
 
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const isMobile = window.matchMedia('(max-width: 767px)').matches;
 		const shift = layer.querySelector<HTMLElement>('.about-parallax__shift');
-		if (!shift || reduceMotion) return;
+		// Mobile: no parallax — image stays put in the section.
+		if (!shift || reduceMotion || isMobile) return;
 
 		const TRAVEL = 0.12;
-		const LERP = window.matchMedia('(max-width: 767px)').matches ? 0.14 : 0.22;
+		const LERP = 0.22;
 
 		let target = 0;
 		let current = 0;

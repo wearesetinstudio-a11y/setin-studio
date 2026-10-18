@@ -5,7 +5,7 @@ tags: ['AI Direction', 'Brand Design', 'Motion']
 thumbnail: '/portfolio/znicz-pruszkow/cover.webm'
 folderName: 'znicz-pruszkow'
 order: 0
-themeColor: '#330001'
+themeColor: '#1F0000'
 isNew: true
 video: '/portfolio/znicz-pruszkow/cover.webm'
 heroImage: '/portfolio/znicz-pruszkow/bg.webp'
