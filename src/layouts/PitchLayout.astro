@@ -40,6 +40,13 @@ interface Props {
 	navLogoAlt?: string;
 	navLogoWidth?: number;
 	navLogoHeight?: number;
+	/**
+	 * Optional Open Graph image path under `/public` (e.g. `/pitches/turysta/og.jpg`).
+	 * When omitted, auto-detects `public/pitches/<slug>/og.jpg`.
+	 */
+	ogImageSrc?: string;
+	/** Optional `og:image:alt` / Twitter image alt. Defaults to page title. */
+	ogImageAlt?: string;
 }
 
 const {
@@ -54,6 +61,8 @@ const {
 	navLogoAlt = 'Setin × client',
 	navLogoWidth = 297,
 	navLogoHeight = 59,
+	ogImageSrc,
+	ogImageAlt,
 } = Astro.props;
 
 const locale: Locale = localeProp ?? (isLocale(lang) ? lang : 'es');
@@ -62,9 +71,15 @@ const { projectCount } = await getSiteCounts();
 
 const pageTitle = title.includes('Setin') ? title : `${title} — Setin Studio`;
 
+/** Prefer pre-rewrite path so locale prefixes never break pitch slug detection. */
+const originPathname =
+	typeof Astro.originPathname === 'string' && Astro.originPathname
+		? Astro.originPathname
+		: Astro.url.pathname;
+
 /** `public/pitches/<slug>/og.jpg` — 1200×630. Missing file falls back to no social image. */
 const pitchSlug =
-	Astro.url.pathname
+	originPathname
 		.replace(/\/$/, '')
 		.split('/')
 		.filter(Boolean)
@@ -79,11 +94,22 @@ const themeStyle = [
 ].join('; ');
 const themeColorMap = await buildThemeColorMap();
 const themeColorMapJson = JSON.stringify(themeColorMap).replace(/</g, '\\u003c');
-const ogPublicPath = `/pitches/${pitchSlug}/og.jpg`;
-const hasOgImage =
-	/^[a-z0-9-]+$/i.test(pitchSlug) &&
-	existsSync(join(process.cwd(), 'public', 'pitches', pitchSlug, 'og.jpg'));
-const ogImage = hasOgImage ? `${SITE_URL}${withPublicAssetVersion(ogPublicPath)}` : '';
+
+const resolvedOgPath = (() => {
+	if (ogImageSrc?.trim()) {
+		const path = ogImageSrc.startsWith('/') ? ogImageSrc : `/${ogImageSrc}`;
+		const relative = path.replace(/^\//, '');
+		return existsSync(join(process.cwd(), 'public', relative)) ? path : '';
+	}
+	const autoPath = `/pitches/${pitchSlug}/og.jpg`;
+	const exists =
+		/^[a-z0-9-]+$/i.test(pitchSlug) &&
+		existsSync(join(process.cwd(), 'public', 'pitches', pitchSlug, 'og.jpg'));
+	return exists ? autoPath : '';
+})();
+
+const ogImage = resolvedOgPath ? `${SITE_URL}${withPublicAssetVersion(resolvedOgPath)}` : '';
+const ogAlt = (ogImageAlt || pageTitle).trim();
 const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 ---
 
@@ -109,11 +135,12 @@ const ogUrl = `${SITE_URL}/pitches/${pitchSlug}`;
 					<meta property="og:image:type" content="image/jpeg" />
 					<meta property="og:image:width" content="1200" />
 					<meta property="og:image:height" content="630" />
-					<meta property="og:image:alt" content={pageTitle} />
+					<meta property="og:image:alt" content={ogAlt} />
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content={pageTitle} />
 					<meta name="twitter:description" content={description} />
 					<meta name="twitter:image" content={ogImage} />
+					<meta name="twitter:image:alt" content={ogAlt} />
 				</>
 			) : null
 		}
