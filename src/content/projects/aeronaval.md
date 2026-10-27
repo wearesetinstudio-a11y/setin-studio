@@ -6,7 +6,6 @@ thumbnail: '/portfolio/aeronaval/cover_image.webp'
 folderName: 'aeronaval'
 order: 0
 themeColor: '#0d0e0f'
-isNew: true
 video: '/portfolio/aeronaval/bg.webm'
 heroImage: '/portfolio/aeronaval/bg.webm'
 heroSubtitle: 'Precision at sea, in the air, and on land. A modern standard for a sovereign elite.'

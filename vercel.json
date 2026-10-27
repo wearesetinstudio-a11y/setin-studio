@@ -5,7 +5,13 @@
 		{ "source": "/pl/pitches/aeronaval", "destination": "/projects/aeronaval", "permanent": true },
 		{ "source": "/pl/pitches/aeronaval/", "destination": "/projects/aeronaval", "permanent": true },
 		{ "source": "/es/pitches/aeronaval", "destination": "/projects/aeronaval", "permanent": true },
-		{ "source": "/es/pitches/aeronaval/", "destination": "/projects/aeronaval", "permanent": true }
+		{ "source": "/es/pitches/aeronaval/", "destination": "/projects/aeronaval", "permanent": true },
+		{ "source": "/pitches/turysta", "destination": "/projects/turysta", "permanent": true },
+		{ "source": "/pitches/turysta/", "destination": "/projects/turysta", "permanent": true },
+		{ "source": "/pl/pitches/turysta", "destination": "/projects/turysta", "permanent": true },
+		{ "source": "/pl/pitches/turysta/", "destination": "/projects/turysta", "permanent": true },
+		{ "source": "/es/pitches/turysta", "destination": "/projects/turysta", "permanent": true },
+		{ "source": "/es/pitches/turysta/", "destination": "/projects/turysta", "permanent": true }
 	],
 	"rewrites": [
 		{ "source": "/pl", "destination": "/" },
