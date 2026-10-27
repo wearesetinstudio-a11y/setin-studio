@@ -4,6 +4,9 @@ import { defineMiddleware } from 'astro:middleware';
 export const onRequest = defineMiddleware(async (context, next) => {
 	const { pathname } = context.url;
 	const barePath = pathname.replace(/^\/(pl|es)(?=\/|$)/, '') || '/';
+	if (barePath === '/pitches/aeronaval' || barePath === '/pitches/aeronaval/') {
+		return context.redirect('/projects/aeronaval' + context.url.search, 308);
+	}
 	if (barePath === '/projects/nrv-web' || barePath === '/projects/nrv-web/') {
 		return context.rewrite(new URL('/projects/nrv/' + context.url.search, context.url.origin));
 	}

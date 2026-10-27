@@ -1,4 +1,12 @@
 {
+	"redirects": [
+		{ "source": "/pitches/aeronaval", "destination": "/projects/aeronaval", "permanent": true },
+		{ "source": "/pitches/aeronaval/", "destination": "/projects/aeronaval", "permanent": true },
+		{ "source": "/pl/pitches/aeronaval", "destination": "/projects/aeronaval", "permanent": true },
+		{ "source": "/pl/pitches/aeronaval/", "destination": "/projects/aeronaval", "permanent": true },
+		{ "source": "/es/pitches/aeronaval", "destination": "/projects/aeronaval", "permanent": true },
+		{ "source": "/es/pitches/aeronaval/", "destination": "/projects/aeronaval", "permanent": true }
+	],
 	"rewrites": [
 		{ "source": "/pl", "destination": "/" },
 		{ "source": "/pl/", "destination": "/" },

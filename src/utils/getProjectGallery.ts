@@ -30,7 +30,7 @@ type ParsedMediaFile = GalleryMediaItem & {
 };
 
 const FILE_PATTERN = /^(\d+)(?:[._](\d+))?\.(webp|mp4|webm|riv)$/i;
-const MAX_SECTION_PARTS = 4;
+const MAX_SECTION_PARTS = 12;
 
 export function getCoverFilename(thumbnail: string): string {
 	return thumbnail.split('/').pop() ?? 'cover.webp';
@@ -97,9 +97,9 @@ function toBlockItem(file: ParsedMediaFile, folderName: string): GalleryMediaIte
 }
 
 /**
- * Right-column gallery rhythm:
- * X.webp / X.1 / X.4 → full width
- * X.2 + X.3 → side by side; if only one exists → full width
+ * Right-column gallery rhythm, repeated every four slots:
+ * X.webp / X.1 / X.4 / X.5 / X.8 → full width
+ * X.2 + X.3 and X.6 + X.7 → side by side; a slot without its pair → full width
  */
 function layoutGroup(
 	folderName: string,
@@ -118,29 +118,33 @@ function layoutGroup(
 		blocks.push({ kind: 'full', group, item: toBlockItem(single, folderName) });
 	}
 
-	const part1 = byPart.get(1);
-	const part2 = byPart.get(2);
-	const part3 = byPart.get(3);
-	const part4 = byPart.get(4);
+	const maxPart = byPart.size > 0 ? Math.max(...byPart.keys()) : 0;
 
-	if (part1) {
-		blocks.push({ kind: 'full', group, item: toBlockItem(part1, folderName) });
-	}
+	for (let start = 1; start <= maxPart; start += 4) {
+		const lead = byPart.get(start);
+		const pairA = byPart.get(start + 1);
+		const pairB = byPart.get(start + 2);
+		const close = byPart.get(start + 3);
 
-	if (part2 && part3) {
-		blocks.push({
-			kind: 'grid',
-			group,
-			items: [toBlockItem(part2, folderName), toBlockItem(part3, folderName)],
-		});
-	} else if (part2) {
-		blocks.push({ kind: 'full', group, item: toBlockItem(part2, folderName) });
-	} else if (part3) {
-		blocks.push({ kind: 'full', group, item: toBlockItem(part3, folderName) });
-	}
+		if (lead) {
+			blocks.push({ kind: 'full', group, item: toBlockItem(lead, folderName) });
+		}
 
-	if (part4) {
-		blocks.push({ kind: 'full', group, item: toBlockItem(part4, folderName) });
+		if (pairA && pairB) {
+			blocks.push({
+				kind: 'grid',
+				group,
+				items: [toBlockItem(pairA, folderName), toBlockItem(pairB, folderName)],
+			});
+		} else if (pairA) {
+			blocks.push({ kind: 'full', group, item: toBlockItem(pairA, folderName) });
+		} else if (pairB) {
+			blocks.push({ kind: 'full', group, item: toBlockItem(pairB, folderName) });
+		}
+
+		if (close) {
+			blocks.push({ kind: 'full', group, item: toBlockItem(close, folderName) });
+		}
 	}
 
 	return blocks;
@@ -237,7 +241,7 @@ export function getOverviewGraphic(
 
 /**
  * Media for one case-study section (group N).
- * Accepts `N.webp` / `N.mp4` and up to four parts: `N.1` / `N_1` … `N.4`.
+ * Accepts `N.webp` / `N.mp4` and numbered parts: `N.1` / `N_1` … `N.12`.
  */
 export function getSectionMedia(
 	folderName: string,

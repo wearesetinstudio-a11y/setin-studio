@@ -1,7 +1,6 @@
 /** Leading chrome color per pitch (navbar / footer / preloader). */
 export const pitchThemes = {
 	turysta: '#000731',
-	aeronaval: '#0d0e0f',
 	'toros-dechiriqui': '#0b140f',
 } as const;
 

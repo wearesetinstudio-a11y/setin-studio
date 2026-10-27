@@ -6,6 +6,8 @@ interface Props {
 }
 
 const { heroImage = '', heroLines, client } = Astro.props;
+const heroIsVideo = /\.(mp4|webm)(\?|$)/i.test(heroImage);
+const heroVideoType = /\.webm(\?|$)/i.test(heroImage) ? 'video/webm' : 'video/mp4';
 const clientLabel = client.toUpperCase();
 const heroRawText = heroLines.join('\n').trim();
 ---
@@ -19,17 +21,33 @@ const heroRawText = heroLines.join('\n').trim();
 				aria-hidden="true"
 			>
 				<div class="project-hero-photo-shift bg-parallax__shift">
-					<img
-						src={heroImage}
-						alt=""
-						width="1920"
-						height="1080"
-						class="project-hero-background bg-parallax__media pointer-events-none"
-						loading="eager"
-						decoding="async"
-						fetchpriority="high"
-						aria-hidden="true"
-					/>
+					{
+						heroIsVideo ? (
+							<video
+								class="project-hero-background bg-parallax__media pointer-events-none"
+								autoplay
+								muted
+								loop
+								playsinline
+								preload="auto"
+								aria-hidden="true"
+							>
+								<source src={heroImage} type={heroVideoType} />
+							</video>
+						) : (
+							<img
+								src={heroImage}
+								alt=""
+								width="1920"
+								height="1080"
+								class="project-hero-background bg-parallax__media pointer-events-none"
+								loading="eager"
+								decoding="async"
+								fetchpriority="high"
+								aria-hidden="true"
+							/>
+						)
+					}
 				</div>
 
 				<div class="pointer-events-none absolute inset-0 z-[1] bg-black/10"></div>
