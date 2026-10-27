@@ -13,6 +13,10 @@ interface Props {
 const { item, index, alts } = Astro.props;
 const label = alts.en;
 const altsJson = JSON.stringify(alts);
+/** Heavy gallery clips with audio (e.g. `1.1.mp4`) — play on click, not muted autoplay. */
+const isClickPlayVideo =
+	item.type === 'video' && item.filename.toLowerCase().endsWith('.mp4');
+const clickPlaySrc = isClickPlayVideo ? `${item.src}#t=0.1` : item.src;
 ---
 
 {
@@ -40,6 +44,28 @@ const altsJson = JSON.stringify(alts);
 				aria-label={label}
 			></canvas>
 		</figure>
+	) : isClickPlayVideo ? (
+		<figure class="project-gallery__item project-gallery__item--video project-gallery__play m-0 w-full" data-click-play>
+			<video
+				class="block h-auto w-full bg-black"
+				preload="none"
+				playsinline
+				data-alts={altsJson}
+				aria-label={label}
+			>
+				<source src={clickPlaySrc} type="video/mp4" />
+			</video>
+			<button
+				type="button"
+				class="project-gallery__play-button"
+				data-click-play-button
+				aria-label="Play video with sound"
+			>
+				<svg width="28" height="32" viewBox="0 0 28 32" fill="none" aria-hidden="true">
+					<path d="M27 16L1 31V1L27 16Z" fill="white"></path>
+				</svg>
+			</button>
+		</figure>
 	) : (
 		<figure class="project-gallery__item project-gallery__item--video m-0 w-full">
 			<video
@@ -62,15 +88,69 @@ const altsJson = JSON.stringify(alts);
 		aspect-ratio: 1980 / 476;
 		width: 100%;
 	}
+
+	.project-gallery__play {
+		position: relative;
+		display: block;
+		overflow: hidden;
+	}
+
+	.project-gallery__play-button {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 88px;
+		height: 88px;
+		padding-left: 6px;
+		border: 1px solid rgba(255, 255, 255, 0.6);
+		border-radius: 9999px;
+		background: rgba(13, 14, 15, 0.35);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		transform: translate(-50%, -50%);
+		cursor: pointer;
+		transition:
+			transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+			background-color 0.3s ease,
+			opacity 0.3s ease;
+	}
+
+	.project-gallery__play-button:hover {
+		background: rgba(13, 14, 15, 0.55);
+		transform: translate(-50%, -50%) scale(1.06);
+	}
+
+	.project-gallery__play.is-playing .project-gallery__play-button {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	@media (width < 768px) {
+		.project-gallery__play-button {
+			width: 64px;
+			height: 64px;
+			padding-left: 4px;
+		}
+
+		.project-gallery__play-button svg {
+			width: 20px;
+			height: 23px;
+		}
+	}
 </style>
 
 <script>
 	import { initRiveCovers } from '../../scripts/initRiveCovers';
 	import { initBufferedAutoplayVideos } from '../../scripts/initBufferedAutoplayVideos';
+	import { initPitchPlayVideo } from '../../scripts/initPitchPlayVideo';
 
 	const boot = () => {
 		initRiveCovers();
 		initBufferedAutoplayVideos();
+		initPitchPlayVideo();
 	};
 
 	boot();
