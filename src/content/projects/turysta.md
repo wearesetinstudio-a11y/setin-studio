@@ -2,11 +2,12 @@
 title: 'Bar Turysta Rebranding'
 client: 'Independent project'
 tags: ['Brand Design']
-thumbnail: '/portfolio/turysta/cover_image.webp'
+thumbnail: '/portfolio/turysta/Cover.webm'
 folderName: 'turysta'
 order: 0
 themeColor: '#000731'
 isNew: true
+video: '/portfolio/turysta/Cover.webm'
 heroImage: '/portfolio/turysta/bg.webp'
 heroSubtitle: 'A living icon of Szczecin since 1964'
 overviewLabel: 'Initiative'
