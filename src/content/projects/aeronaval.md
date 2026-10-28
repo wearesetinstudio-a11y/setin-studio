@@ -13,6 +13,7 @@ overviewLabel: 'Intro'
 overviewTitle: 'Heritage and Modernity'
 overviewText: |-
   The traditional SENAN crest forms an undeniable pillar of historical identity; however, the current institutional structure operates amid visual and operational fragmentation. The absence of a coherent graphic code and a unified positioning strategy weakens the formation's authority within the digital public sphere. Addressing these challenges, we designed a comprehensive system that organizes Aeronaval's visual architecture, positioning it as a modern, sovereign elite force. The proposed standard draws from the best practices of global defense forces, translating tactical precision and discipline into a clear, uncompromising identity.
+overviewYoutube: 'https://youtu.be/mgUBj267yzo'
 service: 'Brand Design'
 industry: 'Defense, government, security'
 market: 'Panama'
