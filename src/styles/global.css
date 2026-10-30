@@ -62,6 +62,8 @@ html {
 	scroll-behavior: auto;
 	background-color: #131415;
 	overflow-x: clip;
+	/* Keep layout width stable when intro/preloader locks overflow (no scrollbar jump). */
+	scrollbar-gutter: stable;
 }
 
 body {
@@ -357,8 +359,8 @@ body.intro-active {
 	 * Keeps cover full-bleed while translate3d moves within the buffer.
 	 */
 	.bg-parallax__shift {
-		top: -10%;
-		height: 125%;
+		top: -20%;
+		height: 140%;
 	}
 }
 

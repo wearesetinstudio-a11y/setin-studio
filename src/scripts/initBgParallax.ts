@@ -1,9 +1,9 @@
 import { getLenis } from './initSmoothScroll.ts';
 
 /** Desktop travel factor. */
-export const BG_PARALLAX_TRAVEL_DESKTOP = 0.08;
-/** Mobile travel factor — same strength as desktop. */
-export const BG_PARALLAX_TRAVEL_MOBILE = 0.08;
+export const BG_PARALLAX_TRAVEL_DESKTOP = 0.2;
+/** Mobile travel factor. */
+export const BG_PARALLAX_TRAVEL_MOBILE = 0.12;
 export const BG_PARALLAX_LERP_DESKTOP = 0.22;
 
 export type BgParallaxOptions = {
@@ -63,7 +63,8 @@ export function initBgParallax(options: BgParallaxOptions): void {
 		 */
 		if (isHero && mobileQuery.matches) {
 			const scrolled = Math.max(0, -rect.top);
-			const max = rect.height * 0.1;
+			/* Stay inside the mobile CSS bleed buffer. */
+			const max = rect.height * 0.12;
 			target = Math.max(-max, -scrolled * factor);
 			return;
 		}
