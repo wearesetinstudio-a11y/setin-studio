@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 /* Desktop: true hover. Touch: only while pressing. */
 @custom-variant hover {
@@ -31,7 +31,7 @@
 
 @theme {
 	--font-sans: "Fustat", ui-sans-serif, system-ui, sans-serif;
-	--color-setin-bg: #131415;
+	--color-setin-bg: #0A0A0B;
 	--color-setin-fg: #f5f5f5;
 	--color-setin-muted: #a3a3a3;
 	--color-setin-border: #2a2b2c;
@@ -60,14 +60,14 @@
 
 html {
 	scroll-behavior: auto;
-	background-color: #131415;
+	background-color: #0A0A0B;
 	overflow-x: clip;
 	/* Keep layout width stable when intro/preloader locks overflow (no scrollbar jump). */
 	scrollbar-gutter: stable;
 }
 
 body {
-	background-color: #131415;
+	background-color: #0A0A0B;
 	font-family: "Fustat", ui-sans-serif, system-ui, sans-serif;
 	letter-spacing: var(--letter-spacing-body);
 	overflow-x: clip;
@@ -102,7 +102,7 @@ blockquote,
 
 /* Light surfaces: keep body copy dark even after client-side i18n rewrites (no Astro scope attrs). */
 .project-page__body {
-	color: #131415;
+	color: #0A0A0B;
 }
 
 .project-overview__text,

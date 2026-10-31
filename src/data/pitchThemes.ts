@@ -5,7 +5,7 @@ export const pitchThemes = {
 
 export type PitchSlug = keyof typeof pitchThemes;
 
-export const DEFAULT_THEME_COLOR = '#131415';
+export const DEFAULT_THEME_COLOR = '#0A0A0B';
 
 export function themeColorForPath(pathname: string): string {
 	const path = pathname.replace(/\/$/, '') || '/';

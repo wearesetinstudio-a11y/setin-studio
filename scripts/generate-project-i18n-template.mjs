@@ -25,7 +25,7 @@ sheet.columns = [
 
 const header = sheet.getRow(1);
 header.font = { bold: true, color: { argb: 'FFFFFFFF' } };
-header.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF131415' } };
+header.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF0A0A0B' } };
 header.alignment = { vertical: 'middle' };
 header.height = 22;
 
@@ -35,7 +35,7 @@ const rows = [
 	{
 		block: 'Project',
 		field: 'Theme color',
-		notes: 'Hex e.g. #131415 — navbar (after scroll), footer, page-transition preloader. Empty = Setin default.',
+		notes: 'Hex e.g. #0A0A0B — navbar (after scroll), footer, page-transition preloader. Empty = Setin default.',
 	},
 	{ block: 'Hero', field: 'Hero Title', notes: 'Nagłówek w hero (może mieć łamania linii)' },
 	{ block: 'Hero', field: 'Klient / Client / Cliente', notes: '' },

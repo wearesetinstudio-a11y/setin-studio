@@ -21,7 +21,7 @@ const border = {
 function styleHeader(sheet) {
 	const header = sheet.getRow(1);
 	header.font = { bold: true, color: { argb: 'FFFFFFFF' } };
-	header.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF131415' } };
+	header.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF0A0A0B' } };
 	header.alignment = { vertical: 'middle' };
 	header.height = 22;
 }

@@ -6,6 +6,7 @@ import ProjectsSection from '../components/ProjectsSection.astro';
 import ClientsSection from '../components/ClientsSection.astro';
 import AboutSection from '../components/AboutSection.astro';
 import TestimonialsSection from '../components/TestimonialsSection.astro';
+import RollingLink from '../components/RollingLink.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { sortProjects } from '../utils/sortProjects.ts';
@@ -13,45 +14,102 @@ import { sortProjects } from '../utils/sortProjects.ts';
 const allProjects = await getCollection('projects');
 const projects = sortProjects(allProjects);
 const { projectCount } = await getSiteCounts();
+
+const heroSocials = [
+	{
+		label: 'WhatsApp',
+		href: 'https://api.whatsapp.com/message/IDQVMTROBPOXM1?autoload=1&app_absent=0',
+	},
+	{ label: 'Instagram', href: 'https://www.instagram.com/weare_setin_studio/' },
+	{ label: 'Facebook', href: 'https://www.facebook.com/wearesetinstudio?locale=pl_PL' },
+	{ label: 'LinkedIn', href: 'https://www.linkedin.com/company/wearesetin' },
+];
+
+const heroLocations = [
+	{ label: 'Panama City, PA', timezone: 'America/Panama' },
+	{ label: 'Szczecin, PL', timezone: 'Europe/Warsaw' },
+	{ label: 'Valencia, ES', timezone: 'Europe/Madrid' },
+];
+
+function formatHeroLocationTime(timeZone: string, date = new Date()) {
+	return new Intl.DateTimeFormat('en-US', {
+		hour: 'numeric',
+		minute: '2-digit',
+		second: '2-digit',
+		hour12: true,
+		timeZone,
+	})
+		.format(date)
+		.toUpperCase();
+}
 ---
 
 <Layout>
 	<div id="hero-background-stack" class="hero-background-stack pointer-events-none" aria-hidden="true">
-		<video
-			src="/hero-background.mp4"
-			poster="/hero-background-poster.webp"
-			class="hero-background-video absolute inset-0 h-full w-full object-cover object-center brightness-[0.85] contrast-[1.15] grayscale"
-			autoplay
-			muted
-			loop
-			playsinline
-			preload="auto"
-		>
-			<source src="/hero-background.mp4" type="video/mp4" />
-		</video>
+		<picture class="hero-background-picture absolute inset-0 block h-full w-full">
+			<source srcset="/hero-background.webp" type="image/webp" />
+			<img
+				src="/hero-background.jpg"
+				alt=""
+				width="4800"
+				height="3584"
+				decoding="async"
+				fetchpriority="high"
+				class="hero-background-media absolute inset-0 h-full w-full object-cover"
+			/>
+		</picture>
 
-		<div class="hero-background-stack__tint absolute inset-0 z-[1] bg-[#131415]/15"></div>
+		<div class="hero-background-stack__tint absolute inset-0 z-[1] bg-[#0A0A0B]"></div>
+
+		<canvas
+			id="hero-dust-layer"
+			class="hero-dust-layer pointer-events-none absolute inset-0 z-[2] block h-full w-full"
+			aria-hidden="true"
+		></canvas>
 
 		<canvas
 			id="cinema-pure-noise-filter"
-			class="hero-background-stack__noise pointer-events-none absolute inset-0 z-[2] block h-full w-full bg-transparent"
+			class="hero-background-stack__noise pointer-events-none absolute inset-0 z-[3] block h-full w-full bg-transparent"
 		></canvas>
+
+		<div class="hero-background-stack__vignette pointer-events-none absolute inset-0 z-[4]" aria-hidden="true"></div>
 	</div>
 
 	<Header projectCount={projectCount} waitForIntro={true} />
 
 	<main class="relative z-20 flex-1">
-		<section id="hero-section" class="hero-section relative pb-16 md:pb-[140px]">
+		<section id="hero-section" class="hero-section relative pb-6 md:pb-10">
 			<div class="hero-section__primary relative z-10 w-full">
 				<div class="hero-section__pin" data-hero-pin>
 					<div class="hero-headline-wrap min-w-0" data-hero-headline-wrap>
 						<h1
 							id="hero-headline"
-							class="hero-headline text-h1 w-full uppercase text-setin-fg"
+							class="hero-monument hero-headline text-h1 w-full uppercase text-setin-fg"
 							data-hero-headline
-							data-i18n="hero.headline"
+							data-i18n-aria="hero.headline"
+							aria-label="We shape the digital monoliths"
 						>
-							We design solutions for visionaries.
+							<span class="hero-monument__row hero-monument__row--left" style="--i: 0">
+								<span class="hero-reveal-mask">
+									<span class="hero-reveal-line" style="--i: 0" data-i18n="hero.monument.1">
+										We shape
+									</span>
+								</span>
+							</span>
+							<span class="hero-monument__row hero-monument__row--center" style="--i: 1">
+								<span class="hero-reveal-mask">
+									<span class="hero-reveal-line" style="--i: 1" data-i18n="hero.monument.2">
+										The digital
+									</span>
+								</span>
+							</span>
+							<span class="hero-monument__row hero-monument__row--right" style="--i: 2">
+								<span class="hero-reveal-mask">
+									<span class="hero-reveal-line" style="--i: 2" data-i18n="hero.monument.3">
+										Monoliths
+									</span>
+								</span>
+							</span>
 						</h1>
 					</div>
 
@@ -62,7 +120,7 @@ const { projectCount } = await getSiteCounts();
 							data-i18n="hero.description"
 						>
 							Setin Studio is an independent creative studio rooted in Slavic culture. We help
-							ambitious founders and brands turn ideas into sharp design, clean code, and clear
+							ambitious brands and founders turn ideas into sharp design, clean code, and clear
 							stories.
 						</p>
 
@@ -118,10 +176,45 @@ const { projectCount } = await getSiteCounts();
 				</div>
 			</div>
 			<div class="hero-section__tail relative z-10" data-hero-tail aria-hidden="true"></div>
+			<div class="hero-meta relative z-10" data-hero-meta>
+				<div class="hero-meta__rule" aria-hidden="true"></div>
+				<div class="hero-meta__row">
+					<nav class="hero-meta__socials" aria-label="Social">
+						{
+							heroSocials.map((link) => (
+								<RollingLink
+									href={link.href}
+									label={link.label}
+									external
+									markCurrent={false}
+								/>
+							))
+						}
+					</nav>
+					<div class="hero-meta__locations" aria-label="Studio locations">
+						{
+							heroLocations.map((location) => (
+								<div class="hero-meta__location">
+									<span class="hero-meta__location-label">{location.label}</span>
+									<time
+										class="hero-meta__location-time"
+										datetime={new Date().toISOString()}
+										data-timezone={location.timezone}
+									>
+										{formatHeroLocationTime(location.timezone)}
+									</time>
+								</div>
+							))
+						}
+					</div>
+				</div>
+			</div>
 		</section>
 
 		<script>
 			import { initCinemaPureNoise } from '../scripts/initCinemaPureNoise.ts';
+			import { initHeroScrollZoom } from '../scripts/initHeroScrollZoom.ts';
+			import { initHeroDust, setHeroDustActive } from '../scripts/initHeroDust.ts';
 
 			let heroStackHidden = false;
 			let heroSyncFrame = 0;
@@ -173,12 +266,14 @@ const { projectCount } = await getSiteCounts();
 					heroStackHidden = true;
 					stack.classList.add('is-hidden');
 					document.documentElement.classList.remove('hero-cinema-active');
-					stack.querySelector<HTMLVideoElement>('video')?.pause();
+					setHeroDustActive(false);
 				} else if (heroStackHidden && heroBottom > 0) {
 					heroStackHidden = false;
 					stack.classList.remove('is-hidden');
 					document.documentElement.classList.add('hero-cinema-active');
-					ensureHeroBackgroundVideo();
+					initHeroScrollZoom();
+					initHeroDust();
+					setHeroDustActive(true);
 				}
 			}
 
@@ -190,27 +285,21 @@ const { projectCount } = await getSiteCounts();
 				});
 			}
 
-			function ensureHeroBackgroundVideo() {
-				const video = document.querySelector<HTMLVideoElement>('#hero-background-stack video');
-				if (!video || heroStackHidden) return;
-				video.muted = true;
-				const play = () => {
-					void video.play().catch(() => {});
-				};
-				if (video.readyState >= 3) play();
-				else video.addEventListener('canplay', play, { once: true });
+			function bootHeroCinema() {
+				initCinemaPureNoise('cinema-pure-noise-filter', {
+					observeElementId: 'hero-section',
+					density: 0.09,
+					grainSize: 0.6,
+					baseOpacity: 0.11,
+				});
+				document.documentElement.classList.add('hero-cinema-active');
+				lockHeroBackgroundViewport(true);
+				syncHeroBackgroundStack();
+				initHeroScrollZoom();
+				initHeroDust();
 			}
 
-			initCinemaPureNoise('cinema-pure-noise-filter', {
-				observeElementId: 'hero-section',
-				density: 0.09,
-				grainSize: 0.6,
-				baseOpacity: 0.11,
-			});
-			document.documentElement.classList.add('hero-cinema-active');
-			lockHeroBackgroundViewport(true);
-			syncHeroBackgroundStack();
-			ensureHeroBackgroundVideo();
+			bootHeroCinema();
 			window.addEventListener('scroll', scheduleHeroBackgroundSync, { passive: true });
 			window.addEventListener(
 				'resize',
@@ -232,23 +321,15 @@ const { projectCount } = await getSiteCounts();
 				{ passive: true },
 			);
 			document.addEventListener('astro:page-load', () => {
-				initCinemaPureNoise('cinema-pure-noise-filter', {
-					observeElementId: 'hero-section',
-					density: 0.09,
-					grainSize: 0.6,
-					baseOpacity: 0.11,
-				});
-				document.documentElement.classList.add('hero-cinema-active');
 				heroStackHidden = false;
 				lockedHeroBgHeight = 0;
-				lockHeroBackgroundViewport(true);
-				syncHeroBackgroundStack();
-				ensureHeroBackgroundVideo();
+				bootHeroCinema();
 			});
 			window.addEventListener('setin:language-change', () => {
 				lockHeroBackgroundViewport(true);
 				syncHeroBackgroundStack();
-				ensureHeroBackgroundVideo();
+				initHeroScrollZoom();
+				initHeroDust();
 			});
 		</script>
 
@@ -266,157 +347,6 @@ const { projectCount } = await getSiteCounts();
 
 	<script>
 		import { hasCompletedIntro } from '../scripts/introState.ts';
-		import { dictionaries, type Locale } from '../i18n/dictionaries.ts';
-
-		function getCurrentHeroLocale(): Locale {
-			const lang = document.documentElement.lang.toLowerCase();
-			if (lang.startsWith('pl')) return 'pl';
-			if (lang.startsWith('es')) return 'es';
-			return 'en';
-		}
-
-		function getResponsiveHeroHeadline(): string {
-			const locale = getCurrentHeroLocale();
-			const dict = dictionaries[locale] ?? dictionaries.en;
-			const isMobile = window.matchMedia('(max-width: 767px)').matches;
-			const key = isMobile ? 'hero.headline.mobile' : 'hero.headline';
-			return dict[key] ?? dict['hero.headline'] ?? dictionaries.en['hero.headline'];
-		}
-
-		function measureWrappedLines(container: HTMLElement, raw: string): string[] {
-			container.textContent = '';
-			// Split on regular spaces only so non-breaking spaces keep phrases together.
-			const words = raw.split(' ').filter(Boolean);
-			const wordSpans = words.map((word, index) => {
-				const span = document.createElement('span');
-				span.textContent = index < words.length - 1 ? `${word} ` : word;
-				container.appendChild(span);
-				return span;
-			});
-
-			const lines: string[][] = [];
-			let currentLine: string[] = [];
-			let currentTop = wordSpans[0]?.offsetTop ?? 0;
-
-			for (const span of wordSpans) {
-				if (span.offsetTop > currentTop + 1) {
-					lines.push(currentLine);
-					currentLine = [];
-					currentTop = span.offsetTop;
-				}
-				currentLine.push((span.textContent ?? '').replace(/ $/, ''));
-			}
-			if (currentLine.length) lines.push(currentLine);
-
-			return lines.map((lineWords) => lineWords.join(' '));
-		}
-
-		function normalizeHeroCopy(text: string): string {
-			return text.replace(/[^\S\u00a0]+/g, ' ').trim();
-		}
-
-		function fitHeroHeadlineToWidth(container: HTMLElement) {
-			if (!container.classList.contains('hero-headline--fixed-lines')) {
-				container.style.removeProperty('font-size');
-				return;
-			}
-
-			container.style.removeProperty('font-size');
-			const lines = [...container.querySelectorAll<HTMLElement>('.hero-reveal-line')];
-			if (!lines.length) return;
-
-			const mask = lines[0]?.parentElement;
-			const available = mask?.clientWidth || container.clientWidth;
-			if (available <= 0) return;
-
-			const longestWidth = () =>
-				lines.reduce((max, line) => Math.max(max, line.scrollWidth), 0);
-
-			let longest = longestWidth();
-			if (longest <= 0) return;
-
-			const computed = parseFloat(getComputedStyle(container).fontSize);
-			if (!computed) return;
-
-			let next = computed * (available / longest);
-			container.style.fontSize = `${Math.max(1, next)}px`;
-
-			for (let i = 0; i < 10; i++) {
-				longest = longestWidth();
-				if (longest <= available) break;
-				next *= available / longest;
-				container.style.fontSize = `${Math.max(1, next)}px`;
-			}
-		}
-
-		function splitHeroHeadlineLines(container: HTMLElement) {
-			const fromDict = getResponsiveHeroHeadline().replace(/\r/g, '');
-			const raw = fromDict.trim();
-			if (!raw) return;
-
-			container.dataset.rawText = raw;
-			const wasRevealed = container.dataset.revealed === 'true';
-			const hasFixedLines = raw.includes('\n');
-
-			const lines = hasFixedLines
-				? raw
-						.split('\n')
-						.map((line) => line.trim())
-						.filter(Boolean)
-				: measureWrappedLines(container, normalizeHeroCopy(raw));
-
-			container.classList.toggle('hero-headline--fixed-lines', hasFixedLines);
-			container.style.removeProperty('font-size');
-			container.replaceChildren();
-
-			lines.forEach((lineText, index) => {
-				const mask = document.createElement('span');
-				mask.className = 'hero-reveal-mask';
-
-				const line = document.createElement('span');
-				line.className = 'hero-reveal-line';
-				line.style.setProperty('--i', String(index));
-				line.textContent = lineText;
-
-				if (wasRevealed) line.classList.add('is-revealed');
-
-				mask.appendChild(line);
-				container.appendChild(mask);
-			});
-
-			requestAnimationFrame(() => {
-				fitHeroHeadlineToWidth(container);
-				syncHeroPinHeight();
-			});
-		}
-
-		function splitHeroDescriptionLines(container: HTMLElement) {
-			const raw =
-				container.dataset.rawText?.trim() ||
-				normalizeHeroCopy(container.textContent ?? '');
-			if (!raw) return;
-
-			container.dataset.rawText = raw;
-			const wasRevealed = container.dataset.revealed === 'true';
-			const lines = measureWrappedLines(container, raw);
-
-			container.replaceChildren();
-
-			lines.forEach((lineText, index) => {
-				const mask = document.createElement('span');
-				mask.className = 'hero-desc-line-mask';
-
-				const line = document.createElement('span');
-				line.className = 'hero-reveal-desc-line';
-				line.style.setProperty('--i', String(index));
-				line.textContent = lineText;
-
-				if (wasRevealed) line.classList.add('is-revealed');
-
-				mask.appendChild(line);
-				container.appendChild(mask);
-			});
-		}
 
 		function revealHeroText() {
 			const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
@@ -427,28 +357,13 @@ const { projectCount } = await getSiteCounts();
 				});
 			}
 
-			const description = document.querySelector<HTMLElement>('[data-hero-description]');
-			if (description) {
-				description.dataset.revealed = 'true';
-				description.querySelectorAll('.hero-reveal-desc-line').forEach((element) => {
-					element.classList.add('is-revealed');
-				});
-			}
-
+			document.querySelector<HTMLElement>('[data-hero-description]')?.classList.add('is-revealed');
 			document.querySelector<HTMLElement>('[data-hero-services]')?.classList.add('is-revealed');
-
-			requestAnimationFrame(() => {
-				const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
-				if (headline) fitHeroHeadlineToWidth(headline);
-				syncHeroPinHeight();
-			});
+			document.querySelector<HTMLElement>('[data-hero-meta]')?.classList.add('is-revealed');
+			requestAnimationFrame(syncHeroPinHeight);
 		}
 
 		function prepareHeroCopy() {
-			const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
-			const description = document.querySelector<HTMLElement>('[data-hero-description]');
-			if (headline) splitHeroHeadlineLines(headline);
-			if (description) splitHeroDescriptionLines(description);
 			syncHeroPinHeight();
 		}
 
@@ -480,8 +395,8 @@ const { projectCount } = await getSiteCounts();
 
 			if (tail) tail.style.height = '0px';
 
-			// Start: aside top aligns with headline top (same as before).
-			// End of scroll: aside bottom aligns with headline bottom → travel = overflow.
+			// Start: aside top aligns with headline top.
+			// End of scroll: services bottom aligns with headline bottom → next sections follow.
 			const shellHeight = headlineWrap.clientHeight || Math.round(window.innerHeight * 0.9);
 			const headlineHeight = headline?.offsetHeight ?? 0;
 			const contentHeight = aside.offsetHeight;
@@ -531,10 +446,6 @@ const { projectCount } = await getSiteCounts();
 		document.addEventListener('astro:page-load', initHeroSlideUpReveal);
 		window.addEventListener('resize', onHeroCopyResize, { passive: true });
 		window.addEventListener('setin:language-change', () => {
-			const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
-			const description = document.querySelector<HTMLElement>('[data-hero-description]');
-			if (headline) delete headline.dataset.rawText;
-			if (description) delete description.dataset.rawText;
 			prepareHeroCopy();
 			if (hasCompletedIntro()) revealHeroText();
 			requestAnimationFrame(syncHeroPinHeight);
@@ -542,13 +453,54 @@ const { projectCount } = await getSiteCounts();
 
 		if ('fonts' in document) {
 			void document.fonts.ready.then(() => {
-				const headline = document.querySelector<HTMLElement>('[data-hero-headline]');
-				if (headline) {
-					fitHeroHeadlineToWidth(headline);
-					syncHeroPinHeight();
-				}
+				syncHeroPinHeight();
 			});
 		}
+
+		let heroClockInterval: ReturnType<typeof window.setInterval> | null = null;
+
+		function initHeroLocationTimes() {
+			if (heroClockInterval !== null) {
+				window.clearInterval(heroClockInterval);
+				heroClockInterval = null;
+			}
+
+			const clocks = document.querySelectorAll<HTMLTimeElement>('.hero-meta__location-time');
+			if (!clocks.length) return;
+
+			const formatterCache = new Map<string, Intl.DateTimeFormat>();
+
+			function getFormatter(timeZone: string) {
+				let formatter = formatterCache.get(timeZone);
+				if (!formatter) {
+					formatter = new Intl.DateTimeFormat('en-US', {
+						hour: 'numeric',
+						minute: '2-digit',
+						second: '2-digit',
+						hour12: true,
+						timeZone,
+					});
+					formatterCache.set(timeZone, formatter);
+				}
+				return formatter;
+			}
+
+			function updateClocks() {
+				const now = new Date();
+				clocks.forEach((clock) => {
+					const timeZone = clock.dataset.timezone;
+					if (!timeZone) return;
+					clock.textContent = getFormatter(timeZone).format(now).toUpperCase();
+					clock.dateTime = now.toISOString();
+				});
+			}
+
+			updateClocks();
+			heroClockInterval = window.setInterval(updateClocks, 1000);
+		}
+
+		initHeroLocationTimes();
+		document.addEventListener('astro:page-load', initHeroLocationTimes);
 	</script>
 </Layout>
 
@@ -561,10 +513,9 @@ const { projectCount } = await getSiteCounts();
 		z-index: 0;
 		overflow: hidden;
 		width: 100%;
-		/* Prefer large viewport units — dvh jumps when mobile browser chrome shows/hides */
-		height: 100vh;
-		height: 100lvh;
-		background-color: #131415;
+		/* svh stays stable when mobile browser chrome shows/hides */
+		height: 100svh;
+		background-color: #0A0A0B;
 		transition: opacity 0.35s ease, visibility 0.35s ease;
 		transform: translateZ(0);
 		backface-visibility: hidden;
@@ -575,13 +526,48 @@ const { projectCount } = await getSiteCounts();
 		visibility: hidden;
 	}
 
-	.hero-background-video {
+	.hero-background-media {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		object-position: center center;
-		transform: scale(1.48);
-		transform-origin: center center;
+		object-position: center 46%;
+		transform: scale(1.08) translateZ(0);
+		transform-origin: 50% 46%;
+		/* Dawn start — JS brightens to 1 on hero scroll end */
+		filter: brightness(0.72) contrast(0.98);
+	}
+
+	.hero-background-stack__tint {
+		opacity: 0.46;
+		background-color: #0A0A0B;
+		transition: none;
+	}
+
+	.hero-dust-layer {
+		mix-blend-mode: screen;
+		opacity: 1;
+		pointer-events: none;
+	}
+
+	/* Soft CRT / old-TV edge falloff — center stays open on the monument */
+	.hero-background-stack__vignette {
+		background:
+			radial-gradient(
+				ellipse 78% 72% at 50% 46%,
+				rgba(0, 0, 0, 0) 0%,
+				rgba(0, 0, 0, 0) 42%,
+				rgba(8, 8, 9, 0.28) 68%,
+				rgba(5, 5, 6, 0.62) 86%,
+				rgba(0, 0, 0, 0.82) 100%
+			),
+			radial-gradient(
+				ellipse 100% 100% at 50% 50%,
+				rgba(0, 0, 0, 0) 55%,
+				rgba(0, 0, 0, 0.22) 100%
+			);
+		box-shadow: inset 0 0 12rem 2.5rem rgba(0, 0, 0, 0.45);
+		opacity: 0.92;
+		mix-blend-mode: multiply;
 	}
 
 	@media (max-width: 767px) {
@@ -590,10 +576,17 @@ const { projectCount } = await getSiteCounts();
 			min-width: 100%;
 		}
 
-		.hero-background-video {
-			/* Fill width; light scale only to avoid edge letterboxing, not heavy crop */
-			transform: none;
-			will-change: auto;
+		.hero-background-media {
+			will-change: transform;
+		}
+
+		.hero-dust-layer {
+			opacity: 0.9;
+		}
+
+		.hero-background-stack__vignette {
+			box-shadow: inset 0 0 7rem 1.5rem rgba(0, 0, 0, 0.4);
+			opacity: 0.85;
 		}
 	}
 
@@ -638,6 +631,99 @@ const { projectCount } = await getSiteCounts();
 		pointer-events: none;
 	}
 
+	.hero-meta {
+		width: 100%;
+		padding-inline: var(--page-gutter);
+		padding-top: 2.5rem;
+		padding-bottom: 0.75rem;
+		opacity: 0;
+		transform: translateY(0.6rem);
+		transition:
+			opacity 900ms cubic-bezier(0.16, 1, 0.3, 1) 420ms,
+			transform 900ms cubic-bezier(0.16, 1, 0.3, 1) 420ms;
+	}
+
+	.hero-meta.is-revealed {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.hero-meta__rule {
+		height: 1px;
+		width: 100%;
+		background-color: rgba(255, 255, 255, 0.18);
+	}
+
+	.hero-meta__row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem 1.5rem;
+		padding-top: 2.5rem;
+	}
+
+	.hero-meta__socials {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1.25rem 1.75rem;
+	}
+
+	.hero-meta__socials .rolling-link--nav {
+		margin: -0.35rem -0.25rem;
+		padding: 0.35rem 0.25rem;
+		color: #ffffff;
+	}
+
+	.hero-meta__socials .rolling-link__line--nav {
+		font-size: 1rem;
+		letter-spacing: -0.01em;
+	}
+
+	.hero-meta__locations {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 1rem 1.75rem;
+	}
+
+	.hero-meta__location {
+		display: flex;
+		align-items: baseline;
+		gap: 0.55rem;
+		white-space: nowrap;
+	}
+
+	.hero-meta__location-label,
+	.hero-meta__location-time {
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: -0.01em;
+		text-transform: uppercase;
+		color: #ffffff;
+	}
+
+	.hero-meta__location-time {
+		font-variant-numeric: tabular-nums;
+		opacity: 0.72;
+	}
+
+	@media (max-width: 767px) {
+		.hero-meta {
+			display: none;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.hero-meta {
+			padding-top: 4.5rem;
+			padding-bottom: 1rem;
+		}
+	}
+
 	.hero-headline-wrap {
 		position: relative;
 		z-index: 1;
@@ -661,7 +747,7 @@ const { projectCount } = await getSiteCounts();
 			height: 90svh;
 		}
 
-		/* Stack headline + description in the pin so description bottom sits on 90vh */
+		/* Headline + description in the pin; services flow below via tail */
 		.hero-aside {
 			position: static;
 			margin-top: 1.5rem;
@@ -672,11 +758,11 @@ const { projectCount } = await getSiteCounts();
 			top: 100%;
 			left: 0;
 			right: 0;
+			margin-top: 1.5rem;
 		}
 
-		/* Forced lines; JS scales font to fill grid width on mobile */
-		.hero-headline.hero-headline--fixed-lines .hero-reveal-line {
-			white-space: nowrap;
+		.hero-monument {
+			font-size: clamp(2.6rem, 11vw, 3.35rem);
 		}
 	}
 
@@ -729,28 +815,85 @@ const { projectCount } = await getSiteCounts();
 		}
 	}
 
-	.hero-headline .hero-reveal-mask {
+	.hero-monument {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		margin: 0;
+		font-size: clamp(3.5rem, 6.5vw, 5.75rem);
+		line-height: 1.05;
+	}
+
+	.hero-monument__row {
+		position: relative;
+		display: flex;
+		width: 100%;
+		padding-block: clamp(0.08rem, 0.25vw, 0.22rem);
+	}
+
+	.hero-monument__row::before,
+	.hero-monument__row:last-child::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background-color: rgba(255, 255, 255, 0.18);
+		transform: scaleX(0);
+		transform-origin: left center;
+		transition: transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: calc(var(--i, 0) * 110ms);
+		pointer-events: none;
+	}
+
+	.hero-monument__row::before {
+		top: 0;
+	}
+
+	.hero-monument__row:last-child::after {
+		bottom: 0;
+		transition-delay: calc((var(--i, 0) + 0.35) * 110ms + 80ms);
+	}
+
+	.hero-monument[data-revealed='true'] .hero-monument__row::before,
+	.hero-monument[data-revealed='true'] .hero-monument__row:last-child::after {
+		transform: scaleX(1);
+	}
+
+	.hero-monument__row--left {
+		justify-content: flex-start;
+		text-align: left;
+	}
+
+	.hero-monument__row--center {
+		justify-content: center;
+		text-align: center;
+	}
+
+	.hero-monument__row--right {
+		justify-content: flex-end;
+		text-align: right;
+	}
+
+	.hero-monument .hero-reveal-mask {
 		display: block;
 		overflow: hidden;
 		padding-top: 0.08em;
-		padding-right: 0.22em;
+		padding-right: 0.08em;
 	}
 
-	.hero-headline .hero-reveal-line {
+	.hero-monument .hero-reveal-line {
 		display: block;
+		white-space: nowrap;
 		transform: translateY(110%);
 		opacity: 0;
 		transition:
 			transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
 			opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1);
-		transition-delay: calc(var(--i, 0) * 90ms);
+		transition-delay: calc(var(--i, 0) * 110ms);
 	}
 
-	.hero-headline.hero-headline--fixed-lines .hero-reveal-line {
-		white-space: nowrap;
-	}
-
-	.hero-headline .hero-reveal-line.is-revealed {
+	.hero-monument .hero-reveal-line.is-revealed {
 		transform: translateY(0);
 		opacity: 1;
 	}
@@ -759,26 +902,16 @@ const { projectCount } = await getSiteCounts();
 		font-weight: 500;
 		line-height: 1.625;
 		color: #ffffff;
-	}
-
-	.hero-desc-line-mask {
-		display: block;
-		overflow: hidden;
-	}
-
-	.hero-reveal-desc-line {
-		display: block;
-		transform: translateY(110%);
 		opacity: 0;
+		transform: translateY(0.75rem);
 		transition:
-			transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
-			opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1);
-		transition-delay: calc(280ms + (var(--i, 0) * 140ms));
+			opacity 900ms cubic-bezier(0.16, 1, 0.3, 1) 180ms,
+			transform 900ms cubic-bezier(0.16, 1, 0.3, 1) 180ms;
 	}
 
-	.hero-reveal-desc-line.is-revealed {
-		transform: translateY(0);
+	.hero-description.is-revealed {
 		opacity: 1;
+		transform: translateY(0);
 	}
 
 	.hero-services {
@@ -786,16 +919,42 @@ const { projectCount } = await getSiteCounts();
 	}
 
 	.hero-service {
+		position: relative;
 		display: block;
-		border-top: 1px solid rgba(255, 255, 255, 0.18);
 		color: #f5f5f5;
 		text-decoration: none;
 		opacity: 0;
 		transform: translateY(0.75rem);
 		transition:
 			background-color 0.35s ease,
-			color 0.35s ease,
-			border-color 0.35s ease;
+			color 0.35s ease;
+	}
+
+	.hero-service::before,
+	.hero-service:last-child::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background-color: rgba(255, 255, 255, 0.18);
+		transform: scaleX(0);
+		transform-origin: right center;
+		transition:
+			transform 1000ms cubic-bezier(0.16, 1, 0.3, 1),
+			background-color 0.35s ease;
+		transition-delay: calc(280ms + (var(--i, 0) * 100ms));
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	.hero-service::before {
+		top: 0;
+	}
+
+	.hero-service:last-child::after {
+		bottom: 0;
+		transition-delay: calc(280ms + ((var(--i, 0) + 0.35) * 100ms) + 80ms);
 	}
 
 	.hero-services.is-revealed .hero-service {
@@ -805,12 +964,12 @@ const { projectCount } = await getSiteCounts();
 			opacity 900ms cubic-bezier(0.16, 1, 0.3, 1) calc(280ms + (var(--i, 0) * 100ms)),
 			transform 900ms cubic-bezier(0.16, 1, 0.3, 1) calc(280ms + (var(--i, 0) * 100ms)),
 			background-color 0.35s ease,
-			color 0.35s ease,
-			border-color 0.35s ease;
+			color 0.35s ease;
 	}
 
-	.hero-service:last-child {
-		border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+	.hero-services.is-revealed .hero-service::before,
+	.hero-services.is-revealed .hero-service:last-child::after {
+		transform: scaleX(1);
 	}
 
 	.hero-service__inner {
@@ -880,13 +1039,14 @@ const { projectCount } = await getSiteCounts();
 
 	.hero-service:focus-visible {
 		background-color: #ffffff;
-		color: #131415;
-		border-color: #ffffff;
+		color: #0A0A0B;
 		outline: none;
 	}
 
-	.hero-service:focus-visible + .hero-service {
-		border-top-color: #ffffff;
+	.hero-service:focus-visible::before,
+	.hero-service:focus-visible::after,
+	.hero-service:focus-visible + .hero-service::before {
+		background-color: #ffffff;
 	}
 
 	.hero-service:focus-visible .hero-service__inner {
@@ -901,13 +1061,14 @@ const { projectCount } = await getSiteCounts();
 	@media (hover: hover) and (pointer: fine) {
 		.hero-service:hover {
 			background-color: #ffffff;
-			color: #131415;
-			border-color: #ffffff;
+			color: #0A0A0B;
 			outline: none;
 		}
 
-		.hero-service:hover + .hero-service {
-			border-top-color: #ffffff;
+		.hero-service:hover::before,
+		.hero-service:hover::after,
+		.hero-service:hover + .hero-service::before {
+			background-color: #ffffff;
 		}
 
 		.hero-service:hover .hero-service__inner {
@@ -923,13 +1084,14 @@ const { projectCount } = await getSiteCounts();
 	@media (hover: none), (pointer: coarse) {
 		.hero-service:active {
 			background-color: #ffffff;
-			color: #131415;
-			border-color: #ffffff;
+			color: #0A0A0B;
 			outline: none;
 		}
 
-		.hero-service:active + .hero-service {
-			border-top-color: #ffffff;
+		.hero-service:active::before,
+		.hero-service:active::after,
+		.hero-service:active + .hero-service::before {
+			background-color: #ffffff;
 		}
 
 		.hero-service:active .hero-service__inner {

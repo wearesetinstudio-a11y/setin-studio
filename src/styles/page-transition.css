@@ -30,7 +30,7 @@
 	height: 100%;
 	margin-right: -1px;
 	/* Destination page sets --page-transition-bg / --theme-color before cover. */
-	background-color: var(--page-transition-bg, var(--theme-color, #131415));
+	background-color: var(--page-transition-bg, var(--theme-color, #0A0A0B));
 	transform: translateY(-100%);
 }
 

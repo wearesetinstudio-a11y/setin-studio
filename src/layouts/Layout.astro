@@ -304,7 +304,7 @@ const themeColorMapJson = JSON.stringify(themeColorMap).replace(/</g, '\\u003c')
 		</script>
 	</head>
 	<body
-		class="relative flex min-h-screen max-w-[100vw] flex-col overflow-x-clip bg-[#131415] font-sans text-base text-setin-fg antialiased"
+		class="relative flex min-h-screen max-w-[100vw] flex-col overflow-x-clip bg-[#0A0A0B] font-sans text-base text-setin-fg antialiased"
 		style={`--theme-color: ${pageThemeColor};`}
 		data-theme-color={pageThemeColor}
 	>
@@ -362,6 +362,7 @@ const themeColorMapJson = JSON.stringify(themeColorMap).replace(/</g, '\\u003c')
 			import { initSmoothScroll } from '../scripts/initSmoothScroll.ts';
 			import { initCookieConsent } from '../scripts/initCookieConsent.ts';
 			import { initCurrentNavLinks } from '../scripts/initCurrentNavLinks.ts';
+			import { initTabTitleIdle } from '../scripts/initTabTitleIdle.ts';
 
 			initSmoothScroll();
 			initPageTransitionOverlay();
@@ -370,6 +371,7 @@ const themeColorMapJson = JSON.stringify(themeColorMap).replace(/</g, '\\u003c')
 			initSiteCursor();
 			initCookieConsent();
 			initCurrentNavLinks();
+			initTabTitleIdle();
 			document.addEventListener('astro:page-load', () => {
 				initSmoothScroll();
 				initI18n();
