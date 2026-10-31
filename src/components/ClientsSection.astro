@@ -27,9 +27,12 @@ const clientEntries = [
 	altsJson: JSON.stringify(getClientLogoAlts(client.name)),
 }));
 
-const mid = Math.ceil(clientEntries.length / 2);
-const rowTop = clientEntries.slice(0, mid);
-const rowBottom = clientEntries.slice(mid);
+const rowSize = Math.ceil(clientEntries.length / 3);
+const logoRows = [
+	{ direction: 'ltr' as const, clients: clientEntries.slice(0, rowSize) },
+	{ direction: 'rtl' as const, clients: clientEntries.slice(rowSize, rowSize * 2) },
+	{ direction: 'ltr' as const, clients: clientEntries.slice(rowSize * 2) },
+];
 ---
 
 <section id="clients-section" class="relative z-20 bg-[#0A0A0B] px-[var(--page-gutter)] py-[var(--section-padding-y)]">
@@ -46,59 +49,34 @@ const rowBottom = clientEntries.slice(mid);
 	</div>
 
 	<div id="clients-logos" class="clients-marquees mt-10 md:mt-20" aria-label="Client logos">
-		<div class="clients-marquee clients-marquee--ltr" data-direction="ltr">
-			<div class="clients-marquee__track">
-				{
-					[0, 1].map((copy) => (
-						<ul class="clients-marquee__group" aria-hidden={copy === 1 ? 'true' : undefined}>
-							{rowTop.map((client) => (
-								<li class="client-logo-item">
-									<img
-										src={client.src}
-										alt={copy === 0 ? client.alts.en : ''}
-										width="200"
-										height={client.height}
-										style={`--logo-h: ${client.height}px`}
-										class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
-										loading="lazy"
-										decoding="async"
-										data-alts={copy === 0 ? client.altsJson : undefined}
-										aria-hidden={copy === 1 ? 'true' : undefined}
-									/>
-								</li>
-							))}
-						</ul>
-					))
-				}
-			</div>
-		</div>
-
-		<div class="clients-marquee clients-marquee--rtl" data-direction="rtl">
-			<div class="clients-marquee__track">
-				{
-					[0, 1].map((copy) => (
-						<ul class="clients-marquee__group" aria-hidden={copy === 1 ? 'true' : undefined}>
-							{rowBottom.map((client) => (
-								<li class="client-logo-item">
-									<img
-										src={client.src}
-										alt={copy === 0 ? client.alts.en : ''}
-										width="200"
-										height={client.height}
-										style={`--logo-h: ${client.height}px`}
-										class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
-										loading="lazy"
-										decoding="async"
-										data-alts={copy === 0 ? client.altsJson : undefined}
-										aria-hidden={copy === 1 ? 'true' : undefined}
-									/>
-								</li>
-							))}
-						</ul>
-					))
-				}
-			</div>
-		</div>
+		{
+			logoRows.map((row) => (
+				<div class={`clients-marquee clients-marquee--${row.direction}`} data-direction={row.direction}>
+					<div class="clients-marquee__track">
+						{[0, 1].map((copy) => (
+							<ul class="clients-marquee__group" aria-hidden={copy === 1 ? 'true' : undefined}>
+								{row.clients.map((client) => (
+									<li class="client-logo-item">
+										<img
+											src={client.src}
+											alt={copy === 0 ? client.alts.en : ''}
+											width="200"
+											height={client.height}
+											style={`--logo-h: ${client.height}px`}
+											class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
+											loading="eager"
+											decoding="async"
+											data-alts={copy === 0 ? client.altsJson : undefined}
+											aria-hidden={copy === 1 ? 'true' : undefined}
+										/>
+									</li>
+								))}
+							</ul>
+						))}
+					</div>
+				</div>
+			))
+		}
 	</div>
 </section>
 
@@ -121,6 +99,7 @@ const rowBottom = clientEntries.slice(mid);
 	}
 
 	.clients-marquees {
+		--clients-marquee-gap: clamp(1.75rem, 4vw, 5rem);
 		display: flex;
 		flex-direction: column;
 		gap: 2.5rem;
@@ -161,10 +140,13 @@ const rowBottom = clientEntries.slice(mid);
 	.clients-marquee__group {
 		display: flex;
 		align-items: center;
-		gap: clamp(1.75rem, 4vw, 5rem);
-		padding-inline: clamp(1rem, 2.5vw, 2.5rem);
-		list-style: none;
+		flex-shrink: 0;
+		gap: var(--clients-marquee-gap);
+		/* One trailing gap so the seam between duplicated groups matches item spacing */
+		padding: 0;
 		margin: 0;
+		padding-right: var(--clients-marquee-gap);
+		list-style: none;
 	}
 
 	.client-logo-item {
@@ -208,6 +190,12 @@ const rowBottom = clientEntries.slice(mid);
 
 		.clients-marquee__group[aria-hidden='true'] {
 			display: none;
+		}
+
+		.clients-marquee__group {
+			padding-right: 0;
+			flex-wrap: wrap;
+			justify-content: center;
 		}
 	}
 </style>
@@ -289,11 +277,16 @@ const rowBottom = clientEntries.slice(mid);
 		targetSpeed: number;
 		loopWidth: number;
 		paused: boolean;
-		raf: number;
 	};
 
 	const SPEED_PX_PER_SEC = 42;
 	const VELOCITY_LERP = 0.06;
+
+	function wrapOffset(offset: number, loopWidth: number) {
+		if (loopWidth <= 0) return offset;
+		const wrapped = offset % loopWidth;
+		return wrapped > 0 ? wrapped - loopWidth : wrapped;
+	}
 
 	function initClientMarquees() {
 		const root = document.getElementById('clients-logos');
@@ -305,6 +298,23 @@ const rowBottom = clientEntries.slice(mid);
 		const rows = Array.from(root.querySelectorAll<HTMLElement>('.clients-marquee'));
 		const states: MarqueeState[] = [];
 
+		const measureState = (state: MarqueeState) => {
+			const group = state.track.querySelector<HTMLElement>('.clients-marquee__group');
+			const nextWidth = group?.getBoundingClientRect().width ?? state.track.scrollWidth / 2;
+			if (!nextWidth) return;
+
+			const prevWidth = state.loopWidth;
+			state.loopWidth = nextWidth;
+
+			if (prevWidth > 0 && Math.abs(prevWidth - nextWidth) > 0.5) {
+				const progress = prevWidth ? state.offset / prevWidth : 0;
+				state.offset = progress * nextWidth;
+			}
+
+			state.offset = wrapOffset(state.offset, state.loopWidth);
+			state.track.style.transform = `translate3d(${state.offset}px, 0, 0)`;
+		};
+
 		rows.forEach((row) => {
 			const track = row.querySelector<HTMLElement>('.clients-marquee__track');
 			if (!track) return;
@@ -314,24 +324,14 @@ const rowBottom = clientEntries.slice(mid);
 				root: row,
 				track,
 				direction,
-				offset: direction === 1 ? 0 : 0,
+				offset: 0,
 				velocity: SPEED_PX_PER_SEC * direction,
 				targetSpeed: SPEED_PX_PER_SEC,
 				loopWidth: 0,
 				paused: false,
-				raf: 0,
 			};
 
-			const measure = () => {
-				const group = track.querySelector<HTMLElement>('.clients-marquee__group');
-				state.loopWidth = group?.offsetWidth ?? track.scrollWidth / 2;
-				if (direction === 1 && state.offset === 0) {
-					state.offset = -state.loopWidth;
-				}
-				track.style.transform = `translate3d(${state.offset}px, 0, 0)`;
-			};
-
-			measure();
+			measureState(state);
 			states.push(state);
 
 			row.addEventListener('mouseenter', () => {
@@ -341,6 +341,18 @@ const rowBottom = clientEntries.slice(mid);
 				state.paused = false;
 			});
 		});
+
+		const remeasureAll = () => {
+			for (const state of states) measureState(state);
+		};
+
+		root.querySelectorAll('img').forEach((img) => {
+			if (img.complete) return;
+			img.addEventListener('load', remeasureAll, { once: true });
+			img.addEventListener('error', remeasureAll, { once: true });
+		});
+
+		window.addEventListener('resize', remeasureAll, { passive: true });
 
 		let lastTime = performance.now();
 
@@ -358,30 +370,13 @@ const rowBottom = clientEntries.slice(mid);
 					state.velocity = 0;
 				}
 
-				state.offset += state.velocity * dt;
-
-				if (state.direction === -1) {
-					if (state.offset <= -state.loopWidth) {
-						state.offset += state.loopWidth;
-					}
-				} else if (state.offset >= 0) {
-					state.offset -= state.loopWidth;
-				}
-
+				state.offset = wrapOffset(state.offset + state.velocity * dt, state.loopWidth);
 				state.track.style.transform = `translate3d(${state.offset}px, 0, 0)`;
 			}
 
 			requestAnimationFrame(tick);
 		};
 
-		const onResize = () => {
-			for (const state of states) {
-				const group = state.track.querySelector<HTMLElement>('.clients-marquee__group');
-				state.loopWidth = group?.offsetWidth ?? state.track.scrollWidth / 2;
-			}
-		};
-
-		window.addEventListener('resize', onResize, { passive: true });
 		requestAnimationFrame(tick);
 	}
 
