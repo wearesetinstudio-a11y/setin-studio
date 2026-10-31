@@ -49,7 +49,7 @@ const filterCategories = standalone
 	id="work"
 	class:list={[
 		'relative z-20 px-[var(--page-gutter)] py-[var(--section-padding-y)]',
-		standalone ? 'bg-white pt-[calc(5.5rem+4rem)] md:pt-[calc(5.5rem+5.5rem)]' : 'bg-[#F5F5F5]',
+		standalone ? 'bg-white pt-[calc(5.5rem+4rem)] md:pt-[calc(5.5rem+5.5rem)]' : 'bg-setin-bg-raised',
 	]}
 	data-projects-standalone={standalone ? 'true' : undefined}
 >
@@ -100,7 +100,7 @@ const filterCategories = standalone
 							<span data-reveal-line data-i18n="projects.heading">Our finest work</span>
 						</h2>
 						<p
-							class="body-txt-1 projects-description max-w-md leading-relaxed text-black/55"
+							class="body-txt-1 projects-description max-w-md leading-relaxed text-white/55"
 							data-i18n="projects.description"
 						>
 							We don't follow trends, we set the tone. These are the collaborations that redefined
@@ -254,13 +254,39 @@ const filterCategories = standalone
 		}
 	}
 
+	#work:not([data-projects-standalone]) .projects-heading {
+		color: #f5f5f5;
+	}
+
 	#projects-heading .reveal-char {
-		color: rgba(0, 0, 0, 0.15);
+		color: rgba(255, 255, 255, 0.15);
 		transition: color 0.35s ease-out;
 	}
 
 	#projects-heading .reveal-char.active {
-		color: rgba(0, 0, 0, 1);
+		color: #ffffff;
+	}
+
+	#work:not([data-projects-standalone]) .project-card__title {
+		color: #f5f5f5;
+	}
+
+	#work:not([data-projects-standalone]) .project-card:not([data-coming-soon]) .project-card__arrow {
+		filter: brightness(0) invert(1);
+	}
+
+	#work:not([data-projects-standalone]) .project-card__tag {
+		background: #2a2b2e;
+		color: #f5f5f5;
+	}
+
+	#work:not([data-projects-standalone]) .project-card[data-coming-soon='true'] .project-card__title,
+	#work:not([data-projects-standalone]) .project-card[data-coming-soon='true'] .project-card__tag {
+		color: #8b909a;
+	}
+
+	#work:not([data-projects-standalone]) .project-card[data-coming-soon='true'] .project-card__tag {
+		background: #2a2b2e;
 	}
 
 	#work[data-projects-standalone='true'] #projects-heading,

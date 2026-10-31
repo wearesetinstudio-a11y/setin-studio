@@ -58,7 +58,7 @@ const rowBottom = clientEntries.slice(mid);
 										alt={copy === 0 ? client.alts.en : ''}
 										width="200"
 										height={client.height}
-										style={`max-height: ${client.height}px`}
+										style={`--logo-h: ${client.height}px`}
 										class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
 										loading="lazy"
 										decoding="async"
@@ -85,7 +85,7 @@ const rowBottom = clientEntries.slice(mid);
 										alt={copy === 0 ? client.alts.en : ''}
 										width="200"
 										height={client.height}
-										style={`max-height: ${client.height}px`}
+										style={`--logo-h: ${client.height}px`}
 										class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
 										loading="lazy"
 										decoding="async"
@@ -161,8 +161,8 @@ const rowBottom = clientEntries.slice(mid);
 	.clients-marquee__group {
 		display: flex;
 		align-items: center;
-		gap: clamp(2.5rem, 5vw, 5rem);
-		padding-inline: clamp(1.25rem, 2.5vw, 2.5rem);
+		gap: clamp(1.75rem, 4vw, 5rem);
+		padding-inline: clamp(1rem, 2.5vw, 2.5rem);
 		list-style: none;
 		margin: 0;
 	}
@@ -172,7 +172,7 @@ const rowBottom = clientEntries.slice(mid);
 		flex-shrink: 0;
 		align-items: center;
 		justify-content: center;
-		min-height: 68px;
+		min-height: 48px;
 		opacity: 0.6;
 		transition: opacity 0.35s ease;
 	}
@@ -182,8 +182,19 @@ const rowBottom = clientEntries.slice(mid);
 	}
 
 	.client-logo-item img {
+		max-height: calc(var(--logo-h) * 0.72);
 		-webkit-user-drag: none;
 		pointer-events: none;
+	}
+
+	@media (min-width: 768px) {
+		.client-logo-item {
+			min-height: 68px;
+		}
+
+		.client-logo-item img {
+			max-height: var(--logo-h);
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {

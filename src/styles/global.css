@@ -32,6 +32,7 @@
 @theme {
 	--font-sans: "Fustat", ui-sans-serif, system-ui, sans-serif;
 	--color-setin-bg: #0A0A0B;
+	--color-setin-bg-raised: #0D0D0D;
 	--color-setin-fg: #f5f5f5;
 	--color-setin-muted: #a3a3a3;
 	--color-setin-border: #2a2b2c;

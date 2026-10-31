@@ -9,12 +9,12 @@ const { count, href = '/projects' } = Astro.props;
 const countLabel = `+${count}`;
 const label = `More projects [${countLabel}]`;
 const lineClass =
-	'see-all-projects__label flex h-[1.5em] items-center leading-[1.15] text-[1.2rem] font-[600] uppercase text-black md:text-[1.6rem]';
+	'see-all-projects__label flex h-[1.5em] items-center leading-[1.15] text-[1.2rem] font-[600] uppercase text-setin-fg md:text-[1.6rem]';
 ---
 
 <a href={href} class="see-all-projects group flex h-full min-h-0 flex-col">
 	<div
-		class="see-all-projects__surface flex min-h-[120px] flex-1 items-center justify-center bg-[#ECECEC] transition-colors duration-300 ease-out group-hover:bg-[#D6D6D6]"
+		class="see-all-projects__surface flex min-h-[120px] flex-1 items-center justify-center bg-[#141415] transition-colors duration-300 ease-out group-hover:bg-[#1B1C1D]"
 	>
 		<span class="relative inline-block pb-1.5 text-[1.2rem] md:text-[1.6rem]">
 			<span class="flex h-[1.5em] flex-col overflow-hidden">
@@ -31,7 +31,7 @@ const lineClass =
 			</span>
 
 			<span
-				class="absolute bottom-0 left-0 h-[1.5px] w-full origin-left scale-x-100 bg-black transition-transform duration-300 ease-out group-hover:origin-right group-hover:scale-x-0"
+				class="absolute bottom-0 left-0 h-[1.5px] w-full origin-left scale-x-100 bg-white transition-transform duration-300 ease-out group-hover:origin-right group-hover:scale-x-0"
 				aria-hidden="true"
 			></span>
 		</span>
