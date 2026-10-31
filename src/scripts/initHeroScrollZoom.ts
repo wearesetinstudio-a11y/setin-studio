@@ -24,12 +24,12 @@ const VISUAL_EPSILON = 0.0008;
 const SCALE_START = 1.08;
 /** How close we push into the monument by end of hero scroll. */
 const SCALE_END = 1.85;
-/** Dawn: darker on entry → current look at the end of hero scroll. */
+/** Dawn: darker on entry → soft open at the end of hero scroll. */
 const BRIGHTNESS_START = 0.72;
-const BRIGHTNESS_END = 1;
-/** Tint overlay opacity (matches end state ~0.20 from current design). */
+const BRIGHTNESS_END = 0.9;
+/** Tint overlay opacity — a touch more veil at peak so dawn stays moody. */
 const TINT_START = 0.46;
-const TINT_END = 0.2;
+const TINT_END = 0.26;
 /** Transform origin aimed at monument center / light shaft. */
 const ORIGIN_X = '50%';
 const ORIGIN_Y = '46%';

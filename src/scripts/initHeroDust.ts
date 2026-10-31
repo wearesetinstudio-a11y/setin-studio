@@ -30,9 +30,9 @@ type Mote = {
 const POOL = 499;
 /** Share of motes allowed to twinkle. */
 const BLINK_CHANCE = 0.07;
-/** Dust mote size (~1.2–2.5px). */
-const SIZE_MIN = 1.2;
-const SIZE_MAX = 2.5;
+/** Dust mote size (~1.0–1.8px). */
+const SIZE_MIN = 1.0;
+const SIZE_MAX = 1.8;
 const ORIGIN_X = 0.5;
 const ORIGIN_Y = 0.46;
 /** How strongly near motes rush past the lens on zoom. */
