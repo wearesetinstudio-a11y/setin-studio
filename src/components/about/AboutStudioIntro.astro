@@ -1,24 +1,22 @@
+---
+import { t } from '../../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../../i18n/seo.ts';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+---
+
 <section id="about-studio-intro" class="about-studio-intro relative z-10 bg-[#0A0A0B] px-[var(--page-gutter)] pt-[var(--section-padding-y)] pb-[60px]">
 	<div class="grid min-w-0 gap-6 md:grid-cols-2 md:gap-20 lg:gap-24">
 		<h2
 			id="about-studio-heading"
 			class="about-studio-intro__heading min-w-0 w-full max-w-full uppercase leading-[1.15] md:max-w-lg"
 		>
-			<span data-reveal-line data-i18n="aboutPage.introHeading">Setin Studio is a digital product studio built on vision and execution.</span>
+			<span data-reveal-line data-i18n="aboutPage.introHeading">{t(locale, 'aboutPage.introHeading')}</span>
 		</h2>
 
 		<div class="body-txt-1 about-studio-intro__body min-w-0 leading-relaxed text-setin-muted">
-			<p data-i18n="aboutPage.introBody1">
-				As brothers, we have developed a unique collaborative way of working, that allows us to
-				move fast, eliminate friction, and stay completely consistent. Operating as a specialized
-				digital studio, we focus on transforming businesses through strategic branding,
-				user-centric UI/UX design, and premium development.
-			</p>
-			<p class="mt-6" data-i18n="aboutPage.introBody2">
-				We don't believe in one size and all fits services. Instead, we partner with you to craft
-				custom digital tools, scalable platforms, and brand identities that mean something to your
-				audience and bring measurable value to your business.
-			</p>
+			<p data-i18n="aboutPage.introBody1">{t(locale, 'aboutPage.introBody1')}</p>
+			<p class="mt-6" data-i18n="aboutPage.introBody2">{t(locale, 'aboutPage.introBody2')}</p>
 		</div>
 	</div>
 </section>

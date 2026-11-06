@@ -9,9 +9,12 @@ import TestimonialsSection from '../components/TestimonialsSection.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { withPublicAssetVersion } from '../utils/withPublicAssetVersion.ts';
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../i18n/seo.ts';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const { projectCount } = await getSiteCounts();
+const locale = getLocaleFromPath(Astro.url.pathname);
 
 const teamMembers = [
 	{
@@ -57,8 +60,8 @@ const teamMembers = [
 ---
 
 <Layout
-	title="About Us"
-	description="Meet the brothers behind Setin Studio — a digital product studio built on vision and execution."
+	title={t(locale, 'aboutPage.title')}
+	description={t(locale, 'aboutPage.introBody1')}
 	preloadImage={withPublicAssetVersion('/images/brothers-intro.webp')}
 >
 	<Header projectCount={projectCount} />
@@ -73,8 +76,8 @@ const teamMembers = [
 					teamMembers.map((member, index) => (
 						<AboutTeamMember
 							name={member.name}
-							role={member.role}
-							bio={member.bio}
+							role={t(locale, member.roleKey)}
+							bio={t(locale, member.bioKey)}
 							roleKey={member.roleKey}
 							bioKey={member.bioKey}
 							imageSrc={member.imageSrc}

@@ -4,8 +4,10 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { dictionaries, t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../i18n/seo.ts';
 
 const { projectCount } = await getSiteCounts();
+const locale = getLocaleFromPath(Astro.url.pathname);
 
 const serviceIds = ['branding', 'product', 'development', 'cloud', 'data', 'automation'];
 
@@ -15,23 +17,23 @@ const services = serviceIds.map((id, index) => {
 	for (let n = 1; `${base}.point${n}.title` in dictionaries.en; n++) {
 		const titleKey = `${base}.point${n}.title`;
 		const textKey = `${base}.point${n}.text`;
-		points.push({ titleKey, title: t('en', titleKey), textKey, text: t('en', textKey) });
+		points.push({ titleKey, title: t(locale, titleKey), textKey, text: t(locale, textKey) });
 	}
 	return {
 		number: String(index + 1).padStart(2, '0'),
 		labelKey: `${base}.label`,
-		label: t('en', `${base}.label`),
+		label: t(locale, `${base}.label`),
 		titleKey: `${base}.title`,
-		title: t('en', `${base}.title`),
+		title: t(locale, `${base}.title`),
 		bodyKey: `${base}.body`,
-		body: t('en', `${base}.body`),
+		body: t(locale, `${base}.body`),
 		points,
 	};
 });
 ---
 
 <Layout
-	title="Services"
+	title={t(locale, 'services.title')}
 	description="Brand identity, digital product design, and high-performance builds from Setin Studio."
 >
 	<Header projectCount={projectCount} />

@@ -2,53 +2,23 @@
 	"redirects": [
 		{ "source": "/pitches/aeronaval", "destination": "/projects/aeronaval", "permanent": true },
 		{ "source": "/pitches/aeronaval/", "destination": "/projects/aeronaval", "permanent": true },
-		{ "source": "/pl/pitches/aeronaval", "destination": "/projects/aeronaval", "permanent": true },
-		{ "source": "/pl/pitches/aeronaval/", "destination": "/projects/aeronaval", "permanent": true },
-		{ "source": "/es/pitches/aeronaval", "destination": "/projects/aeronaval", "permanent": true },
-		{ "source": "/es/pitches/aeronaval/", "destination": "/projects/aeronaval", "permanent": true },
+		{ "source": "/pl/pitches/aeronaval", "destination": "/pl/projects/aeronaval", "permanent": true },
+		{ "source": "/pl/pitches/aeronaval/", "destination": "/pl/projects/aeronaval", "permanent": true },
+		{ "source": "/es/pitches/aeronaval", "destination": "/es/projects/aeronaval", "permanent": true },
+		{ "source": "/es/pitches/aeronaval/", "destination": "/es/projects/aeronaval", "permanent": true },
 		{ "source": "/pitches/turysta", "destination": "/projects/turysta", "permanent": true },
 		{ "source": "/pitches/turysta/", "destination": "/projects/turysta", "permanent": true },
-		{ "source": "/pl/pitches/turysta", "destination": "/projects/turysta", "permanent": true },
-		{ "source": "/pl/pitches/turysta/", "destination": "/projects/turysta", "permanent": true },
-		{ "source": "/es/pitches/turysta", "destination": "/projects/turysta", "permanent": true },
-		{ "source": "/es/pitches/turysta/", "destination": "/projects/turysta", "permanent": true }
+		{ "source": "/pl/pitches/turysta", "destination": "/pl/projects/turysta", "permanent": true },
+		{ "source": "/pl/pitches/turysta/", "destination": "/pl/projects/turysta", "permanent": true },
+		{ "source": "/es/pitches/turysta", "destination": "/es/projects/turysta", "permanent": true },
+		{ "source": "/es/pitches/turysta/", "destination": "/es/projects/turysta", "permanent": true }
 	],
 	"rewrites": [
-		{ "source": "/pl", "destination": "/" },
-		{ "source": "/pl/", "destination": "/" },
-		{ "source": "/es", "destination": "/" },
-		{ "source": "/es/", "destination": "/" },
-
-		{ "source": "/pl/about", "destination": "/about" },
-		{ "source": "/pl/about/", "destination": "/about" },
-		{ "source": "/es/about", "destination": "/about" },
-		{ "source": "/es/about/", "destination": "/about" },
-
-		{ "source": "/pl/services", "destination": "/services" },
-		{ "source": "/pl/services/", "destination": "/services" },
-		{ "source": "/es/services", "destination": "/services" },
-		{ "source": "/es/services/", "destination": "/services" },
-
-		{ "source": "/pl/projects", "destination": "/projects" },
-		{ "source": "/pl/projects/", "destination": "/projects" },
-		{ "source": "/es/projects", "destination": "/projects" },
-		{ "source": "/es/projects/", "destination": "/projects" },
-
 		{ "source": "/projects/nrv-web", "destination": "/projects/nrv" },
 		{ "source": "/projects/nrv-web/", "destination": "/projects/nrv" },
-		{ "source": "/pl/projects/nrv-web", "destination": "/projects/nrv" },
-		{ "source": "/pl/projects/nrv-web/", "destination": "/projects/nrv" },
-		{ "source": "/es/projects/nrv-web", "destination": "/projects/nrv" },
-		{ "source": "/es/projects/nrv-web/", "destination": "/projects/nrv" },
-
-		{ "source": "/pl/projects/:slug/", "destination": "/projects/:slug" },
-		{ "source": "/pl/projects/:slug", "destination": "/projects/:slug" },
-		{ "source": "/es/projects/:slug/", "destination": "/projects/:slug" },
-		{ "source": "/es/projects/:slug", "destination": "/projects/:slug" },
-
-		{ "source": "/pl/:path*/", "destination": "/:path*" },
-		{ "source": "/pl/:path*", "destination": "/:path*" },
-		{ "source": "/es/:path*/", "destination": "/:path*" },
-		{ "source": "/es/:path*", "destination": "/:path*" }
+		{ "source": "/pl/projects/nrv-web", "destination": "/pl/projects/nrv" },
+		{ "source": "/pl/projects/nrv-web/", "destination": "/pl/projects/nrv" },
+		{ "source": "/es/projects/nrv-web", "destination": "/es/projects/nrv" },
+		{ "source": "/es/projects/nrv-web/", "destination": "/es/projects/nrv" }
 	]
 }

@@ -1,8 +1,11 @@
 ---
 import WorkWithUsButton from './WorkWithUsButton.astro';
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../i18n/seo.ts';
 import { FOUNDERS_PHOTO_ALTS } from '../utils/projectImageAlt';
 import { withPublicAssetVersion } from '../utils/withPublicAssetVersion.ts';
 
+const locale = getLocaleFromPath(Astro.url.pathname);
 const foundersSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 const foundersSrc1280 = withPublicAssetVersion('/images/brothers-intro-1280.webp');
 ---
@@ -51,13 +54,12 @@ const foundersSrc1280 = withPublicAssetVersion('/images/brothers-intro-1280.webp
 		<div
 			class="about-visual__content relative z-10 flex h-[420px] flex-col justify-end gap-6 px-[var(--page-gutter)] pb-10 pt-20 md:grid md:h-[600px] md:grid-cols-2 md:items-end md:gap-16 md:pb-16 md:pt-24"
 		>
-			<p class="about-visual__eyebrow text-subtitle-1" data-i18n="about.eyebrow">Our story</p>
+			<p class="about-visual__eyebrow text-subtitle-1" data-i18n="about.eyebrow">{t(locale, 'about.eyebrow')}</p>
 			<p
 				class="body-txt-1 about-visual__intro max-w-md leading-relaxed text-white md:ml-auto"
 				data-i18n="about.intro"
 			>
-				We are two brothers who turned a shared passion into a studio dedicated to quality. We
-				combine years of global experience to build digital products that truly last.
+				{t(locale, 'about.intro')}
 			</p>
 		</div>
 	</div>
@@ -68,23 +70,14 @@ const foundersSrc1280 = withPublicAssetVersion('/images/brothers-intro-1280.webp
 	>
 		<h2 id="about-heading" class="about-content__heading min-w-0 w-full max-w-full uppercase leading-[1.15] md:max-w-lg">
 			<span data-reveal-line data-i18n="about.heading">
-				We believe that a great brand is built on two things – a clear vision and a solid foundation.
+				{t(locale, 'about.heading')}
 			</span>
 		</h2>
 
 		<div class="body-txt-1 about-content__body min-w-0 md:pt-2">
 			<div class="space-y-6 leading-relaxed text-setin-muted">
-				<p data-i18n="about.body1">
-					In our studio, we create digital spaces that tell your story. With 15 years of combined
-					experience, we've worked with brands from Poland to the LatAm, helping them stand out.
-				</p>
-				<p data-i18n="about.body2">
-					Our work is a mix of two worlds. We look at the human side of your business to understand
-					your goals, and then we use high-end technology to make them real. Because we are
-					brothers, we work as one. This means your project is always consistent, from the first
-					sketch to the final line of code. We are here to help you grow and leave a mark on the
-					digital world.
-				</p>
+				<p data-i18n="about.body1">{t(locale, 'about.body1')}</p>
+				<p data-i18n="about.body2">{t(locale, 'about.body2')}</p>
 			</div>
 
 			<div class="mt-12">

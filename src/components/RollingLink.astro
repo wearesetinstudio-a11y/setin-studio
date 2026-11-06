@@ -1,4 +1,7 @@
 ---
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../i18n/seo.ts';
+
 interface Props {
 	href: string;
 	label: string;
@@ -29,7 +32,9 @@ const {
 	exact = false,
 	markCurrent = true,
 } = Astro.props;
-const text = count !== undefined ? `${label} [${count}]` : label;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const localizedLabel = i18nKey ? t(locale, i18nKey) : label;
+const text = count !== undefined ? `${localizedLabel} [${count}]` : localizedLabel;
 const isFooter = variant === 'footer';
 const isCurrent = markCurrent && current;
 

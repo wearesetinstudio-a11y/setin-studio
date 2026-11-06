@@ -6,12 +6,15 @@ import ProjectsSection from '../../components/ProjectsSection.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../../utils/getSiteCounts.ts';
 import { sortProjects } from '../../utils/sortProjects.ts';
+import { t } from '../../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../../i18n/seo.ts';
 
 const projects = sortProjects(await getCollection('projects'));
 const { projectCount } = await getSiteCounts();
+const locale = getLocaleFromPath(Astro.url.pathname);
 ---
 
-<Layout title="Our Work" description="Portfolio projects by Setin Studio.">
+<Layout title={t(locale, 'nav.projects')} description={t(locale, 'projects.description')}>
 	<Header theme="light-bg" projectCount={projectCount} />
 
 	<main class="flex-1">

@@ -5,6 +5,8 @@ import { getProjectImageAlts } from '../utils/projectImageAlt';
 import { normalizeProjectCategories } from '../utils/projectCategories';
 import { resolveCoverPoster } from '../utils/resolveCoverPoster';
 import { withPublicAssetVersion } from '../utils/withPublicAssetVersion';
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath, localizeInternalHref } from '../i18n/seo.ts';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
@@ -27,6 +29,8 @@ const posterSrc = resolveCoverPoster(resolveProjectFolderName(project));
 const isRiveCover = thumbnail.toLowerCase().endsWith('.riv');
 const cardClass = 'project-card project-card__cursor-target group flex h-full flex-col';
 const titlesJson = JSON.stringify(titles);
+const locale = getLocaleFromPath(Astro.url.pathname);
+const projectHref = localizeInternalHref(locale, `/projects/${project.id}`);
 const imageAltsJson = JSON.stringify(imageAlts);
 ---
 
@@ -87,7 +91,7 @@ const imageAltsJson = JSON.stringify(imageAlts);
 						data-project-media-alt
 					/>
 				)}
-				<span class="project-card__soon-label" data-i18n="projects.comingSoon">Coming soon</span>
+				<span class="project-card__soon-label" data-i18n="projects.comingSoon">{t(locale, 'projects.comingSoon')}</span>
 			</div>
 
 			<div class="project-card__meta mt-5 flex items-end justify-between gap-4">
@@ -119,7 +123,7 @@ const imageAltsJson = JSON.stringify(imageAlts);
 		</div>
 	) : (
 		<a
-			href={`/projects/${project.id}`}
+			href={projectHref}
 			class={cardClass}
 			data-cursor-i18n="projects.view"
 			data-project-titles={titlesJson}
@@ -171,7 +175,7 @@ const imageAltsJson = JSON.stringify(imageAlts);
 					/>
 				)}
 				{isNew && (
-					<span class="project-card__soon-label" data-i18n="projects.new">New</span>
+					<span class="project-card__soon-label" data-i18n="projects.new">{t(locale, 'projects.new')}</span>
 				)}
 			</div>
 

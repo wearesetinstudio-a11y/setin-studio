@@ -10,10 +10,13 @@ import RollingLink from '../components/RollingLink.astro';
 import { getCollection } from 'astro:content';
 import { getSiteCounts } from '../utils/getSiteCounts.ts';
 import { sortProjects } from '../utils/sortProjects.ts';
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath, localizeInternalHref } from '../i18n/seo.ts';
 
 const allProjects = await getCollection('projects');
 const projects = sortProjects(allProjects);
 const { projectCount } = await getSiteCounts();
+const locale = getLocaleFromPath(Astro.url.pathname);
 
 const heroSocials = [
 	{
@@ -87,26 +90,26 @@ function formatHeroLocationTime(timeZone: string, date = new Date()) {
 							class="hero-monument hero-headline text-h1 w-full uppercase text-setin-fg"
 							data-hero-headline
 							data-i18n-aria="hero.headline"
-							aria-label="We shape the digital monoliths"
+							aria-label={t(locale, 'hero.headline')}
 						>
 							<span class="hero-monument__row hero-monument__row--left" style="--i: 0">
 								<span class="hero-reveal-mask">
 									<span class="hero-reveal-line" style="--i: 0" data-i18n="hero.monument.1">
-										We shape
+										{t(locale, 'hero.monument.1')}
 									</span>
 								</span>
 							</span>
 							<span class="hero-monument__row hero-monument__row--center" style="--i: 1">
 								<span class="hero-reveal-mask">
 									<span class="hero-reveal-line" style="--i: 1" data-i18n="hero.monument.2">
-										The digital
+										{t(locale, 'hero.monument.2')}
 									</span>
 								</span>
 							</span>
 							<span class="hero-monument__row hero-monument__row--right" style="--i: 2">
 								<span class="hero-reveal-mask">
 									<span class="hero-reveal-line" style="--i: 2" data-i18n="hero.monument.3">
-										Monoliths
+										{t(locale, 'hero.monument.3')}
 									</span>
 								</span>
 							</span>
@@ -119,9 +122,7 @@ function formatHeroLocationTime(timeZone: string, date = new Date()) {
 							data-hero-description
 							data-i18n="hero.description"
 						>
-							Setin Studio is an independent creative studio rooted in Slavic culture. We help
-							ambitious brands and founders turn ideas into sharp design, clean code, and clear
-							stories.
+							{t(locale, 'hero.description')}
 						</p>
 
 						<nav
@@ -140,7 +141,7 @@ function formatHeroLocationTime(timeZone: string, date = new Date()) {
 									{ key: 'services.item.automation.label', label: 'AI Automations', href: '/services#service-06' },
 								].map((service, index) => (
 									<a
-										href={service.href}
+										href={localizeInternalHref(locale, service.href)}
 										class="hero-service group"
 										style={`--i: ${index}`}
 									>
@@ -148,14 +149,14 @@ function formatHeroLocationTime(timeZone: string, date = new Date()) {
 											<span class="hero-service__label-wrap">
 												<span class="hero-service__label-roll">
 													<span class="hero-service__label" data-i18n={service.key}>
-														{service.label}
+														{t(locale, service.key)}
 													</span>
 													<span
 														class="hero-service__label"
 														data-i18n={service.key}
 														aria-hidden="true"
 													>
-														{service.label}
+														{t(locale, service.key)}
 													</span>
 												</span>
 											</span>

@@ -1,5 +1,9 @@
 ---
 import { getClientLogoAlts } from '../utils/projectImageAlt';
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../i18n/seo.ts';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
 
 const clientEntries = [
 	{ name: 'Epic Realty', src: '/logos/epic-realty.svg', height: 34 },
@@ -38,14 +42,11 @@ const logoRows = [
 <section id="clients-section" class="relative z-20 bg-[#0A0A0B] px-[var(--page-gutter)] py-[var(--section-padding-y)]">
 	<div class="grid gap-6 md:grid-cols-2 md:gap-16">
 		<h2 id="clients-heading" class="clients-heading max-w-sm uppercase leading-[1.15]">
-			<span data-reveal-line data-i18n="clients.heading1">Those who stand</span>
+			<span data-reveal-line data-i18n="clients.heading1">{t(locale, 'clients.heading1')}</span>
 			<br />
-			<span data-reveal-line data-i18n="clients.heading2">with us</span>
+			<span data-reveal-line data-i18n="clients.heading2">{t(locale, 'clients.heading2')}</span>
 		</h2>
-		<p class="body-txt-1 clients-description max-w-md leading-relaxed md:ml-auto" data-i18n="clients.description">
-			From local innovators to global visionaries, we've helped plenty of brands find their edge and
-			own their space in the digital landscape.
-		</p>
+		<p class="body-txt-1 clients-description max-w-md leading-relaxed md:ml-auto" data-i18n="clients.description">{t(locale, 'clients.description')}</p>
 	</div>
 
 	<div id="clients-logos" class="clients-marquees mt-10 md:mt-20" aria-label="Client logos">

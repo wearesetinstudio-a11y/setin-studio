@@ -5,7 +5,11 @@ interface Props {
 	client: string;
 }
 
+import { t } from '../../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../../i18n/seo.ts';
+
 const { heroImage = '', heroLines, client } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
 const heroIsVideo = /\.(mp4|webm)(\?|$)/i.test(heroImage);
 const heroVideoType = /\.webm(\?|$)/i.test(heroImage) ? 'video/webm' : 'video/mp4';
 const clientLabel = client.toUpperCase();
@@ -78,7 +82,7 @@ const heroRawText = heroLines.join('\n').trim();
 
 			<div class="project-hero__client shrink-0 lg:text-right" data-project-hero-client>
 				<p class="project-hero__client-label text-[1.2rem] font-semibold uppercase tracking-[0.14em] text-white">
-					[<span data-i18n="project.client">Client</span>]
+					[<span data-i18n="project.client">{t(locale, 'project.client')}</span>]
 				</p>
 				<p
 					class="project-hero__client-name mt-3 font-semibold uppercase leading-[1.08] tracking-tight text-white"

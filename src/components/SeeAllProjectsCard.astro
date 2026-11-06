@@ -1,18 +1,23 @@
 ---
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath, localizeInternalHref } from '../i18n/seo.ts';
+
 interface Props {
 	count: number;
 	href?: string;
 }
 
 const { count, href = '/projects' } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const localizedHref = localizeInternalHref(locale, href);
 
 const countLabel = `+${count}`;
-const label = `More projects [${countLabel}]`;
+const label = `${t(locale, 'projects.seeAll')} [${countLabel}]`;
 const lineClass =
 	'see-all-projects__label flex h-[1.5em] items-center leading-[1.15] text-[1.2rem] font-[600] uppercase text-setin-fg md:text-[1.6rem]';
 ---
 
-<a href={href} class="see-all-projects group flex h-full min-h-0 flex-col">
+<a href={localizedHref} class="see-all-projects group flex h-full min-h-0 flex-col">
 	<div
 		class="see-all-projects__surface flex min-h-[120px] flex-1 items-center justify-center bg-[#141415] transition-colors duration-300 ease-out group-hover:bg-[#1B1C1D]"
 	>

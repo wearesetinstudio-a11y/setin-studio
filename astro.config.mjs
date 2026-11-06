@@ -9,6 +9,14 @@ export default defineConfig({
 	integrations: [
 		sitemap({
 			filter: (page) => !page.includes('/pitches/'),
+			i18n: {
+				defaultLocale: 'en',
+				locales: {
+					en: 'en',
+					pl: 'pl',
+					es: 'es-PA',
+				},
+			},
 		}),
 	],
 	vite: {

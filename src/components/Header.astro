@@ -2,7 +2,8 @@
 import RollingLink from './RollingLink.astro';
 import WorkWithUsButton from './WorkWithUsButton.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
-import { stripLocalePrefix } from '../i18n/seo.ts';
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath, localizeInternalHref, stripLocalePrefix } from '../i18n/seo.ts';
 import { isActiveNavHref, normalizeNavPath } from '../utils/isActiveNavHref.ts';
 import { STUDIO_LOGO_ALTS } from '../utils/projectImageAlt.ts';
 
@@ -32,6 +33,7 @@ const originPathname =
 		? Astro.originPathname
 		: Astro.url.pathname;
 const barePath = normalizeNavPath(stripLocalePrefix(originPathname));
+const locale = getLocaleFromPath(Astro.url.pathname);
 
 const hasLocalContact =
 	barePath === '/' ||
@@ -46,9 +48,9 @@ const isLightBg = theme === 'light-bg';
 const isLockupLogo = logoSrc !== '/logo-setin.svg';
 
 const nav = [
-	{ href: '/projects', label: 'Projects', count: projectCount, i18nKey: 'nav.projects' },
-	{ href: '/services', label: 'Services', i18nKey: 'nav.services' },
-	{ href: '/about', label: 'About us', i18nKey: 'nav.about' },
+	{ href: '/projects', label: t(locale, 'nav.projects'), count: projectCount, i18nKey: 'nav.projects' },
+	{ href: '/services', label: t(locale, 'nav.services'), i18nKey: 'nav.services' },
+	{ href: '/about', label: t(locale, 'nav.about'), i18nKey: 'nav.about' },
 ];
 
 const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
@@ -66,7 +68,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 >
 	<div class="site-header__bar grid h-[72px] w-full grid-cols-[1fr_auto] items-center md:h-[100px]">
 		<a
-			href="/"
+			href={localizeInternalHref(locale, '/')}
 			class="site-header__logo-link justify-self-start block w-fit transition-opacity hover:opacity-70"
 			aria-label={logoAlt || 'Setin Studio — home'}
 			data-i18n-aria={isLockupLogo ? undefined : 'nav.homeAria'}
@@ -93,7 +95,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 			{
 				nav.map((item) => (
 					<RollingLink
-						href={item.href}
+						href={localizeInternalHref(locale, item.href)}
 						label={item.label}
 						count={item.count}
 						inverted={isLightBg}
@@ -104,7 +106,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 			}
 			<LanguageSwitcher inverted={isLightBg} />
 			<WorkWithUsButton
-				href={workWithUsHref}
+				href={workWithUsHref.startsWith('/') ? localizeInternalHref(locale, workWithUsHref) : workWithUsHref}
 				variant={isLightBg ? 'dark' : 'light'}
 				label="Work with us"
 				i18nKey="nav.workWithUs"
@@ -163,7 +165,7 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 						const current = isActiveNavHref(item.href, barePath);
 						return (
 							<a
-								href={item.href}
+								href={localizeInternalHref(locale, item.href)}
 								class:list={[
 									'mobile-nav-link mobile-nav-item text-[2rem] font-semibold uppercase leading-none text-setin-fg',
 									current && 'mobile-nav-link--current',
@@ -204,7 +206,11 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 			>
 				<div class="mobile-nav-item__reveal">
 					<div class="mobile-nav-item__motion">
-						<WorkWithUsButton href={workWithUsHref} size="large" i18nKey="nav.workWithUs" />
+						<WorkWithUsButton
+							href={workWithUsHref.startsWith('/') ? localizeInternalHref(locale, workWithUsHref) : workWithUsHref}
+							size="large"
+							i18nKey="nav.workWithUs"
+						/>
 					</div>
 				</div>
 			</div>
@@ -254,7 +260,8 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 		background-color: var(--theme-color, #0A0A0B);
 	}
 
-	/* White pages (projects index / over project body): solid bar stays white */
+	/* White pages (projects index): solid bar stays white.
+	   Project case pages keep --theme-color, same as the footer and preloader. */
 	.site-header--light-bg.header-solid,
 	.site-header.header-solid.header-over-light {
 		background-color: #ffffff;
@@ -1552,10 +1559,10 @@ const headerClass = waitForIntro ? 'is-intro-pending pointer-events-none' : '';
 				return;
 			}
 
-			// Project case pages: white solid once the light body reaches the nav.
+			// Project case pages: solid project color once the light body reaches the nav.
 			if (projectBody) {
 				header.classList.toggle('header-solid', overProjectLight);
-				header.classList.toggle('header-over-light', overProjectLight);
+				header.classList.remove('header-over-light');
 				return;
 			}
 

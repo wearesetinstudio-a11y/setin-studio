@@ -1,5 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../i18n/seo.ts';
 import ProjectCard from './ProjectCard.astro';
 import SeeAllProjectsCard from './SeeAllProjectsCard.astro';
 import {
@@ -13,6 +15,7 @@ interface Props {
 }
 
 const { projects, standalone = false } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
 const displayedProjects = standalone ? projects : projects.slice(0, 3);
 
 const leftProjects: CollectionEntry<'projects'>[] = [];
@@ -58,14 +61,13 @@ const filterCategories = standalone
 			<div class="projects-intro projects-intro--standalone mb-10 flex flex-col gap-6 md:mb-14 md:grid md:items-start">
 				<div class="projects-intro__copy flex max-w-md flex-col gap-6 md:gap-8">
 					<h2 id="projects-heading" class="projects-heading uppercase leading-[1.15]">
-						<span data-i18n="projects.heading">Our finest work</span>
+						<span data-i18n="projects.heading">{t(locale, 'projects.heading')}</span>
 					</h2>
 					<p
 						class="body-txt-1 projects-description leading-relaxed text-black/55"
 						data-i18n="projects.description"
 					>
-						We don't follow trends, we set the tone. These are the collaborations that redefined the
-						standard for our partners.
+						{t(locale, 'projects.description')}
 					</p>
 				</div>
 				{filterCategories.length > 0 && (
@@ -97,14 +99,13 @@ const filterCategories = standalone
 				!standalone && (
 					<div class="projects-intro order-0 flex flex-col gap-6 md:order-none md:gap-8">
 						<h2 id="projects-heading" class="projects-heading max-w-md uppercase leading-[1.15]">
-							<span data-reveal-line data-i18n="projects.heading">Our finest work</span>
+							<span data-reveal-line data-i18n="projects.heading">{t(locale, 'projects.heading')}</span>
 						</h2>
 						<p
 							class="body-txt-1 projects-description max-w-md leading-relaxed text-white/55"
 							data-i18n="projects.description"
 						>
-							We don't follow trends, we set the tone. These are the collaborations that redefined
-							the standard for our partners.
+							{t(locale, 'projects.description')}
 						</p>
 					</div>
 				)
@@ -147,7 +148,7 @@ const filterCategories = standalone
 
 	<div id="project-cursor" class="project-cursor pointer-events-none fixed z-[200]" aria-hidden="true">
 		<span class="project-cursor__label">
-			<span data-i18n="projects.view" data-project-cursor-label>view</span>
+			<span data-i18n="projects.view" data-project-cursor-label>{t(locale, 'projects.view')}</span>
 			<span class="project-cursor__line"></span>
 		</span>
 	</div>

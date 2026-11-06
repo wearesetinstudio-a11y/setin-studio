@@ -1,5 +1,9 @@
 ---
 import { getClientLogoAlts } from '../utils/projectImageAlt';
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../i18n/seo.ts';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
 
 const testimonials = [
 	{
@@ -59,15 +63,15 @@ const loopTestimonials = [...testimonials, ...testimonials];
 	<div class="grid gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start lg:gap-20">
 		<div class="testimonials-intro">
 			<h2 id="testimonials-heading" class="testimonials-heading max-w-md uppercase leading-[1.15]">
-				<span data-reveal-line data-i18n="testimonials.heading1">What they say</span>
+				<span data-reveal-line data-i18n="testimonials.heading1">{t(locale, 'testimonials.heading1')}</span>
 				<br />
-				<span data-reveal-line data-i18n="testimonials.heading2">about the setin</span>
+				<span data-reveal-line data-i18n="testimonials.heading2">{t(locale, 'testimonials.heading2')}</span>
 			</h2>
 			<p
 				class="body-txt-1 testimonials-description mt-6 max-w-md leading-relaxed text-white/55"
 				data-i18n="testimonials.description"
 			>
-				Every digital landmark we create is a result of deep trust and precise execution.
+				{t(locale, 'testimonials.description')}
 			</p>
 		</div>
 

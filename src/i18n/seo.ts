@@ -49,6 +49,15 @@ export function buildLocalePath(locale: Locale, pathname: string): string {
 	return `/${locale}${normalized.endsWith('/') ? normalized : `${normalized}/`}`;
 }
 
+/** Prefix an internal path with the active locale. Hash-only and external links stay unchanged. */
+export function localizeInternalHref(locale: Locale, href: string): string {
+	if (!href.startsWith('/') || href.startsWith('//')) return href;
+	const hashIndex = href.indexOf('#');
+	const path = hashIndex === -1 ? href : href.slice(0, hashIndex);
+	const hash = hashIndex === -1 ? '' : href.slice(hashIndex);
+	return `${buildLocalePath(locale, path || '/')}${hash}`;
+}
+
 export function absoluteUrl(pathname: string): string {
 	const path = pathname.startsWith('/') ? pathname : `/${pathname}`;
 	if (path === '/') return `${SITE_URL}/`;
@@ -108,11 +117,12 @@ export type ProjectPortfolioJsonLdInput = {
 	year?: number;
 	image?: string;
 	keywords?: string[];
+	locale?: Locale;
 };
 
 /** Agency + portfolio CreativeWork schema for individual case study pages. */
 export function getProjectPortfolioJsonLd(input: ProjectPortfolioJsonLdInput) {
-	const pageUrl = absoluteUrl(`/projects/${input.slug}`);
+	const pageUrl = absoluteUrl(buildLocalePath(input.locale ?? 'en', `/projects/${input.slug}`));
 	const orgId = `${SITE_URL}/#organization`;
 	const caseStudyId = `${pageUrl}#case-study`;
 	const imageUrl = input.image
@@ -138,7 +148,7 @@ export function getProjectPortfolioJsonLd(input: ProjectPortfolioJsonLdInput) {
 		headline: input.name,
 		description: input.description,
 		url: pageUrl,
-		inLanguage: 'en',
+		inLanguage: input.locale === 'es' ? 'es-PA' : input.locale || 'en',
 		creator: { '@id': orgId },
 		provider: { '@id': orgId },
 		publisher: { '@id': orgId },
@@ -172,7 +182,7 @@ export function getProjectPortfolioJsonLd(input: ProjectPortfolioJsonLdInput) {
 		about: { '@id': caseStudyId },
 		mainEntity: { '@id': caseStudyId },
 		publisher: { '@id': orgId },
-		inLanguage: 'en',
+		inLanguage: input.locale === 'es' ? 'es-PA' : input.locale || 'en',
 	};
 
 	if (imageUrl) webPage.primaryImageOfPage = imageUrl;

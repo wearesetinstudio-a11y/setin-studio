@@ -1,0 +1,12 @@
+---
+import Page from '../../../views/ProjectPage.astro';
+import { projectPagePaths } from '../../../utils/projectPagePaths.ts';
+
+export function getStaticPaths() {
+	return projectPagePaths();
+}
+
+const { project, projectCount } = Astro.props;
+---
+
+<Page project={project} projectCount={projectCount} />

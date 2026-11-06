@@ -1,3 +1,10 @@
+---
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../i18n/seo.ts';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+---
+
 <aside
 	id="cookie-banner"
 	class="cookie-banner"
@@ -10,17 +17,17 @@
 	transition:persist="cookie-banner-v2"
 >
 	<div class="cookie-banner__copy">
-		<p id="cookie-banner-title" class="cookie-banner__title" data-i18n="cookies.title">Cookies, not myths</p>
+		<p id="cookie-banner-title" class="cookie-banner__title" data-i18n="cookies.title">{t(locale, 'cookies.title')}</p>
 		<p id="cookie-banner-body" class="cookie-banner__body" data-i18n="cookies.body">
-			We don't read tea leaves, we use Google Analytics. No dark magic, no tracking your personal business.
+			{t(locale, 'cookies.body')}
 		</p>
 	</div>
 	<div class="cookie-banner__actions">
 		<button type="button" class="cookie-banner__action cookie-banner__action--accept" data-cookie-accept>
-			<span data-i18n="cookies.accept">Accept analytics</span>
+			<span data-i18n="cookies.accept">{t(locale, 'cookies.accept')}</span>
 		</button>
 		<button type="button" class="cookie-banner__action cookie-banner__action--necessary" data-cookie-necessary>
-			<span data-i18n="cookies.necessary">Essential only</span>
+			<span data-i18n="cookies.necessary">{t(locale, 'cookies.necessary')}</span>
 		</button>
 	</div>
 </aside>

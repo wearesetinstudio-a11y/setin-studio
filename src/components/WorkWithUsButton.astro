@@ -1,4 +1,7 @@
 ---
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath, localizeInternalHref } from '../i18n/seo.ts';
+
 interface Props {
 	href?: string;
 	label?: string;
@@ -17,18 +20,21 @@ const {
 	count,
 } = Astro.props;
 
+const locale = getLocaleFromPath(Astro.url.pathname);
+const localizedLabel = i18nKey ? t(locale, i18nKey) : label;
+const localizedHref = href.startsWith('/') ? localizeInternalHref(locale, href) : href;
 const isDark = variant === 'dark';
 const textColor = isDark ? 'text-black' : 'text-setin-fg';
 const underlineColor = isDark ? 'bg-black' : 'bg-white';
 const textSize = size === 'large' ? 'text-[2rem]' : 'text-[1.2rem]';
 const lineClass = `flex h-[1.5em] items-center leading-[1.15] ${textSize} font-semibold uppercase ${textColor}`;
 const isStatic = size === 'large';
-const displayLabel = count !== undefined ? `${label} [${count}]` : label;
+const displayLabel = count !== undefined ? `${localizedLabel} [${count}]` : localizedLabel;
 const useCount = count !== undefined;
 ---
 
 <div class:list={['work-with-us-button group relative inline-block', size !== 'large' && 'work-with-us-button--padded']}>
-	<a href={href} class={`work-with-us-button__link relative block ${textColor}`}>
+	<a href={localizedHref} class={`work-with-us-button__link relative block ${textColor}`}>
 		{
 			isStatic ? (
 				<span

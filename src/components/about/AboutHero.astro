@@ -1,7 +1,10 @@
 ---
 import { FOUNDERS_PHOTO_ALTS } from '../../utils/projectImageAlt';
 import { withPublicAssetVersion } from '../../utils/withPublicAssetVersion.ts';
+import { t } from '../../i18n/dictionaries.ts';
+import { getLocaleFromPath } from '../../i18n/seo.ts';
 
+const locale = getLocaleFromPath(Astro.url.pathname);
 const foundersSrc = withPublicAssetVersion('/images/brothers-intro.webp');
 const foundersSrc1280 = withPublicAssetVersion('/images/brothers-intro-1280.webp');
 ---
@@ -51,7 +54,7 @@ const foundersSrc1280 = withPublicAssetVersion('/images/brothers-intro-1280.webp
 			data-about-hero-headline
 			data-i18n="aboutPage.hero"
 		>
-			Two brothers, one vision
+			{t(locale, 'aboutPage.hero')}
 		</h1>
 	</div>
 </section>

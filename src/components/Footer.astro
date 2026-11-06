@@ -1,7 +1,7 @@
 ---
 import RollingLink from './RollingLink.astro';
 import { t, type Locale } from '../i18n/dictionaries.ts';
-import { buildLocalePath, stripLocalePrefix } from '../i18n/seo.ts';
+import { buildLocalePath, getLocaleFromPath, stripLocalePrefix } from '../i18n/seo.ts';
 import { isActiveNavHref, normalizeNavPath } from '../utils/isActiveNavHref.ts';
 import { STUDIO_LOGO_ALTS } from '../utils/projectImageAlt.ts';
 
@@ -10,7 +10,8 @@ interface Props {
 	locale?: Locale;
 }
 
-const { locale = 'en' } = Astro.props;
+const { locale: localeProp } = Astro.props;
+const locale = localeProp ?? getLocaleFromPath(Astro.url.pathname);
 
 const emailHref = 'mailto:wearesetinstudio@gmail.com?subject=Hello%20Setin!%20:)';
 const whatsappHref =

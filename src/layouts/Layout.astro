@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/page-transition.css';
 import CookieBanner from '../components/CookieBanner.astro';
 import { ClientRouter } from 'astro:transitions';
+import { t, type Locale } from '../i18n/dictionaries.ts';
 import {
 	SITE_URL,
 	absoluteUrl,
@@ -34,7 +35,7 @@ interface Props {
 
 const {
 	title = 'Setin Studio',
-	description = 'Multidisciplinary studio forging distinct identities, seamless interfaces, and high-performance builds.',
+	description: descriptionProp = 'Multidisciplinary studio forging distinct identities, seamless interfaces, and high-performance builds.',
 	image = '/images/og.jpg',
 	imageAlt = 'Setin Studio — branding, UI/UX design and B2B digital platforms',
 	themeColor: themeColorProp = '',
@@ -48,7 +49,6 @@ const extraJsonLdBlocks = jsonLd
 		: [jsonLd]
 	: [];
 
-const pageTitle = title === 'Setin Studio' ? title : `${title} — Setin Studio`;
 const pathname = Astro.url.pathname;
 /** Prefer pre-rewrite path so /es/* and /pl/* keep correct locale after middleware rewrite. */
 const originPathname =
@@ -57,13 +57,24 @@ const originPathname =
 		: pathname;
 const barePath = stripLocalePrefix(originPathname);
 const pageLocale = getLocaleFromPath(originPathname);
+const homeTitles: Record<Locale, string> = {
+	en: 'Setin Studio | Brand and digital studio',
+	pl: 'Setin Studio | Studio projektowe ze Szczecina',
+	es: 'Setin Studio | Estudio de Diseño Web y Branding en Panamá',
+};
+const isHome = barePath === '/' || barePath === '';
+const description = isHome ? t(pageLocale, 'hero.description') : descriptionProp;
+const pageTitle = isHome
+	? homeTitles[pageLocale]
+	: title === 'Setin Studio'
+		? title
+		: `${title} — Setin Studio`;
 const hreflangLinks = getHreflangLinks(barePath);
 const canonicalHref = absoluteUrl(buildLocalePath(pageLocale, barePath));
 const organizationJsonLd = getOrganizationJsonLd();
 const panamaServiceJsonLd = getPanamaProfessionalServiceJsonLd();
 const isSpanish = pageLocale === 'es';
-const esOgTitle = 'Setin Studio | Estudio de Diseño Web y Branding en Panamá';
-const ogTitle = isSpanish && barePath === '/' ? esOgTitle : pageTitle;
+const ogTitle = pageTitle;
 const ogImage = `${SITE_URL}${withPublicAssetVersion(image)}`;
 const organizationJsonLdJson = JSON.stringify(organizationJsonLd);
 const panamaServiceJsonLdJson = JSON.stringify(panamaServiceJsonLd);
