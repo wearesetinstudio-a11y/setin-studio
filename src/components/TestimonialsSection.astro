@@ -59,7 +59,7 @@ const testimonials = [
 const loopTestimonials = [...testimonials, ...testimonials];
 ---
 
-<section id="testimonials" class="relative z-20 bg-setin-bg-raised px-[var(--page-gutter)] py-[var(--section-padding-y)] lg:pr-0">
+<section id="testimonials" class="relative z-20 bg-[#F5F5F5] px-[var(--page-gutter)] py-[var(--section-padding-y)] lg:pr-0">
 	<div class="grid gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start lg:gap-20">
 		<div class="testimonials-intro">
 			<h2 id="testimonials-heading" class="testimonials-heading max-w-md uppercase leading-[1.15]">
@@ -68,7 +68,7 @@ const loopTestimonials = [...testimonials, ...testimonials];
 				<span data-reveal-line data-i18n="testimonials.heading2">{t(locale, 'testimonials.heading2')}</span>
 			</h2>
 			<p
-				class="body-txt-1 testimonials-description mt-6 max-w-md leading-relaxed text-white/55"
+				class="body-txt-1 testimonials-description mt-6 max-w-md leading-relaxed text-black/55"
 				data-i18n="testimonials.description"
 			>
 				{t(locale, 'testimonials.description')}
@@ -95,7 +95,7 @@ const loopTestimonials = [...testimonials, ...testimonials];
 										aria-hidden={index >= testimonials.length ? 'true' : undefined}
 									/>
 									<span
-										class="testimonial-card__divider h-10 w-px shrink-0 bg-white/10"
+										class="testimonial-card__divider h-10 w-px shrink-0 bg-black/10"
 										aria-hidden="true"
 									/>
 									<div>
@@ -114,22 +114,22 @@ const loopTestimonials = [...testimonials, ...testimonials];
 
 <style is:global>
 	.testimonials-heading {
-		color: #f5f5f5;
+		color: #000000;
 	}
 
 	#testimonials-heading .reveal-char {
-		color: rgba(255, 255, 255, 0.15);
+		color: rgba(0, 0, 0, 0.15);
 		transition: color 0.35s ease-out;
 	}
 
 	#testimonials-heading .reveal-char.active {
-		color: #ffffff;
+		color: #000000;
 	}
 
 	.testimonials-scroll__viewport {
 		position: relative;
 		overflow: hidden;
-		border-left: 1px solid rgba(255, 255, 255, 0.12);
+		border-left: 1px solid rgba(0, 0, 0, 0.12);
 		padding-left: 1.25rem;
 		cursor: grab;
 		touch-action: pan-y;
@@ -152,14 +152,14 @@ const loopTestimonials = [...testimonials, ...testimonials];
 		min-height: 26rem;
 		flex-shrink: 0;
 		flex-direction: column;
-		background-color: #141415;
+		background-color: #ffffff;
 		padding: 2.5rem;
 	}
 
 	.testimonial-card__quote {
 		font-weight: 500;
 		line-height: 1.5;
-		color: rgba(255, 255, 255, 0.82);
+		color: rgba(0, 0, 0, 0.82);
 	}
 
 	.testimonial-card__footer {
@@ -169,22 +169,22 @@ const loopTestimonials = [...testimonials, ...testimonials];
 	}
 
 	.testimonial-card__logo {
-		filter: brightness(0) invert(1);
-		opacity: 0.4;
+		filter: brightness(0);
+		opacity: 0.22;
 	}
 
 	.testimonial-card__name {
 		font-size: 0.875rem;
 		font-weight: 600;
 		line-height: 1.3;
-		color: rgba(255, 255, 255, 0.55);
+		color: rgba(0, 0, 0, 0.45);
 	}
 
 	.testimonial-card__role {
 		font-size: 0.75rem;
 		font-weight: 500;
 		line-height: 1.3;
-		color: rgba(255, 255, 255, 0.35);
+		color: rgba(0, 0, 0, 0.3);
 	}
 
 	@media (max-width: 767px) {
