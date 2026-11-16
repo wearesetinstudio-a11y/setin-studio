@@ -81,6 +81,11 @@ const PROJECT_IMAGE_ALTS: Record<string, LocalizedAlt> = {
 };
 
 const CLIENT_LOGO_ALTS: Record<string, LocalizedAlt> = {
+	'Arte de Baile': {
+		en: 'Arte de Baile logo — boutique dance studio branding and web client of Setin Studio',
+		es: 'Logo de Arte de Baile — cliente de branding y web para estudio de danza boutique de Setin Studio',
+		pl: 'Logo Arte de Baile — klient brandingu i strony dla butikowego studia tańca Setin Studio',
+	},
 	'Epic Realty': {
 		en: 'Epic Realty logo — luxury real estate branding client of Setin Studio',
 		es: 'Logo de Epic Realty — cliente de branding para bienes raíces de lujo de Setin Studio',

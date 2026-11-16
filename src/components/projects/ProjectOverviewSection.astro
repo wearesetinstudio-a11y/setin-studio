@@ -206,6 +206,13 @@ const hasMeta = rows.length > 0;
 		margin: 0;
 		line-height: 1.625;
 	}
+
+	/* Desktop GPU decode paints a ~10px chroma fringe on the top edge. */
+	@media (min-width: 1024px) {
+		.project-overview__frame video {
+			margin-top: -10px;
+		}
+	}
 </style>
 
 <script>

@@ -320,6 +320,13 @@ const imageAltsJson = JSON.stringify(imageAlts);
 		object-position: center;
 		pointer-events: none;
 	}
+
+	/* Desktop GPU decode paints a ~10px chroma fringe on the top edge. */
+	@media (min-width: 1024px) {
+		.project-card__media video {
+			margin-top: -10px;
+		}
+	}
 </style>
 
 <script>

@@ -180,6 +180,15 @@ const clickPlaySrc = isClickPlayVideo ? `${item.src}#t=0.1` : item.src;
 		height: 100%;
 	}
 
+	/* Desktop GPU decode paints a ~10px chroma fringe on the top edge. */
+	@media (min-width: 1024px) {
+		.project-gallery__video-slot > .project-gallery__video,
+		.project-gallery__play-video {
+			top: -10px;
+			height: calc(100% + 10px);
+		}
+	}
+
 	.project-gallery__play-button {
 		position: absolute;
 		top: 50%;

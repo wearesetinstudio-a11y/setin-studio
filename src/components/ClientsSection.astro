@@ -6,6 +6,7 @@ import { getLocaleFromPath } from '../i18n/seo.ts';
 const locale = getLocaleFromPath(Astro.url.pathname);
 
 const clientEntries = [
+	{ name: 'Arte de Baile', src: '/logos/arte.svg', height: 45 },
 	{ name: 'Epic Realty', src: '/logos/epic-realty.svg', height: 34 },
 	{ name: 'See More Logistics', src: '/logos/see-more.svg', height: 42 },
 	{ name: 'Snacks Lovers', src: '/logos/snacks-lovers.svg', height: 48 },
@@ -31,11 +32,18 @@ const clientEntries = [
 	altsJson: JSON.stringify(getClientLogoAlts(client.name)),
 }));
 
-const rowSize = Math.ceil(clientEntries.length / 3);
+/** Full set per row (offset) so each track stays wider than the viewport on large screens. */
+function rotateClients<T>(items: T[], offset: number): T[] {
+	const length = items.length;
+	if (!length) return items;
+	const start = ((offset % length) + length) % length;
+	return [...items.slice(start), ...items.slice(0, start)];
+}
+
 const logoRows = [
-	{ direction: 'ltr' as const, clients: clientEntries.slice(0, rowSize) },
-	{ direction: 'rtl' as const, clients: clientEntries.slice(rowSize, rowSize * 2) },
-	{ direction: 'ltr' as const, clients: clientEntries.slice(rowSize * 2) },
+	{ direction: 'ltr' as const, clients: rotateClients(clientEntries, 0) },
+	{ direction: 'rtl' as const, clients: rotateClients(clientEntries, 7) },
+	{ direction: 'ltr' as const, clients: rotateClients(clientEntries, 14) },
 ];
 ---
 
@@ -61,7 +69,6 @@ const logoRows = [
 										<img
 											src={client.src}
 											alt={copy === 0 ? client.alts.en : ''}
-											width="200"
 											height={client.height}
 											style={`--logo-h: ${client.height}px`}
 											class="h-auto w-auto max-w-none object-contain object-center brightness-0 invert"
@@ -289,6 +296,54 @@ const logoRows = [
 		return wrapped > 0 ? wrapped - loopWidth : wrapped;
 	}
 
+	function stripCloneAccessibility(node: Element) {
+		node.querySelectorAll('img').forEach((img) => {
+			img.alt = '';
+			img.removeAttribute('data-alts');
+			img.setAttribute('aria-hidden', 'true');
+		});
+	}
+
+	/** Repeat a row's logos until one group is at least as wide as the viewport. */
+	function expandGroupToMinWidth(group: HTMLElement, minWidth: number) {
+		const baseCount = Number(group.dataset.baseCount || group.children.length);
+		if (!baseCount) return;
+
+		group.dataset.baseCount = String(baseCount);
+
+		while (group.children.length > baseCount) {
+			group.lastElementChild?.remove();
+		}
+
+		let guard = 0;
+		while (group.getBoundingClientRect().width < minWidth && guard < 12) {
+			for (let index = 0; index < baseCount; index += 1) {
+				const source = group.children[index];
+				if (!source) break;
+				const clone = source.cloneNode(true) as HTMLElement;
+				stripCloneAccessibility(clone);
+				group.appendChild(clone);
+			}
+			guard += 1;
+		}
+	}
+
+	function syncDuplicateGroup(primary: HTMLElement, secondary: HTMLElement) {
+		secondary.innerHTML = primary.innerHTML;
+		stripCloneAccessibility(secondary);
+	}
+
+	function prepareMarqueeTrack(row: HTMLElement, track: HTMLElement) {
+		const groups = track.querySelectorAll<HTMLElement>('.clients-marquee__group');
+		const primary = groups[0];
+		const secondary = groups[1];
+		if (!primary) return;
+
+		const minWidth = Math.max(row.clientWidth, window.innerWidth) + 1;
+		expandGroupToMinWidth(primary, minWidth);
+		if (secondary) syncDuplicateGroup(primary, secondary);
+	}
+
 	function initClientMarquees() {
 		const root = document.getElementById('clients-logos');
 		if (!root || root.dataset.marqueeInit === 'true') return;
@@ -300,6 +355,8 @@ const logoRows = [
 		const states: MarqueeState[] = [];
 
 		const measureState = (state: MarqueeState) => {
+			prepareMarqueeTrack(state.root, state.track);
+
 			const group = state.track.querySelector<HTMLElement>('.clients-marquee__group');
 			const nextWidth = group?.getBoundingClientRect().width ?? state.track.scrollWidth / 2;
 			if (!nextWidth) return;

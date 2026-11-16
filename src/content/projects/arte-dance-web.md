@@ -19,6 +19,7 @@ industry: "Dance Studio"
 market: "Poznan, Poland"
 year: 2026
 liveUrl: "https://www.arte-viktoriaoskaldowicz.pl/"
+logo: '/logos/arte.svg'
 sections:
   - label: "Research and Goals"
     title: "Aligning studio vision with user needs"
