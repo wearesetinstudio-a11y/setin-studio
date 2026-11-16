@@ -13,6 +13,16 @@ const PROJECT_IMAGE_ALTS: Record<string, LocalizedAlt> = {
 		es: 'Rebranding de Agencia Panamá Pacífico — branding e identidad visual para zona franca gubernamental e inversión internacional en Panamá',
 		pl: 'Rebranding Agencia Panamá Pacífico — branding i identyfikacja wizualna strefy ekonomicznej dla inwestycji międzynarodowych w Panamie',
 	},
+	'arte-dance': {
+		en: 'Arte de Baile brand identity — boutique dance studio branding, motion and AI art direction in Poznan, Poland',
+		es: 'Identidad de marca Arte de Baile — branding, motion y dirección de arte con IA para estudio de danza boutique en Poznań, Polonia',
+		pl: 'Identyfikacja wizualna Arte de Baile — branding, motion i AI art direction dla butikowego studia tańca w Poznaniu',
+	},
+	'arte-dance-web': {
+		en: 'Arte de Baile digital flagship website — web design, engineering and product design for a boutique dance studio in Poznan',
+		es: 'Sitio web flagship de Arte de Baile — diseño web, ingeniería y product design para estudio de danza boutique en Poznań',
+		pl: 'Strona flagowa Arte de Baile — web design, engineering i product design dla butikowego studia tańca w Poznaniu',
+	},
 	avendin: {
 		en: 'Avendin branding — B2B smart vending brand identity and UI design for high-tech retail infrastructure in Panama',
 		es: 'Branding Avendin — identidad de marca B2B y diseño UI para vending inteligente e infraestructura retail en Panamá',
