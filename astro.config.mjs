@@ -1,24 +1,12 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import prettySitemap from './integrations/pretty-sitemap.mjs';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://www.wearesetin.com',
-	integrations: [
-		sitemap({
-			filter: (page) => !page.includes('/pitches/'),
-			i18n: {
-				defaultLocale: 'en',
-				locales: {
-					en: 'en',
-					pl: 'pl',
-					es: 'es-PA',
-				},
-			},
-		}),
-	],
+	integrations: [prettySitemap()],
 	vite: {
 		plugins: [tailwindcss()],
 	},

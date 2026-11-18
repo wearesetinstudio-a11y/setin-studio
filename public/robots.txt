@@ -26,4 +26,5 @@ Allow: /pitches/
 User-agent: *
 Disallow: /pitches/
 
+Sitemap: https://www.wearesetin.com/sitemap.xml
 Sitemap: https://www.wearesetin.com/sitemap-index.xml
