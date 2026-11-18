@@ -55,7 +55,12 @@ export default function prettySitemap() {
 					...new Set(
 						pages
 							.map((page) => normalizePathname(page.pathname))
-							.filter((pathname) => !pathname.includes('/pitches/')),
+							.filter(
+								(pathname) =>
+									!pathname.includes('/pitches/') &&
+									pathname !== '/404/' &&
+									pathname !== '/404',
+							),
 					),
 				].sort((a, b) => a.localeCompare(b));
 

@@ -31,6 +31,8 @@ interface Props {
 	preloadImage?: string;
 	/** Extra Schema.org objects rendered as JSON-LD script tags. */
 	jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
+	/** Hide from search engines (404 and similar). */
+	noindex?: boolean;
 }
 
 const {
@@ -41,6 +43,7 @@ const {
 	themeColor: themeColorProp = '',
 	preloadImage = '',
 	jsonLd,
+	noindex = false,
 } = Astro.props;
 
 const extraJsonLdBlocks = jsonLd
@@ -69,8 +72,10 @@ const pageTitle = isHome
 	: title === 'Setin Studio'
 		? title
 		: `${title} — Setin Studio`;
-const hreflangLinks = getHreflangLinks(barePath);
-const canonicalHref = absoluteUrl(buildLocalePath(pageLocale, barePath));
+const hreflangLinks = noindex ? [] : getHreflangLinks(barePath);
+const canonicalHref = noindex
+	? absoluteUrl('/')
+	: absoluteUrl(buildLocalePath(pageLocale, barePath));
 const organizationJsonLd = getOrganizationJsonLd();
 const panamaServiceJsonLd = getPanamaProfessionalServiceJsonLd();
 const isSpanish = pageLocale === 'es';
@@ -190,6 +195,7 @@ const themeColorMapJson = JSON.stringify(themeColorMap).replace(/</g, '\\u003c')
 				</>
 			) : null
 		}
+		{noindex ? <meta name="robots" content="noindex, nofollow" /> : null}
 		<title>{pageTitle}</title>
 		<script
 			type="application/ld+json"

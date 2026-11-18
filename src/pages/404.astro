@@ -1,0 +1,452 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { t } from '../i18n/dictionaries.ts';
+import { getLocaleFromPath, localizeInternalHref } from '../i18n/seo.ts';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const homeHref = localizeInternalHref(locale, '/');
+---
+
+<Layout title={t(locale, 'error404.documentTitle')} noindex>
+	<main class="error404" data-page="404">
+		<div class="error404__inner">
+			<div class="error404__stage">
+				<div class="error404__mark-wrap" data-error404-mark>
+					<img
+						src="/404.svg"
+						alt="404"
+						width="510"
+						height="192"
+						class="error404__mark-fallback"
+						data-error404-fallback
+						decoding="async"
+						aria-hidden="true"
+					/>
+					<canvas
+						id="error404-dust"
+						class="error404__mark-canvas"
+						aria-hidden="true"
+					></canvas>
+				</div>
+
+				<div class="error404__content">
+					<h1 class="error404__headline">
+						<span class="error404__headline-line" data-i18n="error404.headline.1">
+							{t(locale, 'error404.headline.1')}
+						</span>
+						<span class="error404__headline-line" data-i18n="error404.headline.2">
+							{t(locale, 'error404.headline.2')}
+						</span>
+					</h1>
+
+					<div class="error404__row">
+						<p class="error404__body body-txt-1" data-i18n="error404.body">
+							{t(locale, 'error404.body')}
+						</p>
+
+						<a
+							class="error404__cta group"
+							href={homeHref}
+							data-locale-path="/"
+							data-i18n-aria="error404.cta"
+							aria-label={t(locale, 'error404.cta')}
+						>
+							<span class="error404__cta-inner">
+								<span class="error404__cta-label-wrap">
+									<span class="error404__cta-label-roll">
+										<span class="error404__cta-label" data-i18n="error404.cta">
+											{t(locale, 'error404.cta')}
+										</span>
+										<span class="error404__cta-label" data-i18n="error404.cta" aria-hidden="true">
+											{t(locale, 'error404.cta')}
+										</span>
+									</span>
+								</span>
+								<img
+									src="/icons/simple-arrow.svg"
+									alt=""
+									width="22"
+									height="18"
+									class="error404__cta-arrow"
+									aria-hidden="true"
+								/>
+							</span>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<a
+				class="error404__logo"
+				href={homeHref}
+				data-locale-path="/"
+				data-i18n-aria="error404.homeAria"
+				aria-label={t(locale, 'error404.homeAria')}
+			>
+				<img
+					src="/setin-studio-logo.svg"
+					alt="setin studio"
+					width="267"
+					height="42"
+					class="error404__logo-img"
+					decoding="async"
+				/>
+			</a>
+		</div>
+	</main>
+</Layout>
+
+<style is:global>
+	body:has(.error404) {
+		background: #0a0a0b;
+	}
+
+	.error404 {
+		--error404-pad: clamp(2.5rem, 7vh, 4.5rem);
+		--error404-title-gap: clamp(2rem, 4.5vh, 3.25rem);
+		position: relative;
+		display: flex;
+		min-height: 100svh;
+		min-height: 100dvh;
+		align-items: center;
+		justify-content: center;
+		padding: var(--error404-pad) var(--page-gutter);
+		color: #fff;
+		background: #0a0a0b;
+	}
+
+	.error404__inner {
+		display: flex;
+		width: 100%;
+		max-width: 42rem;
+		flex-direction: column;
+		align-items: center;
+		gap: 0;
+	}
+
+	.error404__stage {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		align-items: center;
+		gap: 0;
+		overflow: visible;
+		text-align: center;
+	}
+
+	.error404__mark-wrap {
+		position: relative;
+		width: min(100%, clamp(16rem, 52vw, 28rem));
+		aspect-ratio: 510 / 192;
+		overflow: hidden;
+		user-select: none;
+	}
+
+	.error404__mark-fallback {
+		position: absolute;
+		inset: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		pointer-events: none;
+	}
+
+	.error404__mark-canvas {
+		position: absolute;
+		inset: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	.error404__content {
+		display: flex;
+		width: 100%;
+		max-width: 100%;
+		flex-direction: column;
+		align-items: center;
+		gap: 0;
+	}
+
+	.error404__headline {
+		max-width: 100%;
+		margin-block: var(--error404-title-gap);
+		font-size: clamp(1.85rem, 7.2vw, 3.75rem);
+		font-weight: 600;
+		line-height: 1.05;
+		letter-spacing: -0.03em;
+		text-transform: uppercase;
+		text-align: center;
+	}
+
+	.error404__headline-line {
+		display: block;
+		white-space: nowrap;
+	}
+
+	.error404__row {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 40px;
+		text-align: center;
+	}
+
+	.error404__body {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.78);
+		text-wrap: pretty;
+	}
+
+	/* Same interaction model as home hero service links. */
+	.error404__cta {
+		position: relative;
+		display: block;
+		width: 100%;
+		max-width: 22rem;
+		color: #fff;
+		text-decoration: none;
+		transition:
+			background-color 0.35s ease,
+			color 0.35s ease;
+	}
+
+	.error404__cta::before,
+	.error404__cta::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background-color: rgba(255, 255, 255, 0.18);
+		pointer-events: none;
+		z-index: 1;
+		transition: background-color 0.35s ease;
+	}
+
+	.error404__cta::before {
+		top: 0;
+	}
+
+	.error404__cta::after {
+		bottom: 0;
+	}
+
+	.error404__cta-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		padding-block: 1.35rem;
+		padding-inline: 0;
+		transition: padding-inline 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.error404__cta-label-wrap {
+		display: flex;
+		height: 1.5em;
+		flex-direction: column;
+		overflow: hidden;
+	}
+
+	.error404__cta-label-roll {
+		display: flex;
+		flex-direction: column;
+		transition: transform 300ms ease-in;
+	}
+
+	.error404__cta:focus-visible .error404__cta-label-roll {
+		transform: translateY(-50%);
+		transition-duration: 450ms;
+		transition-timing-function: ease-out;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.error404__cta:hover .error404__cta-label-roll {
+			transform: translateY(-50%);
+			transition-duration: 450ms;
+			transition-timing-function: ease-out;
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.error404__cta:active .error404__cta-label-roll {
+			transform: translateY(-50%);
+			transition-duration: 450ms;
+			transition-timing-function: ease-out;
+		}
+	}
+
+	.error404__cta-label {
+		display: flex;
+		height: 1.5em;
+		align-items: center;
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: -0.01em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.error404__cta-arrow {
+		width: auto;
+		height: 0.9rem;
+		flex-shrink: 0;
+		transition:
+			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.35s ease;
+	}
+
+	.error404__cta:focus-visible {
+		background-color: #fff;
+		color: #0a0a0b;
+		outline: none;
+	}
+
+	.error404__cta:focus-visible::before,
+	.error404__cta:focus-visible::after {
+		background-color: #fff;
+	}
+
+	.error404__cta:focus-visible .error404__cta-inner {
+		padding-inline: 8px;
+	}
+
+	.error404__cta:focus-visible .error404__cta-arrow {
+		filter: invert(1);
+		transform: rotate(45deg);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.error404__cta:hover {
+			background-color: #fff;
+			color: #0a0a0b;
+			outline: none;
+		}
+
+		.error404__cta:hover::before,
+		.error404__cta:hover::after {
+			background-color: #fff;
+		}
+
+		.error404__cta:hover .error404__cta-inner {
+			padding-inline: 8px;
+		}
+
+		.error404__cta:hover .error404__cta-arrow {
+			filter: invert(1);
+			transform: rotate(45deg);
+		}
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.error404__cta:active {
+			background-color: #fff;
+			color: #0a0a0b;
+			outline: none;
+		}
+
+		.error404__cta:active::before,
+		.error404__cta:active::after {
+			background-color: #fff;
+		}
+
+		.error404__cta:active .error404__cta-inner {
+			padding-inline: 8px;
+		}
+
+		.error404__cta:active .error404__cta-arrow {
+			filter: invert(1);
+			transform: rotate(45deg);
+		}
+	}
+
+	.error404__logo {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: clamp(2.75rem, 6vh, 4rem);
+		opacity: 1;
+		transition: opacity 0.3s ease;
+	}
+
+	.error404__logo:hover,
+	.error404__logo:focus-visible {
+		opacity: 0.7;
+		outline: none;
+	}
+
+	.error404__logo-img {
+		width: clamp(9.5rem, 28vw, 13rem);
+		height: auto;
+	}
+
+	@media (min-width: 768px) {
+		.error404__inner {
+			max-width: none;
+		}
+
+		.error404__content {
+			width: fit-content;
+			max-width: 100%;
+			align-items: stretch;
+		}
+
+		.error404__headline {
+			max-width: none;
+			width: max-content;
+			white-space: nowrap;
+		}
+
+		.error404__headline-line {
+			display: inline;
+		}
+
+		.error404__headline-line + .error404__headline-line::before {
+			content: '\00a0';
+		}
+
+		.error404__row {
+			flex-direction: row;
+			align-items: center;
+			justify-content: flex-start;
+			gap: 40px;
+			width: 0;
+			min-width: 100%;
+			text-align: left;
+		}
+
+		.error404__body {
+			flex: 1 1 auto;
+			min-width: 0;
+			max-width: none;
+		}
+
+		.error404__cta {
+			flex: 0 0 auto;
+			width: auto;
+			min-width: 17.5rem;
+			max-width: none;
+		}
+
+		.error404__cta-inner {
+			padding-block: 1.65rem;
+		}
+	}
+</style>
+
+<script>
+	import { applyTranslations } from '../scripts/i18n.ts';
+	import { getLocaleFromPath } from '../i18n/seo.ts';
+	import { initError404Dust } from '../scripts/initError404Dust.ts';
+
+	const locale = getLocaleFromPath(window.location.pathname);
+	document.body.dataset.i18nTitle = 'error404.documentTitle';
+	applyTranslations(locale);
+	void initError404Dust();
+</script>

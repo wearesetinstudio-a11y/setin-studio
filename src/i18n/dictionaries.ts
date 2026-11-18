@@ -161,6 +161,15 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			"We don't read tea leaves, we use Google Analytics. No dark magic, no tracking your personal business.",
 		'cookies.accept': 'Accept analytics',
 		'cookies.necessary': 'Essential only',
+
+		'error404.documentTitle': 'Page not found',
+		'error404.headline': 'This path leads nowhere',
+		'error404.headline.1': 'This path',
+		'error404.headline.2': 'leads nowhere',
+		'error404.body':
+			'The coordinates you followed turned out to be a myth. The page you are looking for has been swallowed by the dark, rewritten by history, or never existed at all.',
+		'error404.cta': 'Back to the darkness',
+		'error404.homeAria': 'Setin Studio — home',
 	},
 	pl: {
 		'nav.projects': 'Projekty',
@@ -317,6 +326,15 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			'Nie czytamy z fusów, tylko z Google Analytics. Bez czarnej magii i bez śledzenia Twoich prywatnych spraw.',
 		'cookies.accept': 'Akceptuję analitykę',
 		'cookies.necessary': 'Tylko niezbędne',
+
+		'error404.documentTitle': 'Nie znaleziono strony',
+		'error404.headline': 'Ta ścieżka prowadzi donikąd',
+		'error404.headline.1': 'Ta ścieżka',
+		'error404.headline.2': 'prowadzi donikąd',
+		'error404.body':
+			'Współrzędne, które wybrałeś, okazały się czystym mitem. Strona, której szukasz, została pochłonięta przez mrok, wymazana z map lub nigdy nie ujrzała światła dziennego.',
+		'error404.cta': 'Powrót w mrok',
+		'error404.homeAria': 'Setin Studio — strona główna',
 	},
 	es: {
 		'nav.projects': 'Proyectos',
@@ -473,6 +491,15 @@ export const dictionaries: Record<Locale, Dictionary> = {
 			'No usamos una bola de cristal, sino Google Analytics. Sin magia negra ni rastreo de tus asuntos privados.',
 		'cookies.accept': 'Acepto analítica',
 		'cookies.necessary': 'Solo lo esencial',
+
+		'error404.documentTitle': 'Página no encontrada',
+		'error404.headline': 'Esta ruta no lleva a ninguna parte',
+		'error404.headline.1': 'Esta ruta',
+		'error404.headline.2': 'no lleva a ninguna parte',
+		'error404.body':
+			'Las coordenadas que elegiste resultaron ser un mito. La página que buscas fue tragada por la oscuridad, reescrita por la historia o jamás existió.',
+		'error404.cta': 'Volver a la oscuridad',
+		'error404.homeAria': 'Setin Studio — inicio',
 	},
 };
 

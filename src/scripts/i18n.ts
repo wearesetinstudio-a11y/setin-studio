@@ -265,6 +265,17 @@ export function applyTranslations(
 		element.setAttribute('aria-label', value);
 	});
 
+	document.querySelectorAll<HTMLAnchorElement>('[data-locale-path]').forEach((anchor) => {
+		const bare = anchor.dataset.localePath || '/';
+		anchor.setAttribute('href', buildLocalePath(locale, bare));
+	});
+
+	const documentTitleKey = document.body.dataset.i18nTitle;
+	if (documentTitleKey) {
+		const titleValue = dict[documentTitleKey] ?? dictionaries.en[documentTitleKey];
+		if (titleValue) document.title = `${titleValue} — Setin Studio`;
+	}
+
 	document.querySelectorAll<HTMLElement>('[data-i18n-count]').forEach((element) => {
 		const key = element.dataset.i18nCount;
 		const count = element.dataset.count;
