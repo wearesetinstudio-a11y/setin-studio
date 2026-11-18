@@ -14,7 +14,6 @@ import {
 	buildLocalePath,
 	getLocaleFromPath,
 	htmlLang,
-	localeFromHtmlLang,
 	stripLocalePrefix,
 } from '../i18n/seo.ts';
 import { applyProjectCopy } from './initProjectCopy.ts';
@@ -127,23 +126,9 @@ function rewriteLocaleLinks(locale: Locale) {
 	});
 }
 
+/** Locale from the URL only. Unprefixed paths are always EN (SEO default). */
 export function getCurrentLocale(): Locale {
-	const path = window.location.pathname;
-	if (/^\/(pl|es)(?=\/|$)/.test(path)) {
-		return getLocaleFromPath(path);
-	}
-
-	try {
-		const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
-		if (isLocale(stored)) return stored;
-	} catch {
-		/* ignore */
-	}
-
-	const fromHtml = localeFromHtmlLang(document.documentElement.lang);
-	if (fromHtml) return fromHtml;
-
-	return defaultLocale;
+	return getLocaleFromPath(window.location.pathname) || defaultLocale;
 }
 
 export type ApplyTranslationsOptions = {
@@ -399,21 +384,13 @@ export function initI18n() {
 		true,
 	);
 
-	// After Astro view transitions the new page ships with lang="en" — restore from URL/storage.
+	// After Astro view transitions the new page ships with lang="en" — restore from URL.
 	document.addEventListener('astro:after-swap', () => {
 		applyTranslations(getCurrentLocale());
 	});
 
-	// Prefer stored locale when the swapped URL has no /es|/pl prefix yet.
 	document.addEventListener('astro:before-preparation', () => {
-		try {
-			const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
-			if (isLocale(stored)) {
-				document.documentElement.lang = htmlLang(stored);
-			}
-		} catch {
-			/* ignore */
-		}
+		document.documentElement.lang = htmlLang(getCurrentLocale());
 	});
 
 	window.addEventListener('popstate', () => {

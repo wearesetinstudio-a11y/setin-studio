@@ -273,14 +273,10 @@ const themeColorMapJson = JSON.stringify(themeColorMap).replace(/</g, '\\u003c')
 					return '/' + locale + b;
 				}
 
+				// URL is the source of truth: unprefixed = EN, /pl = PL, /es = ES.
 				var locale = pathLocale || 'en';
 				try {
-					if (pathLocale) {
-						window.localStorage.setItem('setin-lang', pathLocale);
-					} else {
-						var stored = window.localStorage.getItem('setin-lang');
-						if (stored === 'en' || stored === 'pl' || stored === 'es') locale = stored;
-					}
+					window.localStorage.setItem('setin-lang', locale);
 				} catch (e) {}
 
 				document.documentElement.lang = locale === 'es' ? 'es-PA' : locale;
